@@ -1026,7 +1026,7 @@ footer {
     <div class="slider-row reveal">
       <div>
         <div class="sl-label">Daily transactions</div>
-        <input type="range" id="r-txn" min="1" max="25" step="1" value="8" oninput="calc()">
+        <input type="range" id="r-txn" min="1" max="200" step="1" value="8" oninput="calc()">
         <div class="sl-val" id="v-txn">8</div>
       </div>
       <div>
@@ -1258,36 +1258,121 @@ rEls.forEach(r => obs.observe(r));
 // ── PRICING ENGINE ──
 const BASE_HW = 829;
 const PROVIDERS = [
-  { id:'sumup_plus',  name:'SumUp', plan:'Payments Plus', sub:19,  rate:0.0099, flat:0,    extra:0,  featured:true,
+  // ── SumUp ──
+  { id:'sumup_payg',          name:'SumUp', plan:'Pay as you go', sub:0,    rate:0.0169, flat:0,    extra:0,   featured:false,
+    warn:null,
+    pros:['No monthly fee','No contract — cancel anytime','All cards same rate incl. Amex'] },
+  { id:'sumup_plus',          name:'SumUp', plan:'Payments Plus', sub:19,   rate:0.0099, flat:0,    extra:0,   featured:true,
     warn:'0.99% for UK consumer Visa/MC only — Amex, corporate & intl revert to 1.69%',
-    pros:['Best 5yr TCO at Tiara volumes','Cancel anytime subscription','Free reader replacement'] },
-  { id:'sumup_payg',  name:'SumUp', plan:'Pay-as-you-go', sub:0,   rate:0.0169, flat:0,    extra:0,  featured:false,
-    warn:null, pros:['No monthly fee ever','All cards incl. Amex same rate','Full flexibility'] },
-  { id:'revolut',     name:'Revolut', plan:'Business (£10/mo)', sub:10, rate:0.008, flat:0.02, extra:49, featured:false,
-    warn:'No Amex support · Requires Revolut Business account · Basic POS tools',
-    pros:['Lowest rate: 0.8%+2p','Next-day settlement 7 days/wk'] },
-  { id:'stripe',      name:'Stripe', plan:'Terminal', sub:0,   rate:0.014, flat:0.10, extra:49, featured:false,
-    warn:'No native retail POS — needs custom integration',
-    pros:['1.4%+10p in-person UK/EEA','Online & offline unified'] },
-  { id:'square',      name:'Square', plan:'Free plan', sub:0,   rate:0.0175, flat:0,    extra:0,  featured:false,
-    warn:null, pros:['Best retail POS software (free)','Strong CRM & inventory tools'] },
-  { id:'zettle',      name:'PayPal POS', plan:'(Zettle)', sub:0,   rate:0.0175, flat:0,    extra:0,  featured:false,
-    warn:null, pros:['No monthly fee','PayPal ecosystem integration'] },
-  { id:'lightspeed',  name:'Lightspeed', plan:'Retail Basic', sub:69, rate:0.014, flat:0.10, extra:59, featured:false,
-    warn:'POS software included in £69/mo · Rate estimated — verify at lightspeedhq.com/uk',
-    pros:['Full POS + payments bundle','Strong inventory & reporting','Omnichannel online/offline'] },
-  { id:'dojo',        name:'Dojo', plan:'Fix plan', sub:39.99, rate:0.014, flat:0.05, extra:79, featured:false,
+    pros:['0.99% rate — cancel anytime','Free reader replacement','Next-day 7am payouts incl. weekends'] },
+
+  // ── Teya ──
+  { id:'teya_start',          name:'Teya', plan:'Start', sub:0,    rate:0.0169, flat:0,    extra:0,   featured:false,
+    warn:'£29.99/month fee if monthly card turnover is under £2,500',
+    pros:['No monthly fee','No lock-in contract','Next-day settlement 7 days/wk'] },
+  { id:'teya_boost',          name:'Teya', plan:'Boost', sub:19,   rate:0.0099, flat:0,    extra:0,   featured:false,
+    warn:'0.99% with Teya Business Account — add 0.10% with external bank · First reader 50% off',
+    pros:['0.99% — no flat fee per transaction','No lock-in','Next-day settlement incl. bank holidays'] },
+  { id:'teya_thrive',         name:'Teya', plan:'Thrive', sub:39,  rate:0.0059, flat:0,    extra:0,   featured:false,
+    warn:'0.59% with Teya Business Account — add 0.10% with external bank · First reader free',
+    pros:['Lowest percentage rate: 0.59%','First card reader free','Next-day settlement 7 days/wk'] },
+
+  // ── Revolut Business ── (flagged incompatible — no Loyverse integration)
+  { id:'revolut_basic',       name:'Revolut', plan:'Basic', sub:0,    rate:0.008, flat:0.02, extra:49,  featured:false,
+    warn:'No Amex · Requires Revolut Business account · No native Loyverse integration · Rate varies by card type',
+    pros:['No monthly fee','0.8%+2p in-store','Integrated business banking'] },
+  { id:'revolut_grow',        name:'Revolut', plan:'Grow', sub:30,   rate:0.008, flat:0.02, extra:49,  featured:false,
+    warn:'Same payment rate as Basic · No native Loyverse integration · Requires Revolut Business account',
+    pros:['£30/mo for enhanced banking features','0.8%+2p in-store','Multi-currency accounts'] },
+  { id:'revolut_scale',       name:'Revolut', plan:'Scale', sub:90,  rate:0.008, flat:0.02, extra:49,  featured:false,
+    warn:'Same payment rate as Basic/Grow · No native Loyverse integration · Requires Revolut Business account',
+    pros:['Full banking feature set','0.8%+2p in-store','Priority support'] },
+
+  // ── Stripe ──
+  { id:'stripe',              name:'Stripe', plan:'Terminal', sub:0,    rate:0.014, flat:0.10, extra:49,  featured:false,
+    warn:'No native retail POS — needs custom integration · Non-EEA cards 2.9%+10p',
+    pros:['1.4%+10p in-person UK/EEA','No monthly fee','Unified online & offline'] },
+
+  // ── Square ──
+  { id:'square_free',         name:'Square', plan:'Free', sub:0,    rate:0.0175, flat:0,    extra:13,  featured:false,
+    warn:null,
+    pros:['No monthly fee or contract','Best-in-class free retail POS','Strong CRM & inventory'] },
+  { id:'square_plus',         name:'Square', plan:'Plus', sub:29,   rate:0.0175, flat:0,    extra:13,  featured:false,
+    warn:'Same in-person rate as free tier — subscription unlocks advanced POS features only',
+    pros:['Advanced team management & inventory','Enhanced reporting','Same 1.75% in-person rate'] },
+
+  // ── Zettle by PayPal ──
+  { id:'zettle',              name:'Zettle by PayPal', plan:'Pay as you go', sub:0,    rate:0.0175, flat:0,    extra:29,  featured:false,
+    warn:null,
+    pros:['No monthly fee or contract','1.75% all cards incl. Amex','PayPal ecosystem integration'] },
+
+  // ── Lightspeed ──
+  { id:'lightspeed_lean',     name:'Lightspeed', plan:'Lean', sub:59,   rate:0.026, flat:0.08, extra:0,   featured:false,
+    warn:'2.6%+8p in-person rate · £400/mo penalty for using non-Lightspeed payments',
+    pros:['POS software included','Multichannel retail features','Inventory & reporting'] },
+  { id:'lightspeed_standard', name:'Lightspeed', plan:'Standard', sub:199,  rate:0.026, flat:0.08, extra:0,   featured:false,
+    warn:'2.6%+8p in-person rate · £400/mo penalty for using non-Lightspeed payments',
+    pros:['Full retail POS suite','Advanced analytics & CRM','Omnichannel online/offline'] },
+
+  // ── Dojo ──
+  { id:'dojo_payg',           name:'Dojo', plan:'Pay as you go', sub:0,    rate:0.019, flat:0.05, extra:79,  featured:false,
+    warn:'Rate varies by turnover — figure shown is an estimate · Terminal rental model',
+    pros:['No monthly fee','No minimum contract','Good UK support'] },
+  { id:'dojo_fix',            name:'Dojo', plan:'Fix', sub:39.99, rate:0.014, flat:0.05, extra:79,  featured:false,
     warn:'12-month contract · £24.95 minimum monthly charge · Business cards 1.8%+5p',
-    pros:['1.4%+5p consumer cards','Strong UK support','Good retail hardware'] },
-  { id:'mypos',       name:'myPOS', plan:'Pay as you go', sub:0, rate:0.011, flat:0.07, extra:0, featured:false,
+    pros:['1.4%+5p consumer cards','Strong UK retail hardware','Same-day settlement option'] },
+  { id:'dojo_plus',           name:'Dojo', plan:'Plus', sub:11.99, rate:0.014, flat:0.05, extra:79,  featured:false,
+    warn:'Per-location pricing · 12-month contract · Rate applies on turnover above £4k/mo',
+    pros:['Analytics, pre-auth & bill splitting','Custom tipping','Good for counter retail'] },
+
+  // ── myPOS ──
+  { id:'mypos',               name:'myPOS', plan:'Pay as you go', sub:0,    rate:0.011, flat:0.07, extra:29,  featured:false,
     warn:'1.10%+7p for domestic/EEA cards only · Amex 2.45%+7p · Rates for <£10k/mo turnover',
-    pros:['No monthly fee','No contract','Built-in merchant account — no business bank account needed'] },
-  { id:'tyl',         name:'Tyl by NatWest', plan:'Standard', sub:16.99, rate:0.0139, flat:0.05, extra:0, featured:false,
-    warn:'Terminal rental included in monthly fee · Requires NatWest business account',
-    pros:['1.39%+5p UK & Europe cards','Terminal rental included','Same rate in-person, online & phone'] },
-  { id:'shopify',     name:'Shopify POS', plan:'Basic + POS Pro', sub:94, rate:0.017, flat:0, extra:49, featured:false,
-    warn:'Requires Shopify subscription · Best value only if also selling online',
-    pros:['1.7% in-person, no flat fee','Unified online + offline','Strong product catalogue & CRM'] },
+    pros:['No monthly fee or contract','Built-in merchant account — no business bank needed','Instant deposit to myPOS account'] },
+
+  // ── Tyl by NatWest ──
+  { id:'tyl',                 name:'Tyl by NatWest', plan:'Standard', sub:16.99, rate:0.0139, flat:0.05, extra:0,   featured:false,
+    warn:'Terminal rental included in monthly fee · Requires NatWest business account · Other cards 1.99%+5p',
+    pros:['1.39%+5p UK & EEA cards','Terminal included in fee','Same-day payout with NatWest account'] },
+
+  // ── Shopify POS ──
+  { id:'shopify_basic',       name:'Shopify POS', plan:'Basic + POS Pro', sub:94,   rate:0.017, flat:0,    extra:49,  featured:false,
+    warn:'Requires Shopify Basic (£25/mo) + POS Pro (£69/mo) · Best value only if also selling online',
+    pros:['1.7% in-person via Shopify Payments','Unified online + offline','Strong catalogue & CRM'] },
+  { id:'shopify_standard',    name:'Shopify POS', plan:'Shopify + POS Pro', sub:134,  rate:0.017, flat:0,    extra:49,  featured:false,
+    warn:'Requires Shopify plan (£65/mo) + POS Pro (£69/mo) · Same in-person rate as Basic',
+    pros:['Better reporting than Basic tier','Lower online transaction fees','Full omnichannel suite'] },
+  { id:'shopify_advanced',    name:'Shopify POS', plan:'Advanced + POS Pro', sub:413,  rate:0.015, flat:0,    extra:49,  featured:false,
+    warn:'Requires Advanced Shopify (£344/mo) + POS Pro (£69/mo) · Only viable at very high online+offline volume',
+    pros:['Lowest Shopify rate: 1.5%','Advanced analytics & custom reports','Multi-location inventory'] },
+
+  // ── Tide ──
+  { id:'tide',                name:'Tide', plan:'Business + Payments', sub:17.99, rate:0.0139, flat:0.05, extra:30,  featured:false,
+    warn:'Tied to Tide business banking account · 1–3 day settlement · Fee increases to £17.99+VAT from April 2026',
+    pros:['1.39%+5p — among lowest rates','Integrated business banking','Simple app-based setup'] },
+
+  // ── Worldpay ──
+  { id:'worldpay_payg',       name:'Worldpay', plan:'Pay as you go', sub:0,    rate:0.0275, flat:0.20, extra:0,   featured:false,
+    warn:'2.75%+20p PAYG rate is very high · Terminal rental £17.50–22.50/mo extra · Setup fee £25–50',
+    pros:['No long-term contract on PAYG','Widely trusted UK brand','Multi-channel support'] },
+  { id:'worldpay_contract',   name:'Worldpay', plan:'Contract', sub:20,   rate:0.010,  flat:0,    extra:0,   featured:false,
+    warn:'Rate requires custom quote — figure shown is illustrative · Long contracts with early termination fees · Better suited to £75k+/year',
+    pros:['Negotiated rates from ~0.3% debit','Full-service merchant account','Best for high-volume multi-channel'] },
+
+  // ── Barclaycard ──
+  { id:'barclaycard',         name:'Barclaycard', plan:'Anywhere (PAYG)', sub:0,    rate:0.016, flat:0,    extra:29,  featured:false,
+    warn:'Exact rates require custom quote — figure shown is approximate · 12–36 month contracts on some plans',
+    pros:['~1.6% flat PAYG rate','No setup fee on PAYG','Trusted UK bank brand'] },
+
+  // ── Clover ──
+  { id:'clover',              name:'Clover', plan:'Starter', sub:14.95, rate:0.026, flat:0.10, extra:49,  featured:false,
+    warn:'36-MONTH CONTRACT — early exit costs full remaining balance (£500–2,000+) · High hardware costs · Not recommended',
+    pros:['Integrated POS + payments','Wide app marketplace','Established UK presence'] },
+
+  // ── Elavon / Opayo ──
+  { id:'elavon',              name:'Elavon / Opayo', plan:'Standard', sub:25,   rate:0.015, flat:0,    extra:0,   featured:false,
+    warn:'36-month contract standard · Annual rate increases · Custom quote required — rate shown is illustrative · Next increase Feb 2026',
+    pros:['Established UK processor','Opayo gateway included','Multi-currency support'] },
 ];
 
 let sortBy = 'tco';
@@ -1348,6 +1433,9 @@ function calc() {
   else if (sortBy === 'rate')    rows.sort((a,b) => a.rate - b.rate);
   else                           rows.sort((a,b) => a.mFee - b.mFee);
 
+  const eligibleRows = rows.filter(r => !r.id.startsWith('revolut'));
+  const recommended  = eligibleRows.reduce((a, b) => a.tco < b.tco ? a : b);
+
   const maxTco  = Math.max(...rows.map(r => r.tco));
   const minTco  = rows[0].tco;
   const sqTco   = rows.find(r => r.id === 'stripe').tco;
@@ -1360,15 +1448,15 @@ function calc() {
   document.getElementById('be-mvol').textContent = fmt(mVol);
   document.getElementById('be-rev5').textContent = fmt(rev5y);
   document.getElementById('be-brkn').textContent = brkEven > 0 ? brkEven + ' sales' : 'N/A';
-  document.getElementById('be-pct').textContent  = (minTco / rev5y * 100).toFixed(1) + '%';
+  document.getElementById('be-pct').textContent  = (recommended.tco / rev5y * 100).toFixed(1) + '%';
 
   document.getElementById('provider-grid').innerHTML = rows.map(r => {
     const hwPct   = Math.round(r.hw    / maxTco * 100);
     const feesPct = Math.round(r.fees  / maxTco * 100);
     const subPct  = Math.round(r.subs  / maxTco * 100);
     const isWin   = r.tco === minTco;
-    const isIncompat = r.id === 'revolut';
-    const isRecommended = r.featured;
+    const isIncompat = r.id.startsWith('revolut');
+    const isRecommended = r.id === recommended.id;
     const cardClass = isIncompat ? ' incompatible' : (isRecommended ? ' winner' : '');
     let badge;
     if (isIncompat) {
@@ -1394,7 +1482,7 @@ function calc() {
       <div class="p-monthly">Monthly on <strong>${fmt(mVol)}</strong>: <strong>${fmtD(r.mFee)}</strong></div>
       <ul class="p-pros">${r.pros.map(p => `<li>${p}</li>`).join('')}</ul>
       ${r.warn ? `<div class="p-warn">⚠ ${r.warn}</div>` : ''}
-      ${isIncompat ? `<div class="p-incompatible">✕ No native integration with Loyverse POS — not compatible with this system</div>` : ''}
+      ${isIncompat ? `<div class="p-incompatible">✕ No native Loyverse POS integration — not compatible with this system</div>` : ''}
     </div>`;
   }).join('');
 }
