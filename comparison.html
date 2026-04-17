@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIARA — Payment Provider Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:    #0a0a0a;
+  --black2:   #111111;
+  --black3:   #1a1a1a;
+  --black4:   #222222;
+  --gold:     #c9a84c;
+  --gold2:    #e2c47a;
+  --gold3:    #f5e6b8;
+  --white:    #f8f5ef;
+  --white2:   #ede8de;
+  --muted:    rgba(248,245,239,0.45);
+  --border:   rgba(201,168,76,0.18);
+  --border2:  rgba(201,168,76,0.38);
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans:  'Jost', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 3rem;
+  height: 60px;
+  background: rgba(10,10,10,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-brand {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  color: var(--gold2);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.nav-sub {
+  font-size: 10px; font-weight: 400;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted);
+}
+
+.full-bleed { max-width: 100%; padding: 7rem 2rem 5rem; }
+.full-bleed-inner { max-width: 1140px; margin: 0 auto; }
+
+.section-eyebrow {
+  display: flex; align-items: center; gap: 0.75rem;
+  font-size: 10px; font-weight: 400;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.25rem;
+}
+.section-eyebrow::before {
+  content: ''; display: block;
+  width: 24px; height: 1px; background: var(--gold);
+}
+
+.section-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 400; line-height: 1.15;
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+.section-heading em { font-style: italic; color: var(--gold2); }
+
+.section-body {
+  font-size: 0.92rem; color: var(--muted);
+  max-width: 560px; line-height: 1.8;
+}
+
+/* ── PRICING SECTION ── */
+.pricing-section {
+  background: var(--black2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.slider-row {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.5rem;
+  background: var(--black3);
+  border: 1px solid var(--border);
+  padding: 1.75rem 2rem;
+  margin: 2.5rem 0;
+}
+
+.sl-label {
+  font-size: 10px; font-weight: 400;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 10px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 1px;
+  background: rgba(201,168,76,0.25);
+  outline: none; margin-bottom: 8px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 13px; height: 13px;
+  background: var(--gold); border-radius: 50%; cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 13px; height: 13px;
+  background: var(--gold); border-radius: 50%; cursor: pointer; border: none;
+}
+
+.sl-val {
+  font-family: var(--font-serif);
+  font-size: 1.9rem; font-weight: 400; color: var(--gold2);
+}
+
+.sort-row {
+  display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;
+  margin-bottom: 1rem;
+}
+.sort-label { font-size: 11px; letter-spacing: 0.1em; color: var(--muted); margin-right: 0.25rem; }
+.sort-btn {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--muted); padding: 4px 14px;
+  font-family: var(--font-sans); font-size: 11px; font-weight: 400;
+  letter-spacing: 0.08em; cursor: pointer;
+  transition: all 0.2s;
+}
+.sort-btn:hover { border-color: var(--border2); color: var(--gold2); }
+.sort-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.07); }
+
+.provider-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+/* cards are anchor tags — reset link styling */
+.provider-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: var(--black2);
+  padding: 1.5rem 1.25rem 1.25rem;
+  transition: background 0.2s;
+}
+.provider-card:hover { background: var(--black3); }
+
+.provider-card.winner {
+  background: rgba(201,168,76,0.05);
+  border: 1px solid var(--border2);
+  margin: -1px; z-index: 1; position: relative;
+}
+
+
+.p-badge {
+  font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold); border: 1px solid var(--border2);
+  padding: 2px 8px; display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.p-name {
+  font-family: var(--font-serif);
+  font-size: 1.1rem; font-weight: 400;
+  color: var(--white); line-height: 1.2; margin-bottom: 1px;
+}
+.p-plan { font-size: 11px; color: var(--muted); margin-bottom: 1rem; }
+
+.p-tco {
+  font-family: var(--font-serif);
+  font-size: 1.9rem; font-weight: 400;
+  color: var(--gold2); line-height: 1; margin-bottom: 3px;
+}
+.p-tco-label {
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 1rem;
+}
+
+.mini-bar-row {
+  display: flex; align-items: center; gap: 6px;
+  margin: 3px 0; font-size: 10px; color: var(--muted);
+}
+.mini-bar-track {
+  flex: 1; height: 2px;
+  background: rgba(255,255,255,0.06); border-radius: 1px; overflow: hidden;
+}
+.mini-bar-fill { height: 2px; border-radius: 1px; transition: width 0.4s ease; }
+
+.p-rate { font-size: 12px; color: rgba(248,245,239,0.55); margin: 0.75rem 0 2px; }
+.p-rate-val { font-size: 13px; font-weight: 500; color: rgba(248,245,239,0.75); margin-bottom: 0.5rem; }
+.p-monthly { font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 7px; margin-top: 7px; }
+.p-monthly strong { color: rgba(248,245,239,0.65); }
+
+.p-pros { list-style: none; margin-top: 0.6rem; }
+.p-pros li {
+  font-size: 11px; color: var(--muted);
+  padding: 2px 0 2px 13px; position: relative; line-height: 1.45;
+}
+.p-pros li::before { content: '+'; position: absolute; left: 0; color: var(--gold); }
+
+.p-warn { font-size: 10px; color: rgba(201,168,76,0.6); margin-top: 6px; line-height: 1.45; }
+.p-indicative { font-size: 10px; color: rgba(180,130,50,0.8); margin-top: 6px; line-height: 1.45; border-top: 1px solid var(--border); padding-top: 6px; }
+
+.p-source {
+  font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(201,168,76,0.35); margin-top: 8px; display: block;
+}
+.provider-card:hover .p-source { color: rgba(201,168,76,0.6); }
+
+/* ── SAVINGS BANNER ── */
+.savings-banner {
+  background: var(--black3);
+  border: 1px solid var(--border2);
+  padding: 2rem 2.5rem;
+  margin-bottom: 2.5rem;
+  display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+}
+.sb-label-col { flex: 1; min-width: 200px; }
+.sb-eyebrow {
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.5rem;
+}
+.sb-select-wrap { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-top: 0.5rem; }
+.sb-select {
+  background: var(--black2);
+  border: 1px solid var(--border2);
+  color: var(--white);
+  font-family: var(--font-sans); font-size: 13px; font-weight: 300;
+  padding: 0.55rem 2rem 0.55rem 0.9rem;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a84c'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 0.75rem center;
+  cursor: pointer; outline: none; min-width: 200px;
+}
+.sb-select:focus { border-color: var(--gold); }
+.sb-select option { background: var(--black3); }
+.sb-result-col { text-align: right; }
+.sb-saving-num {
+  font-family: var(--font-serif); font-size: 3rem; font-weight: 400;
+  color: var(--gold2); line-height: 1;
+}
+.sb-saving-label {
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); margin-top: 4px;
+}
+.sb-saving-detail { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.on { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  nav { padding: 0 1.25rem; }
+  .provider-grid { grid-template-columns: 1fr 1fr; }
+}
+
+footer {
+  background: var(--black);
+  border-top: 1px solid var(--border);
+  padding: 3.5rem 2rem;
+  text-align: center;
+}
+.footer-brand {
+  font-family: var(--font-serif); font-size: 1.35rem;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold2); margin-bottom: 0.5rem;
+}
+.footer-tagline { font-size: 11px; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 1.25rem; }
+.footer-note { font-size: 13px; color: rgba(248,245,239,0.55); max-width: 640px; margin: 0 auto; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">Tiara</span>
+  <span class="nav-sub">Payment Provider Comparison · April 2026</span>
+</nav>
+
+<div class="pricing-section full-bleed" id="pricing">
+  <div class="full-bleed-inner">
+    <div class="reveal">
+      <div class="section-eyebrow">Payment providers</div>
+      <h2 class="section-heading">Every UK provider.<br><em>Verified April 2026.</em></h2>
+      <p class="section-body">Rates sourced directly from each provider's own website. Click any card to view their pricing page. Adjust the sliders to model Tiara's actual volumes. Cards marked <em>Rate indicative</em> use published or estimated figures — contact the provider to confirm.</p>
+    </div>
+
+    <div class="savings-banner reveal">
+      <div class="sb-label-col">
+        <div class="sb-eyebrow">Your savings</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Select your current payment provider to see how much you could save over 5 years by switching to the cheapest option.</div>
+        <div class="sb-select-wrap">
+          <select class="sb-select" id="current-provider" onchange="calc()">
+            <option value="">— Select your current provider —</option>
+          </select>
+        </div>
+      </div>
+      <div class="sb-result-col" id="savings-result" style="display:none">
+        <div class="sb-saving-num" id="sb-saving-num">—</div>
+        <div class="sb-saving-label">5-year saving</div>
+        <div class="sb-saving-detail" id="sb-saving-detail"></div>
+      </div>
+    </div>
+
+    <div class="slider-row reveal">
+      <div>
+        <div class="sl-label">Daily transactions</div>
+        <input type="range" id="r-txn" min="1" max="200" step="1" value="8" oninput="calc()">
+        <div class="sl-val" id="v-txn">8</div>
+      </div>
+      <div>
+        <div class="sl-label">Average transaction (£)</div>
+        <input type="range" id="r-val" min="5" max="300" step="5" value="50" oninput="calc()">
+        <div class="sl-val" id="v-val">£50</div>
+      </div>
+      <div>
+        <div class="sl-label">Trading days / month</div>
+        <input type="range" id="r-days" min="15" max="31" step="1" value="22" oninput="calc()">
+        <div class="sl-val" id="v-days">22</div>
+      </div>
+      <div>
+        <div class="sl-label">Annual price inflation</div>
+        <input type="range" id="r-infl" min="0" max="8" step="0.5" value="3" oninput="calc()">
+        <div class="sl-val" id="v-infl">3.0%</div>
+      </div>
+      <div>
+        <div class="sl-label">Annual volume growth</div>
+        <input type="range" id="r-growth" min="0" max="20" step="1" value="3" oninput="calc()">
+        <div class="sl-val" id="v-growth">3%</div>
+      </div>
+      <div>
+        <div class="sl-label">5yr saving vs Stripe</div>
+        <div class="sl-val" id="be-save">—</div>
+      </div>
+      <div>
+        <div class="sl-label">Yr 1 monthly card volume</div>
+        <div class="sl-val" id="be-mvol">—</div>
+      </div>
+      <div>
+        <div class="sl-label">5yr projected revenue</div>
+        <div class="sl-val" id="be-rev5">—</div>
+      </div>
+      <div>
+        <div class="sl-label">Txns to break even on sub</div>
+        <div class="sl-val" id="be-brkn">—</div>
+      </div>
+      <div>
+        <div class="sl-label">POS cost as % of 5yr revenue</div>
+        <div class="sl-val" id="be-pct">—</div>
+      </div>
+    </div>
+
+    <div class="sort-row reveal">
+      <span class="sort-label">Sort by</span>
+      <button class="sort-btn active" id="sb-tco" onclick="setSortBy('tco')">5yr cost</button>
+      <button class="sort-btn" id="sb-rate" onclick="setSortBy('rate')">Tx rate</button>
+      <button class="sort-btn" id="sb-monthly" onclick="setSortBy('monthly')">Monthly fees</button>
+    </div>
+
+    <div class="provider-grid reveal" id="provider-grid"></div>
+
+    <p style="font-size:11px;color:rgba(248,245,239,0.2);margin-top:1.25rem;line-height:1.6">All rates sourced directly from provider websites April 2026. Cards marked "Rate indicative" use figures not fully confirmed from the provider's public pricing page — verify before committing. Rates are subject to change. This document is confidential and prepared exclusively for Tiara.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">TIARA</div>
+  <div class="footer-tagline">Where Timeless Elegance Meets Modern Commerce</div>
+  <div class="footer-note">Rates verified April 2026 from each provider's own website. Rates are subject to change — always verify current pricing directly with the provider before committing. This document is confidential and prepared exclusively for Tiara.</div>
+  <div style="margin-top:2rem;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(248,245,239,0.2)">Prepared by <a href="https://itoldyouso.tech" target="_blank" style="color:rgba(201,168,76,0.5);text-decoration:none;border-bottom:1px solid rgba(201,168,76,0.25)">IToldYouSo</a></div>
+</footer>
+
+<script>
+// ── SCROLL REVEAL ──
+const rEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('on'), i * 60);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+rEls.forEach(r => obs.observe(r));
+
+// ── PRICING ENGINE ──
+// BASE_HW = Tiara system hardware excluding card reader (£829)
+const BASE_HW = 829;
+
+// extra = estimated cost of provider-specific card reader hardware
+// source = provider's own pricing page (each card links here)
+// indicative = true means rates could not be fully confirmed from a public pricing page
+const PROVIDERS = [
+
+  // ── SumUp ── source: https://sumup.com/en-gb/card-readers/
+  { id:'sumup_payg',
+    name:'SumUp', plan:'Pay as you go',
+    sub:0, rate:0.0169, flat:0, extra:0,
+    source:'https://sumup.com/en-gb/card-readers/',
+    warn:'1.69% for all card types including Amex and international cards. No contract.',
+    pros:['No monthly fee','No contract — cancel anytime','All card types at same rate incl. Amex'] },
+
+  { id:'sumup_plus',
+    name:'SumUp', plan:'Payments Plus',
+    sub:19, rate:0.0099, flat:0, extra:0,
+    source:'https://sumup.com/en-gb/card-readers/',
+    warn:'0.99% for UK/EU consumer Visa/MC only — Amex, corporate & international revert to 1.69%. Free reader replacement. Businesses over £10k/month directed to sales.',
+    pros:['0.99% rate — no long-term contract','Free reader replacement','Next-day 7am payouts incl. weekends'] },
+
+  // ── Teya ── source: https://www.teya.com/pricing
+  { id:'teya',
+    name:'Teya', plan:'Pay as you go',
+    sub:0, rate:0.0159, flat:0, extra:0,
+    source:'https://www.teya.com/pricing',
+    warn:'£29.99/month fee applies if monthly card turnover falls below £2,500. Add 0.10% if not using Teya Business Account.',
+    pros:['Simple flat 1.59% rate','Next-day settlement 7 days/week','No lock-in contract'] },
+
+  // ── Revolut Business ── source: https://www.revolut.com/business/revolut-reader/
+  { id:'revolut_basic',
+    name:'Revolut', plan:'Basic',
+    sub:0, rate:0.008, flat:0.02, extra:49,
+    source:'https://www.revolut.com/business/accept-payments-pricing/',
+    warn:'Requires Revolut Business account · 2.6%+2p for international/commercial cards · No Amex',
+    pros:['No monthly fee','0.8%+2p in-store UK/EEA','Integrated business banking'] },
+
+  { id:'revolut_grow',
+    name:'Revolut', plan:'Grow',
+    sub:25, rate:0.008, flat:0.02, extra:49,
+    source:'https://www.revolut.com/business/accept-payments-pricing/',
+    warn:'Same 0.8%+2p rate as Basic · Requires Revolut Business account · 2.6%+2p for international/commercial cards',
+    pros:['Enhanced banking features','0.8%+2p in-store','Multi-currency accounts'] },
+
+  { id:'revolut_scale',
+    name:'Revolut', plan:'Scale',
+    sub:100, rate:0.008, flat:0.02, extra:49,
+    source:'https://www.revolut.com/business/accept-payments-pricing/',
+    warn:'Same 0.8%+2p rate as Basic/Grow · Requires Revolut Business account · 2.6%+2p for international/commercial cards',
+    pros:['Full banking feature set','0.8%+2p in-store','Priority support'] },
+
+  // ── Stripe ── source: https://stripe.com/gb/pricing
+  { id:'stripe',
+    name:'Stripe', plan:'Terminal',
+    sub:0, rate:0.014, flat:0.10, extra:49,
+    source:'https://stripe.com/gb/pricing',
+    warn:'No native retail POS — requires custom integration · Non-EEA cards 2.9%+10p · Tap to Pay adds 10p per auth · Prices exc. VAT',
+    pros:['1.4%+10p in-person UK/EEA','No monthly fee','Unified online & offline'] },
+
+  // ── Square ── source: https://squareup.com/gb/en/pricing
+  { id:'square_free',
+    name:'Square', plan:'Free',
+    sub:0, rate:0.0175, flat:0, extra:13,
+    source:'https://squareup.com/gb/en/pricing',
+    warn:'Non-UK card surcharge: +1.5%. No contract.',
+    pros:['No monthly fee or contract','Best-in-class free retail POS','Strong CRM & inventory'] },
+
+  { id:'square_plus',
+    name:'Square', plan:'Plus',
+    sub:29, rate:0.0175, flat:0, extra:13,
+    source:'https://squareup.com/gb/en/pricing',
+    warn:'Same 1.75% in-person rate as Free — subscription unlocks advanced POS software features only',
+    pros:['Advanced team management & inventory','Enhanced reporting','Same 1.75% in-person rate'] },
+
+  // ── Zettle by PayPal ── source: https://www.zettle.com/gb/pricing
+  { id:'zettle',
+    name:'Zettle by PayPal', plan:'Pay as you go',
+    sub:0, rate:0.0175, flat:0, extra:29,
+    source:'https://www.zettle.com/gb/pricing',
+    warn:'Custom rates available for businesses processing over £10k/month. Invoice payments 2.5%.',
+    pros:['No monthly fee or contract','1.75% all cards incl. Amex','PayPal ecosystem integration'] },
+
+  // ── myPOS ── source: https://www.mypos.com/en-gb/pricing-and-fees
+  { id:'mypos',
+    name:'myPOS', plan:'Pay as you go',
+    sub:0, rate:0.011, flat:0.07, extra:29,
+    source:'https://www.mypos.com/en-gb/pricing-and-fees',
+    warn:'1.10%+7p for domestic/EEA cards only · Amex 2.45%+7p · International/commercial 2.85%+7p · For under £10k/month turnover',
+    pros:['No monthly fee or contract','Built-in merchant account — no business bank needed','Instant settlement to myPOS account'] },
+
+  // ── Tyl by NatWest ── source: https://www.tylbynatwest.com/card-machines/pricing-fees
+  { id:'tyl',
+    name:'Tyl by NatWest', plan:'Standard',
+    sub:16.99, rate:0.0139, flat:0.05, extra:0,
+    source:'https://www.tylbynatwest.com/card-machines/pricing-fees',
+    warn:'Terminal rental £13.99–£19.99/month on 12-month contract (included in sub shown) · Requires NatWest business account · Business/international cards 1.99%+5p',
+    pros:['1.39%+5p UK & EEA cards','Terminal included in monthly fee','Next business day settlement'] },
+
+  // ── Shopify POS ── source: https://www.shopify.com/pos/pricing
+  { id:'shopify_basic',
+    name:'Shopify POS', plan:'Basic',
+    sub:25, rate:0.017, flat:0, extra:49,
+    source:'https://www.shopify.com/pos/pricing',
+    warn:'Shopify Payments only · Advanced retail features (POS Pro) cost +£69/month/location · Using a third-party processor adds 2% extra fee',
+    pros:['1.7% in-person via Shopify Payments','Unified online + offline','Strong catalogue & CRM'] },
+
+  { id:'shopify_grow',
+    name:'Shopify POS', plan:'Grow',
+    sub:65, rate:0.016, flat:0, extra:49,
+    source:'https://www.shopify.com/pos/pricing',
+    warn:'Shopify Payments only · POS Pro +£69/month/location · Third-party processor adds 1% extra fee',
+    pros:['Lower 1.6% rate vs Basic','Better reporting & analytics','Full omnichannel suite'] },
+
+  { id:'shopify_advanced',
+    name:'Shopify POS', plan:'Advanced',
+    sub:344, rate:0.015, flat:0, extra:49,
+    source:'https://www.shopify.com/pos/pricing',
+    warn:'Advanced Shopify (£344/mo) required · POS Pro +£69/month/location · Only viable at very high combined online + offline volume',
+    pros:['Lowest Shopify rate: 1.5%','Advanced analytics & custom reports','Multi-location inventory'] },
+
+  // ── Lightspeed ── source: https://www.lightspeedhq.com/uk/pos/retail/pricing/
+  // Transaction rates not publicly disclosed
+  { id:'lightspeed_basic',
+    name:'Lightspeed', plan:'Basic',
+    sub:75, rate:0.020, flat:0.08, extra:0,
+    indicative:true,
+    source:'https://www.lightspeedhq.com/uk/pos/retail/pricing/',
+    warn:'Transaction rates NOT publicly disclosed — agreed individually at sign-up. Rate shown is indicative only. £400/month penalty for using non-Lightspeed payments processor.',
+    pros:['POS software included from £75/month','Multichannel retail features','Inventory & reporting'] },
+
+  { id:'lightspeed_core',
+    name:'Lightspeed', plan:'Core',
+    sub:149, rate:0.020, flat:0.08, extra:0,
+    indicative:true,
+    source:'https://www.lightspeedhq.com/uk/pos/retail/pricing/',
+    warn:'Transaction rates NOT publicly disclosed — agreed individually at sign-up. Rate shown is indicative only. £400/month penalty for using non-Lightspeed payments processor.',
+    pros:['Advanced inventory & purchasing','Accounting integrations','Enhanced reporting'] },
+
+  { id:'lightspeed_plus',
+    name:'Lightspeed', plan:'Plus',
+    sub:189, rate:0.020, flat:0.08, extra:0,
+    indicative:true,
+    source:'https://www.lightspeedhq.com/uk/pos/retail/pricing/',
+    warn:'Transaction rates NOT publicly disclosed — agreed individually at sign-up. Rate shown is indicative only. £400/month penalty for using non-Lightspeed payments processor.',
+    pros:['Full feature set incl. custom reporting','Dedicated account manager','Priority support'] },
+
+  // ── Dojo ── source: https://dojo.tech/pricing (returned 403 — could not verify)
+  { id:'dojo_payg',
+    name:'Dojo', plan:'Pay as you go',
+    sub:0, rate:0.019, flat:0.05, extra:79,
+    indicative:true,
+    source:'https://dojo.tech/pricing',
+    warn:'Pricing page unavailable — rates not publicly disclosed. Rate shown is indicative only. Terminal rental model. Verify directly at dojo.tech/pricing before committing.',
+    pros:['No minimum contract on PAYG','Same-day settlement option','Good UK support'] },
+
+  { id:'dojo_fix',
+    name:'Dojo', plan:'Fix',
+    sub:39.99, rate:0.014, flat:0.05, extra:79,
+    indicative:true,
+    source:'https://dojo.tech/pricing',
+    warn:'Rates not publicly disclosed — indicative only · 12-month contract · £24.95 minimum monthly charge · Business cards at higher rate · Verify at dojo.tech.',
+    pros:['Indicative 1.4%+5p consumer cards','Strong UK retail hardware','Same-day settlement option'] },
+
+  // ── Worldpay ── source: https://www.worldpay.com/en-gb/small-business
+  // Rates not publicly disclosed — all pricing is bespoke
+  { id:'worldpay_payg',
+    name:'Worldpay', plan:'Pay as you go',
+    sub:0, rate:0.0275, flat:0.20, extra:0,
+    indicative:true,
+    source:'https://www.worldpay.com/en-gb/small-business',
+    warn:'Rates not publicly disclosed — figures shown are indicative only · Terminal rental £17.50–22.50/month extra · 18-month minimum contract on some plans · Setup fee ~£25–50',
+    pros:['No long-term contract on PAYG','Widely trusted UK brand','Multi-channel support'] },
+
+  { id:'worldpay_contract',
+    name:'Worldpay', plan:'Contract',
+    sub:20, rate:0.010, flat:0, extra:0,
+    indicative:true,
+    source:'https://www.worldpay.com/en-gb/small-business',
+    warn:'Rate requires custom quote — figure shown is illustrative only · 18-month minimum contract · Early termination fees · Better suited to £75k+/year',
+    pros:['Negotiated rates from ~0.3% debit','Full-service merchant account','Best for high-volume multi-channel'] },
+
+  // ── Barclaycard ── source: https://www.barclaycard.co.uk/business/accepting-payments/card-readers/pocket-sized-card-reader
+  // Indicative — actual rate tailored on application
+  { id:'barclaycard',
+    name:'Barclaycard', plan:'Anywhere (PAYG)',
+    sub:0, rate:0.016, flat:0, extra:29,
+    indicative:true,
+    source:'https://www.barclaycard.co.uk/business/accepting-payments/card-readers/pocket-sized-card-reader',
+    warn:'Indicative rate only — actual rate tailored on application · Authorisation fee ~3p per transaction may apply · 12–36 month contracts on some plans',
+    pros:['~1.6% flat rate indication','No setup fee on PAYG','Trusted UK bank brand'] },
+
+  // ── Clover ── source: https://uk.clover.com/start-taking-payments/
+  // Transaction rates not publicly disclosed
+  { id:'clover',
+    name:'Clover', plan:'Starter',
+    sub:9.99, rate:0.026, flat:0.10, extra:0,
+    indicative:true,
+    source:'https://uk.clover.com/start-taking-payments/',
+    warn:'Transaction rates NOT publicly disclosed — set individually at sign-up. Rate shown is indicative only. Device included in monthly fee. Short-term contract.',
+    pros:['Integrated POS + payments device','Wide app marketplace','Device included in £9.99/month'] },
+
+  // ── Elavon / Opayo ── source: https://www.elavon.co.uk
+  // Rates not published — all pricing bespoke
+  { id:'elavon',
+    name:'Elavon / Opayo', plan:'Standard',
+    sub:25, rate:0.0175, flat:0, extra:0,
+    indicative:true,
+    source:'https://www.elavon.co.uk',
+    warn:'Rates NOT published online — all pricing is bespoke/quoted · 36-month contracts typical · PCI DSS fee ~£6/month · International card handling fee 0.80% (from Feb 2026)',
+    pros:['Established UK processor','Opayo gateway included','Multi-currency support'] },
+];
+
+let sortBy = 'tco';
+
+function fmt(n)    { return '£' + Math.round(n).toLocaleString(); }
+function fmtD(n)   { return '£' + n.toFixed(2); }
+function fmtPct(n) { return n.toFixed(2) + '%'; }
+
+function setSortBy(s) {
+  sortBy = s;
+  ['tco','rate','monthly'].forEach(k => {
+    const b = document.getElementById('sb-' + k);
+    if (b) b.classList.toggle('active', k === s);
+  });
+  calc();
+}
+
+function calc() {
+  const txn    = parseInt(document.getElementById('r-txn').value);
+  const val    = parseInt(document.getElementById('r-val').value);
+  const days   = parseInt(document.getElementById('r-days').value);
+  const infl   = parseFloat(document.getElementById('r-infl').value) / 100;
+  const growth = parseFloat(document.getElementById('r-growth').value) / 100;
+  document.getElementById('v-txn').textContent    = txn;
+  document.getElementById('v-val').textContent    = '£' + val;
+  document.getElementById('v-days').textContent   = days;
+  document.getElementById('v-infl').textContent   = (infl * 100).toFixed(1) + '%';
+  document.getElementById('v-growth').textContent = (growth * 100).toFixed(0) + '%';
+
+  const mVol  = txn * val * days;
+  const mTxns = txn * days;
+
+  // Compound over 5 years (12 months each)
+  let rev5y = 0;
+  const yearlyFees = Array(PROVIDERS.length).fill(0);
+  for (let y = 0; y < 5; y++) {
+    const valY  = val  * Math.pow(1 + infl,   y);
+    const txnY  = txn  * Math.pow(1 + growth, y);
+    const mVolY = txnY * valY * days;
+    const mTxnY = txnY * days;
+    rev5y += mVolY * 12;
+    PROVIDERS.forEach((p, i) => {
+      yearlyFees[i] += (mVolY * p.rate + mTxnY * p.flat) * 12;
+    });
+  }
+
+  const rows = PROVIDERS.map((p, i) => {
+    const hw   = BASE_HW + p.extra;
+    const fees = yearlyFees[i];
+    const subs = p.sub * 60;
+    const tco  = hw + fees + subs;
+    const mFee = mVol * p.rate + mTxns * p.flat;
+    return { ...p, hw, fees, subs, tco, mFee };
+  });
+
+  if (sortBy === 'tco')          rows.sort((a,b) => a.tco  - b.tco);
+  else if (sortBy === 'rate')    rows.sort((a,b) => a.rate - b.rate);
+  else                           rows.sort((a,b) => a.mFee - b.mFee);
+
+  // Recommended = lowest TCO overall
+  const recommended = rows.reduce((a, b) => a.tco < b.tco ? a : b);
+
+  const maxTco = Math.max(...rows.map(r => r.tco));
+  const minTco = rows[0].tco;
+  const stripeTco = rows.find(r => r.id === 'stripe')?.tco ?? 0;
+  const winner  = rows[0];
+  const brkEven = winner.sub > 0
+    ? Math.ceil(winner.sub / ((0.0169 - winner.rate) * val))
+    : 0;
+
+  document.getElementById('be-save').textContent = fmt(stripeTco - minTco);
+  document.getElementById('be-mvol').textContent = fmt(mVol);
+  document.getElementById('be-rev5').textContent = fmt(rev5y);
+  document.getElementById('be-brkn').textContent = brkEven > 0 ? brkEven + ' sales' : 'N/A';
+  document.getElementById('be-pct').textContent  = (recommended.tco / rev5y * 100).toFixed(1) + '%';
+
+  // Derive the hostname for the source label
+  function sourceHost(url) {
+    try { return new URL(url).hostname.replace(/^www\./, ''); }
+    catch(e) { return url; }
+  }
+
+  document.getElementById('provider-grid').innerHTML = rows.map(r => {
+    const hwPct   = Math.round(r.hw    / maxTco * 100);
+    const feesPct = Math.round(r.fees  / maxTco * 100);
+    const subPct  = Math.round(r.subs  / maxTco * 100);
+    const isRecommended = r.id === recommended.id;
+    const cardClass = isRecommended ? ' winner' : '';
+
+    const badge = isRecommended
+      ? '<div class="p-badge">Recommended</div>'
+      : '<div style="height:21px"></div>';
+
+    const indicativeBadge = r.indicative
+      ? `<div class="p-indicative">⚠ Rate indicative — not fully confirmed from public pricing page</div>`
+      : '';
+
+    return `<a class="provider-card${cardClass}" href="${r.source}" target="_blank" rel="noopener">
+      ${badge}
+      <div class="p-name">${r.name}</div>
+      <div class="p-plan">${r.plan}</div>
+      <div class="p-tco">${fmt(r.tco)}</div>
+      <div class="p-tco-label">5-year total (inflation-adjusted)</div>
+      <div>
+        <div class="mini-bar-row"><span style="min-width:30px">HW</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${hwPct}%;background:#6b4e1a"></div></div><span style="min-width:38px;text-align:right">${fmt(r.hw)}</span></div>
+        <div class="mini-bar-row"><span style="min-width:30px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#c9a84c"></div></div><span style="min-width:38px;text-align:right">${fmt(r.fees)}</span></div>
+        <div class="mini-bar-row"><span style="min-width:30px">Sub</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${subPct}%;background:#4a5a3a"></div></div><span style="min-width:38px;text-align:right">${fmt(r.subs)}</span></div>
+      </div>
+      <div class="p-rate">In-person rate</div>
+      <div class="p-rate-val">${fmtPct(r.rate * 100)}${r.flat ? ' + ' + Math.round(r.flat * 100) + 'p' : ''} · Sub: ${r.sub ? '£' + r.sub + '/mo' : 'None'}</div>
+      <div class="p-monthly">Monthly on <strong>${fmt(mVol)}</strong>: <strong>${fmtD(r.mFee)}</strong></div>
+      <ul class="p-pros">${r.pros.map(p => `<li>${p}</li>`).join('')}</ul>
+      ${r.warn ? `<div class="p-warn">⚠ ${r.warn}</div>` : ''}
+      ${indicativeBadge}
+      <span class="p-source">↗ ${sourceHost(r.source)}</span>
+    </a>`;
+  }).join('');
+
+  // ── SAVINGS BANNER ──
+  // Populate dropdown on first run
+  const sel = document.getElementById('current-provider');
+  if (sel.options.length === 1) {
+    rows.forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.id;
+      opt.textContent = r.name + ' — ' + r.plan;
+      sel.appendChild(opt);
+    });
+  }
+
+  const currentId = sel.value;
+  const resultEl  = document.getElementById('savings-result');
+  if (!currentId) {
+    resultEl.style.display = 'none';
+  } else {
+    const current = rows.find(r => r.id === currentId);
+    const saving  = current ? current.tco - recommended.tco : null;
+    if (saving !== null && saving > 0) {
+      document.getElementById('sb-saving-num').textContent   = fmt(saving);
+      document.getElementById('sb-saving-detail').textContent =
+        'vs ' + recommended.name + ' ' + recommended.plan +
+        ' (' + fmtPct(recommended.rate * 100) + (recommended.flat ? ' + ' + Math.round(recommended.flat * 100) + 'p' : '') + ')';
+    } else if (saving !== null && saving <= 0) {
+      document.getElementById('sb-saving-num').textContent   = 'Already cheapest';
+      document.getElementById('sb-saving-detail').textContent = 'No cheaper option found at these volumes';
+    }
+    resultEl.style.display = 'block';
+  }
+}
+
+calc();
+</script>
+</body>
+</html>
