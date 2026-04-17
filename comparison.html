@@ -510,7 +510,7 @@ footer {
       </div>
       <div>
         <div class="sl-label">Trading days / month</div>
-        <input type="range" id="r-days" min="15" max="31" step="1" value="22" oninput="calc()">
+        <input type="range" id="r-days" min="4" max="31" step="1" value="22" oninput="calc()">
         <div class="sl-val" id="v-days">22</div>
       </div>
       <div>
@@ -523,10 +523,7 @@ footer {
         <input type="range" id="r-growth" min="0" max="20" step="1" value="3" oninput="calc()">
         <div class="sl-val" id="v-growth">3%</div>
       </div>
-      <div>
-        <div class="sl-label">5yr saving vs Stripe</div>
-        <div class="sl-val" id="be-save">—</div>
-      </div>
+
       <div>
         <div class="sl-label">Yr 1 monthly card volume</div>
         <div class="sl-val" id="be-mvol">—</div>
@@ -908,7 +905,6 @@ function calc() {
     ? Math.ceil(winner.sub / ((0.0169 - winner.rate) * val))
     : 0;
 
-  document.getElementById('be-save').textContent = fmt(stripeTco - minTco);
   document.getElementById('be-mvol').textContent = fmt(mVol);
   document.getElementById('be-rev5').textContent = fmt(rev5y);
   document.getElementById('be-brkn').textContent = brkEven > 0 ? brkEven + ' sales' : 'N/A';
