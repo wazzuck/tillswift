@@ -231,6 +231,18 @@ input[type="range"]::-moz-range-thumb {
 }
 .p-pros li::before { content: '+'; position: absolute; left: 0; color: var(--gold); }
 
+.p-cons { list-style: none; margin-top: 0.3rem; }
+.p-cons li {
+  font-size: 11px; color: var(--muted);
+  padding: 2px 0 2px 13px; position: relative; line-height: 1.45;
+}
+.p-cons li::before { content: '−'; position: absolute; left: 0; color: rgba(220,80,80,0.75); }
+
+.p-pros-cons-divider {
+  border: none; border-top: 1px solid var(--border);
+  margin: 0.5rem 0 0.3rem;
+}
+
 .p-warn { font-size: 10px; color: rgba(201,168,76,0.6); margin-top: 6px; line-height: 1.45; }
 .p-indicative { font-size: 10px; color: rgba(180,130,50,0.8); margin-top: 6px; line-height: 1.45; border-top: 1px solid var(--border); padding-top: 6px; }
 
@@ -307,6 +319,48 @@ footer {
 }
 .footer-tagline { font-size: 11px; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 1.25rem; }
 .footer-note { font-size: 13px; color: rgba(248,245,239,0.55); max-width: 640px; margin: 0 auto; line-height: 1.7; }
+
+/* ── PARTNER / ISC SECTION ── */
+.partner-section { background: var(--black); border-bottom: 1px solid var(--border); }
+
+.partner-table-wrap { overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border); }
+.partner-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.partner-table th {
+  background: var(--black3); color: var(--gold);
+  font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 400;
+  padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border2);
+  white-space: nowrap;
+}
+.partner-table tr.pt-row { cursor: pointer; transition: background 0.15s; border-bottom: 1px solid var(--border); }
+.partner-table tr.pt-row:hover { background: var(--black3); }
+.partner-table tr.pt-row.pt-highlight { background: rgba(201,168,76,0.04); }
+.partner-table tr.pt-row.pt-highlight:hover { background: rgba(201,168,76,0.08); }
+.partner-table td { padding: 0.85rem 1rem; color: var(--muted); vertical-align: top; line-height: 1.5; }
+.pt-name { font-family: var(--font-serif); font-size: 1rem; color: var(--white); font-weight: 400; white-space: nowrap; }
+.pt-source-label { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(201,168,76,0.4); display: block; margin-top: 3px; }
+.pt-badge { display: inline-block; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; padding: 2px 7px; border: 1px solid; margin-bottom: 4px; }
+.pt-yes    { color: #6ed98a; border-color: rgba(110,217,138,0.3); background: rgba(110,217,138,0.07); }
+.pt-likely { color: var(--gold); border-color: var(--border2); background: rgba(201,168,76,0.06); }
+.pt-no     { color: rgba(248,245,239,0.25); border-color: rgba(255,255,255,0.08); }
+
+.rr-stat-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1px; background: var(--border); border: 1px solid var(--border); margin: 1.5rem 0;
+}
+.rr-stat { background: var(--black2); padding: 1.25rem 1.5rem; }
+.rr-stat-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.rr-stat-val { font-family: var(--font-serif); font-size: 2rem; font-weight: 400; color: var(--gold2); }
+
+.rr-breakdown { width: 100%; border-collapse: collapse; font-size: 12px; }
+.rr-breakdown th {
+  background: var(--black3); color: var(--gold);
+  font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 400;
+  padding: 0.65rem 1rem; text-align: left; border-bottom: 1px solid var(--border2);
+}
+.rr-breakdown td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); color: var(--muted); }
+.rr-breakdown td.rr-num { font-family: var(--font-serif); color: var(--gold2); font-size: 1rem; }
+.rr-breakdown tr.rr-total td { border-top: 1px solid var(--border2); color: var(--white); }
+.rr-breakdown tr.rr-total td.rr-num { color: var(--gold2); }
 </style>
 </head>
 <body>
@@ -315,6 +369,108 @@ footer {
   <span class="nav-brand">Tiara</span>
   <span class="nav-sub">Payment Provider Comparison · April 2026</span>
 </nav>
+
+<!-- ── PARTNER / ISC SECTION ── -->
+<div class="partner-section full-bleed" id="partners">
+  <div class="full-bleed-inner">
+
+    <div class="reveal">
+      <div class="section-eyebrow">Referral &amp; Partner Programmes</div>
+      <h2 class="section-heading">Who pays <em>you</em> to sell?</h2>
+      <p class="section-body">Every provider researched from their official website only — click any row to open the source page. Providers confirming no programme have been verified directly. <span style="color:var(--gold)">Residual programmes</span> pay an ongoing % of your referred merchants' card turnover, compounding as your portfolio grows.</p>
+    </div>
+
+    <div class="sort-row reveal">
+      <span class="sort-label">Sort by</span>
+      <button class="sort-btn active" id="psb-residuals" onclick="setPartnerSort('residuals')">Residuals</button>
+      <button class="sort-btn" id="psb-upfront"   onclick="setPartnerSort('upfront')">Upfront / Bounty</button>
+      <button class="sort-btn" id="psb-name"      onclick="setPartnerSort('name')">Provider A–Z</button>
+    </div>
+
+    <div class="partner-table-wrap reveal">
+      <table class="partner-table">
+        <thead>
+          <tr>
+            <th>Provider</th>
+            <th>Programme Type</th>
+            <th>Sign-up Fee</th>
+            <th>Upfront / Bounty</th>
+            <th>Residuals</th>
+          </tr>
+        </thead>
+        <tbody id="partner-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- ── RESIDUAL CALCULATOR ── -->
+    <div class="reveal" style="margin-top:3.5rem">
+      <div class="section-eyebrow">Residual Income Calculator</div>
+      <h3 style="font-family:var(--font-serif);font-size:clamp(1.4rem,2.5vw,2rem);font-weight:400;color:var(--white);line-height:1.2;margin-bottom:0.75rem">Model your <em style="font-style:italic;color:var(--gold2)">ISC earnings</em></h3>
+      <p class="section-body" style="margin-bottom:1.5rem">Residual rate and upfront bounty are negotiated individually with each provider. <strong style="color:var(--gold2)">Teya</strong> is the only provider to publish specific figures publicly (£350–£3,300 bounty; top ISC earned £196,000 in residuals in 2025) — use their data as a benchmark when modelling.</p>
+
+      <div class="slider-row">
+        <div>
+          <div class="sl-label">Merchants in portfolio</div>
+          <input type="range" id="rr-merchants" min="1" max="100" step="1" value="10" oninput="calcResiduals()">
+          <div class="sl-val" id="rr-v-merchants">10</div>
+        </div>
+        <div>
+          <div class="sl-label">Avg monthly vol / merchant</div>
+          <input type="range" id="rr-mvol" min="1000" max="100000" step="1000" value="10000" oninput="calcResiduals()">
+          <div class="sl-val" id="rr-v-mvol">£10,000</div>
+        </div>
+        <div>
+          <div class="sl-label">Residual rate (%)</div>
+          <input type="range" id="rr-rpct" min="0.05" max="0.50" step="0.01" value="0.15" oninput="calcResiduals()">
+          <div class="sl-val" id="rr-v-rpct">0.15%</div>
+        </div>
+        <div>
+          <div class="sl-label">Upfront bounty / merchant</div>
+          <input type="range" id="rr-bounty" min="0" max="3300" step="50" value="350" oninput="calcResiduals()">
+          <div class="sl-val" id="rr-v-bounty">£350</div>
+        </div>
+        <div>
+          <div class="sl-label">Years to project</div>
+          <input type="range" id="rr-years" min="1" max="10" step="1" value="3" oninput="calcResiduals()">
+          <div class="sl-val" id="rr-v-years">3 yrs</div>
+        </div>
+        <div>
+          <div class="sl-label">Total upfront income</div>
+          <div class="sl-val" id="rr-stat-upfront">—</div>
+        </div>
+        <div>
+          <div class="sl-label">Annual residual income</div>
+          <div class="sl-val" id="rr-stat-annual">—</div>
+        </div>
+        <div>
+          <div class="sl-label">Cumulative residuals</div>
+          <div class="sl-val" id="rr-stat-residual">—</div>
+        </div>
+        <div>
+          <div class="sl-label">Total combined income</div>
+          <div class="sl-val" id="rr-stat-total">—</div>
+        </div>
+      </div>
+
+      <div class="partner-table-wrap">
+        <table class="rr-breakdown">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Annual Residual</th>
+              <th>Cumulative Residual</th>
+              <th>Total incl. Upfront</th>
+            </tr>
+          </thead>
+          <tbody id="rr-breakdown-tbody"></tbody>
+        </table>
+      </div>
+
+      <p style="font-size:11px;color:rgba(248,245,239,0.2);margin-top:1rem;line-height:1.6">Residual rate and upfront bounty are illustrative — actual amounts depend on individual agreements with each provider. Only Teya publishes specific figures publicly. All other provider programme details require direct contact.</p>
+    </div>
+
+  </div>
+</div>
 
 <div class="pricing-section full-bleed" id="pricing">
   <div class="full-bleed-inner">
@@ -635,6 +791,53 @@ const PROVIDERS = [
     source:'https://www.elavon.co.uk',
     warn:'Rates NOT published online — all pricing is bespoke/quoted · 36-month contracts typical · PCI DSS fee ~£6/month · International card handling fee 0.80% (from Feb 2026)',
     pros:['Established UK processor','Opayo gateway included','Multi-currency support'] },
+
+  // ── Lopay ── source: https://lopay.com/en-gb/pricing
+  { id:'lopay_essential',
+    name:'Lopay', plan:'Essential',
+    sub:0, rate:0.0079, flat:0, extra:31,
+    source:'https://lopay.com/en-gb/pricing',
+    warn:'UK consumer Visa/MC only — Amex, international & corporate cards: +1% on all accounts · Payout on Thursdays only, no next-day option · Reader must be ordered in-app for £24 price (£49 thereafter)',
+    pros:['Lowest published rate: 0.79% UK consumer cards','No monthly fee or contract','WisePad3 reader from £24 in-app + £6.95 P&P'] },
+
+  { id:'lopay_standard',
+    name:'Lopay', plan:'Standard',
+    sub:0, rate:0.0099, flat:0, extra:31,
+    source:'https://lopay.com/en-gb/pricing',
+    warn:'UK consumer Visa/MC only — Amex, international & corporate cards: +1% · Payouts Mon–Fri only (next-day, weekly, or monthly)',
+    pros:['0.99% UK consumer Visa/MC','Flexible next-day / weekly / monthly payouts Mon–Fri','No monthly fee or contract'] },
+
+  { id:'lopay_instant',
+    name:'Lopay', plan:'Instant to Bank',
+    sub:0, rate:0.0179, flat:0, extra:31,
+    source:'https://lopay.com/en-gb/pricing',
+    warn:'UK consumer Visa/MC only — Amex, international & corporate cards: +1% · 1.79% rate is a significant premium — only worthwhile if instant settlement is critical · Payment Links & Subscriptions also 1.79% (min £0.50 per payout)',
+    pros:['Instant 24/7 payouts incl. weekends & bank holidays','No monthly fee or contract','Same-day access to funds'] },
+
+  // ── Tide ── source: https://www.tide.co/features/card-reader/
+  { id:'tide_payg',
+    name:'Tide', plan:'Pay As You Go',
+    sub:0, rate:0.0139, flat:0.05, extra:191,
+    source:'https://www.tide.co/features/card-reader/',
+    warn:'Requires Tide business account · Card Reader £159+VAT (£191 inc VAT) or Card Reader Plus £199+VAT · Other card types not listed publicly — see Tide Membership & Product Terms · Tap to Pay on iPhone: 1.5%+11p',
+    pros:['No monthly fee or contract','1.39%+5p domestic consumer debit','Integrated with Tide business banking'] },
+
+  { id:'tide_sellinperson',
+    name:'Tide', plan:'Sell In-Person',
+    sub:17.99, rate:0.0079, flat:0.03, extra:119,
+    source:'https://www.tide.co/features/card-reader/',
+    warn:'Price rising to £17.99+VAT/month from 27 Apr 2026 (was £12.99+VAT) · Reader from £99+VAT with active subscription · Requires Tide business account · Other card types not publicly listed · Contact sales for custom rates above £8,300/month · Tap to Pay: 0.79%+9p',
+    pros:['0.79%+3p domestic consumer debit','Discounted reader from £99+VAT with subscription','Cost-effective above £2,200/month card volume'] },
+
+  // ── TakePayments ── source: https://www.takepayments.com/quotation-tool/
+  // Rates not publicly disclosed — custom quote only
+  { id:'takepayments',
+    name:'TakePayments', plan:'Custom Quote',
+    sub:30, rate:0.015, flat:0.05, extra:0,
+    indicative:true,
+    source:'https://www.takepayments.com/quotation-tool/',
+    warn:'Rates NOT publicly disclosed — all pricing is custom-quoted. Figures shown are indicative. Monthly charge covers terminal rental, PCI DSS fee & minimum monthly service charge. Call 01472 306 695 or use online quotation tool.',
+    pros:['Accepts Visa, MC, Amex, JCB & Diners','Contracts available from 30 days','Next-day settlement · Terminal included in monthly rental'] },
 ];
 
 let sortBy = 'tco';
@@ -747,6 +950,7 @@ function calc() {
       <div class="p-rate-val">${fmtPct(r.rate * 100)}${r.flat ? ' + ' + Math.round(r.flat * 100) + 'p' : ''} · Sub: ${r.sub ? '£' + r.sub + '/mo' : 'None'}</div>
       <div class="p-monthly">Monthly on <strong>${fmt(mVol)}</strong>: <strong>${fmtD(r.mFee)}</strong></div>
       <ul class="p-pros">${r.pros.map(p => `<li>${p}</li>`).join('')}</ul>
+      ${(CONS[r.id] && CONS[r.id].length) ? `<hr class="p-pros-cons-divider"><ul class="p-cons">${CONS[r.id].map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
       ${r.warn ? `<div class="p-warn">⚠ ${r.warn}</div>` : ''}
       ${indicativeBadge}
       <span class="p-source">↗ ${sourceHost(r.source)}</span>
@@ -785,7 +989,431 @@ function calc() {
   }
 }
 
+// ── COMMON COMPLAINTS & ADVANTAGES (provider cons keyed by id) ──
+const CONS = {
+  sumup_payg: [
+    'Support is chat/email only — no dedicated phone line on PAYG',
+    'Account compliance holds reported with little prior notice',
+    'Amex & international cards at 1.69% — no blended rate reduction',
+  ],
+  sumup_plus: [
+    '0.99% applies to UK/EU consumer Visa/MC only — Amex, corporate & international still 1.69%',
+    'High-volume merchants (£10k+/month) must contact sales — no self-serve upgrade path',
+    'Periodic compliance reviews can result in temporary account holds',
+  ],
+  teya: [
+    '£29.99/month fee triggered if monthly card volume drops below £2,500',
+    'Add 0.10% to rate if not using a Teya Business Account',
+    'Newer company — smaller support infrastructure than established banks',
+  ],
+  revolut_basic: [
+    'Requires a Revolut Business account — not usable if you bank elsewhere',
+    'No Amex support at any price point',
+    'International and commercial cards charged at a much higher 2.6%+2p',
+    'Account freezes during compliance checks widely reported',
+  ],
+  revolut_grow: [
+    'Same 0.8%+2p in-person rate as the free Basic plan — subscription cost buys banking features only',
+    'No Amex accepted',
+    'International/commercial cards still at 2.6%+2p regardless of plan',
+  ],
+  revolut_scale: [
+    'Highest monthly cost (£100) with no improvement to the in-person processing rate over Basic',
+    'No Amex accepted at any tier',
+    'International/commercial cards still at 2.6%+2p — a significant premium',
+  ],
+  stripe: [
+    'No native retail POS — in-store setup requires developer integration',
+    'Non-EEA cards charged at 2.9%+10p — a substantial jump',
+    'Tap to Pay adds an extra 10p per authorisation on top of the transaction fee',
+    'Not practical for a pure retail business without technical resource',
+  ],
+  square_free: [
+    'Non-UK cards attract a +1.5% surcharge, significantly raising the effective rate',
+    'Basic reader included; better hardware costs extra',
+    'Customer support primarily via online chat — limited phone access',
+  ],
+  square_plus: [
+    'In-person transaction rate is identical to the free plan — subscription only unlocks software features',
+    'Non-UK card surcharge of +1.5% still applies',
+    '£29/month hard to justify for smaller retailers who don\'t need the advanced POS features',
+  ],
+  zettle: [
+    'Invoice payments charged at a higher 2.5%',
+    'Customer service quality rated inconsistently across review platforms',
+    'Less integrated than Revolut or Tide for business banking',
+  ],
+  mypos: [
+    'Amex charged at a significantly higher 2.45%+7p',
+    'International/commercial cards at 2.85%+7p',
+    'Funds settle into myPOS account, not directly to your business bank',
+    'POS software less feature-rich than Square or Shopify',
+  ],
+  tyl: [
+    'Requires a NatWest business bank account — excludes all non-NatWest customers',
+    '12-month terminal rental contract with penalties for early exit',
+    'Business and international cards charged at a higher 1.99%+5p',
+  ],
+  shopify_basic: [
+    'Locked into Shopify Payments — using a 3rd-party processor adds a 2% surcharge',
+    'POS Pro (advanced retail features) costs an additional £69/month per location',
+    'Entire business stack must run on Shopify ecosystem',
+  ],
+  shopify_grow: [
+    '3rd-party processor surcharge drops to 1% but remains — still locks you in',
+    'POS Pro still +£69/month/location on top of the £65 subscription',
+    'Rate improvement over Basic (1.7% → 1.6%) modest given the higher subscription cost',
+  ],
+  shopify_advanced: [
+    '£344/month subscription — only cost-effective at very high combined online and offline volume',
+    'POS Pro still +£69/month/location on top of the highest subscription tier',
+    'Deep ecosystem lock-in — switching processors incurs significant financial penalties',
+  ],
+  lightspeed_basic: [
+    'Transaction rates not disclosed publicly — you must agree before seeing what you\'ll pay',
+    '£400/month penalty if you choose any processor other than Lightspeed Payments',
+    'One of the more expensive POS subscriptions in the market at £75/month before payments',
+  ],
+  lightspeed_core: [
+    'Rates not disclosed — same transparency issue as Basic tier',
+    '£400/month non-Lightspeed processor penalty at every tier',
+    'High monthly cost — better suited to multi-location retailers than a boutique',
+  ],
+  lightspeed_plus: [
+    'Rates not disclosed publicly at the highest and most expensive tier',
+    '£400/month processor penalty remains regardless of plan',
+    'Overkill for single-location businesses — cost hard to justify at this scale',
+  ],
+  dojo_payg: [
+    'Official pricing page inaccessible — rates could not be verified from official source',
+    'Terminal rental model adds an ongoing cost on top of transaction fees',
+    'Limited public pricing transparency makes direct comparison difficult',
+  ],
+  dojo_fix: [
+    '12-month contract — early exit carries financial implications',
+    '£24.95 minimum monthly service charge applies regardless of volume processed',
+    'Rates not publicly disclosed — individual quote required before committing',
+  ],
+  worldpay_payg: [
+    'Terminal rental (£17.50–£22.50/month) is an additional cost on top of transaction fees',
+    'Setup fee of approximately £25–£50 may apply',
+    'All rates indicative — actual pricing requires a quote and may differ significantly',
+  ],
+  worldpay_contract: [
+    '18-month minimum contract with early termination fees',
+    'All pricing custom-quoted — no transparency without engaging their sales team',
+    'Negotiated rates typically only advantageous at £75k+/year card volume',
+  ],
+  barclaycard: [
+    'Actual rate tailored on application — no guarantee of the indicative 1.6% figure',
+    'Authorisation fee of approximately 3p per transaction may be added on top',
+    '12–36 month contracts available — read the small print carefully before signing',
+  ],
+  clover: [
+    'Transaction rates set individually at sign-up — no published rate to compare against',
+    'Device is tied to Clover\'s own processing — very limited flexibility to switch',
+    'Refer-a-friend scheme is a limited-time promotion (valid to 30 Jun 2026 only)',
+  ],
+  elavon: [
+    '36-month contracts are typical — a very long commitment for a boutique retailer',
+    'PCI DSS compliance fee of approximately £6/month is charged on top of other fees',
+    'International card handling fee of 0.80% added from February 2026',
+    'All pricing bespoke — impossible to compare online without obtaining a full quote',
+  ],
+  lopay_essential: [
+    'Payouts available on Thursdays only — not suitable if daily cash-flow access is needed',
+    '+1% surcharge on Amex, international and corporate cards on all accounts',
+    'In-app reader order required to access the £24 price — subsequent orders cost £49',
+  ],
+  lopay_standard: [
+    'Payouts limited to Monday–Friday — no weekend or bank-holiday settlement',
+    '+1% surcharge on Amex, international and corporate cards',
+    '0.99% rate becomes less competitive than subscription alternatives at higher volumes',
+  ],
+  lopay_instant: [
+    '1.79% rate is substantially higher than alternatives — a large premium for instant settlement',
+    '+1% on Amex, international and corporate cards makes total rate 2.79%+ for those card types',
+    'Harder to justify vs. cheaper alternatives if next-day (rather than instant) settlement is acceptable',
+  ],
+  tide_payg: [
+    'Reader is £159+VAT (£191 inc VAT) — the most expensive standalone reader in this comparison',
+    'Rates for non-domestic/non-consumer cards not published — potential surprises at checkout',
+    'Requires a Tide business account — unavailable to non-Tide customers',
+  ],
+  tide_sellinperson: [
+    'Price rising to £17.99+VAT/month from 27 Apr 2026 — a significant recent increase',
+    'Rates for non-domestic/non-consumer cards not listed publicly',
+    'Requires a Tide business account — cannot use as a standalone payments product',
+  ],
+  takepayments: [
+    'All pricing custom-quoted — no online transparency before engaging their sales team',
+    'PCI DSS fee and minimum monthly service charge are additional costs on top of transaction fees',
+    'Must enter a formal contract — terms vary and require careful review',
+  ],
+};
+
 calc();
+
+// ── PARTNER / ISC DATA ──
+// hasResiduals: 2=confirmed, 1=likely/undisclosed, 0=none/not found
+const PARTNERS = [
+  { name:"Teya",
+    type:"ISO / Independent Sales Consultant",
+    signupFee:"None",
+    upfrontDesc:"£350–£3,300 per merchant live; bounty multipliers up to +200% for higher-value merchants",
+    upfrontMax:3300,
+    residualDesc:"Yes — monthly, uncapped, paid as merchants transact. Top ISC earned £196,000 in residuals in 2025. Tier system: bounty increases as you hit milestones.",
+    hasResiduals:2,
+    source:"https://www.teya.com/independent-sales-consultants" },
+
+  { name:"TakePayments",
+    type:"ISO / Reseller / ISV",
+    signupFee:"None stated",
+    upfrontDesc:"Not publicly disclosed",
+    upfrontMax:null,
+    residualDesc:"Yes — an agreed % of commission on referred merchant's transactional activity for contract duration. Rate negotiated; not disclosed publicly. Partner portal + dedicated manager provided.",
+    hasResiduals:2,
+    source:"https://www.takepayments.com/partners/" },
+
+  { name:"Lightspeed",
+    type:"Referral / Integration Partner",
+    signupFee:"None stated",
+    upfrontDesc:"Not publicly disclosed; one-time payout confirmed alongside recurring commissions",
+    upfrontMax:null,
+    residualDesc:"Yes — 'recurring commissions' explicitly confirmed. Rates not disclosed; described as 'some of the highest commission opportunities in the industry'.",
+    hasResiduals:2,
+    source:"https://www.lightspeedhq.com/partners/" },
+
+  { name:"Worldpay",
+    type:"ISO / Software / Marketplace Partner",
+    signupFee:"Not disclosed",
+    upfrontDesc:"Not disclosed",
+    upfrontMax:null,
+    residualDesc:"Likely — ISO model; standard industry practice is ongoing residuals on processing volume. Rates not publicly disclosed; contact required.",
+    hasResiduals:1,
+    source:"https://www.worldpay.com/en-gb/partners" },
+
+  { name:"Elavon / Opayo",
+    type:"ISO / IPS Partner",
+    signupFee:"Not disclosed",
+    upfrontDesc:"Not disclosed",
+    upfrontMax:null,
+    residualDesc:"Likely — ISO model; standard industry practice is ongoing residuals. Rates not publicly disclosed; dedicated partner manager provided.",
+    hasResiduals:1,
+    source:"https://www.elavon.co.uk/partners" },
+
+  { name:"SumUp",
+    type:"Affiliate / Referral / Reseller",
+    signupFee:"None stated",
+    upfrontDesc:"Not disclosed — 'scalable commissions and discounts' mentioned for resellers",
+    upfrontMax:null,
+    residualDesc:"Possible — revenue sharing on transactions for integration partners mentioned. Exact structure not publicly disclosed; four partner tracks available.",
+    hasResiduals:1,
+    source:"https://sumup.com/en-gb/partner/" },
+
+  { name:"myPOS",
+    type:"Partner Programme",
+    signupFee:"None",
+    upfrontDesc:"Not disclosed",
+    upfrontMax:null,
+    residualDesc:"Implied — 'keep bringing customers and keep getting paid' stated. Structure and rate not publicly disclosed; apply online.",
+    hasResiduals:1,
+    source:"https://www.mypos.com/en-gb/become-a-partner" },
+
+  { name:"Tyl by NatWest",
+    type:"Partner Programme",
+    signupFee:"Not disclosed",
+    upfrontDesc:"Not disclosed — terms provided during referral process only",
+    upfrontMax:null,
+    residualDesc:"Not disclosed publicly — 'commission terms disclosed during the referral process' per official website.",
+    hasResiduals:1,
+    source:"https://www.tylbynatwest.com/partners/" },
+
+  { name:"Dojo",
+    type:"Could not verify — website inaccessible",
+    signupFee:"Unknown",
+    upfrontDesc:"Could not be verified — official website (dojo.tech) returned access errors during research",
+    upfrontMax:null,
+    residualDesc:"Unknown — dojo.tech returned access errors during all research attempts. Cannot confirm or deny from official source.",
+    hasResiduals:1,
+    source:"https://dojo.tech" },
+
+  { name:"Zettle by PayPal",
+    type:"Distribution / Integration Partner",
+    signupFee:"Not disclosed",
+    upfrontDesc:"Not disclosed — three partner tracks: payments integration, application integration, distribution",
+    upfrontMax:null,
+    residualDesc:"Not disclosed — 'start earning rewards today' stated but financial terms require direct contact.",
+    hasResiduals:1,
+    source:"https://www.zettle.com/gb/affiliates/" },
+
+  { name:"Shopify POS",
+    type:"Affiliate",
+    signupFee:"None — free to join",
+    upfrontDesc:"Up to $150 USD (approx. £120) per qualified referral. 30-day tracking cookie; monthly payouts on 22nd.",
+    upfrontMax:120,
+    residualDesc:"None — one-time payment per referral only. No ongoing residuals.",
+    hasResiduals:0,
+    source:"https://www.shopify.com/affiliates" },
+
+  { name:"Square",
+    type:"Affiliate",
+    signupFee:"None — free to join",
+    upfrontDesc:"Commission per referral via Partnerize platform — rate not publicly disclosed. Min £50 payout threshold.",
+    upfrontMax:null,
+    residualDesc:"None — one-time per referral. No ongoing residuals.",
+    hasResiduals:0,
+    source:"https://squareup.com/gb/en/affiliate" },
+
+  { name:"Clover",
+    type:"Refer-a-Friend / ISO",
+    signupFee:"None",
+    upfrontDesc:"£100 Amazon gift voucher per successful referral (scheme valid to 30 Jun 2026 only). ISO programme rates not disclosed.",
+    upfrontMax:100,
+    residualDesc:"None for refer-a-friend scheme. ISO programme rates not publicly disclosed; apply separately.",
+    hasResiduals:0,
+    source:"https://uk.clover.com/refer-a-friend/" },
+
+  { name:"Tide",
+    type:"Partner Programme",
+    signupFee:"None — free to join",
+    upfrontDesc:"Not disclosed — described as 'market-leading commission amounts per referral'",
+    upfrontMax:null,
+    residualDesc:"None indicated — per-referral incentives only. No mention of ongoing residuals on official page.",
+    hasResiduals:0,
+    source:"https://www.tide.co/partners/" },
+
+  { name:"Stripe",
+    type:"Technology / Services Partners only",
+    signupFee:"N/A",
+    upfrontDesc:"No referral or affiliate commission scheme for independent sales consultants",
+    upfrontMax:0,
+    residualDesc:"None — no ISO, referral, or affiliate programme. Partner ecosystem is for technology builders and agencies only.",
+    hasResiduals:0,
+    source:"https://stripe.com/gb/partners" },
+
+  { name:"Revolut Business",
+    type:"No programme found",
+    signupFee:"N/A",
+    upfrontDesc:"N/A — no programme found",
+    upfrontMax:0,
+    residualDesc:"None — no referral, affiliate, or ISO programme of any kind found on the official Revolut Business website.",
+    hasResiduals:0,
+    source:"https://www.revolut.com/business/" },
+
+  { name:"Lopay",
+    type:"No programme found",
+    signupFee:"N/A",
+    upfrontDesc:"N/A — no programme found",
+    upfrontMax:0,
+    residualDesc:"None — no referral, affiliate, or partner programme of any kind found on the official Lopay website.",
+    hasResiduals:0,
+    source:"https://lopay.com/en-gb" },
+
+  { name:"Barclaycard",
+    type:"No programme found",
+    signupFee:"N/A",
+    upfrontDesc:"N/A — no programme found",
+    upfrontMax:0,
+    residualDesc:"None — no referral, affiliate, or partner programme found on the official Barclaycard business website.",
+    hasResiduals:0,
+    source:"https://www.barclaycard.co.uk/business/accepting-payments/card-readers/pocket-sized-card-reader" },
+];
+
+let partnerSortKey = 'residuals';
+let partnerSortAsc = false;
+
+function setPartnerSort(key) {
+  if (partnerSortKey === key) {
+    partnerSortAsc = !partnerSortAsc;
+  } else {
+    partnerSortKey = key;
+    partnerSortAsc = (key === 'name');
+  }
+  ['residuals','upfront','name'].forEach(k => {
+    const btn = document.getElementById('psb-' + k);
+    if (btn) btn.classList.toggle('active', k === partnerSortKey);
+  });
+  renderPartnerTable();
+}
+
+function renderPartnerTable() {
+  const rows = [...PARTNERS];
+  rows.sort((a, b) => {
+    let av, bv;
+    if (partnerSortKey === 'residuals') {
+      av = a.hasResiduals; bv = b.hasResiduals;
+    } else if (partnerSortKey === 'upfront') {
+      av = a.upfrontMax !== null ? a.upfrontMax : -1;
+      bv = b.upfrontMax !== null ? b.upfrontMax : -1;
+    } else {
+      av = a.name.toLowerCase(); bv = b.name.toLowerCase();
+    }
+    if (av < bv) return partnerSortAsc ? -1 : 1;
+    if (av > bv) return partnerSortAsc ? 1 : -1;
+    return 0;
+  });
+
+  document.getElementById('partner-tbody').innerHTML = rows.map(p => {
+    const badgeCls = p.hasResiduals === 2 ? 'pt-yes' : p.hasResiduals === 1 ? 'pt-likely' : 'pt-no';
+    const badgeTxt = p.hasResiduals === 2 ? 'Yes — confirmed' : p.hasResiduals === 1 ? 'Possible / undisclosed' : 'None';
+    const rowCls   = p.hasResiduals === 2 ? 'pt-row pt-highlight' : 'pt-row';
+    const host     = (() => { try { return new URL(p.source).hostname.replace(/^www\./, ''); } catch(e) { return p.source; } })();
+    return `<tr class="${rowCls}" onclick="window.open('${p.source}','_blank')" title="Open official source: ${host}">
+      <td>
+        <div class="pt-name">${p.name}</div>
+        <span class="pt-source-label">↗ ${host}</span>
+      </td>
+      <td>${p.type}</td>
+      <td>${p.signupFee}</td>
+      <td>${p.upfrontDesc}</td>
+      <td>
+        <div class="pt-badge ${badgeCls}">${badgeTxt}</div>
+        <div style="font-size:11px;margin-top:2px">${p.residualDesc}</div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function calcResiduals() {
+  const merchants   = parseInt(document.getElementById('rr-merchants').value);
+  const monthlyVol  = parseInt(document.getElementById('rr-mvol').value);
+  const residualPct = parseFloat(document.getElementById('rr-rpct').value) / 100;
+  const bounty      = parseInt(document.getElementById('rr-bounty').value);
+  const years       = parseInt(document.getElementById('rr-years').value);
+
+  document.getElementById('rr-v-merchants').textContent = merchants;
+  document.getElementById('rr-v-mvol').textContent      = '£' + monthlyVol.toLocaleString();
+  document.getElementById('rr-v-rpct').textContent      = (residualPct * 100).toFixed(2) + '%';
+  document.getElementById('rr-v-bounty').textContent    = '£' + bounty.toLocaleString();
+  document.getElementById('rr-v-years').textContent     = years + ' yr' + (years !== 1 ? 's' : '');
+
+  const totalUpfront    = merchants * bounty;
+  const annualResidual  = merchants * monthlyVol * residualPct * 12;
+
+  document.getElementById('rr-stat-upfront').textContent  = fmt(totalUpfront);
+  document.getElementById('rr-stat-annual').textContent   = fmt(annualResidual);
+
+  let cumResidual = 0;
+  let rows = '';
+  for (let y = 1; y <= years; y++) {
+    cumResidual += annualResidual;
+    const isFinal = y === years;
+    rows += `<tr class="${isFinal ? 'rr-total' : ''}">
+      <td>Year ${y}</td>
+      <td class="rr-num">${fmt(annualResidual)}</td>
+      <td class="rr-num">${fmt(cumResidual)}</td>
+      <td class="rr-num">${fmt(totalUpfront + cumResidual)}</td>
+    </tr>`;
+  }
+  document.getElementById('rr-breakdown-tbody').innerHTML = rows;
+  document.getElementById('rr-stat-residual').textContent = fmt(cumResidual);
+  document.getElementById('rr-stat-total').textContent    = fmt(totalUpfront + cumResidual);
+}
+
+
+renderPartnerTable();
+calcResiduals();
 </script>
 </body>
 </html>
