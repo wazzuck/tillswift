@@ -2,3 +2,5 @@ timestamp,record_type,business_name,contact_name,email,current_provider_id,curre
 2026-04-18T10:26:09.113Z,consultation,nev,Nev B,nev@nev.com,revolut_basic,Revolut Basic,8,50,22,3.0,3,8800,336485,2822,revolut_basic,Revolut Basic,2822,0,,
 2026-04-18T10:27:22.416Z,consultation,dave,dave g,dae@ca.com,revolut_scale,Revolut Scale,8,50,22,3.0,3,8800,336485,6422,revolut_basic,Revolut Basic,2822,3600,,
 2026-04-18T10:37:41.450Z,hello,Nev B,nev@nev.com,shopify_advanced,Shopify POS Advanced,8,50,22,3.0,3,8800,336485,17431,revolut_basic,Revolut Basic,2822,14609
+2026-04-18T12:18:21.650Z,dave,dave,dave@dave.com,zettle,Zettle by PayPal Pay as you go,40,24,8,3.0,3,7680,293659,5139,revolut_basic,Revolut Basic,2587,2552
+2026-04-18T12:19:08.233Z,,dave,dave@dave.com,,,8,50,22,3.0,3,8800,336485,,revolut_basic,Revolut Basic,2822,0

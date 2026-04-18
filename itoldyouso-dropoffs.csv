@@ -1,2 +1,3 @@
 timestamp,business_name,email,dropoff_reason,dropoff_comment,current_provider_id,current_provider_name,txns_per_day,avg_txn_value_gbp,trading_days_per_month,inflation_pct,volume_growth_pct,monthly_card_volume_gbp,revenue_3y_gbp,current_3y_cost_gbp,would_recommend_provider_id,would_recommend_provider_name,would_recommend_3y_cost_gbp,would_save_3y_gbp
 2026-04-18T10:36:41.250Z,nev,nev@nev.com,scam,,,,8,50,22,3.0,3,8800,336485,,revolut_basic,Revolut Basic,2822,0
+2026-04-18T11:14:35.571Z,Nev,,other,The guy is a jerk,shopify_grow,Shopify POS Grow,8,50,22,3.0,3,8800,336485,7724,revolut_basic,Revolut Basic,2822,4901

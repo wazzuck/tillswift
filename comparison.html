@@ -121,7 +121,7 @@ nav {
   cursor: pointer; padding-right: 2rem;
 }
 .field-select option { background: var(--black3); }
-.field-hint { font-size: 11px; color: rgba(248,245,239,0.25); line-height: 1.5; }
+.field-hint { font-size: 11px; color: rgba(248,245,239,0.5); line-height: 1.5; }
 
 /* ── SAVINGS HOOK ── */
 .savings-hook {
@@ -269,8 +269,8 @@ input[type="range"]::-moz-range-thumb {
 }
 .p-rank {
   font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(248,245,239,0.2); padding: 2px 6px;
-  border: 1px solid rgba(248,245,239,0.07);
+  color: rgba(248,245,239,0.45); padding: 2px 6px;
+  border: 1px solid rgba(248,245,239,0.18);
 }
 .p-badge-row {
   display: flex; justify-content: space-between; align-items: center;
@@ -283,27 +283,27 @@ input[type="range"]::-moz-range-thumb {
 }
 .card-current:hover { background: rgba(180,210,235,0.09) !important; }
 .p-name { font-family: var(--font-serif); font-size: 1rem; font-weight: 400; color: var(--white); line-height: 1.2; margin-bottom: 1px; }
-.p-plan { font-size: 11px; color: var(--muted); margin-bottom: 0.75rem; }
+.p-plan { font-size: 11px; color: rgba(248,245,239,0.65); margin-bottom: 0.75rem; }
 .p-tco { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 400; color: var(--gold2); line-height: 1; margin-bottom: 2px; }
-.p-tco-label { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
-.mini-bar-row { display: flex; align-items: center; gap: 5px; margin: 2px 0; font-size: 9px; color: var(--muted); }
+.p-tco-label { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(248,245,239,0.65); margin-bottom: 0.75rem; }
+.mini-bar-row { display: flex; align-items: center; gap: 5px; margin: 2px 0; font-size: 9px; color: rgba(248,245,239,0.6); }
 .mini-bar-track { flex: 1; height: 2px; background: rgba(255,255,255,0.06); border-radius: 1px; overflow: hidden; }
 .mini-bar-fill { height: 2px; border-radius: 1px; transition: width 0.4s ease; }
-.p-rate { font-size: 11px; color: rgba(248,245,239,0.5); margin: 0.6rem 0 2px; }
-.p-rate-val { font-size: 12px; font-weight: 500; color: rgba(248,245,239,0.75); margin-bottom: 0.4rem; }
-.p-monthly { font-size: 10px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 6px; margin-top: 6px; }
-.p-monthly strong { color: rgba(248,245,239,0.6); }
+.p-rate { font-size: 11px; color: rgba(248,245,239,0.7); margin: 0.6rem 0 2px; }
+.p-rate-val { font-size: 12px; font-weight: 500; color: rgba(248,245,239,0.88); margin-bottom: 0.4rem; }
+.p-monthly { font-size: 10px; color: rgba(248,245,239,0.65); border-top: 1px solid var(--border); padding-top: 6px; margin-top: 6px; }
+.p-monthly strong { color: rgba(248,245,239,0.8); }
 .p-pros { list-style: none; margin-top: 0.5rem; }
-.p-pros li { font-size: 10px; color: var(--muted); padding: 2px 0 2px 12px; position: relative; line-height: 1.4; }
+.p-pros li { font-size: 10px; color: rgba(248,245,239,0.65); padding: 2px 0 2px 12px; position: relative; line-height: 1.4; }
 .p-pros li::before { content: '+'; position: absolute; left: 0; color: var(--gold); }
-.p-warn { font-size: 9px; color: rgba(201,168,76,0.55); margin-top: 5px; line-height: 1.4; }
-.p-indicative { font-size: 9px; color: rgba(180,130,50,0.7); margin-top: 5px; line-height: 1.4; border-top: 1px solid var(--border); padding-top: 5px; }
-.p-source { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(201,168,76,0.3); margin-top: 7px; display: block; }
-.provider-card:hover .p-source { color: rgba(201,168,76,0.55); }
+.p-warn { font-size: 9px; color: rgba(201,168,76,0.8); margin-top: 5px; line-height: 1.4; }
+.p-indicative { font-size: 9px; color: rgba(180,130,50,0.88); margin-top: 5px; line-height: 1.4; border-top: 1px solid var(--border); padding-top: 5px; }
+.p-source { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(201,168,76,0.6); margin-top: 7px; display: block; }
+.provider-card:hover .p-source { color: rgba(201,168,76,0.82); }
 
 .p-cons { list-style: none; margin-top: 0.3rem; }
 .p-cons li {
-  font-size: 11px; color: var(--muted);
+  font-size: 11px; color: rgba(248,245,239,0.65);
   padding: 2px 0 2px 13px; position: relative; line-height: 1.45;
 }
 .p-cons li::before { content: '−'; position: absolute; left: 0; color: rgba(220,80,80,0.75); }
@@ -384,7 +384,7 @@ footer {
   letter-spacing: 0.3em; text-transform: uppercase;
   color: var(--gold2); margin-bottom: 0.5rem;
 }
-.footer-note { font-size: 11px; color: rgba(248,245,239,0.25); max-width: 540px; margin: 0 auto; line-height: 1.7; }
+.footer-note { font-size: 11px; color: rgba(248,245,239,0.5); max-width: 540px; margin: 0 auto; line-height: 1.7; }
 
 @media (max-width: 600px) {
   .step { padding: 4rem 1rem 2rem; }
@@ -409,7 +409,7 @@ footer {
 /* ── LOCKED PROVIDER CARD ── */
 .card-locked { cursor: default; }
 .card-locked:hover { background: var(--black2) !important; }
-.card-lock-badge { color: rgba(201,168,76,0.35) !important; border-color: rgba(201,168,76,0.15) !important; }
+.card-lock-badge { color: rgba(201,168,76,0.6) !important; border-color: rgba(201,168,76,0.3) !important; }
 .card-lock-body {
   display: flex; flex-direction: column; align-items: center;
   padding: 1.25rem 0 0.75rem; gap: 7px;
@@ -423,7 +423,7 @@ footer {
 }
 .card-lock-msg {
   font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: rgba(201,168,76,0.45); line-height: 1.8; text-align: center; margin-top: 0.4rem;
+  color: rgba(201,168,76,0.7); line-height: 1.8; text-align: center; margin-top: 0.4rem;
 }
 .wiz-unlock-cta {
   margin-top: 2.5rem; padding: 2rem; border: 1px solid var(--border2);
@@ -656,7 +656,7 @@ footer {
 
     <div class="provider-grid" id="provider-grid-2"></div>
 
-    <p style="font-size:10px;color:rgba(248,245,239,0.18);margin-top:1rem;line-height:1.6">Rates sourced directly from provider websites, April 2026. Subject to change — verify before committing.</p>
+    <p style="font-size:10px;color:rgba(248,245,239,0.45);margin-top:1rem;line-height:1.6">Rates sourced directly from provider websites, April 2026. Subject to change — verify before committing.</p>
 
     <div class="wiz-unlock-cta">
       <p>Ready to see your top 10? Leave your details and I'll reveal your personalised recommendation — and walk you through switching.</p>
@@ -721,7 +721,7 @@ footer {
       </div>
     </div>
 
-    <p style="font-size:11px;color:rgba(248,245,239,0.2);margin-top:1.5rem;line-height:1.6">Leaving your details is not a commitment. It simply means you'd like to have a conversation. No payment is taken until a fee option is agreed in writing.</p>
+    <p style="font-size:11px;color:rgba(248,245,239,0.45);margin-top:1.5rem;line-height:1.6">Leaving your details is not a commitment. It simply means you'd like to have a conversation. No payment is taken until a fee option is agreed in writing.</p>
   </div>
 </div>
 
@@ -767,7 +767,7 @@ footer {
 
     <div class="provider-grid" id="provider-grid-4"></div>
 
-    <p style="font-size:10px;color:rgba(248,245,239,0.18);margin-top:1rem;line-height:1.6">All rates sourced directly from provider websites April 2026. Rates subject to change — verify before committing.</p>
+    <p style="font-size:10px;color:rgba(248,245,239,0.45);margin-top:1rem;line-height:1.6">All rates sourced directly from provider websites April 2026. Rates subject to change — verify before committing.</p>
   </div>
 </div>
 
@@ -873,6 +873,7 @@ footer {
             <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Monthly fees</th>
             <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">3yr TCO</th>
             <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:rgba(201,168,76,0.6);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Affiliate (3yr)</th>
+            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:rgba(201,168,76,0.6);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Affiliate (monthly)</th>
             <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Source</th>
             <th style="text-align:center;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">App</th>
             <th style="text-align:center;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Confirmed</th>
@@ -1713,7 +1714,7 @@ function calc() {
           <div class="p-rate">Your rate</div>
           <div class="p-rate-val">${rateStr} blended</div>
           <div class="p-monthly">Monthly on <strong>${fmt(mVol)}</strong>: <strong>${fmtD(r.mFee)}</strong></div>
-          <div style="font-size:10px;color:rgba(180,210,235,0.55);margin-top:0.75rem;line-height:1.5">Based on the rate you entered. Compare the tiles above to see what you could save.</div>
+          <div style="font-size:10px;color:rgba(180,210,235,0.75);margin-top:0.75rem;line-height:1.5">Based on the rate you entered. Compare the tiles above to see what you could save.</div>
         </div>`;
       }
 
@@ -1741,7 +1742,7 @@ function calc() {
               <div class="mini-bar-row"><span style="min-width:26px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#c9a84c"></div></div><span style="min-width:34px;text-align:right">${fmt(r.fees)}</span></div>
               <div class="mini-bar-row"><span style="min-width:26px">Sub</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${subPct}%;background:#4a5a3a"></div></div><span style="min-width:34px;text-align:right">${fmt(r.subs)}</span></div>
             </div>
-            <div style="font-size:11px;color:rgba(248,245,239,0.45);letter-spacing:0.04em">${rateStr} in-person</div>
+            <div style="font-size:11px;color:rgba(248,245,239,0.65);letter-spacing:0.04em">${rateStr} in-person</div>
             <div class="card-lock-msg" style="margin-top:0.75rem">Submit your details<br>to reveal this provider</div>
           </div>
           <span class="p-source" style="opacity:0.25">&#x1F512; locked</span>
@@ -2608,14 +2609,21 @@ function populateAdmin() {
 
     // Affiliate income cell
     const aff = AFFILIATE[r.id];
-    let affCell;
+    let affCell, affMonthlyCell;
     if (!aff || aff.type === 'none') {
       affCell = td('<span style="color:rgba(248,245,239,0.2)">—</span>', true);
+      affMonthlyCell = td('<span style="color:rgba(248,245,239,0.2)">—</span>', true);
     } else if (aff.type === 'pct_vol') {
       const inc3y = Math.round(rev3y * aff.rate);
+      const incMo = (rev3y * aff.rate / 36);
       affCell = td(
         `<span style="color:rgba(201,168,76,0.9);font-weight:500">${fmt(inc3y)}</span>`
         + `<span style="display:block;font-size:9px;color:rgba(201,168,76,0.45)">${aff.note}</span>`,
+        true
+      );
+      affMonthlyCell = td(
+        `<span style="color:rgba(201,168,76,0.9);font-weight:500">£${incMo.toFixed(2)}</span>`
+        + `<span style="display:block;font-size:9px;color:rgba(201,168,76,0.45)">avg/month</span>`,
         true
       );
     } else if (aff.type === 'flat') {
@@ -2624,12 +2632,14 @@ function populateAdmin() {
         + `<span style="display:block;font-size:9px;color:rgba(248,245,239,0.3)">${aff.note}</span>`,
         true
       );
+      affMonthlyCell = td('<span style="color:rgba(248,245,239,0.2)">—</span><span style="display:block;font-size:9px;color:rgba(248,245,239,0.2)">per referral</span>', true);
     } else {
       // programme — rate undisclosed
       affCell = td(
         `<span style="color:rgba(248,245,239,0.35);font-size:10px">${aff.note}</span>`,
         true
       );
+      affMonthlyCell = td('<span style="color:rgba(248,245,239,0.2)">—</span>', true);
     }
 
     return `<tr style="${rowStyle}">
@@ -2641,6 +2651,7 @@ function populateAdmin() {
       ${td(fmtD(r.mFee), true)}
       ${td(fmt(r.tco), true, isWinner ? ';color:var(--gold2)' : '')}
       ${affCell}
+      ${affMonthlyCell}
       ${td('<a href="' + r.source + '" target="_blank" style="color:rgba(201,168,76,0.5);text-decoration:none;font-size:10px">' + hostname(r.source) + ' ↗</a>')}
       ${td(r.app === true ? '<span style="color:rgba(110,217,138,0.85)">✓ Yes</span>' : r.app === 'partial' ? '<span style="color:rgba(201,168,76,0.7)">~ Partial</span>' : '<span style="color:rgba(248,245,239,0.25)">✗ No</span>', true)}
       ${td(r.indicative ? '<span style="color:rgba(180,130,50,0.7)">Indicative</span>' : '<span style="color:rgba(100,180,100,0.8)">✓ Confirmed</span>', true)}
