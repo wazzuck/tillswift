@@ -61,6 +61,9 @@ nav {
   max-width: 780px; margin: 0 auto;
   padding: 5rem 1.5rem 3rem;
 }
+.step--wide {
+  max-width: 80vw;
+}
 .step + .step { padding-top: 0; }
 
 .step-num {
@@ -151,10 +154,6 @@ nav {
   color: var(--gold2); line-height: 1;
 }
 .sh-saving-detail { font-size: 12px; color: var(--muted); margin-top: 4px; }
-.sh-empty {
-  font-size: 13px; color: rgba(248,245,239,0.2);
-  font-style: italic; grid-column: 1 / -1;
-}
 
 /* ── ADVANCED SLIDERS ── */
 .advanced-toggle {
@@ -243,7 +242,7 @@ input[type="range"]::-moz-range-thumb {
 /* ── PROVIDER GRID ── */
 .provider-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(208px, 1fr));
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
@@ -251,7 +250,7 @@ input[type="range"]::-moz-range-thumb {
 .provider-card {
   display: block; text-decoration: none; color: inherit;
   background: var(--black2);
-  padding: 1.25rem 1rem 1rem;
+  padding: 1.6rem 1.3rem 1.3rem;
   transition: background 0.2s;
 }
 .provider-card:hover { background: var(--black3); }
@@ -263,8 +262,26 @@ input[type="range"]::-moz-range-thumb {
 .p-badge {
   font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--gold); border: 1px solid var(--border2);
-  padding: 2px 8px; display: inline-block; margin-bottom: 0.6rem;
+  padding: 2px 8px; display: inline-block;
 }
+.p-badge-current {
+  color: rgba(180,210,235,0.75); border-color: rgba(180,210,235,0.2);
+}
+.p-rank {
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(248,245,239,0.2); padding: 2px 6px;
+  border: 1px solid rgba(248,245,239,0.07);
+}
+.p-badge-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 0.6rem; min-height: 19px;
+}
+.card-current {
+  background: rgba(180,210,235,0.06) !important;
+  border-color: rgba(180,210,235,0.45) !important;
+  margin: -1px; z-index: 1; position: relative;
+}
+.card-current:hover { background: rgba(180,210,235,0.09) !important; }
 .p-name { font-family: var(--font-serif); font-size: 1rem; font-weight: 400; color: var(--white); line-height: 1.2; margin-bottom: 1px; }
 .p-plan { font-size: 11px; color: var(--muted); margin-bottom: 0.75rem; }
 .p-tco { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 400; color: var(--gold2); line-height: 1; margin-bottom: 2px; }
@@ -294,35 +311,6 @@ input[type="range"]::-moz-range-thumb {
 .p-pros-cons-divider {
   border: none; border-top: 1px solid var(--border);
   margin: 0.5rem 0 0.3rem;
-}
-
-/* ── IMPLEMENTATION STEPS ── */
-.impl-grid {
-  display: flex; flex-direction: column;
-  gap: 0;
-  border: 1px solid var(--border);
-  margin-top: 2rem;
-}
-.impl-step {
-  display: grid;
-  grid-template-columns: 48px 1fr;
-  border-bottom: 1px solid var(--border);
-  transition: background 0.2s;
-}
-.impl-step:last-child { border-bottom: none; }
-.impl-step:hover { background: var(--black2); }
-.impl-num {
-  padding: 1.5rem 0 1.5rem 1.25rem;
-  font-family: var(--font-serif); font-size: 1.4rem; font-weight: 400;
-  color: var(--border2); line-height: 1; padding-top: 1.6rem;
-}
-.impl-body { padding: 1.5rem 1.5rem 1.5rem 0.75rem; }
-.impl-title { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 0.3rem; }
-.impl-desc { font-size: 12px; color: var(--muted); line-height: 1.65; margin-bottom: 0.5rem; }
-.impl-value {
-  font-size: 11px; color: var(--gold);
-  padding-left: 0.75rem; border-left: 2px solid var(--border2);
-  line-height: 1.55;
 }
 
 /* ── ENGAGEMENT SECTION ── */
@@ -398,13 +386,107 @@ footer {
 }
 .footer-note { font-size: 11px; color: rgba(248,245,239,0.25); max-width: 540px; margin: 0 auto; line-height: 1.7; }
 
-/* ── ANIMATIONS ── */
-.reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
-.reveal.on { opacity: 1; transform: translateY(0); }
-
 @media (max-width: 600px) {
   .step { padding: 4rem 1rem 2rem; }
 }
+
+/* ── WIZARD STEPS ── */
+.wiz-step { display: none; }
+.wiz-step.active { display: block; }
+
+/* ── PROGRESS BAR ── */
+#step-bar {
+  position: fixed; top: 56px; left: 0; right: 0;
+  height: 2px; background: rgba(201,168,76,0.1); z-index: 400;
+}
+#progress-bar {
+  height: 100%;
+  background: linear-gradient(to right, var(--gold), var(--gold2));
+  transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
+  width: 25%;
+}
+
+/* ── LOCKED PROVIDER CARD ── */
+.card-locked { cursor: default; }
+.card-locked:hover { background: var(--black2) !important; }
+.card-lock-badge { color: rgba(201,168,76,0.35) !important; border-color: rgba(201,168,76,0.15) !important; }
+.card-lock-body {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 1.25rem 0 0.75rem; gap: 7px;
+}
+.card-lock-rank {
+  font-family: var(--font-serif); font-size: 2.2rem; font-weight: 400;
+  color: rgba(201,168,76,0.15); line-height: 1; margin-bottom: 0.25rem;
+}
+.card-lock-redact {
+  height: 7px; background: rgba(248,245,239,0.07); border-radius: 2px; width: 100%;
+}
+.card-lock-msg {
+  font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(201,168,76,0.45); line-height: 1.8; text-align: center; margin-top: 0.4rem;
+}
+.wiz-unlock-cta {
+  margin-top: 2.5rem; padding: 2rem; border: 1px solid var(--border2);
+  background: var(--black2); text-align: center;
+}
+.wiz-unlock-cta p {
+  font-size: 0.875rem; color: var(--muted); max-width: 460px;
+  margin: 0 auto 1.5rem; line-height: 1.85;
+}
+
+/* ── Live preview panel (Step 1) ── */
+#live-preview {
+  margin-top: 2rem;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+  pointer-events: none;
+}
+#live-preview.lp-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.lp-eyebrow {
+  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(201,168,76,0.4); margin-bottom: 0.9rem; text-align: center;
+}
+.lp-grid {
+  display: grid; grid-template-columns: 1fr;
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+}
+@media (min-width: 560px) { .lp-grid { grid-template-columns: 1fr 1fr 1fr; } }
+.lp-cell {
+  background: var(--black2); padding: 1.4rem 1rem; text-align: center;
+}
+.lp-label {
+  font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 0.55rem;
+}
+.lp-value {
+  font-family: var(--font-serif); font-size: 1.85rem; font-weight: 400;
+  color: var(--gold2); line-height: 1; margin-bottom: 5px;
+}
+.lp-value.lp-gold { color: var(--gold); }
+.lp-value.lp-dim  { color: rgba(248,245,239,0.13); font-size: 1.1rem; font-family: var(--font-sans); letter-spacing: .03em; }
+.lp-sub {
+  font-size: 9px; color: rgba(248,245,239,0.22); letter-spacing: 0.04em; min-height: 12px;
+}
+
+/* ── DROPOFF SURVEY ── */
+.dropoff-opt {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  background: var(--black3);
+  color: var(--white);
+  font-size: 12px; font-weight: 300;
+  cursor: pointer; transition: border-color 0.15s, background 0.15s;
+}
+.dropoff-opt:hover { border-color: var(--border2); }
+.dropoff-opt input[type="radio"] { accent-color: var(--gold); margin: 0; cursor: pointer; }
+.dropoff-opt input[type="radio"]:checked + span { color: var(--gold2); }
+.dropoff-opt:has(input:checked) { border-color: var(--gold); background: rgba(201,168,76,0.06); }
 </style>
 </head>
 <body>
@@ -414,270 +496,328 @@ footer {
   <span class="nav-date" id="nav-date"></span>
 </nav>
 
-<!-- ═══ STEP 1: DISCOVERY ═══ -->
-<div class="step reveal" style="padding-top:6rem">
-  <div class="step-num">Step 1</div>
-  <h1 class="step-heading">Let's find out what<br><em>you're actually paying.</em></h1>
-  <p class="step-body">Fill in a few numbers about your business and I'll show you exactly what your card payments are costing you — and what you could be paying instead.</p>
+<!-- ═══ PROGRESS BAR ═══ -->
+<div id="step-bar"><div id="progress-bar"></div></div>
 
-  <div class="field-grid">
-    <div class="field" style="grid-column: 1 / -1">
-      <label class="field-label" for="f-name">Business name <span style="color:rgba(248,245,239,0.2)">(optional)</span></label>
-      <input class="field-input" type="text" id="f-name" placeholder="e.g. Sarah's Candles">
+<!-- ═══ LEAD-FILE SETUP GATE ═══ -->
+<div id="leadfile-gate" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.96);z-index:2500;align-items:center;justify-content:center;padding:1rem;">
+  <div style="background:var(--black2);border:1px solid var(--border2);padding:2.5rem 2rem;width:100%;max-width:460px;">
+    <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem">Lead file setup</div>
+    <div id="lfg-heading" style="font-family:var(--font-serif);font-size:1.5rem;font-weight:400;color:var(--white);line-height:1.25;margin-bottom:.75rem">Set up your leads file</div>
+    <div id="lfg-body" style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:1.5rem">
+      Click below to pick a location for <strong style="color:var(--gold2)">itoldyouso-leads.csv</strong>. If the file already exists at that location it will be reused; if it doesn't, it will be created automatically. Every completed consultation and drop-off is appended as a row.
     </div>
-
-    <div class="field" style="grid-column: 1 / -1">
-      <label class="field-label" for="current-provider">Current payment provider</label>
-      <select class="field-input field-select" id="current-provider" onchange="calc()">
-        <option value="">— Select provider —</option>
-        <option value="new">No provider yet / new to card payments</option>
-      </select>
-      <span class="field-hint">Not sure? Check your card reader, bank statement, or look for the name on your app.</span>
+    <div id="lfg-error" style="display:none;font-size:11px;color:rgba(220,80,80,0.85);margin-bottom:1rem;line-height:1.5"></div>
+    <div id="lfg-actions" style="display:flex;flex-direction:column;gap:.6rem">
+      <button class="btn-primary" id="lfg-btn-primary" style="margin-top:0" onclick="lfgPrimary()">Create or open leads file</button>
+      <button id="lfg-btn-secondary" style="display:none;background:transparent;border:1px solid var(--border2);color:var(--muted);padding:.85rem;font-family:var(--font-sans);font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer" onclick="lfgSwitchFile()">Use a different file</button>
     </div>
-
-    <div class="field">
-      <label class="field-label" for="f-txn">Transactions per day</label>
-      <input class="field-input" type="number" id="f-txn" min="1" max="500" value="8" oninput="syncFromForm()">
-    </div>
-
-    <div class="field">
-      <label class="field-label" for="f-val">Average transaction (£)</label>
-      <input class="field-input" type="number" id="f-val" min="5" max="1000" value="50" oninput="syncFromForm()">
-    </div>
-
-    <div class="field">
-      <label class="field-label" for="f-days">Trading days per month</label>
-      <input class="field-input" type="number" id="f-days" min="1" max="31" value="22" oninput="syncFromForm()">
-    </div>
+    <div id="lfg-hint" style="font-size:10px;color:rgba(248,245,239,0.25);line-height:1.6;margin-top:1.25rem">Requires Chrome or Edge. File System Access API permission persists for this browser session only — you'll be asked to confirm once per page load.</div>
   </div>
+</div>
 
-  <!-- Advanced assumptions -->
-  <button class="advanced-toggle" id="adv-toggle" onclick="toggleAdvanced()">Advanced assumptions</button>
-  <div class="advanced-panel" id="adv-panel">
-    <div>
-      <span class="sl-label">Annual price inflation</span>
-      <input type="range" id="r-infl" min="0" max="8" step="0.5" value="3" oninput="calc()">
-      <div class="sl-val" id="v-infl">3.0%</div>
+<!-- ═══ WIZARD ═══ -->
+
+<!-- ─── STEP 1: DISCOVERY ─── -->
+<div class="wiz-step active" id="wiz-1">
+  <div class="step" style="padding-top:6rem">
+    <div class="step-num">Step 1 of 4</div>
+    <h1 class="step-heading">Let's find out what<br><em>you're actually paying.</em></h1>
+    <p class="step-body">Fill in a few numbers about your business. I'll rank every UK payment provider for your exact volumes — all 44 of them.</p>
+
+    <div class="field-grid">
+      <div class="field" style="grid-column: 1 / -1">
+        <label class="field-label" for="f-name">Business name <span style="color:rgba(248,245,239,0.2)">(optional)</span></label>
+        <input class="field-input" type="text" id="f-name" placeholder="e.g. Sarah's Candles">
+      </div>
+
+      <div class="field" style="grid-column: 1 / -1">
+        <label class="field-label" for="current-provider">Current payment provider</label>
+        <select class="field-input field-select" id="current-provider" onchange="lpInteracted=true; toggleCustomRate(); calc()">
+          <option value="">— Select provider —</option>
+          <option value="new">No provider yet / new to card payments</option>
+          <option value="custom">I know my rate — enter it below</option>
+        </select>
+        <span class="field-hint">Not sure? Check your card reader, bank statement, or look for the name on your app.</span>
+      </div>
+
+      <div class="field" id="custom-rate-field" style="display:none">
+        <label class="field-label" for="custom-rate-pct">Your current rate (%)</label>
+        <input class="field-input" type="number" id="custom-rate-pct" min="0" max="10" step="0.01" placeholder="e.g. 1.75" oninput="lpInteracted=true; calc()">
+        <span class="field-hint">Enter the percentage charged on your card takings — find it on your monthly statement, terminal receipt, or provider dashboard.</span>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="f-txn">Transactions per day</label>
+        <input class="field-input" type="number" id="f-txn" min="1" max="500" value="8" oninput="syncFromForm()">
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="f-val">Average transaction (£)</label>
+        <input class="field-input" type="number" id="f-val" min="5" max="1000" value="50" oninput="syncFromForm()">
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="f-days">Trading days per month</label>
+        <input class="field-input" type="number" id="f-days" min="1" max="31" value="22" oninput="syncFromForm()">
+      </div>
     </div>
-    <div>
-      <span class="sl-label">Annual volume growth</span>
-      <input type="range" id="r-growth" min="0" max="20" step="1" value="3" oninput="calc()">
-      <div class="sl-val" id="v-growth">3%</div>
+
+    <div id="live-preview">
+      <div class="lp-eyebrow">Your numbers at a glance</div>
+      <div class="lp-grid">
+        <div class="lp-cell">
+          <div class="lp-label">3-year card revenue</div>
+          <div class="lp-value" id="lp-rev">—</div>
+          <div class="lp-sub" id="lp-rev-sub">&nbsp;</div>
+        </div>
+        <div class="lp-cell">
+          <div class="lp-label">Fees over 3 years</div>
+          <div class="lp-value lp-dim" id="lp-fees">—</div>
+          <div class="lp-sub" id="lp-fees-sub">select a provider above</div>
+        </div>
+        <div class="lp-cell">
+          <div class="lp-label">You will save</div>
+          <div class="lp-value lp-dim" id="lp-save">—</div>
+          <div class="lp-sub" id="lp-save-sub">vs best alternative</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="advanced-toggle" id="adv-toggle" onclick="toggleAdvanced()">Advanced assumptions</button>
+    <div class="advanced-panel" id="adv-panel">
+      <div>
+        <span class="sl-label">Annual price inflation</span>
+        <input type="range" id="r-infl" min="0" max="8" step="0.5" value="3" oninput="lpInteracted=true; calc()">
+        <div class="sl-val" id="v-infl">3.0%</div>
+      </div>
+      <div>
+        <span class="sl-label">Annual volume growth</span>
+        <input type="range" id="r-growth" min="0" max="20" step="1" value="3" oninput="lpInteracted=true; calc()">
+        <div class="sl-val" id="v-growth">3%</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" style="margin-top:2.5rem" onclick="goToStep(2)">See how every provider compares →</button>
+  </div>
+</div>
+
+<!-- ─── STEP 2: ALL PROVIDERS (top 10 locked) ─── -->
+<div class="wiz-step" id="wiz-2">
+  <div class="step step--wide" style="padding-top:6rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
+      <div class="step-num" style="margin-bottom:0">Step 2 of 4</div>
+      <button onclick="goToStep(1)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.3);font-family:var(--font-sans);padding:0">← Back</button>
+    </div>
+    <h2 class="step-heading">Every UK provider,<br><em>ranked for your numbers.</em></h2>
+    <p class="step-body">All 44 providers compared side by side. The top 10 cheapest options for your exact volumes are locked — complete step 3 to reveal your full recommendation.</p>
+
+    <div class="savings-hook" id="savings-hook" style="display:none">
+      <div id="sh-content">
+        <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:center">
+          <div>
+            <div class="sh-label">Your current 3-year cost</div>
+            <div class="sh-current-cost" id="sh-current-cost">—</div>
+            <div class="sh-current-detail" id="sh-current-detail"></div>
+          </div>
+          <div class="sh-arrow">→</div>
+          <div style="text-align:right">
+            <div class="sh-label">Best alternative</div>
+            <div class="sh-saving-num" style="font-size:2rem;letter-spacing:.1em;color:rgba(201,168,76,0.25)" id="sh-saving-num">Locked</div>
+            <div class="sh-saving-detail" id="sh-saving-detail" style="color:rgba(248,245,239,0.2)">Complete your details to unlock</div>
+          </div>
+        </div>
+        <div style="margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+          <div style="text-align:center">
+            <span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">You save over 3 years</span>
+            <span class="sh-saving-num" id="sh-net-saving" style="font-size:2.5rem">—</span>
+          </div>
+          <div style="text-align:center">
+            <span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Yearly saving</span>
+            <span class="sh-saving-num" id="sh-monthly-saving" style="font-size:2.5rem">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-cell"><span class="stat-num" id="be-mvol">—</span><span class="stat-lbl">Monthly card volume</span></div>
+      <div class="stat-cell"><span class="stat-num" id="be-rev5">—</span><span class="stat-lbl">3yr projected revenue</span></div>
+      <div class="stat-cell"><span class="stat-num" id="be-brkn">—</span><span class="stat-lbl">Txns to break even on sub</span></div>
+      <div class="stat-cell"><span class="stat-num" id="be-pct">—</span><span class="stat-lbl">Best cost as % of revenue</span></div>
+    </div>
+
+    <div class="sort-row">
+      <span class="sort-label">Sort by</span>
+      <button class="sort-btn active" id="sb-tco" onclick="setSortBy('tco')">3yr cost</button>
+      <button class="sort-btn" id="sb-rate" onclick="setSortBy('rate')">Tx rate</button>
+      <button class="sort-btn" id="sb-monthly" onclick="setSortBy('monthly')">Monthly fees</button>
+    </div>
+
+    <div class="provider-grid" id="provider-grid-2"></div>
+
+    <p style="font-size:10px;color:rgba(248,245,239,0.18);margin-top:1rem;line-height:1.6">Rates sourced directly from provider websites, April 2026. Subject to change — verify before committing.</p>
+
+    <div class="wiz-unlock-cta">
+      <p>Ready to see your top 10? Leave your details and I'll reveal your personalised recommendation — and walk you through switching.</p>
+      <button class="btn-primary" style="max-width:320px" onclick="goToStep(3)">Unlock my top 10 →</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ STEP 2: YOUR NUMBERS ═══ -->
-<div class="step reveal" id="step2" style="display:none">
-  <div class="step-num">Step 2</div>
-  <h2 class="step-heading">Here's what the<br><em>numbers say.</em></h2>
-  <p class="step-body">Based on what you've told me, here's your current 5-year cost — and what you could save by switching to the best available option at your volumes.</p>
+<!-- ─── STEP 3: ENGAGEMENT FORM ─── -->
+<div class="wiz-step" id="wiz-3">
+  <div class="step" style="padding-top:6rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
+      <div class="step-num" style="margin-bottom:0">Step 3 of 4</div>
+      <button onclick="goToStep(2)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.3);font-family:var(--font-sans);padding:0">← Back</button>
+    </div>
+    <h2 class="step-heading">Unlock your<br><em>recommendation.</em></h2>
+    <p class="step-body">Leave your details below and I'll reveal the exact provider you should switch to — and walk you through everything needed to make it happen. One flat fee, done properly.</p>
 
-  <div class="savings-hook" id="savings-hook">
-    <div id="sh-empty" class="sh-empty">Select your current provider above to see your saving.</div>
-    <div id="sh-content" style="display:none; display:none; grid-column:1/-1; display:none">
+    <div class="engagement-box">
+      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem">Fee options</div>
+      <div class="fee-options">
+        <div class="fee-option">
+          <div class="fee-name">Amount due today</div>
+          <div class="fee-amount">£40</div>
+          <div class="fee-desc">Flat fee agreed upfront.</div>
+        </div>
+      </div>
+
+      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;margin-top:1.75rem">Your details — unlocks your full recommendation</div>
+      <div id="contact-form">
+        <div class="contact-grid">
+          <div class="field">
+            <label class="field-label" for="e-name">Your name</label>
+            <input class="field-input" type="text" id="e-name" placeholder="e.g. Sarah Jones">
+          </div>
+          <div class="field">
+            <label class="field-label" for="e-email">Email</label>
+            <input class="field-input" type="email" id="e-email" placeholder="you@example.com">
+          </div>
+        </div>
+
+        <div style="margin-top:1.5rem;padding:1.25rem;border:1px solid var(--border);background:var(--black3)">
+          <div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(248,245,239,0.3);margin-bottom:0.75rem">Terms &amp; Conditions</div>
+          <div style="font-size:10px;color:rgba(248,245,239,0.35);line-height:1.8;margin-bottom:1rem">
+            The £40 consultation fee is charged as a single upfront payment prior to work commencing. The fee covers provider recommendation, setup assistance, and handover as described during the consultation. No subscription, retainer, or ongoing charges apply.<br><br>
+            <strong style="color:rgba(248,245,239,0.5)">14-day satisfaction guarantee.</strong> If you are not satisfied with the service, a full refund will be issued on request within 14 days of payment. No questions asked.<br><br>
+            IToldYouSo is a trading name operating as an independent payment consultant. We are not affiliated with, endorsed by, or acting as an agent of any payment provider listed on this page. Provider rates and terms are sourced from public sources and are subject to change — always verify with the provider before signing any agreement.
+          </div>
+          <div class="consent-row">
+            <input type="checkbox" id="e-consent">
+            <label for="e-consent">I have read and agree to the terms and conditions above.</label>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="submitEngagement()">Unlock my recommendation →</button>
+
+        <button onclick="openDropoffSurvey()" style="display:block;width:100%;margin-top:1rem;background:#d94a5a;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#000;font-family:var(--font-sans);padding:.9rem 1.25rem">Not for you? Tell us why</button>
+      </div>
+
+      <div class="confirmation" id="confirmation">
+        <strong id="confirmation-msg">Thanks</strong>
+      </div>
+    </div>
+
+    <p style="font-size:11px;color:rgba(248,245,239,0.2);margin-top:1.5rem;line-height:1.6">Leaving your details is not a commitment. It simply means you'd like to have a conversation. No payment is taken until a fee option is agreed in writing.</p>
+  </div>
+</div>
+
+<!-- ─── STEP 4: FULL RECOMMENDATION ─── -->
+<div class="wiz-step" id="wiz-4">
+  <div class="step step--wide" style="padding-top:6rem">
+    <div class="step-num">Your recommendation</div>
+    <h2 class="step-heading">Your full<br><em>recommendation.</em></h2>
+    <p class="step-body">Every UK provider ranked for your exact volumes. Your recommended option is highlighted. Click any card to view their official pricing page.</p>
+
+    <div class="savings-hook" id="savings-hook-4" style="display:none">
       <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:center">
         <div>
-          <div class="sh-label">Your current 5-year cost</div>
-          <div class="sh-current-cost" id="sh-current-cost">—</div>
-          <div class="sh-current-detail" id="sh-current-detail"></div>
+          <div class="sh-label">Your current 3-year cost</div>
+          <div class="sh-current-cost" id="sh-current-cost-4">—</div>
+          <div class="sh-current-detail" id="sh-current-detail-4"></div>
         </div>
         <div class="sh-arrow">→</div>
         <div style="text-align:right">
           <div class="sh-label">Best alternative</div>
-          <div class="sh-saving-num" style="font-size:2rem;letter-spacing:.1em;color:rgba(201,168,76,0.25)" id="sh-saving-num">Locked</div>
-          <div class="sh-saving-detail" id="sh-saving-detail" style="color:rgba(248,245,239,0.2)">Leave your details below to unlock</div>
+          <div class="sh-saving-num" id="sh-saving-num-4" style="font-size:2rem">—</div>
+          <div class="sh-saving-detail" id="sh-saving-detail-4"></div>
         </div>
       </div>
       <div style="margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:1rem">
         <div style="text-align:center">
-          <span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">You save over 5 years</span>
-          <span class="sh-saving-num" id="sh-net-saving" style="font-size:2.5rem">—</span>
+          <span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">You save over 3 years</span>
+          <span class="sh-saving-num" id="sh-net-saving-4" style="font-size:2.5rem">—</span>
         </div>
         <div style="text-align:center">
           <span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Yearly saving</span>
-          <span class="sh-saving-num" id="sh-monthly-saving" style="font-size:2.5rem">—</span>
+          <span class="sh-saving-num" id="sh-monthly-saving-4" style="font-size:2.5rem">—</span>
         </div>
       </div>
     </div>
+
+    <div class="sort-row" style="margin-top:1.5rem">
+      <span class="sort-label">Sort by</span>
+      <button class="sort-btn active" id="sb-tco-4" onclick="setSortBy('tco')">3yr cost</button>
+      <button class="sort-btn" id="sb-rate-4" onclick="setSortBy('rate')">Tx rate</button>
+      <button class="sort-btn" id="sb-monthly-4" onclick="setSortBy('monthly')">Monthly fees</button>
+    </div>
+
+    <div class="provider-grid" id="provider-grid-4"></div>
+
+    <p style="font-size:10px;color:rgba(248,245,239,0.18);margin-top:1rem;line-height:1.6">All rates sourced directly from provider websites April 2026. Rates subject to change — verify before committing.</p>
   </div>
-
-  <div class="stats-row">
-    <div class="stat-cell"><span class="stat-num" id="be-mvol">—</span><span class="stat-lbl">Monthly card volume</span></div>
-    <div class="stat-cell"><span class="stat-num" id="be-rev5">—</span><span class="stat-lbl">5yr projected revenue</span></div>
-    <div class="stat-cell"><span class="stat-num" id="be-brkn">—</span><span class="stat-lbl">Txns to break even on sub</span></div>
-    <div class="stat-cell"><span class="stat-num" id="be-pct">—</span><span class="stat-lbl">Best cost as % of revenue</span></div>
-  </div>
-</div>
-
-<div class="rule"></div>
-
-<!-- ═══ STEP 3: MAKING THE SWITCH ═══ -->
-<div class="step reveal">
-  <div class="step-num">Step 3</div>
-  <h2 class="step-heading">What switching<br><em>actually involves.</em></h2>
-  <p class="step-body">The rates are the easy part. Here's everything that needs to happen between "I want to switch" and "my new system is live and working" — and where most people get stuck trying to do it themselves.</p>
-
-  <div class="impl-grid">
-
-    <div class="impl-step">
-      <div class="impl-num">1</div>
-      <div class="impl-body">
-        <div class="impl-title">Exit audit — check your current contract</div>
-        <div class="impl-desc">Before anything else, your current provider needs to be checked for exit clauses, termination fees, and notice periods. Getting this wrong can wipe out months of saving before you've even started.</div>
-        <div class="impl-value">I review your current agreement, identify any exit costs, and factor them into the real switching calculation so there are no surprises.</div>
-      </div>
-    </div>
-
-    <div class="impl-step">
-      <div class="impl-num">2</div>
-      <div class="impl-body">
-        <div class="impl-title">Provider selection — right for your specific situation</div>
-        <div class="impl-desc">The cheapest rate on paper isn't always the right choice. Outdoor market traders need reliable offline mode. Shop owners need solid POS software and inventory. Kiosk operators need compact, durable hardware and fast settlement. Some providers won't onboard certain business types at all.</div>
-        <div class="impl-value">I match the provider to your actual use case — not just the rate. That includes reliability, support response times, onboarding speed, and compatibility with any existing kit.</div>
-      </div>
-    </div>
-
-    <div class="impl-step">
-      <div class="impl-num">3</div>
-      <div class="impl-body">
-        <div class="impl-title">Hardware sourcing</div>
-        <div class="impl-desc">Card readers vary widely in build quality, battery life, and weather resistance. The right hardware depends on your setup — a robust portable reader for a market stall, a countertop terminal for a shop, or a compact unit for a kiosk. Buying the wrong one is an expensive mistake. Refurbished options can save £50–£100 but need to come from the right sources.</div>
-        <div class="impl-value">I source the right hardware for your environment — with warranty, at the best price available. No guesswork on Amazon.</div>
-      </div>
-    </div>
-
-    <div class="impl-step">
-      <div class="impl-num">4</div>
-      <div class="impl-body">
-        <div class="impl-title">Merchant account setup &amp; verification</div>
-        <div class="impl-desc">Opening a merchant account requires ID verification, business registration details, and bank linking. Done correctly it takes 2–5 business days. Done incorrectly it can stall for weeks — or get rejected entirely.</div>
-        <div class="impl-value">I help you with the application, making sure the right documents are submitted in the right format so approvals go through first time — no back-and-forth with support.</div>
-      </div>
-    </div>
-
-    <div class="impl-step">
-      <div class="impl-num">5</div>
-      <div class="impl-body">
-        <div class="impl-title">Product catalogue &amp; pricing setup</div>
-        <div class="impl-desc">If you want itemised receipts, sales reporting by product, or low-stock alerts, your catalogue needs to be built properly from day one. This is tedious to do yourself and easy to get wrong.</div>
-        <div class="impl-value">I build your product catalogue, configure tax rates and categories, and set up reporting so your data is clean from the first transaction.</div>
-      </div>
-    </div>
-
-    <div class="impl-step">
-      <div class="impl-num">6</div>
-      <div class="impl-body">
-        <div class="impl-title">Full system test before go-live</div>
-        <div class="impl-desc">Every component needs testing together — card reader, POS app, receipt flow, payout routing to bank. A test transaction doesn't tell you much. A full end-to-end run does.</div>
-        <div class="impl-value">I run a complete pre-launch test and sign off that every part of the system works before you take your first real payment.</div>
-      </div>
-    </div>
-
-    <div class="impl-step">
-      <div class="impl-num">7</div>
-      <div class="impl-body">
-        <div class="impl-title">Go-live day support</div>
-        <div class="impl-desc">Launch day problems happen. A card reader that won't connect, an app update that breaks something, a payout that doesn't arrive — all of these are solvable, but not while you're serving customers.</div>
-        <div class="impl-value">I'm available on launch day to deal with anything that comes up, so you can focus on selling.</div>
-      </div>
-    </div>
-
-    <div class="impl-step">
-      <div class="impl-num">8</div>
-      <div class="impl-body">
-        <div class="impl-title">Staff handover &amp; training</div>
-        <div class="impl-desc">A new payment system is only useful if everyone using it is confident with it. Most providers offer a help centre. That's not the same as a 20-minute walkthrough with someone who set it up.</div>
-        <div class="impl-value">I walk through the system with you and any staff — refunds, daily close, reports, what to do if the reader loses connection. Hands on, not a YouTube link.</div>
-      </div>
-    </div>
-
-    <div class="impl-step">
-      <div class="impl-num">9</div>
-      <div class="impl-body">
-        <div class="impl-title">Ongoing first-line support</div>
-        <div class="impl-desc">After setup, small things come up — a software update changes the interface, a reader needs replacing, a payout is delayed. Most traders don't have the time or inclination to deal with a provider's support line.</div>
-        <div class="impl-value">I remain your first call. I either fix it directly or navigate the provider's support on your behalf — saving you the hold time and the headache.</div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<div class="rule"></div>
-
-<!-- ═══ STEP 4: ENGAGEMENT ═══ -->
-<div class="step reveal">
-  <div class="step-num">Step 4</div>
-  <h2 class="step-heading">Unlock your<br><em>recommendation.</em></h2>
-  <p class="step-body">Leave your details below and I'll reveal the exact provider you should switch to, the rate you'll pay, and walk you through everything needed to make it happen. One project, done properly — no forum posts at midnight, no 45-minute hold music.</p>
-
-  <div class="engagement-box">
-    <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem">Fee options</div>
-    <div class="fee-options">
-      <div class="fee-option">
-        <div class="fee-name">Fixed project fee</div>
-        <div class="fee-amount">£150</div>
-        <div class="fee-desc">Flat fee agreed upfront. Covers everything in Step 3. Includes exit audit, provider selection, hardware sourcing, merchant account setup, product catalogue, testing, go-live support, and staff training.</div>
-      </div>
-    </div>
-
-    <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;margin-top:1.75rem">Your details — unlocks your full recommendation</div>
-    <div id="contact-form">
-      <div class="contact-grid">
-        <div class="field">
-          <label class="field-label" for="e-name">Your name</label>
-          <input class="field-input" type="text" id="e-name" placeholder="First name">
-        </div>
-        <div class="field">
-          <label class="field-label" for="e-phone">Phone</label>
-          <input class="field-input" type="tel" id="e-phone" placeholder="07700 000000">
-        </div>
-        <div class="field">
-          <label class="field-label" for="e-email">Email</label>
-          <input class="field-input" type="email" id="e-email" placeholder="you@example.com">
-        </div>
-
-      </div>
-      <div class="consent-row">
-        <input type="checkbox" id="e-consent">
-        <label for="e-consent">I'm happy for IToldYouSo to contact me about this consultation. I understand this is not a binding commitment — it's the start of a conversation.</label>
-      </div>
-      <button class="btn-primary" onclick="submitEngagement()">Unlock my recommendation →</button>
-    </div>
-
-    <div class="confirmation" id="confirmation">
-      <strong>Details received.</strong>
-      Your full recommendation is now unlocked below. I'll follow up within 24 hours to walk through next steps. Any questions in the meantime: <span style="color:var(--gold)">hello@itoldyouso.tech</span>
-    </div>
-  </div>
-
-  <p style="font-size:11px;color:rgba(248,245,239,0.2);margin-top:1.5rem;line-height:1.6">Leaving your details is not a commitment. It simply means you'd like to have a conversation. No payment is taken until a fee option is agreed in writing.</p>
-</div>
-
-<!-- ═══ RECOMMENDATION (revealed after form) ═══ -->
-<div class="step" id="recommendation-section" style="display:none; opacity:0; transition: opacity 0.7s ease;">
-  <div class="step-num">Your recommendation</div>
-  <h2 class="step-heading">Every UK provider,<br><em>side by side.</em></h2>
-  <p class="step-body">Rates sourced directly from each provider's own website. Your recommended provider is highlighted. Click any card to view their pricing page. Cards marked <em>Rate indicative</em> use figures not publicly confirmed — verify before committing.</p>
-
-  <div class="sort-row">
-    <span class="sort-label">Sort by</span>
-    <button class="sort-btn active" id="sb-tco" onclick="setSortBy('tco')">5yr cost</button>
-    <button class="sort-btn" id="sb-rate" onclick="setSortBy('rate')">Tx rate</button>
-    <button class="sort-btn" id="sb-monthly" onclick="setSortBy('monthly')">Monthly fees</button>
-  </div>
-
-  <div class="provider-grid" id="provider-grid"></div>
-
-  <p style="font-size:10px;color:rgba(248,245,239,0.18);margin-top:1rem;line-height:1.6">All rates sourced directly from provider websites April 2026. Rates subject to change — verify before committing.</p>
 </div>
 
 <footer>
   <div class="footer-brand">IToldYouSo</div>
   <div class="footer-note">Payment provider data sourced directly from provider websites, April 2026. Rates are subject to change — verify before committing. This document is prepared exclusively for use in IToldYouSo consultations and is not for redistribution.</div>
+
   <button onclick="openAdmin()" style="background:none;border:none;cursor:pointer;margin-top:2rem;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.1);font-family:var(--font-sans)">Admin</button>
 </footer>
+
+<!-- ═══ DROPOFF SURVEY MODAL ═══ -->
+<div id="dropoff-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;align-items:center;justify-content:center;padding:1rem;">
+  <div style="background:var(--black2);border:1px solid var(--border2);padding:2.25rem 2rem;width:100%;max-width:440px;max-height:90vh;overflow-y:auto;">
+    <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem">A quick favour</div>
+    <div style="font-family:var(--font-serif);font-size:1.4rem;font-weight:400;color:var(--white);line-height:1.25;margin-bottom:.5rem">Mind telling me why?</div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:1.25rem">No pressure — just helps me improve the service for the next person.</div>
+
+    <div id="dropoff-form">
+      <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem">
+        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="price"><span>The fee is a strange price</span></label>
+        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="scam"><span>I think this is a scam</span></label>
+        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="researching"><span>Still researching — not ready to pay</span></label>
+        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="trust"><span>Not sure I trust the recommendation</span></label>
+        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="info"><span>I need more detail before deciding</span></label>
+        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="already"><span>Already switching via another route</span></label>
+        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="browsing"><span>Just browsing / curious</span></label>
+        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="other"><span>Other</span></label>
+      </div>
+
+      <div class="field" style="margin-bottom:1rem">
+        <label class="field-label" for="dropoff-comment">Anything else? <span style="color:rgba(248,245,239,0.2)">(optional)</span></label>
+        <textarea class="field-input" id="dropoff-comment" rows="3" style="font-family:var(--font-sans);resize:vertical" placeholder="Free-text feedback welcome"></textarea>
+      </div>
+
+      <div class="field" style="margin-bottom:1.25rem">
+        <label class="field-label" for="dropoff-email">Email <span style="color:rgba(248,245,239,0.2)">(optional — only if you want a follow-up)</span></label>
+        <input class="field-input" type="email" id="dropoff-email" placeholder="you@example.com">
+      </div>
+
+      <div id="dropoff-error" style="display:none;font-size:11px;color:rgba(220,80,80,0.85);margin-bottom:.75rem"></div>
+
+      <div style="display:flex;gap:.75rem">
+        <button class="btn-primary" onclick="submitDropoffSurvey()" style="flex:1;margin-top:0">Send</button>
+        <button onclick="closeDropoffSurvey()" style="flex:1;background:transparent;border:1px solid var(--border2);color:var(--muted);padding:.9rem;font-family:var(--font-sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer">Cancel</button>
+      </div>
+    </div>
+
+    <div id="dropoff-thanks" style="display:none;font-family:var(--font-serif);font-size:1.2rem;color:var(--gold2);text-align:center;padding:1.5rem 0">Thanks — really appreciated.</div>
+  </div>
+</div>
 
 <!-- ═══ ADMIN PASSWORD MODAL ═══ -->
 <div id="admin-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;display:none;align-items:center;justify-content:center;">
@@ -708,11 +848,15 @@ footer {
     <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Summary at current volumes</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:3rem">
       <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-mvol">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Monthly volume</span></div>
-      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-rev5">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">5yr revenue</span></div>
-      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-cheapest">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Cheapest 5yr cost</span></div>
-      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-expensive">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Most expensive 5yr</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-rev5">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">3yr revenue</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-cheapest">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Cheapest 3yr cost</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-expensive">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Most expensive 3yr</span></div>
       <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-spread">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Max saving available</span></div>
-      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-stripe-save">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">5yr saving vs Stripe</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-stripe-save">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">3yr saving vs Stripe</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(201,168,76,0.9);display:block;line-height:1" id="adm-aff-lopay">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Lopay aff. 3yr</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(201,168,76,0.9);display:block;line-height:1" id="adm-aff-best">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Best aff. 3yr</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(201,168,76,0.9);display:block;line-height:1" id="adm-fee">£40</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Consult fee</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(201,168,76,1);display:block;line-height:1" id="adm-aff-total">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Combined income</span></div>
     </div>
 
     <!-- Full provider table -->
@@ -726,9 +870,9 @@ footer {
             <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Rate</th>
             <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Flat fee</th>
             <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Monthly sub</th>
-            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Reader</th>
             <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Monthly fees</th>
-            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">5yr TCO</th>
+            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">3yr TCO</th>
+            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:rgba(201,168,76,0.6);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Affiliate (3yr)</th>
             <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Source</th>
             <th style="text-align:center;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">App</th>
             <th style="text-align:center;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Confirmed</th>
@@ -749,18 +893,7 @@ footer {
 <script>
 // ── NAV DATE ──
 document.getElementById('nav-date').textContent =
-  new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
-
-// ── SCROLL REVEAL ──
-const obs = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('on'), i * 60);
-      obs.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.06 });
-document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+  new Date().toLocaleDateString('en-GB', { month:'long', year:'numeric' });
 
 // ── ADVANCED TOGGLE ──
 function toggleAdvanced() {
@@ -770,8 +903,14 @@ function toggleAdvanced() {
   panel.classList.toggle('open');
 }
 
+function toggleCustomRate() {
+  const v = document.getElementById('current-provider').value;
+  document.getElementById('custom-rate-field').style.display = v === 'custom' ? '' : 'none';
+}
+
 // ── SYNC form inputs → hidden slider values ──
 function syncFromForm() {
+  lpInteracted = true;
   const txn  = parseInt(document.getElementById('f-txn').value)  || 8;
   const val  = parseInt(document.getElementById('f-val').value)  || 50;
   const days = parseInt(document.getElementById('f-days').value) || 22;
@@ -781,8 +920,117 @@ function syncFromForm() {
   calc();
 }
 
-// ── PRICING ENGINE ──
-const BASE_HW = 829;
+// ── LIVE PREVIEW (Step 1) ──
+let lpShown    = false;
+let lpInteracted = false;   // true only after a real user input
+const lpLast = { rev: 0, fees: 0, save: 0 };
+
+function animateLp(el, from, to, dur) {
+  const t0 = performance.now();
+  (function tick(now) {
+    const p = Math.min((now - t0) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);          // ease-out cubic
+    el.textContent = '£' + Math.round(from + (to - from) * e).toLocaleString();
+    if (p < 1) requestAnimationFrame(tick);
+  })(t0);
+}
+
+function updateLivePreview() {
+  // Only meaningful once PROVIDERS is defined
+  if (typeof PROVIDERS === 'undefined') return;
+
+  const txn    = parseInt(document.getElementById('f-txn')?.value)  || 8;
+  const val    = parseInt(document.getElementById('f-val')?.value)  || 50;
+  const days   = parseInt(document.getElementById('f-days')?.value) || 22;
+  const infl   = parseFloat(document.getElementById('r-infl').value)   / 100;
+  const growth = parseFloat(document.getElementById('r-growth').value) / 100;
+
+  // 3-year revenue + per-provider fees
+  let rev3 = 0;
+  const fees3 = new Array(PROVIDERS.length).fill(0);
+  for (let y = 0; y < 3; y++) {
+    const valY  = val  * Math.pow(1 + infl,   y);
+    const txnY  = txn  * Math.pow(1 + growth, y);
+    const mVolY = txnY * valY * days;
+    const mTxnY = txnY * days;
+    rev3 += mVolY * 12;
+    PROVIDERS.forEach((p, i) => {
+      fees3[i] += (mVolY * p.rate + mTxnY * p.flat) * 12;
+    });
+  }
+
+  // 3-year TCO for every provider (fees + subs + hardware)
+  const tco3 = PROVIDERS.map((p, i) => fees3[i] + p.sub * 36);
+  const bestTco3 = Math.min(...tco3);
+
+  // Current provider
+  const sel  = document.getElementById('current-provider');
+  const cId  = sel ? sel.value : '';
+  const cIdx = (cId && cId !== 'new' && cId !== 'custom') ? PROVIDERS.findIndex(p => p.id === cId) : -1;
+  let cTco3 = cIdx >= 0 ? tco3[cIdx] : null;
+  if (cId === 'custom') {
+    const customPct = parseFloat(document.getElementById('custom-rate-pct')?.value) || 0;
+    if (customPct > 0) cTco3 = rev3 * (customPct / 100);
+  }
+  const saving3 = cTco3 !== null ? cTco3 - bestTco3 : null;
+
+  // Slide in on first user interaction
+  if (!lpShown && lpInteracted) {
+    lpShown = true;
+    requestAnimationFrame(() =>
+      document.getElementById('live-preview').classList.add('lp-visible'));
+  }
+
+  // Revenue column (always shown)
+  const revEl  = document.getElementById('lp-rev');
+  const revSub = document.getElementById('lp-rev-sub');
+  animateLp(revEl, lpLast.rev, rev3, 500);
+  lpLast.rev = rev3;
+  revEl.className = 'lp-value';
+  revSub.textContent = (txn * days).toLocaleString() + ' txns/mo · £' + val + ' avg';
+
+  // Fees column
+  const feesEl  = document.getElementById('lp-fees');
+  const feesSub = document.getElementById('lp-fees-sub');
+  if (cIdx >= 0) {
+    const f = fees3[cIdx] + PROVIDERS[cIdx].sub * 36;
+    animateLp(feesEl, lpLast.fees, f, 500);
+    lpLast.fees = f;
+    feesEl.className = 'lp-value';
+    feesSub.textContent = PROVIDERS[cIdx].name + ' · ' + PROVIDERS[cIdx].plan;
+  } else if (cId === 'custom' && cTco3 !== null) {
+    const customPct = parseFloat(document.getElementById('custom-rate-pct')?.value) || 0;
+    animateLp(feesEl, lpLast.fees, cTco3, 500);
+    lpLast.fees = cTco3;
+    feesEl.className = 'lp-value';
+    feesSub.textContent = 'Custom rate · ' + customPct.toFixed(2) + '%';
+  } else {
+    feesEl.className  = 'lp-value lp-dim';
+    feesEl.textContent = '—';
+    feesSub.textContent = 'select a provider above';
+    lpLast.fees = 0;
+  }
+
+  // Savings column
+  const saveEl  = document.getElementById('lp-save');
+  const saveSub = document.getElementById('lp-save-sub');
+  if (saving3 !== null && saving3 > 50) {
+    animateLp(saveEl, lpLast.save, saving3, 600);
+    lpLast.save = saving3;
+    saveEl.className = 'lp-value lp-gold';
+    saveSub.textContent = 'over 3 years vs best alternative';
+  } else if (cIdx >= 0) {
+    saveEl.className  = 'lp-value lp-dim';
+    saveEl.textContent = "You're on the cheapest";
+    saveSub.textContent = 'No cheaper option found';
+    lpLast.save = 0;
+  } else {
+    saveEl.className  = 'lp-value lp-dim';
+    saveEl.textContent = '—';
+    saveSub.textContent = 'vs best alternative';
+    lpLast.save = 0;
+  }
+}
 
 const PROVIDERS = [
 
@@ -1005,7 +1253,7 @@ const PROVIDERS = [
   // ── Lopay ── source: https://lopay.com/pricing
   { id:'lopay_essential', app:true,
     name:'Lopay', plan:'Essential',
-    sub:0, rate:0.0079, flat:0, extra:0,
+    sub:0, rate:0.0079, flat:0.08, extra:0,
     source:'https://lopay.com/pricing',
     warn:'Payouts on Thursdays only on Essential plan · Amex, international & corporate cards +1% · Tap to Pay +8p per transaction',
     pros:['0.79% — among lowest published rates','No monthly fee or contract','No setup costs'] },
@@ -1129,61 +1377,48 @@ const PROVIDERS = [
     warn:'Rates not publicly disclosed — bespoke quotes only. Terminal rental £10–20/month typically included in or added to subscription shown. 12–36 month contracts. Part of PayPoint Group.',
     pros:['Competitive negotiated debit rates','PayPoint Group backing','UK-based support'] },
 
-  // ── Paymentsense ── source: https://www.paymentsense.com/gb/
+  // ── Paymentsense ── source: https://www.paymentsense.com/uk/pricing/
   { id:'paymentsense', app:'partial',
     name:'Paymentsense', plan:'Standard',
     sub:20, rate:0.013, flat:0.05, extra:0,
     indicative:true,
-    source:'https://www.paymentsense.com/gb/',
+    source:'https://www.paymentsense.com/uk/pricing/',
     warn:'Paymentsense was acquired by Dojo in 2021 — new customers may be onboarded under Dojo branding. Rates not publicly disclosed — indicative only. 12–36 month contracts typical.',
     pros:['Established UK brand','Terminal included on some plans','UK-based support'] },
 ];
 
-const PROVIDER_CONS = {
-  sumup_payg:          ['Higher 1.69% rate than most competitors','No business banking','Basic reporting on free plan'],
-  sumup_plus:          ['0.99% applies to UK/EU consumer cards only — Amex reverts to 1.69%','£19/month subscription','Custom pricing required above £10k/month'],
-  teya:                ['Rates negotiated individually — no public price guarantee','£29.99/month penalty if turnover under £2,500','Less established brand than SumUp or Square'],
-  revolut_basic:       ['Requires Revolut Business account','No Amex acceptance','2.6%+2p for international/commercial cards','No native Loyverse integration'],
-  revolut_grow:        ['Same payment rate as Basic — £25/month buys banking features only','No Amex','No Loyverse integration'],
-  revolut_scale:       ['Same payment rate as Basic/Grow — £100/month is expensive for same rate','No Amex','No Loyverse integration'],
-  stripe:              ['No native retail POS — requires custom development work','Non-EEA cards 2.9%+10p','Tap to Pay costs extra 10p per auth','Technical setup complexity'],
-  square_free:         ['1.5% surcharge on non-UK cards','Customer support can be slow','Limited offline functionality'],
-  square_plus:         ['Same 1.75% in-person rate as Free tier','Subscription only unlocks software features, not a better rate','1.5% surcharge on non-UK cards'],
-  zettle:              ['Invoice/payment links charged at 2.5%','Limited business banking integration','PayPal brand can deter some customers'],
-  mypos:               ['Amex 2.45%+7p — significantly higher','International/commercial cards 2.85%+7p','Instant settlement only to myPOS account (not your bank)'],
-  tyl:                 ['Requires NatWest business account','12-month contract on terminals','Business/international cards 1.99%+5p','Locked into NatWest ecosystem'],
-  shopify_basic:       ['2% extra fee if not using Shopify Payments','Advanced retail features (POS Pro) cost extra £69/month','Best value only if also selling online'],
-  shopify_grow:        ['Same in-person rate applies whether you pay £25 or £65 — extra cost is for online features','POS Pro still +£69/month','1% extra for third-party processor'],
-  shopify_advanced:    ['Very high £344/month subscription','POS Pro still required at +£69/month','Only viable at very high combined online + offline volume'],
-  lightspeed_basic:    ['Transaction rates not publicly disclosed','£400/month penalty for non-Lightspeed payments','Expensive at £75/month for entry level'],
-  lightspeed_core:     ['Transaction rates not publicly disclosed','£400/month penalty for non-Lightspeed payments','£149/month is very high for mid-tier'],
-  lightspeed_plus:     ['Transaction rates not publicly disclosed','£400/month penalty for non-Lightspeed payments','£189/month — highest Lightspeed tier'],
-  dojo_payg:           ['Rates not publicly disclosed — pricing page inaccessible','Terminal rental model adds ongoing cost','Rate shown is indicative only'],
-  dojo_fix:            ['12-month contract required','£24.95 minimum monthly charge','Business cards charged at higher rate','Rates not publicly disclosed'],
-  worldpay_payg:       ['Very high indicative 2.75%+20p rate','Terminal rental £17.50–22.50/month on top','Setup fee ~£25–50','18-month contract on some plans'],
-  worldpay_contract:   ['18-month minimum contract','Early termination fees apply','Rate requires custom quote — figure shown is illustrative','Better suited to £75k+/year turnover'],
-  barclaycard:         ['Rate is indicative only — actual rate confirmed on application','Authorisation fee ~3p per transaction may apply','12–36 month contracts on some plans'],
-  clover:              ['Transaction rates not publicly disclosed — set individually at sign-up','Contract terms unclear','Limited pricing transparency'],
-  elavon:              ['Rates not published online — all pricing bespoke','36-month contracts typical','PCI DSS fee ~£6/month','International card handling fee 0.80%'],
-  lopay_essential:     ['Thursday payouts only — no flexible payout schedule','Amex, international & corporate cards +1%','Tap to Pay costs extra 8p','Less established brand'],
-  lopay_standard:      ['Amex, international & corporate cards +1%','Payment links 1.79% minimum £0.50','Tap to Pay costs extra 8p','Less established than SumUp or Square'],
-  lopay_instant:       ['1.79% rate is significantly higher — premium is for instant payouts only','Amex/international +1%','Poor value unless instant settlement is essential'],
-  tide_payg:           ['Reader from £159+VAT — expensive hardware','Settlement up to 3 working days (next-day costs extra)','Advertised rate for domestic consumer debit only','Tied to Tide business banking'],
-  tide_subscription:   ['Monthly fee rising to £17.99+VAT from 27 April 2026','Reader still £99+VAT','Settlement up to 3 working days','Advertised rate for domestic consumer debit only','Locked into Tide ecosystem'],
-  takepayments:        ['Rates not published — bespoke quote required','12-month contract','No self-service pricing — must speak to sales','Limited price transparency'],
-  clover_standard:     ['Transaction rates not publicly disclosed — set individually','Higher monthly fee than Starter for marginal rate improvement','Contract terms unclear','Limited pricing transparency'],
-  clover_advanced:     ['Very high monthly fee for small traders','Transaction rates not publicly disclosed','Only worthwhile at high volumes with complex POS needs','Contract terms unclear'],
-  zeller:              ['Not currently available in the UK — Australian provider only','No UK customer support or onboarding','Cannot be recommended for UK traders'],
-  fluxa:               ['Very limited publicly available information','Rates not confirmed — verify before recommending','Unproven track record in UK market'],
-  adyen:               ['Interchange++ pricing is complex — effective rate hard to predict','Minimum monthly processing volume expected','Enterprise-focused — not suitable for small traders or kiosks','Technical integration required'],
-  checkout:            ['Pricing not publicly disclosed — enterprise bespoke only','Not suited to small traders, shops, or low volumes','No self-service onboarding','Technical integration required'],
-  globalpay:           ['Rates not publicly disclosed — bespoke quote required','24-month contracts common','Terminal rental adds to monthly cost','Better suited to established high-volume businesses'],
-  nexi:                ['Rates not publicly disclosed — pricing confirmed on application only','Limited UK brand recognition vs SumUp or Square','Contract terms not published'],
-  nuvei:               ['Pricing not publicly disclosed — enterprise bespoke only','Not suited to small traders or kiosks','Minimum volume expectations','Technical integration typically required'],
-  airwallex:           ['In-person limited to Tap to Pay on iPhone — no card reader','Primarily an online and multi-currency platform','Not suited to high-volume in-person retail or kiosks','Less established for UK in-person payments'],
-  handepay:            ['Rates not publicly disclosed — bespoke quote required','12–36 month contracts','Terminal rental adds ongoing cost','Less transparent pricing than SumUp or Square'],
-  paymentsense:        ['Acquired by Dojo in 2021 — brand future uncertain','Rates not publicly disclosed','12–36 month contracts typical','New customers may be redirected to Dojo'],
-};
+// ── POPULARITY ORDER for provider dropdown ──
+// Ordered by estimated UK market presence among small traders / shops / kiosks
+const POP_ORDER = [
+  'sumup',        // largest small-trader base in UK
+  'square',       // #2 for small retail
+  'zettle',       // PayPal/iZettle — very established
+  'stripe',       // dominant developer / online-to-offline
+  'revolut',      // fast-growing business banking + payments
+  'shopify',      // dominant for retail + online combined
+  'lopay',        // fastest-growing UK-focused newcomer
+  'dojo',         // strong UK hospitality & retail push
+  'tide',         // business banking + card reader bundle
+  'mypos',        // popular in UK independent retail
+  'tyl',          // NatWest — large existing business base
+  'barclaycard',  // established bank brand
+  'worldpay',     // large legacy estate
+  'lightspeed',   // growing in hospitality & retail
+  'takepayments', // UK-focused mid-market
+  'handepay',     // UK-focused mid-market
+  'clover',       // growing in UK hospitality
+  'elavon',       // established acquirer
+  'paymentsense', // legacy — now Dojo
+  'teya',         // formerly Teya/SaltPay — UK presence
+  'adyen',        // enterprise
+  'checkout',     // enterprise
+  'globalpay',    // enterprise
+  'nexi',         // enterprise / EU focus
+  'nuvei',        // enterprise
+  'airwallex',    // multi-currency / online focus
+  'zeller',       // Australia only — listed last
+  'fluxa',        // unverified / minimal info
+];
 
 let sortBy = 'tco';
 
@@ -1191,13 +1426,76 @@ function fmt(n)    { return '£' + Math.round(n).toLocaleString(); }
 function fmtD(n)   { return '£' + n.toFixed(2); }
 function fmtPct(n) { return n.toFixed(2) + '%'; }
 
+// ── WIZARD NAVIGATION ──
+let currentStep = 1;
+
+function updateProgress(n) {
+  document.getElementById('progress-bar').style.width = (n / 4 * 100) + '%';
+}
+
+function goToStep(n) {
+  if (n === currentStep) return;
+  if (n === 2) calc();   // ensure grids are fresh before showing step 2
+
+  const oldEl = document.getElementById('wiz-' + currentStep);
+  const newEl = document.getElementById('wiz-' + n);
+  const goingForward = n > currentStep;
+
+  updateProgress(n);
+
+  oldEl.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+  oldEl.style.opacity = '0';
+  oldEl.style.transform = goingForward ? 'translateX(-24px)' : 'translateX(24px)';
+
+  setTimeout(() => {
+    oldEl.classList.remove('active');
+    oldEl.style.cssText = '';
+    currentStep = n;
+
+    newEl.classList.add('active');
+    newEl.style.opacity = '0';
+    newEl.style.transform = goingForward ? 'translateX(24px)' : 'translateX(-24px)';
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        newEl.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+        newEl.style.opacity = '1';
+        newEl.style.transform = 'translateX(0)';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    setTimeout(() => { newEl.style.cssText = ''; }, 500);
+  }, 220);
+
+  // After animation completes, scroll to the user's current provider card
+  if (n === 2) {
+    setTimeout(() => {
+      const cId = document.getElementById('current-provider').value;
+      if (cId && cId !== 'new') {
+        const card = document.querySelector('#provider-grid-2 [data-pid="' + cId + '"]');
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 750);
+  }
+}
+
 function setSortBy(s) {
   sortBy = s;
-  ['tco','rate','monthly'].forEach(k => {
-    const b = document.getElementById('sb-' + k);
-    if (b) b.classList.toggle('active', k === s);
+  ['tco', 'rate', 'monthly'].forEach(k => {
+    const b2 = document.getElementById('sb-' + k);
+    const b4 = document.getElementById('sb-' + k + '-4');
+    if (b2) b2.classList.toggle('active', k === s);
+    if (b4) b4.classList.toggle('active', k === s);
   });
   calc();
+  if (currentStep === 2) {
+    const cId = document.getElementById('current-provider').value;
+    if (cId && cId !== 'new') {
+      const card = document.querySelector('#provider-grid-2 [data-pid="' + cId + '"]');
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
 }
 
 function calc() {
@@ -1214,50 +1512,68 @@ function calc() {
   const mVol  = txn * val * days;
   const mTxns = txn * days;
 
-  let rev5y = 0;
+  let rev3y = 0;
   const yearlyFees = Array(PROVIDERS.length).fill(0);
-  for (let y = 0; y < 5; y++) {
+  for (let y = 0; y < 3; y++) {
     const valY  = val  * Math.pow(1 + infl,   y);
     const txnY  = txn  * Math.pow(1 + growth, y);
     const mVolY = txnY * valY * days;
     const mTxnY = txnY * days;
-    rev5y += mVolY * 12;
+    rev3y += mVolY * 12;
     PROVIDERS.forEach((p, i) => {
       yearlyFees[i] += (mVolY * p.rate + mTxnY * p.flat) * 12;
     });
   }
 
-  const rows = PROVIDERS.map((p, i) => {
-    const hw   = BASE_HW + p.extra;
+  const allRows = PROVIDERS.map((p, i) => {
     const fees = yearlyFees[i];
-    const subs = p.sub * 60;
-    const tco  = hw + fees + subs;
+    const subs = p.sub * 36;
+    const tco  = fees + subs;
     const mFee = mVol * p.rate + mTxns * p.flat;
-    return { ...p, hw, fees, subs, tco, mFee };
+    return { ...p, fees, subs, tco, mFee };
   });
 
-  if (sortBy === 'tco')          rows.sort((a,b) => a.tco  - b.tco);
-  else if (sortBy === 'rate')    rows.sort((a,b) => a.rate - b.rate);
-  else                           rows.sort((a,b) => a.mFee - b.mFee);
+  // Always sort by TCO first to get stable ranking & recommendation
+  const byTco = [...allRows].sort((a, b) => a.tco - b.tco);
+  const top10ids  = new Set(byTco.slice(0, 10).map(r => r.id));
+  const recommended = byTco[0];
 
-  const recommended = rows.reduce((a, b) => a.tco < b.tco ? a : b);
+  // Rank lookup for locked card labels
+  const tcoRank = {};
+  byTco.forEach((r, i) => { tcoRank[r.id] = i + 1; });
 
-  const minTco  = recommended.tco;
-  const maxTco  = Math.max(...rows.map(r => r.tco));
-  const winner  = rows[0];
+  // Sort rows per user's selected sort key
+  const rows = [...allRows];
+  if (sortBy === 'tco')          rows.sort((a, b) => a.tco  - b.tco);
+  else if (sortBy === 'rate')    rows.sort((a, b) => a.rate - b.rate);
+  else                           rows.sort((a, b) => a.mFee - b.mFee);
+
+  // Display rank in current sort order
+  const displayRank = {};
+  rows.forEach((r, i) => { displayRank[r.id] = i + 1; });
+
+  let maxTco = Math.max(...rows.map(r => r.tco));
+  const winner  = byTco[0];
   const brkEven = winner.sub > 0
     ? Math.ceil(winner.sub / ((0.0169 - winner.rate) * val))
     : 0;
 
+  // Stats strip
   document.getElementById('be-mvol').textContent = fmt(mVol);
-  document.getElementById('be-rev5').textContent = fmt(rev5y);
-  document.getElementById('be-brkn').textContent = brkEven > 0 ? brkEven + ' sales' : 'N/A';
-  document.getElementById('be-pct').textContent  = (minTco / rev5y * 100).toFixed(1) + '%';
+  document.getElementById('be-rev5').textContent = fmt(rev3y);
+  document.getElementById('be-brkn').textContent = brkEven > 0 ? brkEven + ' sales' : 'N/A — no contract';
+  document.getElementById('be-pct').textContent  = (recommended.tco / rev3y * 100).toFixed(1) + '%';
 
-  // ── Populate provider dropdown on first run ──
+  // Populate provider dropdown (first run only), sorted by popularity
   const sel = document.getElementById('current-provider');
-  if (sel.options.length === 2) {
-    rows.forEach(r => {
+  if (sel.options.length === 3) {
+    const popBase = id => { const i = id.indexOf('_'); return i >= 0 ? id.slice(0, i) : id; };
+    const popRank = id => { const r = POP_ORDER.indexOf(popBase(id)); return r >= 0 ? r : POP_ORDER.length; };
+    const dropRows = [...rows].sort((a, b) => {
+      const diff = popRank(a.id) - popRank(b.id);
+      return diff !== 0 ? diff : a.tco - b.tco; // within same provider, cheapest plan first
+    });
+    dropRows.forEach(r => {
       const opt = document.createElement('option');
       opt.value = r.id;
       opt.textContent = r.name + ' — ' + r.plan;
@@ -1265,138 +1581,695 @@ function calc() {
     });
   }
 
-  // ── Show / hide Step 2 ──
+  // ── Savings hook — Step 2 (best alternative locked) ──
   const currentId = sel.value;
-  const step2El = document.getElementById('step2');
-  if (!currentId) {
-    step2El.style.display = 'none';
-    return;
-  }
-  step2El.style.display = '';
 
-  // ── Savings hook ──
-  const emptyEl   = document.getElementById('sh-empty');
-  const contentEl = document.getElementById('sh-content');
-  const hookEl    = document.getElementById('savings-hook');
-
-  if (currentId === 'new') {
-    // New to card payments — hide savings hook, show only stats
-    hookEl.style.display = 'none';
-  } else {
-    // Existing provider selected — show savings hook
-    hookEl.style.display = '';
-    const current = rows.find(r => r.id === currentId);
-    if (current) {
-      const saving5y   = current.tco - recommended.tco;
-      const savingMo   = saving5y / 5;
-      emptyEl.style.display   = 'none';
-      contentEl.style.display = 'block';
-      document.getElementById('sh-current-cost').textContent  = fmt(current.tco);
-      document.getElementById('sh-current-detail').textContent = current.name + ' ' + current.plan + ' · 5-year total';
-      const savingNumEl   = document.getElementById('sh-saving-num');
-      const savingDetailEl = document.getElementById('sh-saving-detail');
-      if (saving5y > 0) {
-        if (unlocked) {
-          savingNumEl.textContent    = fmt(recommended.tco);
-          savingNumEl.style.fontSize = '';
-          savingNumEl.style.color    = '';
-          savingDetailEl.textContent = recommended.name + ' ' + recommended.plan + ' · best alternative';
-          savingDetailEl.style.color = '';
-        } else {
-          savingNumEl.textContent    = 'Locked';
-          savingNumEl.style.fontSize = '2rem';
-          savingNumEl.style.color    = 'rgba(201,168,76,0.25)';
-          savingDetailEl.textContent = 'Leave your details below to unlock';
-          savingDetailEl.style.color = 'rgba(248,245,239,0.2)';
-        }
-        document.getElementById('sh-net-saving').textContent     = fmt(saving5y);
-        document.getElementById('sh-monthly-saving').textContent = fmtD(savingMo);
-      } else {
-        savingNumEl.textContent    = unlocked ? fmt(recommended.tco) : 'Locked';
-        savingDetailEl.textContent = unlocked ? 'You\'re already on the cheapest option' : 'Leave your details below to unlock';
-        document.getElementById('sh-net-saving').textContent     = '—';
-        document.getElementById('sh-monthly-saving').textContent = '—';
+  // Build a virtual row for custom-rate mode
+  let customRow = null;
+  if (currentId === 'custom') {
+    const customPct = parseFloat(document.getElementById('custom-rate-pct')?.value) || 0;
+    if (customPct > 0) {
+      const customRate = customPct / 100;
+      let customFees = 0;
+      for (let y = 0; y < 3; y++) {
+        const valY = val * Math.pow(1 + infl, y);
+        const txnY = txn * Math.pow(1 + growth, y);
+        customFees += txnY * valY * days * 12 * customRate;
       }
+      customRow = {
+        id: 'custom', name: 'Your current plan', plan: customPct.toFixed(2) + '% rate',
+        tco: customFees, fees: customFees, subs: 0, mFee: mVol * customRate,
+        rate: customRate, flat: 0, sub: 0,
+        pros: [], source: null, indicative: false, warn: null,
+        isCustom: true
+      };
     }
   }
 
-  // ── Provider grid ──
+  // Splice the custom tile into the displayed grid (but not into top10ids or recommended)
+  if (customRow) {
+    rows.push(customRow);
+    if (sortBy === 'tco')        rows.sort((a, b) => a.tco  - b.tco);
+    else if (sortBy === 'rate')  rows.sort((a, b) => a.rate - b.rate);
+    else                         rows.sort((a, b) => a.mFee - b.mFee);
+    Object.keys(displayRank).forEach(k => delete displayRank[k]);
+    rows.forEach((r, i) => { displayRank[r.id] = i + 1; });
+    if (customRow.tco > maxTco) maxTco = customRow.tco;
+  }
+
+  // Resolve the current provider row (known provider, custom rate, or none)
+  const currentForHook = currentId === 'custom' ? customRow
+    : (currentId && currentId !== 'new' ? rows.find(r => r.id === currentId) : null);
+
+  const hookEl = document.getElementById('savings-hook');
+  if (currentForHook) {
+    hookEl.style.display = '';
+    const saving3y = currentForHook.tco - recommended.tco;
+    const savingMo = saving3y / 3;
+    document.getElementById('sh-current-cost').textContent    = fmt(currentForHook.tco);
+    document.getElementById('sh-current-detail').textContent  = currentId === 'custom'
+      ? 'Your current rate · 3-year estimate'
+      : currentForHook.name + ' ' + currentForHook.plan + ' · 3-year total';
+    document.getElementById('sh-saving-num').textContent      = 'Locked';
+    document.getElementById('sh-saving-num').style.fontSize   = '2rem';
+    document.getElementById('sh-saving-num').style.color      = 'rgba(201,168,76,0.25)';
+    document.getElementById('sh-saving-detail').textContent   = 'Complete your details to unlock';
+    document.getElementById('sh-saving-detail').style.color   = 'rgba(248,245,239,0.2)';
+    document.getElementById('sh-net-saving').textContent      = saving3y > 0 ? fmt(saving3y)   : '—';
+    document.getElementById('sh-monthly-saving').textContent  = saving3y > 0 ? fmtD(savingMo) : '—';
+  } else {
+    hookEl.style.display = 'none';
+  }
+
+  // ── Savings hook — Step 4 (fully unlocked) ──
+  const hookEl4 = document.getElementById('savings-hook-4');
+  if (currentForHook) {
+    hookEl4.style.display = '';
+    const saving3y = currentForHook.tco - recommended.tco;
+    const savingMo = saving3y / 3;
+    document.getElementById('sh-current-cost-4').textContent   = fmt(currentForHook.tco);
+    document.getElementById('sh-current-detail-4').textContent = currentId === 'custom'
+      ? 'Your current rate · 3-year estimate'
+      : currentForHook.name + ' ' + currentForHook.plan + ' · 3-year total';
+    if (saving3y > 0) {
+      document.getElementById('sh-saving-num-4').textContent    = fmt(recommended.tco);
+      document.getElementById('sh-saving-num-4').style.fontSize = '';
+      document.getElementById('sh-saving-num-4').style.color    = '';
+      document.getElementById('sh-saving-detail-4').textContent = recommended.name + ' ' + recommended.plan + ' · best alternative';
+      document.getElementById('sh-saving-detail-4').style.color = '';
+      document.getElementById('sh-net-saving-4').textContent    = fmt(saving3y);
+      document.getElementById('sh-monthly-saving-4').textContent = fmtD(savingMo);
+    } else {
+      document.getElementById('sh-saving-num-4').textContent    = fmt(recommended.tco);
+      document.getElementById('sh-saving-detail-4').textContent = 'You\'re already on the cheapest option';
+      document.getElementById('sh-net-saving-4').textContent    = '—';
+      document.getElementById('sh-monthly-saving-4').textContent = '—';
+    }
+  } else {
+    hookEl4.style.display = 'none';
+  }
+
+  // ── Provider grid rendering helper ──
   function sourceHost(url) {
     try { return new URL(url).hostname.replace(/^www\./, ''); }
     catch(e) { return url; }
   }
 
-  document.getElementById('provider-grid').innerHTML = rows.map(r => {
-    const hwPct   = Math.round(r.hw    / maxTco * 100);
-    const feesPct = Math.round(r.fees  / maxTco * 100);
-    const subPct  = Math.round(r.subs  / maxTco * 100);
-    const isRecommended = r.id === recommended.id;
-    const cardClass = isRecommended ? ' winner' : '';
+  function renderGrid(containerId, lockSet) {
+    const effectiveCurrent = (currentId && currentId !== 'new') ? currentId : null;
+    const currentRow = effectiveCurrent === 'custom' ? customRow
+      : (effectiveCurrent ? rows.find(r2 => r2.id === effectiveCurrent) : null);
 
-    const badge = isRecommended
-      ? '<div class="p-badge">Recommended</div>'
-      : '<div style="height:19px"></div>';
+    // Returns { num, label, color } for the main headline figure on a card
+    function mainFigure(r, isCurrent) {
+      if (!currentRow || isCurrent) {
+        return { num: fmt(r.tco), label: '3-year total', color: 'var(--gold2)' };
+      }
+      if (r.tco < currentRow.tco) {
+        return { num: fmt(currentRow.tco - r.tco), label: 'You save', color: 'rgba(110,217,138,0.9)' };
+      }
+      return { num: fmt(r.tco - currentRow.tco), label: 'Costs more', color: 'rgba(220,100,80,0.8)' };
+    }
 
-    const indicativeBadge = r.indicative
-      ? `<div class="p-indicative">⚠ Rate indicative — not publicly confirmed</div>`
-      : '';
+    document.getElementById(containerId).innerHTML = rows.map(r => {
+      const isLocked = lockSet && lockSet.has(r.id);
 
-    return `<a class="provider-card${cardClass}" href="${r.source}" target="_blank" rel="noopener">
-      ${badge}
-      <div class="p-name">${r.name}</div>
-      <div class="p-plan">${r.plan}</div>
-      <div class="p-tco">${fmt(r.tco)}</div>
-      <div class="p-tco-label">5-year total</div>
-      <div>
-        <div class="mini-bar-row"><span style="min-width:26px">HW</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${hwPct}%;background:#6b4e1a"></div></div><span style="min-width:34px;text-align:right">${fmt(r.hw)}</span></div>
-        <div class="mini-bar-row"><span style="min-width:26px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#c9a84c"></div></div><span style="min-width:34px;text-align:right">${fmt(r.fees)}</span></div>
-        <div class="mini-bar-row"><span style="min-width:26px">Sub</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${subPct}%;background:#4a5a3a"></div></div><span style="min-width:34px;text-align:right">${fmt(r.subs)}</span></div>
-      </div>
-      <div class="p-rate">In-person rate</div>
-      <div class="p-rate-val">${fmtPct(r.rate * 100)}${r.flat ? ' + ' + Math.round(r.flat * 100) + 'p' : ''} · Sub: ${r.sub ? '£' + r.sub + '/mo' : 'None'}</div>
-      <div class="p-monthly">Monthly on <strong>${fmt(mVol)}</strong>: <strong>${fmtD(r.mFee)}</strong></div>
-      <ul class="p-pros">${r.pros.map(p => `<li>${p}</li>`).join('')}</ul>
-      ${(CONS[r.id] && CONS[r.id].length) ? `<hr class="p-pros-cons-divider"><ul class="p-cons">${CONS[r.id].map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
-      ${r.warn ? `<div class="p-warn">⚠ ${r.warn}</div>` : ''}
-      ${indicativeBadge}
-      <span class="p-source">↗ ${sourceHost(r.source)}</span>
-    </a>`;
-  }).join('');
+      if (r.isCustom) {
+        const feesPct = Math.round(r.fees / maxTco * 100);
+        const rateStr = fmtPct(r.rate * 100);
+        return `<div class="provider-card card-current" data-pid="custom">
+          <div class="p-badge-row">
+            <div class="p-badge p-badge-current">Your current plan</div>
+            <div class="p-rank">#${displayRank[r.id]}</div>
+          </div>
+          <div class="p-name">${r.name}</div>
+          <div class="p-plan">${r.plan}</div>
+          <div class="p-tco" style="color:var(--gold2)">${fmt(r.tco)}</div>
+          <div class="p-tco-label">3-year total</div>
+          <div>
+            <div class="mini-bar-row"><span style="min-width:26px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#c9a84c"></div></div><span style="min-width:34px;text-align:right">${fmt(r.fees)}</span></div>
+            <div class="mini-bar-row"><span style="min-width:26px">Sub</span><div class="mini-bar-track"></div><span style="min-width:34px;text-align:right">—</span></div>
+          </div>
+          <div class="p-rate">Your rate</div>
+          <div class="p-rate-val">${rateStr} blended</div>
+          <div class="p-monthly">Monthly on <strong>${fmt(mVol)}</strong>: <strong>${fmtD(r.mFee)}</strong></div>
+          <div style="font-size:10px;color:rgba(180,210,235,0.55);margin-top:0.75rem;line-height:1.5">Based on the rate you entered. Compare the tiles above to see what you could save.</div>
+        </div>`;
+      }
+
+      if (isLocked) {
+        const rank      = tcoRank[r.id];
+        const rateStr   = fmtPct(r.rate * 100) + (r.flat ? ' + ' + Math.round(r.flat * 100) + 'p' : '');
+        const feesPct   = Math.round(r.fees / maxTco * 100);
+        const subPct    = Math.round(r.subs / maxTco * 100);
+        const isCurLock = effectiveCurrent && r.id === effectiveCurrent;
+        const lockClass = isCurLock ? ' card-current' : '';
+        const mf        = mainFigure(r, isCurLock);
+        const topBadge  = isCurLock
+          ? `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem">
+               <div class="p-badge p-badge-current">Your provider</div>
+               <div class="p-badge card-lock-badge" style="margin-bottom:0">Top ${rank}</div>
+             </div>`
+          : `<div class="p-badge card-lock-badge">Top ${rank}</div>`;
+        return `<div class="provider-card card-locked${lockClass}" data-pid="${r.id}">
+          ${topBadge}
+          <div class="card-lock-body">
+            <div class="card-lock-rank">#${rank}</div>
+            <div class="p-tco" style="margin-top:0.5rem;color:${mf.color}">${mf.num}</div>
+            <div class="p-tco-label">${mf.label}</div>
+            <div style="margin:0.5rem 0">
+              <div class="mini-bar-row"><span style="min-width:26px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#c9a84c"></div></div><span style="min-width:34px;text-align:right">${fmt(r.fees)}</span></div>
+              <div class="mini-bar-row"><span style="min-width:26px">Sub</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${subPct}%;background:#4a5a3a"></div></div><span style="min-width:34px;text-align:right">${fmt(r.subs)}</span></div>
+            </div>
+            <div style="font-size:11px;color:rgba(248,245,239,0.45);letter-spacing:0.04em">${rateStr} in-person</div>
+            <div class="card-lock-msg" style="margin-top:0.75rem">Submit your details<br>to reveal this provider</div>
+          </div>
+          <span class="p-source" style="opacity:0.25">&#x1F512; locked</span>
+        </div>`;
+      }
+
+      const feesPct = Math.round(r.fees  / maxTco * 100);
+      const subPct  = Math.round(r.subs  / maxTco * 100);
+      const isRecommended = r.id === recommended.id;
+      const isCurrent = effectiveCurrent && r.id === effectiveCurrent;
+      const cardClass = isRecommended ? ' winner' : (isCurrent ? ' card-current' : '');
+      const mf = mainFigure(r, isCurrent);
+
+      const rankLabel = `<div class="p-rank">#${displayRank[r.id]}</div>`;
+      let badgeLeft;
+      if (isRecommended)  badgeLeft = `<div class="p-badge">Recommended</div>`;
+      else if (isCurrent) badgeLeft = `<div class="p-badge p-badge-current">Your provider</div>`;
+      else                badgeLeft = `<div></div>`;
+      const badge = `<div class="p-badge-row">${badgeLeft}${rankLabel}</div>`;
+
+      const indicativeBadge = r.indicative
+        ? `<div class="p-indicative">⚠ Rate indicative — not publicly confirmed</div>`
+        : '';
+
+      return `<a class="provider-card${cardClass}" href="${r.source}" target="_blank" rel="noopener" data-pid="${r.id}">
+        ${badge}
+        <div class="p-name">${r.name}</div>
+        <div class="p-plan">${r.plan}</div>
+        <div class="p-tco" style="color:${mf.color}">${mf.num}</div>
+        <div class="p-tco-label">${mf.label}</div>
+        <div>
+          <div class="mini-bar-row"><span style="min-width:26px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#c9a84c"></div></div><span style="min-width:34px;text-align:right">${fmt(r.fees)}</span></div>
+          <div class="mini-bar-row"><span style="min-width:26px">Sub</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${subPct}%;background:#4a5a3a"></div></div><span style="min-width:34px;text-align:right">${fmt(r.subs)}</span></div>
+        </div>
+        <div class="p-rate">In-person rate</div>
+        <div class="p-rate-val">${fmtPct(r.rate * 100)}${r.flat ? ' + ' + Math.round(r.flat * 100) + 'p' : ''} · Sub: ${r.sub ? '£' + r.sub + '/mo' : 'None'}</div>
+        <div class="p-monthly">Monthly on <strong>${fmt(mVol)}</strong>: <strong>${fmtD(r.mFee)}</strong></div>
+        <ul class="p-pros">${r.pros.map(p => `<li>${p}</li>`).join('')}</ul>
+        ${(CONS[r.id] && CONS[r.id].length) ? `<hr class="p-pros-cons-divider"><ul class="p-cons">${CONS[r.id].map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
+        ${r.warn ? `<div class="p-warn">⚠ ${r.warn}</div>` : ''}
+        ${indicativeBadge}
+        <span class="p-source">↗ ${sourceHost(r.source)}</span>
+      </a>`;
+    }).join('');
+  }
+
+  // Render Step 2 grid — top 10 locked
+  renderGrid('provider-grid-2', top10ids);
+
+  // Render Step 4 grid — all revealed (only once unlocked)
+  if (unlocked) {
+    renderGrid('provider-grid-4', null);
+  }
+
+  // Stash the latest computation so the lead export can pick it up.
+  window._lastCalc = {
+    inputs: { txn, val, days, infl, growth, currentId },
+    monthlyVolume: mVol,
+    revenue3y: rev3y,
+    recommended: recommended && {
+      id: recommended.id, name: recommended.name, plan: recommended.plan,
+      tco: recommended.tco, rate: recommended.rate, sub: recommended.sub
+    },
+    current: currentForHook && {
+      id: currentForHook.id, name: currentForHook.name,
+      plan: currentForHook.plan, tco: currentForHook.tco
+    },
+    saving3y: currentForHook ? (currentForHook.tco - recommended.tco) : 0
+  };
+
+  // Update live preview whenever we're on step 1
+  if (currentStep === 1) updateLivePreview();
 }
 
 // ── ENGAGEMENT FORM ──
 let unlocked = false;
 
-function submitEngagement() {
+// File System Access API handles — persisted in IndexedDB across reloads.
+// A setup gate on page load guarantees both are populated before any
+// submission can reach saveLeadToCsv() / saveDropoffToCsv().
+const fileHandles = { leads: null, dropoff: null };
+
+// ── IndexedDB wrapper for persisting the file handles ──
+function lfDbOpen() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('itoldyouso-leads', 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('handles');
+    req.onsuccess = () => resolve(req.result);
+    req.onerror   = () => reject(req.error);
+  });
+}
+async function lfDbGet(key) {
+  const db = await lfDbOpen();
+  return new Promise((resolve, reject) => {
+    const req = db.transaction('handles', 'readonly').objectStore('handles').get(key);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror   = () => reject(req.error);
+  });
+}
+async function lfDbSet(key, handle) {
+  const db = await lfDbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('handles', 'readwrite');
+    tx.objectStore('handles').put(handle, key);
+    tx.oncomplete = () => resolve();
+    tx.onerror    = () => reject(tx.error);
+  });
+}
+async function lfDbClear(key) {
+  const db = await lfDbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('handles', 'readwrite');
+    tx.objectStore('handles').delete(key);
+    tx.oncomplete = () => resolve();
+    tx.onerror    = () => reject(tx.error);
+  });
+}
+
+// ── Permission helpers ──
+async function ensurePermission(handle) {
+  const opts = { mode: 'readwrite' };
+  if ((await handle.queryPermission(opts)) === 'granted') return true;
+  return (await handle.requestPermission(opts)) === 'granted';
+}
+
+const LEAD_CSV_COLUMNS = [
+  'timestamp', 'business_name', 'contact_name', 'email',
+  'current_provider_id', 'current_provider_name',
+  'txns_per_day', 'avg_txn_value_gbp', 'trading_days_per_month',
+  'inflation_pct', 'volume_growth_pct',
+  'monthly_card_volume_gbp', 'revenue_3y_gbp',
+  'current_3y_cost_gbp', 'recommended_provider_id',
+  'recommended_provider_name', 'recommended_3y_cost_gbp',
+  'saving_3y_gbp'
+];
+
+const DROPOFF_CSV_COLUMNS = [
+  'timestamp', 'business_name', 'email',
+  'dropoff_reason', 'dropoff_comment',
+  'current_provider_id', 'current_provider_name',
+  'txns_per_day', 'avg_txn_value_gbp', 'trading_days_per_month',
+  'inflation_pct', 'volume_growth_pct',
+  'monthly_card_volume_gbp', 'revenue_3y_gbp',
+  'current_3y_cost_gbp',
+  'would_recommend_provider_id', 'would_recommend_provider_name',
+  'would_recommend_3y_cost_gbp', 'would_save_3y_gbp'
+];
+
+// Role configuration keyed by identifier used in IDB / fileHandles / gate.
+const FILE_ROLES = {
+  leads: {
+    idbKey: 'csv',
+    suggestedName: 'itoldyouso-leads.csv',
+    columns: LEAD_CSV_COLUMNS,
+    heading: 'Set up your leads file',
+    resumeHeading: 'Continue with your leads file',
+    description: 'consultation leads'
+  },
+  dropoff: {
+    idbKey: 'dropoff_csv',
+    suggestedName: 'itoldyouso-dropoffs.csv',
+    columns: DROPOFF_CSV_COLUMNS,
+    heading: 'Set up your drop-off survey file',
+    resumeHeading: 'Continue with your drop-off file',
+    description: 'drop-off survey responses'
+  }
+};
+
+function csvEscape(v) {
+  const s = v == null ? '' : String(v);
+  return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
+function buildCalcSnapshot() {
+  const c = window._lastCalc || {};
+  const inp = c.inputs || {};
+  const rec = c.recommended || {};
+  const cur = c.current || {};
+  const round = n => (typeof n === 'number' ? Math.round(n) : '');
+  return {
+    current_provider_id: inp.currentId || '',
+    current_provider_name: cur.name ? (cur.name + (cur.plan ? ' ' + cur.plan : '')) : '',
+    txns_per_day: inp.txn ?? '',
+    avg_txn_value_gbp: inp.val ?? '',
+    trading_days_per_month: inp.days ?? '',
+    inflation_pct: inp.infl != null ? (inp.infl * 100).toFixed(1) : '',
+    volume_growth_pct: inp.growth != null ? (inp.growth * 100).toFixed(0) : '',
+    monthly_card_volume_gbp: round(c.monthlyVolume),
+    revenue_3y_gbp: round(c.revenue3y),
+    current_3y_cost_gbp: round(cur.tco),
+    recommended_provider_id: rec.id || '',
+    recommended_provider_name: rec.name ? (rec.name + (rec.plan ? ' ' + rec.plan : '')) : '',
+    recommended_3y_cost_gbp: round(rec.tco),
+    saving_3y_gbp: round(c.saving3y)
+  };
+}
+
+function buildLeadRow(contact) {
+  return {
+    timestamp: new Date().toISOString(),
+    business_name: contact.bizName,
+    contact_name: contact.name,
+    email: contact.email,
+    ...buildCalcSnapshot()
+  };
+}
+
+function buildDropoffRow(survey) {
+  const snap = buildCalcSnapshot();
+  return {
+    timestamp: new Date().toISOString(),
+    business_name: document.getElementById('f-name')?.value.trim() || '',
+    email: survey.email || '',
+    dropoff_reason: survey.reason || '',
+    dropoff_comment: survey.comment || '',
+    current_provider_id: snap.current_provider_id,
+    current_provider_name: snap.current_provider_name,
+    txns_per_day: snap.txns_per_day,
+    avg_txn_value_gbp: snap.avg_txn_value_gbp,
+    trading_days_per_month: snap.trading_days_per_month,
+    inflation_pct: snap.inflation_pct,
+    volume_growth_pct: snap.volume_growth_pct,
+    monthly_card_volume_gbp: snap.monthly_card_volume_gbp,
+    revenue_3y_gbp: snap.revenue_3y_gbp,
+    current_3y_cost_gbp: snap.current_3y_cost_gbp,
+    would_recommend_provider_id: snap.recommended_provider_id,
+    would_recommend_provider_name: snap.recommended_provider_name,
+    would_recommend_3y_cost_gbp: snap.recommended_3y_cost_gbp,
+    would_save_3y_gbp: snap.saving_3y_gbp
+  };
+}
+
+async function appendRowToCsv(role, row) {
+  const cfg = FILE_ROLES[role];
+  const handle = fileHandles[role];
+  const rowLine = cfg.columns.map(k => csvEscape(row[k])).join(',');
+
+  // No API or no handle (unsupported browser / gate was bypassed) — download instead.
+  if (!window.showSaveFilePicker || !handle) {
+    downloadSingleRowCsv(cfg.columns, rowLine, cfg.suggestedName);
+    return;
+  }
+
+  try {
+    if (!(await ensurePermission(handle))) {
+      alert('Permission to write the ' + cfg.description + ' file was denied — downloading this row instead.');
+      downloadSingleRowCsv(cfg.columns, rowLine, cfg.suggestedName);
+      return;
+    }
+
+    const file = await handle.getFile();
+    const existing = await file.text();
+    const needsHeader = !existing.trim();
+    let out = existing;
+    if (needsHeader) out = cfg.columns.join(',') + '\n';
+    else if (!out.endsWith('\n')) out += '\n';
+    out += rowLine + '\n';
+
+    const writable = await handle.createWritable();
+    await writable.write(out);
+    await writable.close();
+  } catch (e) {
+    console.error('CSV save failed, falling back to download:', e);
+    downloadSingleRowCsv(cfg.columns, rowLine, cfg.suggestedName);
+  }
+}
+
+async function saveLeadToCsv(contact) {
+  return appendRowToCsv('leads', buildLeadRow(contact));
+}
+
+async function saveDropoffToCsv(survey) {
+  return appendRowToCsv('dropoff', buildDropoffRow(survey));
+}
+
+// ── Dropoff survey modal ──
+function openDropoffSurvey() {
+  document.getElementById('dropoff-overlay').style.display = 'flex';
+  document.getElementById('dropoff-error').style.display = 'none';
+  document.getElementById('dropoff-thanks').style.display = 'none';
+  document.getElementById('dropoff-form').style.display = 'block';
+}
+
+function closeDropoffSurvey() {
+  document.getElementById('dropoff-overlay').style.display = 'none';
+  // Reset the form so reopening is clean
+  document.querySelectorAll('input[name="dropoff-reason"]').forEach(el => { el.checked = false; });
+  document.getElementById('dropoff-comment').value = '';
+  document.getElementById('dropoff-email').value = '';
+}
+
+async function submitDropoffSurvey() {
+  const errEl = document.getElementById('dropoff-error');
+  errEl.style.display = 'none';
+
+  const chosen = document.querySelector('input[name="dropoff-reason"]:checked');
+  if (!chosen) {
+    errEl.textContent = 'Please pick a reason.';
+    errEl.style.display = '';
+    return;
+  }
+  const comment = document.getElementById('dropoff-comment').value.trim();
+  const email   = document.getElementById('dropoff-email').value.trim();
+
+  // Make sure the computed snapshot is current before we save.
+  calc();
+
+  try {
+    await saveDropoffToCsv({ reason: chosen.value, comment, email });
+    document.getElementById('dropoff-form').style.display = 'none';
+    document.getElementById('dropoff-thanks').style.display = 'block';
+    setTimeout(closeDropoffSurvey, 2500);
+  } catch (e) {
+    console.error('Dropoff save failed:', e);
+    errEl.textContent = 'Could not save — try again.';
+    errEl.style.display = '';
+  }
+}
+
+// ── Setup gate (used sequentially for each file role) ──
+let lfgRole = 'leads';  // which role the gate is currently configuring
+let lfgResolver = null;  // resolves when the operator closes the gate
+
+function lfgShowError(msg) {
+  const el = document.getElementById('lfg-error');
+  el.textContent = msg;
+  el.style.display = msg ? '' : 'none';
+}
+
+function lfgOpen() {
+  document.getElementById('leadfile-gate').style.display = 'flex';
+  return new Promise(resolve => { lfgResolver = resolve; });
+}
+
+function lfgClose() {
+  document.getElementById('leadfile-gate').style.display = 'none';
+  if (lfgResolver) { const r = lfgResolver; lfgResolver = null; r(); }
+}
+
+function lfgRenderExisting(handle) {
+  const cfg = FILE_ROLES[lfgRole];
+  document.getElementById('lfg-heading').textContent = cfg.resumeHeading;
+  const body = document.getElementById('lfg-body');
+  body.textContent = '';
+  body.appendChild(document.createTextNode('Ready to append to '));
+  const strong = document.createElement('strong');
+  strong.style.color = 'var(--gold2)';
+  strong.textContent = handle.name;
+  body.appendChild(strong);
+  body.appendChild(document.createTextNode('. Click continue to grant write access for this session.'));
+  const primary = document.getElementById('lfg-btn-primary');
+  primary.textContent = 'Continue';
+  primary.onclick = lfgPrimary;
+  const secondary = document.getElementById('lfg-btn-secondary');
+  secondary.style.display = '';
+  secondary.textContent = 'Use a different file';
+  secondary.onclick = lfgSwitchFile;
+}
+
+function lfgRenderFresh() {
+  const cfg = FILE_ROLES[lfgRole];
+  document.getElementById('lfg-heading').textContent = cfg.heading;
+  const body = document.getElementById('lfg-body');
+  body.textContent = '';
+  body.appendChild(document.createTextNode('Click below to pick a location for '));
+  const strong = document.createElement('strong');
+  strong.style.color = 'var(--gold2)';
+  strong.textContent = cfg.suggestedName;
+  body.appendChild(strong);
+  body.appendChild(document.createTextNode(
+    '. If the file already exists at that location it will be reused; if it doesn\'t, it will be created automatically. Every ' + cfg.description + ' entry is appended as a row.'
+  ));
+  const primary = document.getElementById('lfg-btn-primary');
+  primary.textContent = 'Create or open ' + (lfgRole === 'leads' ? 'leads file' : 'drop-off file');
+  primary.onclick = lfgPrimary;
+  const secondary = document.getElementById('lfg-btn-secondary');
+  secondary.style.display = 'none';
+}
+
+// Primary action — either confirm existing, or create new
+async function lfgPrimary() {
+  lfgShowError('');
+  const cfg = FILE_ROLES[lfgRole];
+  const existing = fileHandles[lfgRole];
+
+  if (existing) {
+    if (!(await ensurePermission(existing))) {
+      lfgShowError('Permission denied. Please grant write access, or choose a different file.');
+      return;
+    }
+    if (!(await handleFileStillExists(existing))) {
+      fileHandles[lfgRole] = null;
+      await lfDbClear(cfg.idbKey);
+      lfgRenderFresh();
+      lfgShowError('The previous file is gone. Please pick a new location.');
+      return;
+    }
+    lfgClose();
+    return;
+  }
+
+  try {
+    const handle = await window.showSaveFilePicker({
+      suggestedName: cfg.suggestedName,
+      types: [{ description: 'CSV file', accept: { 'text/csv': ['.csv'] } }]
+    });
+    if (!(await ensurePermission(handle))) {
+      lfgShowError('Write permission was denied.');
+      return;
+    }
+    // Seed new/empty file with headers so it's valid CSV from the start
+    const file = await handle.getFile();
+    if (!(await file.text()).trim()) {
+      const w = await handle.createWritable();
+      await w.write(cfg.columns.join(',') + '\n');
+      await w.close();
+    }
+    fileHandles[lfgRole] = handle;
+    await lfDbSet(cfg.idbKey, handle);
+    lfgClose();
+  } catch (e) {
+    if (e && e.name !== 'AbortError') lfgShowError('Could not create file: ' + e.message);
+  }
+}
+
+// Switch from a stored handle to a different file
+async function lfgSwitchFile() {
+  const cfg = FILE_ROLES[lfgRole];
+  fileHandles[lfgRole] = null;
+  await lfDbClear(cfg.idbKey);
+  lfgRenderFresh();
+  lfgShowError('');
+}
+
+// Probe whether the underlying file still exists on disk. Requires read permission
+// to return a definitive answer — callers should only rely on this after permission
+// has been granted or queried as 'granted'.
+async function handleFileStillExists(handle) {
+  try {
+    await handle.getFile();
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+// Set up a single file role. Skips the gate silently if a persisted handle is
+// still valid; otherwise prompts and waits for the operator.
+async function initFileRole(role) {
+  const cfg = FILE_ROLES[role];
+  lfgRole = role;
+
+  try {
+    const stored = await lfDbGet(cfg.idbKey);
+    if (stored) {
+      const perm = await stored.queryPermission({ mode: 'readwrite' });
+      if (perm === 'granted' && await handleFileStillExists(stored)) {
+        fileHandles[role] = stored;
+        return;
+      }
+      if (perm !== 'granted') {
+        fileHandles[role] = stored;
+        lfgRenderExisting(stored);
+      } else {
+        // Permission granted but file missing — clear and start fresh.
+        await lfDbClear(cfg.idbKey);
+        lfgRenderFresh();
+      }
+    } else {
+      lfgRenderFresh();
+    }
+    await lfgOpen();
+  } catch (e) {
+    console.error('File role init failed:', role, e);
+    lfgRenderFresh();
+    await lfgOpen();
+  }
+}
+
+async function initLeadFile() {
+  // Unsupported browser — skip the gate; submit-time fallback will download each row.
+  if (!window.showSaveFilePicker) return;
+  await initFileRole('leads');
+  await initFileRole('dropoff');
+}
+
+function downloadSingleRowCsv(columns, rowLine, suggestedName) {
+  const csv = columns.join(',') + '\n' + rowLine + '\n';
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const base = suggestedName ? suggestedName.replace(/\.csv$/i, '') : 'itoldyouso-row';
+  a.download = base + '-' + Date.now() + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+async function submitEngagement() {
   const name    = document.getElementById('e-name').value.trim();
-  const phone   = document.getElementById('e-phone').value.trim();
   const email   = document.getElementById('e-email').value.trim();
+  const bizName = document.getElementById('f-name').value.trim();
   const consent = document.getElementById('e-consent').checked;
 
   if (!consent) {
     alert('Please tick the consent box to continue.');
     return;
   }
-  if (!name || (!phone && !email)) {
-    alert('Please enter your name and at least one way to contact you.');
+  if (!name || !email) {
+    alert('Please enter your name and email to continue.');
     return;
   }
 
   unlocked = true;
 
-  document.getElementById('contact-form').style.display  = 'none';
-  document.getElementById('confirmation').style.display  = 'block';
+  const firstName = name.split(/\s+/)[0];
+  document.getElementById('confirmation-msg').textContent = 'Thanks ' + firstName;
+  document.getElementById('contact-form').style.display = 'none';
+  document.getElementById('confirmation').style.display = 'block';
 
-  // Reveal the recommendation section
-  const section = document.getElementById('recommendation-section');
-  section.style.display = 'block';
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => { section.style.opacity = '1'; });
-  });
-  setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+  calc(); // render step-4 grid AND refresh window._lastCalc
 
-  // Unlock the savings hook best-alternative reveal
-  calc();
+  // Fire-and-forget write so the transition isn't blocked by the file picker.
+  saveLeadToCsv({ name, email, bizName });
+
+  setTimeout(() => goToStep(4), 5000);
 }
 
 // ── COMMON COMPLAINTS & ADVANTAGES (provider cons keyed by id) ──
@@ -1550,7 +2423,7 @@ const CONS = {
     'Rates for non-domestic/non-consumer cards not published — potential surprises at checkout',
     'Requires a Tide business account — unavailable to non-Tide customers',
   ],
-  tide_sellinperson: [
+  tide_subscription: [
     'Price rising to £17.99+VAT/month from 27 Apr 2026 — a significant recent increase',
     'Rates for non-domestic/non-consumer cards not listed publicly',
     'Requires a Tide business account — cannot use as a standalone payments product',
@@ -1562,7 +2435,74 @@ const CONS = {
   ],
 };
 
+// ── AFFILIATE / REFERRAL PROGRAMME DATA ──
+// type: 'pct_vol'  → rate * 3yr card vol = estimated 3yr affiliate income
+//       'flat'     → fixed £ fee per referral (one-time)
+//       'programme'→ programme exists but rate not publicly disclosed
+//       'none'     → no public programme found
+const AFFILIATE = {
+  // ── Lopay — 0.25% of every transaction, paid monthly (lopay.com/en-gb/payment-pros)
+  lopay_essential:     { type:'pct_vol',   rate:0.0025, note:'0.25% of txn vol',        url:'https://lopay.com/en-gb/payment-pros' },
+  lopay_standard:      { type:'pct_vol',   rate:0.0025, note:'0.25% of txn vol',        url:'https://lopay.com/en-gb/payment-pros' },
+  lopay_instant:       { type:'pct_vol',   rate:0.0025, note:'0.25% of txn vol',        url:'https://lopay.com/en-gb/payment-pros' },
+
+  // ── Tide — £50 flat per new member (tide.co/affiliate-programme)
+  tide_payg:           { type:'flat',      rate:50,     note:'£50 per referral',        url:'https://www.tide.co/affiliate-programme/' },
+  tide_subscription:   { type:'flat',      rate:50,     note:'£50 per referral',        url:'https://www.tide.co/affiliate-programme/' },
+
+  // ── Handepay — £50 gift card per referral (consumer scheme)
+  handepay:            { type:'flat',      rate:50,     note:'£50 gift card/referral',  url:'https://www.handepay.co.uk/refer-a-friend/' },
+
+  // ── Shopify — up to ~£120 (≈$150 USD) per qualified referral (shopify.com/uk/affiliates)
+  shopify_basic:       { type:'flat',      rate:120,    note:'~£120/referral (≈$150)',  url:'https://www.shopify.com/uk/affiliates' },
+  shopify_grow:        { type:'flat',      rate:120,    note:'~£120/referral (≈$150)',  url:'https://www.shopify.com/uk/affiliates' },
+  shopify_advanced:    { type:'flat',      rate:120,    note:'~£120/referral (≈$150)',  url:'https://www.shopify.com/uk/affiliates' },
+
+  // ── Teya — £350–£3,300 bounty per sale + undisclosed residual (teya.com/independent-sales-consultants)
+  teya:                { type:'flat',      rate:350,    note:'£350–£3,300/sale bounty', url:'https://teya.com/independent-sales-consultants' },
+
+  // ── takepayments — £100 Love2Shop voucher per referral (takepayments.com/refer-a-business)
+  takepayments:        { type:'flat',      rate:100,    note:'£100 voucher/referral',   url:'https://www.takepayments.com/refer-a-business/' },
+
+  // ── Programmes exist but rate not publicly disclosed ──
+  sumup_payg:          { type:'programme', note:'Programme — rate undisclosed',         url:'https://www.sumup.com/en-gb/affiliate-program/' },
+  sumup_plus:          { type:'programme', note:'Programme — rate undisclosed',         url:'https://www.sumup.com/en-gb/affiliate-program/' },
+  square_free:         { type:'programme', note:'Programme — rate undisclosed',         url:'https://squareup.com/gb/en' },
+  square_plus:         { type:'programme', note:'Programme — rate undisclosed',         url:'https://squareup.com/gb/en' },
+  zettle:              { type:'programme', note:'Programme — rate undisclosed',         url:'https://www.zettle.com/affiliates' },
+  mypos:               { type:'programme', note:'Programme — rate undisclosed',         url:'https://www.mypos.com/en-gb/become-a-partner' },
+  lightspeed_basic:    { type:'programme', note:'Programme — rate undisclosed',         url:'https://www.lightspeedhq.com/uk/partners/' },
+  lightspeed_core:     { type:'programme', note:'Programme — rate undisclosed',         url:'https://www.lightspeedhq.com/uk/partners/' },
+  lightspeed_plus:     { type:'programme', note:'Programme — rate undisclosed',         url:'https://www.lightspeedhq.com/uk/partners/' },
+  worldpay_payg:       { type:'programme', note:'ISO channel — rate negotiated',        url:'https://www.worldpay.com/en-gb' },
+  worldpay_contract:   { type:'programme', note:'ISO channel — rate negotiated',        url:'https://www.worldpay.com/en-gb' },
+  clover:              { type:'programme', note:'ISO channel — rate negotiated',        url:'https://www.clover.com' },
+  clover_standard:     { type:'programme', note:'ISO channel — rate negotiated',        url:'https://www.clover.com' },
+  clover_advanced:     { type:'programme', note:'ISO channel — rate negotiated',        url:'https://www.clover.com' },
+  elavon:              { type:'programme', note:'B2B partner — rate negotiated',        url:'https://www.elavon.co.uk/partners' },
+  zeller:              { type:'programme', note:'Programme — rate undisclosed',         url:'https://www.myzeller.com' },
+  adyen:               { type:'programme', note:'Partner programme — rate negotiated',  url:'https://www.adyen.com/partners' },
+  checkout:            { type:'programme', note:'Partner programme — rate negotiated',  url:'https://www.checkout.com/partners' },
+  globalpay:           { type:'programme', note:'Revenue-share — rate negotiated',      url:'https://www.globalpayments.com/en-gb/partners' },
+  nexi:                { type:'programme', note:'Partner programme — rate negotiated',  url:'https://www.nexigroup.com/en/business/partners/' },
+  nuvei:               { type:'programme', note:'Revenue-share — rate negotiated',      url:'https://www.nuvei.com/partners' },
+  airwallex:           { type:'programme', note:'Commission — rate undisclosed',        url:'https://www.airwallex.com/uk/partners' },
+  paymentsense:        { type:'programme', note:'Programme — rate undisclosed',         url:'https://www.paymentsense.com' },
+
+  // ── No public programme found ──
+  revolut_basic:       { type:'none', note:'No public programme' },
+  revolut_grow:        { type:'none', note:'No public programme' },
+  revolut_scale:       { type:'none', note:'No public programme' },
+  stripe:              { type:'none', note:'Partner ecosystem only — no public affiliate rate' },
+  tyl:                 { type:'none', note:'No public programme found' },
+  barclaycard:         { type:'none', note:'No public programme found' },
+  dojo_payg:           { type:'none', note:'No public programme found' },
+  dojo_fix:            { type:'none', note:'No public programme found' },
+  fluxa:               { type:'none', note:'No public programme found' },
+};
+
 calc();
+initLeadFile();
 
 // ── ADMIN ──
 function openAdmin() {
@@ -1602,38 +2542,59 @@ function populateAdmin() {
   const mVol  = txn * val * days;
   const mTxns = txn * days;
 
-  let rev5y = 0;
+  let rev3y = 0;
   const yearlyFees = Array(PROVIDERS.length).fill(0);
-  for (let y = 0; y < 5; y++) {
+  for (let y = 0; y < 3; y++) {
     const valY  = val  * Math.pow(1 + infl,   y);
     const txnY  = txn  * Math.pow(1 + growth, y);
     const mVolY = txnY * valY * days;
     const mTxnY = txnY * days;
-    rev5y += mVolY * 12;
+    rev3y += mVolY * 12;
     PROVIDERS.forEach((p, i) => {
       yearlyFees[i] += (mVolY * p.rate + mTxnY * p.flat) * 12;
     });
   }
 
   const rows = PROVIDERS.map((p, i) => {
-    const hw   = BASE_HW + p.extra;
     const fees = yearlyFees[i];
-    const subs = p.sub * 60;
-    const tco  = hw + fees + subs;
+    const subs = p.sub * 36;
+    const tco  = fees + subs;
     const mFee = mVol * p.rate + mTxns * p.flat;
-    return { ...p, hw, fees, subs, tco, mFee };
-  }).sort((a, b) => a.tco - b.tco);
+    const aff  = AFFILIATE[p.id];
+    let affInc = 0;
+    if (aff) {
+      if (aff.type === 'pct_vol') affInc = rev3y * aff.rate;
+      else if (aff.type === 'flat') affInc = aff.rate; // per-client flat — treat as nominal for sort
+    }
+    return { ...p, fees, subs, tco, mFee, affInc };
+  }).sort((a, b) => b.affInc - a.affInc);
 
-  const cheapest   = rows[0];
-  const mostExp    = rows[rows.length - 1];
-  const stripeRow  = rows.find(r => r.id === 'stripe');
+  const rowsByTco = [...rows].sort((a, b) => a.tco - b.tco);
+  const cheapest   = rowsByTco[0];
+  const mostExp    = rowsByTco[rowsByTco.length - 1];
+  const stripeRow  = rowsByTco.find(r => r.id === 'stripe');
 
   document.getElementById('adm-mvol').textContent      = fmt(mVol);
-  document.getElementById('adm-rev5').textContent      = fmt(rev5y);
+  document.getElementById('adm-rev5').textContent      = fmt(rev3y);
   document.getElementById('adm-cheapest').textContent  = fmt(cheapest.tco) + ' (' + cheapest.name + ')';
   document.getElementById('adm-expensive').textContent = fmt(mostExp.tco)  + ' (' + mostExp.name + ')';
   document.getElementById('adm-spread').textContent    = fmt(mostExp.tco - cheapest.tco);
   document.getElementById('adm-stripe-save').textContent = stripeRow ? fmt(stripeRow.tco - cheapest.tco) : '—';
+
+  // Affiliate income summary
+  const lopayAff = AFFILIATE['lopay_standard'];
+  const lopayInc = (lopayAff && lopayAff.type === 'pct_vol') ? Math.round(rev3y * lopayAff.rate) : 0;
+  let bestAffInc = 0, bestAffName = '';
+  Object.entries(AFFILIATE).forEach(([id, aff]) => {
+    if (aff.type === 'pct_vol') {
+      const inc = Math.round(rev3y * aff.rate);
+      if (inc > bestAffInc) { bestAffInc = inc; bestAffName = id; }
+    }
+  });
+  const combinedInc = 40 + lopayInc;
+  document.getElementById('adm-aff-lopay').textContent = lopayInc ? fmt(lopayInc) : '—';
+  document.getElementById('adm-aff-best').textContent  = bestAffInc ? fmt(bestAffInc) : '—';
+  document.getElementById('adm-aff-total').textContent = lopayInc  ? fmt(combinedInc) : '—';
 
   const tbody = document.getElementById('admin-table-body');
   tbody.innerHTML = rows.map((r, i) => {
@@ -1644,15 +2605,42 @@ function populateAdmin() {
     const td = (content, right, extra='') =>
       `<td style="padding:.75rem 1rem;border-bottom:1px solid var(--border);color:rgba(248,245,239,0.75);${right?'text-align:right':''}${extra}">${content}</td>`;
     const hostname = url => { try { return new URL(url).hostname.replace(/^www\./,''); } catch(e) { return url; } };
+
+    // Affiliate income cell
+    const aff = AFFILIATE[r.id];
+    let affCell;
+    if (!aff || aff.type === 'none') {
+      affCell = td('<span style="color:rgba(248,245,239,0.2)">—</span>', true);
+    } else if (aff.type === 'pct_vol') {
+      const inc3y = Math.round(rev3y * aff.rate);
+      affCell = td(
+        `<span style="color:rgba(201,168,76,0.9);font-weight:500">${fmt(inc3y)}</span>`
+        + `<span style="display:block;font-size:9px;color:rgba(201,168,76,0.45)">${aff.note}</span>`,
+        true
+      );
+    } else if (aff.type === 'flat') {
+      affCell = td(
+        `<span style="color:rgba(201,168,76,0.75)">£${aff.rate} / client</span>`
+        + `<span style="display:block;font-size:9px;color:rgba(248,245,239,0.3)">${aff.note}</span>`,
+        true
+      );
+    } else {
+      // programme — rate undisclosed
+      affCell = td(
+        `<span style="color:rgba(248,245,239,0.35);font-size:10px">${aff.note}</span>`,
+        true
+      );
+    }
+
     return `<tr style="${rowStyle}">
       ${td((isWinner ? '★ ' : '') + r.name, false, isWinner ? ';color:var(--gold2);font-weight:500' : '')}
       ${td(r.plan)}
       ${td(fmtPct(r.rate * 100), true)}
       ${td(r.flat ? Math.round(r.flat * 100) + 'p' : '—', true)}
       ${td(r.sub ? '£' + r.sub + '/mo' : '—', true)}
-      ${td(r.extra ? '£' + r.extra : '—', true)}
       ${td(fmtD(r.mFee), true)}
       ${td(fmt(r.tco), true, isWinner ? ';color:var(--gold2)' : '')}
+      ${affCell}
       ${td('<a href="' + r.source + '" target="_blank" style="color:rgba(201,168,76,0.5);text-decoration:none;font-size:10px">' + hostname(r.source) + ' ↗</a>')}
       ${td(r.app === true ? '<span style="color:rgba(110,217,138,0.85)">✓ Yes</span>' : r.app === 'partial' ? '<span style="color:rgba(201,168,76,0.7)">~ Partial</span>' : '<span style="color:rgba(248,245,239,0.25)">✗ No</span>', true)}
       ${td(r.indicative ? '<span style="color:rgba(180,130,50,0.7)">Indicative</span>' : '<span style="color:rgba(100,180,100,0.8)">✓ Confirmed</span>', true)}
