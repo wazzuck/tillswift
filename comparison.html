@@ -430,6 +430,7 @@ footer {
       <label class="field-label" for="current-provider">Current payment provider</label>
       <select class="field-input field-select" id="current-provider" onchange="calc()">
         <option value="">— Select provider —</option>
+        <option value="new">No provider yet / new to card payments</option>
       </select>
       <span class="field-hint">Not sure? Check your card reader, bank statement, or look for the name on your app.</span>
     </div>
@@ -467,7 +468,7 @@ footer {
 </div>
 
 <!-- ═══ STEP 2: YOUR NUMBERS ═══ -->
-<div class="step reveal">
+<div class="step reveal" id="step2" style="display:none">
   <div class="step-num">Step 2</div>
   <h2 class="step-heading">Here's what the<br><em>numbers say.</em></h2>
   <p class="step-body">Based on what you've told me, here's your current 5-year cost — and what you could save by switching to the best available option at your volumes.</p>
@@ -729,6 +730,7 @@ footer {
             <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Monthly fees</th>
             <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">5yr TCO</th>
             <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Source</th>
+            <th style="text-align:center;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">App</th>
             <th style="text-align:center;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Confirmed</th>
           </tr>
         </thead>
@@ -830,7 +832,7 @@ const PROVIDERS = [
     pros:['Full banking feature set','0.8%+2p in-store','Priority support'] },
 
   // ── Stripe ── source: https://stripe.com/gb/pricing
-  { id:'stripe',
+  { id:'stripe', app:'partial',
     name:'Stripe', plan:'Terminal',
     sub:0, rate:0.014, flat:0.10, extra:49,
     source:'https://stripe.com/gb/pricing',
@@ -838,14 +840,14 @@ const PROVIDERS = [
     pros:['1.4%+10p in-person UK/EEA','No monthly fee','Unified online & offline'] },
 
   // ── Square ── source: https://squareup.com/gb/en/pricing
-  { id:'square_free',
+  { id:'square_free', app:true,
     name:'Square', plan:'Free',
     sub:0, rate:0.0175, flat:0, extra:13,
     source:'https://squareup.com/gb/en/pricing',
     warn:'Non-UK card surcharge: +1.5%. No contract.',
     pros:['No monthly fee or contract','Best-in-class free retail POS','Strong CRM & inventory'] },
 
-  { id:'square_plus',
+  { id:'square_plus', app:true,
     name:'Square', plan:'Plus',
     sub:29, rate:0.0175, flat:0, extra:13,
     source:'https://squareup.com/gb/en/pricing',
@@ -853,7 +855,7 @@ const PROVIDERS = [
     pros:['Advanced team management & inventory','Enhanced reporting','Same 1.75% in-person rate'] },
 
   // ── Zettle by PayPal ── source: https://www.zettle.com/gb/pricing
-  { id:'zettle',
+  { id:'zettle', app:true,
     name:'Zettle by PayPal', plan:'Pay as you go',
     sub:0, rate:0.0175, flat:0, extra:29,
     source:'https://www.zettle.com/gb/pricing',
@@ -861,7 +863,7 @@ const PROVIDERS = [
     pros:['No monthly fee or contract','1.75% all cards incl. Amex','PayPal ecosystem integration'] },
 
   // ── myPOS ── source: https://www.mypos.com/en-gb/pricing-and-fees
-  { id:'mypos',
+  { id:'mypos', app:true,
     name:'myPOS', plan:'Pay as you go',
     sub:0, rate:0.011, flat:0.07, extra:29,
     source:'https://www.mypos.com/en-gb/pricing-and-fees',
@@ -869,7 +871,7 @@ const PROVIDERS = [
     pros:['No monthly fee or contract','Built-in merchant account — no business bank needed','Instant settlement to myPOS account'] },
 
   // ── Tyl by NatWest ── source: https://www.tylbynatwest.com/card-machines/pricing-fees
-  { id:'tyl',
+  { id:'tyl', app:true,
     name:'Tyl by NatWest', plan:'Standard',
     sub:16.99, rate:0.0139, flat:0.05, extra:0,
     source:'https://www.tylbynatwest.com/card-machines/pricing-fees',
@@ -877,21 +879,21 @@ const PROVIDERS = [
     pros:['1.39%+5p UK & EEA cards','Terminal included in monthly fee','Next business day settlement'] },
 
   // ── Shopify POS ── source: https://www.shopify.com/pos/pricing
-  { id:'shopify_basic',
+  { id:'shopify_basic', app:true,
     name:'Shopify POS', plan:'Basic',
     sub:25, rate:0.017, flat:0, extra:49,
     source:'https://www.shopify.com/pos/pricing',
     warn:'Shopify Payments only · Advanced retail features (POS Pro) cost +£69/month/location · Using a third-party processor adds 2% extra fee',
     pros:['1.7% in-person via Shopify Payments','Unified online + offline','Strong catalogue & CRM'] },
 
-  { id:'shopify_grow',
+  { id:'shopify_grow', app:true,
     name:'Shopify POS', plan:'Grow',
     sub:65, rate:0.016, flat:0, extra:49,
     source:'https://www.shopify.com/pos/pricing',
     warn:'Shopify Payments only · POS Pro +£69/month/location · Third-party processor adds 1% extra fee',
     pros:['Lower 1.6% rate vs Basic','Better reporting & analytics','Full omnichannel suite'] },
 
-  { id:'shopify_advanced',
+  { id:'shopify_advanced', app:true,
     name:'Shopify POS', plan:'Advanced',
     sub:344, rate:0.015, flat:0, extra:49,
     source:'https://www.shopify.com/pos/pricing',
@@ -899,7 +901,7 @@ const PROVIDERS = [
     pros:['Lowest Shopify rate: 1.5%','Advanced analytics & custom reports','Multi-location inventory'] },
 
   // ── Lightspeed ── source: https://www.lightspeedhq.com/uk/pos/retail/pricing/
-  { id:'lightspeed_basic',
+  { id:'lightspeed_basic', app:true,
     name:'Lightspeed', plan:'Basic',
     sub:75, rate:0.020, flat:0.08, extra:0,
     indicative:true,
@@ -907,7 +909,7 @@ const PROVIDERS = [
     warn:'Transaction rates NOT publicly disclosed — agreed individually at sign-up. Rate shown is indicative only. £400/month penalty for using non-Lightspeed payments processor.',
     pros:['POS software included from £75/month','Multichannel retail features','Inventory & reporting'] },
 
-  { id:'lightspeed_core',
+  { id:'lightspeed_core', app:true,
     name:'Lightspeed', plan:'Core',
     sub:149, rate:0.020, flat:0.08, extra:0,
     indicative:true,
@@ -915,7 +917,7 @@ const PROVIDERS = [
     warn:'Transaction rates NOT publicly disclosed — agreed individually at sign-up. Rate shown is indicative only. £400/month penalty for using non-Lightspeed payments processor.',
     pros:['Advanced inventory & purchasing','Accounting integrations','Enhanced reporting'] },
 
-  { id:'lightspeed_plus',
+  { id:'lightspeed_plus', app:true,
     name:'Lightspeed', plan:'Plus',
     sub:189, rate:0.020, flat:0.08, extra:0,
     indicative:true,
@@ -924,7 +926,7 @@ const PROVIDERS = [
     pros:['Full feature set incl. custom reporting','Dedicated account manager','Priority support'] },
 
   // ── Dojo ── source: https://dojo.tech/pricing (returned 403 — could not verify)
-  { id:'dojo_payg',
+  { id:'dojo_payg', app:'partial',
     name:'Dojo', plan:'Pay as you go',
     sub:0, rate:0.019, flat:0.05, extra:79,
     indicative:true,
@@ -932,7 +934,7 @@ const PROVIDERS = [
     warn:'Pricing page unavailable — rates not publicly disclosed. Rate shown is indicative only. Terminal rental model. Verify directly at dojo.tech/pricing before committing.',
     pros:['No minimum contract on PAYG','Same-day settlement option','Good UK support'] },
 
-  { id:'dojo_fix',
+  { id:'dojo_fix', app:'partial',
     name:'Dojo', plan:'Fix',
     sub:39.99, rate:0.014, flat:0.05, extra:79,
     indicative:true,
@@ -941,7 +943,7 @@ const PROVIDERS = [
     pros:['Indicative 1.4%+5p consumer cards','Strong UK retail hardware','Same-day settlement option'] },
 
   // ── Worldpay ── source: https://www.worldpay.com/en-gb/small-business
-  { id:'worldpay_payg',
+  { id:'worldpay_payg', app:'partial',
     name:'Worldpay', plan:'Pay as you go',
     sub:0, rate:0.0275, flat:0.20, extra:0,
     indicative:true,
@@ -949,7 +951,7 @@ const PROVIDERS = [
     warn:'Rates not publicly disclosed — figures shown are indicative only · Terminal rental £17.50–22.50/month extra · 18-month minimum contract on some plans · Setup fee ~£25–50',
     pros:['No long-term contract on PAYG','Widely trusted UK brand','Multi-channel support'] },
 
-  { id:'worldpay_contract',
+  { id:'worldpay_contract', app:'partial',
     name:'Worldpay', plan:'Contract',
     sub:20, rate:0.010, flat:0, extra:0,
     indicative:true,
@@ -958,7 +960,7 @@ const PROVIDERS = [
     pros:['Negotiated rates from ~0.3% debit','Full-service merchant account','Best for high-volume multi-channel'] },
 
   // ── Barclaycard ── source: https://www.barclaycard.co.uk/business/accepting-payments/card-readers/pocket-sized-card-reader
-  { id:'barclaycard',
+  { id:'barclaycard', app:'partial',
     name:'Barclaycard', plan:'Anywhere (PAYG)',
     sub:0, rate:0.016, flat:0, extra:29,
     indicative:true,
@@ -967,7 +969,7 @@ const PROVIDERS = [
     pros:['~1.6% flat rate indication','No setup fee on PAYG','Trusted UK bank brand'] },
 
   // ── Clover / Fiserv ── source: https://uk.clover.com/start-taking-payments/
-  { id:'clover',
+  { id:'clover', app:true,
     name:'Clover / Fiserv', plan:'Starter',
     sub:9.99, rate:0.026, flat:0.10, extra:0,
     indicative:true,
@@ -975,7 +977,7 @@ const PROVIDERS = [
     warn:'Transaction rates NOT publicly disclosed — set individually at sign-up. Rate shown is indicative only. Device included in monthly fee. Powered by Fiserv.',
     pros:['Integrated POS + payments device','Wide app marketplace','Device included in £9.99/month'] },
 
-  { id:'clover_standard',
+  { id:'clover_standard', app:true,
     name:'Clover / Fiserv', plan:'Standard',
     sub:24.99, rate:0.022, flat:0.10, extra:0,
     indicative:true,
@@ -983,7 +985,7 @@ const PROVIDERS = [
     warn:'Transaction rates NOT publicly disclosed — set individually at sign-up. Rate shown is indicative only. Includes more capable POS hardware. Powered by Fiserv.',
     pros:['More capable POS hardware than Starter','Broader app ecosystem','Device included in monthly fee'] },
 
-  { id:'clover_advanced',
+  { id:'clover_advanced', app:true,
     name:'Clover / Fiserv', plan:'Advanced',
     sub:54.99, rate:0.018, flat:0.10, extra:0,
     indicative:true,
@@ -992,7 +994,7 @@ const PROVIDERS = [
     pros:['Full POS suite with advanced reporting','Priority support','Device included in monthly fee'] },
 
   // ── Elavon / Opayo ── source: https://www.elavon.co.uk
-  { id:'elavon',
+  { id:'elavon', app:'partial',
     name:'Elavon / Opayo', plan:'Standard',
     sub:25, rate:0.0175, flat:0, extra:0,
     indicative:true,
@@ -1001,21 +1003,21 @@ const PROVIDERS = [
     pros:['Established UK processor','Opayo gateway included','Multi-currency support'] },
 
   // ── Lopay ── source: https://lopay.com/pricing
-  { id:'lopay_essential',
+  { id:'lopay_essential', app:true,
     name:'Lopay', plan:'Essential',
     sub:0, rate:0.0079, flat:0, extra:0,
     source:'https://lopay.com/pricing',
     warn:'Payouts on Thursdays only on Essential plan · Amex, international & corporate cards +1% · Tap to Pay +8p per transaction',
     pros:['0.79% — among lowest published rates','No monthly fee or contract','No setup costs'] },
 
-  { id:'lopay_standard',
+  { id:'lopay_standard', app:true,
     name:'Lopay', plan:'Standard',
     sub:0, rate:0.0099, flat:0, extra:0,
     source:'https://lopay.com/pricing',
     warn:'Amex, international & corporate cards +1% · Tap to Pay +8p per transaction · Payment links 1.79% min £0.50',
     pros:['0.99% rate — no monthly fee','Flexible next-day payouts Mon–Fri','No contract or setup costs'] },
 
-  { id:'lopay_instant',
+  { id:'lopay_instant', app:true,
     name:'Lopay', plan:'Instant to Bank',
     sub:0, rate:0.0179, flat:0, extra:0,
     source:'https://lopay.com/pricing',
@@ -1023,14 +1025,14 @@ const PROVIDERS = [
     pros:['Instant 24/7 payouts to bank','No monthly fee or contract','No setup costs'] },
 
   // ── Tide ── source: https://www.tide.co/features/card-reader/
-  { id:'tide_payg',
+  { id:'tide_payg', app:true,
     name:'Tide', plan:'Pay as you go',
     sub:0, rate:0.0139, flat:0.05, extra:159,
     source:'https://www.tide.co/features/card-reader/',
     warn:'Domestic consumer debit cards only at this rate · All other card types at different rates per Tide terms · Settlement up to 3 working days (next-day +£2.99+VAT/month) · Reader from £159+VAT',
     pros:['1.39%+5p — no monthly fee','No contract','Integrated Tide business banking'] },
 
-  { id:'tide_subscription',
+  { id:'tide_subscription', app:true,
     name:'Tide', plan:'Sell In-Person',
     sub:17.99, rate:0.0079, flat:0.03, extra:99,
     source:'https://www.tide.co/features/card-reader/',
@@ -1038,7 +1040,7 @@ const PROVIDERS = [
     pros:['0.79%+3p — competitive rate','Integrated Tide business banking','Reader from £99+VAT'] },
 
   // ── takepayments ── source: https://www.takepayments.com/card-machines/
-  { id:'takepayments',
+  { id:'takepayments', app:'partial',
     name:'takepayments', plan:'Bespoke quote',
     sub:0, rate:0.015, flat:0.05, extra:0,
     indicative:true,
@@ -1047,7 +1049,7 @@ const PROVIDERS = [
     pros:['Competitive negotiated rates','Next-day settlement (approved customers)','12-month contract (shorter than some)'] },
 
   // ── Zeller ── source: https://myzeller.com
-  { id:'zeller',
+  { id:'zeller', app:false,
     name:'Zeller', plan:'Standard',
     sub:0, rate:0.017, flat:0, extra:0,
     indicative:true,
@@ -1056,7 +1058,7 @@ const PROVIDERS = [
     pros:['Flat-rate pricing (AU)','Integrated business account','No monthly fee'] },
 
   // ── Fluxa ── source: https://fluxa.io
-  { id:'fluxa',
+  { id:'fluxa', app:false,
     name:'Fluxa', plan:'Pay as you go',
     sub:0, rate:0.015, flat:0, extra:0,
     indicative:true,
@@ -1065,7 +1067,7 @@ const PROVIDERS = [
     pros:['No monthly fee','Simple onboarding','UK-focused'] },
 
   // ── Adyen ── source: https://www.adyen.com/pricing
-  { id:'adyen',
+  { id:'adyen', app:false,
     name:'Adyen', plan:'Interchange++',
     sub:0, rate:0.013, flat:0.10, extra:0,
     indicative:true,
@@ -1074,7 +1076,7 @@ const PROVIDERS = [
     pros:['Transparent interchange++ model','Unified in-person and online','Global multi-currency support'] },
 
   // ── Checkout.com ── source: https://www.checkout.com/pricing
-  { id:'checkout',
+  { id:'checkout', app:false,
     name:'Checkout.com', plan:'Enterprise',
     sub:0, rate:0.015, flat:0.10, extra:0,
     indicative:true,
@@ -1083,7 +1085,7 @@ const PROVIDERS = [
     pros:['Enterprise-grade infrastructure','Unified global payment platform','Advanced fraud tools'] },
 
   // ── Global Payments ── source: https://www.globalpayments.com/en-gb
-  { id:'globalpay',
+  { id:'globalpay', app:'partial',
     name:'Global Payments', plan:'Bespoke',
     sub:20, rate:0.012, flat:0.05, extra:0,
     indicative:true,
@@ -1092,7 +1094,7 @@ const PROVIDERS = [
     pros:['Full-service UK merchant account','Wide hardware range','Established UK presence'] },
 
   // ── Nexi ── source: https://www.nexigroup.com/en/uk
-  { id:'nexi',
+  { id:'nexi', app:'partial',
     name:'Nexi', plan:'Standard',
     sub:0, rate:0.016, flat:0.05, extra:0,
     indicative:true,
@@ -1101,7 +1103,7 @@ const PROVIDERS = [
     pros:['Major European processor','Multi-currency support','Wide terminal range'] },
 
   // ── Nuvei ── source: https://www.nuvei.com/en-gb
-  { id:'nuvei',
+  { id:'nuvei', app:false,
     name:'Nuvei', plan:'Enterprise',
     sub:0, rate:0.015, flat:0.10, extra:0,
     indicative:true,
@@ -1110,7 +1112,7 @@ const PROVIDERS = [
     pros:['Global payment processing','Wide payment method support','Enterprise-grade reliability'] },
 
   // ── Airwallex ── source: https://www.airwallex.com/uk/pricing
-  { id:'airwallex',
+  { id:'airwallex', app:'partial',
     name:'Airwallex', plan:'Pay as you go',
     sub:0, rate:0.013, flat:0.20, extra:0,
     indicative:true,
@@ -1119,7 +1121,7 @@ const PROVIDERS = [
     pros:['No monthly fee','Multi-currency business account','Competitive FX rates'] },
 
   // ── Handepay ── source: https://www.handepay.co.uk/card-machines/
-  { id:'handepay',
+  { id:'handepay', app:'partial',
     name:'Handepay', plan:'Standard',
     sub:15, rate:0.009, flat:0.03, extra:0,
     indicative:true,
@@ -1128,7 +1130,7 @@ const PROVIDERS = [
     pros:['Competitive negotiated debit rates','PayPoint Group backing','UK-based support'] },
 
   // ── Paymentsense ── source: https://www.paymentsense.com/gb/
-  { id:'paymentsense',
+  { id:'paymentsense', app:'partial',
     name:'Paymentsense', plan:'Standard',
     sub:20, rate:0.013, flat:0.05, extra:0,
     indicative:true,
@@ -1254,7 +1256,7 @@ function calc() {
 
   // ── Populate provider dropdown on first run ──
   const sel = document.getElementById('current-provider');
-  if (sel.options.length === 1) {
+  if (sel.options.length === 2) {
     rows.forEach(r => {
       const opt = document.createElement('option');
       opt.value = r.id;
@@ -1263,15 +1265,26 @@ function calc() {
     });
   }
 
-  // ── Savings hook ──
+  // ── Show / hide Step 2 ──
   const currentId = sel.value;
+  const step2El = document.getElementById('step2');
+  if (!currentId) {
+    step2El.style.display = 'none';
+    return;
+  }
+  step2El.style.display = '';
+
+  // ── Savings hook ──
   const emptyEl   = document.getElementById('sh-empty');
   const contentEl = document.getElementById('sh-content');
+  const hookEl    = document.getElementById('savings-hook');
 
-  if (!currentId) {
-    emptyEl.style.display  = 'block';
-    contentEl.style.display = 'none';
+  if (currentId === 'new') {
+    // New to card payments — hide savings hook, show only stats
+    hookEl.style.display = 'none';
   } else {
+    // Existing provider selected — show savings hook
+    hookEl.style.display = '';
     const current = rows.find(r => r.id === currentId);
     if (current) {
       const saving5y   = current.tco - recommended.tco;
@@ -1641,6 +1654,7 @@ function populateAdmin() {
       ${td(fmtD(r.mFee), true)}
       ${td(fmt(r.tco), true, isWinner ? ';color:var(--gold2)' : '')}
       ${td('<a href="' + r.source + '" target="_blank" style="color:rgba(201,168,76,0.5);text-decoration:none;font-size:10px">' + hostname(r.source) + ' ↗</a>')}
+      ${td(r.app === true ? '<span style="color:rgba(110,217,138,0.85)">✓ Yes</span>' : r.app === 'partial' ? '<span style="color:rgba(201,168,76,0.7)">~ Partial</span>' : '<span style="color:rgba(248,245,239,0.25)">✗ No</span>', true)}
       ${td(r.indicative ? '<span style="color:rgba(180,130,50,0.7)">Indicative</span>' : '<span style="color:rgba(100,180,100,0.8)">✓ Confirmed</span>', true)}
     </tr>`;
   }).join('');
