@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIARA — Payment Provider Comparison</title>
+<title>Payment Consultation — IToldYouSo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -11,17 +11,15 @@
   --black:    #0a0a0a;
   --black2:   #111111;
   --black3:   #1a1a1a;
-  --black4:   #222222;
   --gold:     #c9a84c;
   --gold2:    #e2c47a;
-  --gold3:    #f5e6b8;
   --white:    #f8f5ef;
-  --white2:   #ede8de;
   --muted:    rgba(248,245,239,0.45);
   --border:   rgba(201,168,76,0.18);
   --border2:  rgba(201,168,76,0.38);
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans:  'Jost', sans-serif;
+  --red:      rgba(220,80,80,0.85);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -38,96 +36,154 @@ body {
 
 body::before {
   content: '';
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 1000;
-  opacity: 0.4;
+  pointer-events: none; z-index: 1000; opacity: 0.4;
 }
 
+/* ── NAV ── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 500;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 3rem;
-  height: 60px;
-  background: rgba(10,10,10,0.88);
+  padding: 0 2rem; height: 56px;
+  background: rgba(10,10,10,0.92);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
 }
-
 .nav-brand {
+  font-family: var(--font-serif); font-size: 1.1rem; font-weight: 400;
+  letter-spacing: 0.25em; color: var(--gold2); text-transform: uppercase; text-decoration: none;
+}
+.nav-date { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+
+/* ── STEP SHELL ── */
+.step {
+  max-width: 780px; margin: 0 auto;
+  padding: 5rem 1.5rem 3rem;
+}
+.step + .step { padding-top: 0; }
+
+.step-num {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1rem;
+}
+.step-num::before { content:''; display:block; width:24px; height:1px; background:var(--gold); }
+
+.step-heading {
   font-family: var(--font-serif);
-  font-size: 1.25rem;
-  font-weight: 400;
-  letter-spacing: 0.35em;
-  color: var(--gold2);
-  text-transform: uppercase;
-  text-decoration: none;
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 400; line-height: 1.2;
+  color: var(--white); margin-bottom: 0.5rem;
+}
+.step-heading em { font-style: italic; color: var(--gold2); }
+
+.step-body {
+  font-size: 0.9rem; color: var(--muted);
+  max-width: 540px; line-height: 1.8; margin-bottom: 2rem;
 }
 
-.nav-sub {
-  font-size: 10px; font-weight: 400;
-  letter-spacing: 0.18em; text-transform: uppercase;
+/* ── RULE ── */
+.rule {
+  max-width: 780px; margin: 0 auto;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border2), transparent);
+}
+
+/* ── FORM FIELDS ── */
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+.field { display: flex; flex-direction: column; gap: 0.4rem; }
+.field-label {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--muted);
 }
-
-.full-bleed { max-width: 100%; padding: 7rem 2rem 5rem; }
-.full-bleed-inner { max-width: 1140px; margin: 0 auto; }
-
-.section-eyebrow {
-  display: flex; align-items: center; gap: 0.75rem;
-  font-size: 10px; font-weight: 400;
-  letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 1.25rem;
-}
-.section-eyebrow::before {
-  content: ''; display: block;
-  width: 24px; height: 1px; background: var(--gold);
-}
-
-.section-heading {
-  font-family: var(--font-serif);
-  font-size: clamp(2rem, 4vw, 3.25rem);
-  font-weight: 400; line-height: 1.15;
-  color: var(--white);
-  margin-bottom: 1rem;
-}
-.section-heading em { font-style: italic; color: var(--gold2); }
-
-.section-body {
-  font-size: 0.92rem; color: var(--muted);
-  max-width: 560px; line-height: 1.8;
-}
-
-/* ── PRICING SECTION ── */
-.pricing-section {
+.field-input {
   background: var(--black2);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  border: 1px solid var(--border2);
+  color: var(--white);
+  font-family: var(--font-sans); font-size: 1.1rem; font-weight: 300;
+  padding: 0.7rem 0.9rem;
+  outline: none; width: 100%;
+  transition: border-color 0.2s;
+}
+.field-input:focus { border-color: var(--gold); }
+.field-select {
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a84c'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 0.9rem center;
+  cursor: pointer; padding-right: 2rem;
+}
+.field-select option { background: var(--black3); }
+.field-hint { font-size: 11px; color: rgba(248,245,239,0.25); line-height: 1.5; }
+
+/* ── SAVINGS HOOK ── */
+.savings-hook {
+  background: var(--black2);
+  border: 1px solid var(--border2);
+  padding: 2rem 2rem 1.75rem;
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+}
+@media (max-width: 520px) { .savings-hook { grid-template-columns: 1fr; } }
+
+.sh-label {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.25rem;
+}
+.sh-current-cost {
+  font-family: var(--font-serif); font-size: 2.2rem; font-weight: 400;
+  color: rgba(248,245,239,0.5); line-height: 1;
+}
+.sh-current-detail { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.sh-arrow {
+  font-size: 1.5rem; color: var(--border2); text-align: center; padding: 0 0.5rem;
+  align-self: center;
+}
+.sh-saving-num {
+  font-family: var(--font-serif); font-size: 3.5rem; font-weight: 400;
+  color: var(--gold2); line-height: 1;
+}
+.sh-saving-detail { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.sh-empty {
+  font-size: 13px; color: rgba(248,245,239,0.2);
+  font-style: italic; grid-column: 1 / -1;
 }
 
-.slider-row {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 1.5rem;
+/* ── ADVANCED SLIDERS ── */
+.advanced-toggle {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); cursor: pointer; margin-top: 1.25rem;
+  background: none; border: none; padding: 0;
+  transition: color 0.2s;
+}
+.advanced-toggle:hover { color: var(--gold2); }
+.advanced-toggle::before { content:'›'; font-size: 14px; transition: transform 0.2s; display:inline-block; }
+.advanced-toggle.open::before { transform: rotate(90deg); }
+
+.advanced-panel {
+  display: none;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+  padding: 1.5rem;
   background: var(--black3);
   border: 1px solid var(--border);
-  padding: 1.75rem 2rem;
-  margin: 2.5rem 0;
 }
-
-.sl-label {
-  font-size: 10px; font-weight: 400;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 10px;
-}
+.advanced-panel.open { display: grid; }
 
 input[type="range"] {
   -webkit-appearance: none; appearance: none;
   width: 100%; height: 1px;
   background: rgba(201,168,76,0.25);
-  outline: none; margin-bottom: 8px;
+  outline: none; margin: 8px 0;
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none;
@@ -138,99 +194,97 @@ input[type="range"]::-moz-range-thumb {
   width: 13px; height: 13px;
   background: var(--gold); border-radius: 50%; cursor: pointer; border: none;
 }
-
+.sl-label {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 4px; display: block;
+}
 .sl-val {
-  font-family: var(--font-serif);
-  font-size: 1.9rem; font-weight: 400; color: var(--gold2);
+  font-family: var(--font-serif); font-size: 1.6rem; font-weight: 400; color: var(--gold2);
 }
 
+/* ── STATS ROW ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 1.5rem;
+}
+.stat-cell {
+  background: var(--black3);
+  padding: 1.25rem 1rem 1rem;
+  text-align: center;
+}
+.stat-num {
+  font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400;
+  color: var(--gold2); display: block; line-height: 1;
+}
+.stat-lbl {
+  font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-top: 5px; display: block;
+}
+
+/* ── SORT ROW ── */
 .sort-row {
   display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;
-  margin-bottom: 1rem;
+  margin: 2rem 0 1rem;
 }
 .sort-label { font-size: 11px; letter-spacing: 0.1em; color: var(--muted); margin-right: 0.25rem; }
 .sort-btn {
   background: transparent; border: 1px solid var(--border);
   color: var(--muted); padding: 4px 14px;
   font-family: var(--font-sans); font-size: 11px; font-weight: 400;
-  letter-spacing: 0.08em; cursor: pointer;
-  transition: all 0.2s;
+  letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s;
 }
 .sort-btn:hover { border-color: var(--border2); color: var(--gold2); }
 .sort-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.07); }
 
+/* ── PROVIDER GRID ── */
 .provider-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
 }
-
-/* cards are anchor tags — reset link styling */
 .provider-card {
-  display: block;
-  text-decoration: none;
-  color: inherit;
+  display: block; text-decoration: none; color: inherit;
   background: var(--black2);
-  padding: 1.5rem 1.25rem 1.25rem;
+  padding: 1.25rem 1rem 1rem;
   transition: background 0.2s;
 }
 .provider-card:hover { background: var(--black3); }
-
 .provider-card.winner {
   background: rgba(201,168,76,0.05);
   border: 1px solid var(--border2);
   margin: -1px; z-index: 1; position: relative;
 }
-
-
 .p-badge {
   font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--gold); border: 1px solid var(--border2);
-  padding: 2px 8px; display: inline-block;
-  margin-bottom: 0.75rem;
+  padding: 2px 8px; display: inline-block; margin-bottom: 0.6rem;
 }
-
-.p-name {
-  font-family: var(--font-serif);
-  font-size: 1.1rem; font-weight: 400;
-  color: var(--white); line-height: 1.2; margin-bottom: 1px;
-}
-.p-plan { font-size: 11px; color: var(--muted); margin-bottom: 1rem; }
-
-.p-tco {
-  font-family: var(--font-serif);
-  font-size: 1.9rem; font-weight: 400;
-  color: var(--gold2); line-height: 1; margin-bottom: 3px;
-}
-.p-tco-label {
-  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 1rem;
-}
-
-.mini-bar-row {
-  display: flex; align-items: center; gap: 6px;
-  margin: 3px 0; font-size: 10px; color: var(--muted);
-}
-.mini-bar-track {
-  flex: 1; height: 2px;
-  background: rgba(255,255,255,0.06); border-radius: 1px; overflow: hidden;
-}
+.p-name { font-family: var(--font-serif); font-size: 1rem; font-weight: 400; color: var(--white); line-height: 1.2; margin-bottom: 1px; }
+.p-plan { font-size: 11px; color: var(--muted); margin-bottom: 0.75rem; }
+.p-tco { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 400; color: var(--gold2); line-height: 1; margin-bottom: 2px; }
+.p-tco-label { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+.mini-bar-row { display: flex; align-items: center; gap: 5px; margin: 2px 0; font-size: 9px; color: var(--muted); }
+.mini-bar-track { flex: 1; height: 2px; background: rgba(255,255,255,0.06); border-radius: 1px; overflow: hidden; }
 .mini-bar-fill { height: 2px; border-radius: 1px; transition: width 0.4s ease; }
-
-.p-rate { font-size: 12px; color: rgba(248,245,239,0.55); margin: 0.75rem 0 2px; }
-.p-rate-val { font-size: 13px; font-weight: 500; color: rgba(248,245,239,0.75); margin-bottom: 0.5rem; }
-.p-monthly { font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 7px; margin-top: 7px; }
-.p-monthly strong { color: rgba(248,245,239,0.65); }
-
-.p-pros { list-style: none; margin-top: 0.6rem; }
-.p-pros li {
-  font-size: 11px; color: var(--muted);
-  padding: 2px 0 2px 13px; position: relative; line-height: 1.45;
-}
+.p-rate { font-size: 11px; color: rgba(248,245,239,0.5); margin: 0.6rem 0 2px; }
+.p-rate-val { font-size: 12px; font-weight: 500; color: rgba(248,245,239,0.75); margin-bottom: 0.4rem; }
+.p-monthly { font-size: 10px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 6px; margin-top: 6px; }
+.p-monthly strong { color: rgba(248,245,239,0.6); }
+.p-pros { list-style: none; margin-top: 0.5rem; }
+.p-pros li { font-size: 10px; color: var(--muted); padding: 2px 0 2px 12px; position: relative; line-height: 1.4; }
 .p-pros li::before { content: '+'; position: absolute; left: 0; color: var(--gold); }
+.p-warn { font-size: 9px; color: rgba(201,168,76,0.55); margin-top: 5px; line-height: 1.4; }
+.p-indicative { font-size: 9px; color: rgba(180,130,50,0.7); margin-top: 5px; line-height: 1.4; border-top: 1px solid var(--border); padding-top: 5px; }
+.p-source { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(201,168,76,0.3); margin-top: 7px; display: block; }
+.provider-card:hover .p-source { color: rgba(201,168,76,0.55); }
 
+<<<<<<< HEAD
 .p-cons { list-style: none; margin-top: 0.3rem; }
 .p-cons li {
   font-size: 11px; color: var(--muted);
@@ -245,78 +299,109 @@ input[type="range"]::-moz-range-thumb {
 
 .p-warn { font-size: 10px; color: rgba(201,168,76,0.6); margin-top: 6px; line-height: 1.45; }
 .p-indicative { font-size: 10px; color: rgba(180,130,50,0.8); margin-top: 6px; line-height: 1.45; border-top: 1px solid var(--border); padding-top: 6px; }
+=======
+/* ── IMPLEMENTATION STEPS ── */
+.impl-grid {
+  display: flex; flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  margin-top: 2rem;
+}
+.impl-step {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.impl-step:last-child { border-bottom: none; }
+.impl-step:hover { background: var(--black2); }
+.impl-num {
+  padding: 1.5rem 0 1.5rem 1.25rem;
+  font-family: var(--font-serif); font-size: 1.4rem; font-weight: 400;
+  color: var(--border2); line-height: 1; padding-top: 1.6rem;
+}
+.impl-body { padding: 1.5rem 1.5rem 1.5rem 0.75rem; }
+.impl-title { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 0.3rem; }
+.impl-desc { font-size: 12px; color: var(--muted); line-height: 1.65; margin-bottom: 0.5rem; }
+.impl-value {
+  font-size: 11px; color: var(--gold);
+  padding-left: 0.75rem; border-left: 2px solid var(--border2);
+  line-height: 1.55;
+}
+>>>>>>> 52b6742 (Updating)
 
-.p-source {
-  font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
-  color: rgba(201,168,76,0.35); margin-top: 8px; display: block;
-}
-.provider-card:hover .p-source { color: rgba(201,168,76,0.6); }
-
-/* ── SAVINGS BANNER ── */
-.savings-banner {
-  background: var(--black3);
-  border: 1px solid var(--border2);
-  padding: 2rem 2.5rem;
-  margin-bottom: 2.5rem;
-  display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
-}
-.sb-label-col { flex: 1; min-width: 200px; }
-.sb-eyebrow {
-  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 0.5rem;
-}
-.sb-select-wrap { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-top: 0.5rem; }
-.sb-select {
+/* ── ENGAGEMENT SECTION ── */
+.engagement-box {
   background: var(--black2);
   border: 1px solid var(--border2);
-  color: var(--white);
-  font-family: var(--font-sans); font-size: 13px; font-weight: 300;
-  padding: 0.55rem 2rem 0.55rem 0.9rem;
-  appearance: none; -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a84c'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 0.75rem center;
-  cursor: pointer; outline: none; min-width: 200px;
+  padding: 2rem;
+  margin-top: 2rem;
 }
-.sb-select:focus { border-color: var(--gold); }
-.sb-select option { background: var(--black3); }
-.sb-result-col { text-align: right; }
-.sb-saving-num {
-  font-family: var(--font-serif); font-size: 3rem; font-weight: 400;
-  color: var(--gold2); line-height: 1;
+.fee-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin: 1.5rem 0;
 }
-.sb-saving-label {
-  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--muted); margin-top: 4px;
+.fee-option {
+  background: var(--black3);
+  padding: 1.25rem 1.25rem 1rem;
 }
-.sb-saving-detail { font-size: 12px; color: var(--muted); margin-top: 6px; }
+.fee-name { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+.fee-amount { font-family: var(--font-serif); font-size: 1.5rem; color: var(--white); line-height: 1; margin-bottom: 0.4rem; }
+.fee-desc { font-size: 11px; color: var(--muted); line-height: 1.55; }
 
-
-/* ── ANIMATIONS ── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0); }
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-.reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
-.reveal.on { opacity: 1; transform: translateY(0); }
-
-/* ── RESPONSIVE ── */
-@media (max-width: 600px) {
-  nav { padding: 0 1.25rem; }
-  .provider-grid { grid-template-columns: 1fr 1fr; }
+.consent-row {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  font-size: 12px; color: var(--muted); line-height: 1.6;
+  margin-top: 1rem;
 }
+.consent-row input[type="checkbox"] { accent-color: var(--gold); margin-top: 3px; flex-shrink: 0; }
 
+.btn-primary {
+  display: inline-block;
+  background: var(--gold); color: var(--black);
+  border: none; padding: 0.9rem 2.5rem;
+  font-family: var(--font-sans); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  cursor: pointer; transition: background 0.2s, transform 0.15s;
+  margin-top: 1.25rem; width: 100%; text-align: center;
+}
+.btn-primary:hover { background: var(--gold2); transform: translateY(-1px); }
+
+.confirmation {
+  display: none;
+  background: rgba(201,168,76,0.06);
+  border: 1px solid var(--border2);
+  padding: 1.5rem;
+  margin-top: 1rem;
+  font-size: 13px; color: var(--muted); line-height: 1.7;
+  text-align: center;
+}
+.confirmation strong { color: var(--gold2); display: block; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+
+/* ── FOOTER ── */
 footer {
-  background: var(--black);
+  max-width: 780px; margin: 0 auto;
+  padding: 3rem 1.5rem;
   border-top: 1px solid var(--border);
-  padding: 3.5rem 2rem;
   text-align: center;
 }
 .footer-brand {
-  font-family: var(--font-serif); font-size: 1.35rem;
+  font-family: var(--font-serif); font-size: 1.1rem;
   letter-spacing: 0.3em; text-transform: uppercase;
   color: var(--gold2); margin-bottom: 0.5rem;
 }
+<<<<<<< HEAD
 .footer-tagline { font-size: 11px; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 1.25rem; }
 .footer-note { font-size: 13px; color: rgba(248,245,239,0.55); max-width: 640px; margin: 0 auto; line-height: 1.7; }
 
@@ -361,15 +446,27 @@ footer {
 .rr-breakdown td.rr-num { font-family: var(--font-serif); color: var(--gold2); font-size: 1rem; }
 .rr-breakdown tr.rr-total td { border-top: 1px solid var(--border2); color: var(--white); }
 .rr-breakdown tr.rr-total td.rr-num { color: var(--gold2); }
+=======
+.footer-note { font-size: 11px; color: rgba(248,245,239,0.25); max-width: 540px; margin: 0 auto; line-height: 1.7; }
+
+/* ── ANIMATIONS ── */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.on { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 600px) {
+  .step { padding: 4rem 1rem 2rem; }
+}
+>>>>>>> 52b6742 (Updating)
 </style>
 </head>
 <body>
 
 <nav>
-  <span class="nav-brand">Tiara</span>
-  <span class="nav-sub">Payment Provider Comparison · April 2026</span>
+  <span class="nav-brand">IToldYouSo</span>
+  <span class="nav-date" id="nav-date"></span>
 </nav>
 
+<<<<<<< HEAD
 <!-- ── PARTNER / ISC SECTION ── -->
 <div class="partner-section full-bleed" id="partners">
   <div class="full-bleed-inner">
@@ -478,25 +575,29 @@ footer {
       <div class="section-eyebrow">Payment providers</div>
       <h2 class="section-heading">Every UK provider.<br><em>Verified April 2026.</em></h2>
       <p class="section-body">Rates sourced directly from each provider's own website. Click any card to view their pricing page. Adjust the sliders to model Tiara's actual volumes. Cards marked <em>Rate indicative</em> use published or estimated figures — contact the provider to confirm.</p>
+=======
+<!-- ═══ STEP 1: DISCOVERY ═══ -->
+<div class="step reveal" style="padding-top:6rem">
+  <div class="step-num">Step 1</div>
+  <h1 class="step-heading">Let's find out what<br><em>you're actually paying.</em></h1>
+  <p class="step-body">Fill in a few numbers about your business and I'll show you exactly what your card payments are costing you — and what you could be paying instead.</p>
+
+  <div class="field-grid">
+    <div class="field" style="grid-column: 1 / -1">
+      <label class="field-label" for="f-name">Business name <span style="color:rgba(248,245,239,0.2)">(optional)</span></label>
+      <input class="field-input" type="text" id="f-name" placeholder="e.g. Sarah's Candles">
+>>>>>>> 52b6742 (Updating)
     </div>
 
-    <div class="savings-banner reveal">
-      <div class="sb-label-col">
-        <div class="sb-eyebrow">Your savings</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.6">Select your current payment provider to see how much you could save over 5 years by switching to the cheapest option.</div>
-        <div class="sb-select-wrap">
-          <select class="sb-select" id="current-provider" onchange="calc()">
-            <option value="">— Select your current provider —</option>
-          </select>
-        </div>
-      </div>
-      <div class="sb-result-col" id="savings-result" style="display:none">
-        <div class="sb-saving-num" id="sb-saving-num">—</div>
-        <div class="sb-saving-label">5-year saving</div>
-        <div class="sb-saving-detail" id="sb-saving-detail"></div>
-      </div>
+    <div class="field" style="grid-column: 1 / -1">
+      <label class="field-label" for="current-provider">Current payment provider</label>
+      <select class="field-input field-select" id="current-provider" onchange="calc()">
+        <option value="">— Select provider —</option>
+      </select>
+      <span class="field-hint">Not sure? Check your card reader, bank statement, or look for the name on your app.</span>
     </div>
 
+<<<<<<< HEAD
     <div class="slider-row reveal">
       <div>
         <div class="sl-label">Daily transactions</div>
@@ -540,31 +641,324 @@ footer {
         <div class="sl-label">POS cost as % of 5yr revenue</div>
         <div class="sl-val" id="be-pct">—</div>
       </div>
+=======
+    <div class="field">
+      <label class="field-label" for="f-txn">Transactions per day</label>
+      <input class="field-input" type="number" id="f-txn" min="1" max="500" value="8" oninput="syncFromForm()">
+>>>>>>> 52b6742 (Updating)
     </div>
 
-    <div class="sort-row reveal">
-      <span class="sort-label">Sort by</span>
-      <button class="sort-btn active" id="sb-tco" onclick="setSortBy('tco')">5yr cost</button>
-      <button class="sort-btn" id="sb-rate" onclick="setSortBy('rate')">Tx rate</button>
-      <button class="sort-btn" id="sb-monthly" onclick="setSortBy('monthly')">Monthly fees</button>
+    <div class="field">
+      <label class="field-label" for="f-val">Average transaction (£)</label>
+      <input class="field-input" type="number" id="f-val" min="5" max="1000" value="50" oninput="syncFromForm()">
     </div>
 
-    <div class="provider-grid reveal" id="provider-grid"></div>
+    <div class="field">
+      <label class="field-label" for="f-days">Trading days per month</label>
+      <input class="field-input" type="number" id="f-days" min="1" max="31" value="22" oninput="syncFromForm()">
+    </div>
+  </div>
 
-    <p style="font-size:11px;color:rgba(248,245,239,0.2);margin-top:1.25rem;line-height:1.6">All rates sourced directly from provider websites April 2026. Cards marked "Rate indicative" use figures not fully confirmed from the provider's public pricing page — verify before committing. Rates are subject to change. This document is confidential and prepared exclusively for Tiara.</p>
+  <!-- Advanced assumptions -->
+  <button class="advanced-toggle" id="adv-toggle" onclick="toggleAdvanced()">Advanced assumptions</button>
+  <div class="advanced-panel" id="adv-panel">
+    <div>
+      <span class="sl-label">Annual price inflation</span>
+      <input type="range" id="r-infl" min="0" max="8" step="0.5" value="3" oninput="calc()">
+      <div class="sl-val" id="v-infl">3.0%</div>
+    </div>
+    <div>
+      <span class="sl-label">Annual volume growth</span>
+      <input type="range" id="r-growth" min="0" max="20" step="1" value="3" oninput="calc()">
+      <div class="sl-val" id="v-growth">3%</div>
+    </div>
   </div>
 </div>
 
+<!-- ═══ STEP 2: YOUR NUMBERS ═══ -->
+<div class="step reveal">
+  <div class="step-num">Step 2</div>
+  <h2 class="step-heading">Here's what the<br><em>numbers say.</em></h2>
+  <p class="step-body">Based on what you've told me, here's your current 5-year cost — and what you could save by switching to the best available option at your volumes.</p>
+
+  <div class="savings-hook" id="savings-hook">
+    <div id="sh-empty" class="sh-empty">Select your current provider above to see your saving.</div>
+    <div id="sh-content" style="display:none; display:none; grid-column:1/-1; display:none">
+      <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:center">
+        <div>
+          <div class="sh-label">Your current 5-year cost</div>
+          <div class="sh-current-cost" id="sh-current-cost">—</div>
+          <div class="sh-current-detail" id="sh-current-detail"></div>
+        </div>
+        <div class="sh-arrow">→</div>
+        <div style="text-align:right">
+          <div class="sh-label">Best alternative</div>
+          <div class="sh-saving-num" style="font-size:2rem;letter-spacing:.1em;color:rgba(201,168,76,0.25)" id="sh-saving-num">Locked</div>
+          <div class="sh-saving-detail" id="sh-saving-detail" style="color:rgba(248,245,239,0.2)">Leave your details below to unlock</div>
+        </div>
+      </div>
+      <div style="margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+        <div style="text-align:center">
+          <span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">You save over 5 years</span>
+          <span class="sh-saving-num" id="sh-net-saving" style="font-size:2.5rem">—</span>
+        </div>
+        <div style="text-align:center">
+          <span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Yearly saving</span>
+          <span class="sh-saving-num" id="sh-monthly-saving" style="font-size:2.5rem">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-cell"><span class="stat-num" id="be-mvol">—</span><span class="stat-lbl">Monthly card volume</span></div>
+    <div class="stat-cell"><span class="stat-num" id="be-rev5">—</span><span class="stat-lbl">5yr projected revenue</span></div>
+    <div class="stat-cell"><span class="stat-num" id="be-brkn">—</span><span class="stat-lbl">Txns to break even on sub</span></div>
+    <div class="stat-cell"><span class="stat-num" id="be-pct">—</span><span class="stat-lbl">Best cost as % of revenue</span></div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- ═══ STEP 3: MAKING THE SWITCH ═══ -->
+<div class="step reveal">
+  <div class="step-num">Step 3</div>
+  <h2 class="step-heading">What switching<br><em>actually involves.</em></h2>
+  <p class="step-body">The rates are the easy part. Here's everything that needs to happen between "I want to switch" and "my new system is live and working" — and where most people get stuck trying to do it themselves.</p>
+
+  <div class="impl-grid">
+
+    <div class="impl-step">
+      <div class="impl-num">1</div>
+      <div class="impl-body">
+        <div class="impl-title">Exit audit — check your current contract</div>
+        <div class="impl-desc">Before anything else, your current provider needs to be checked for exit clauses, termination fees, and notice periods. Getting this wrong can wipe out months of saving before you've even started.</div>
+        <div class="impl-value">I review your current agreement, identify any exit costs, and factor them into the real switching calculation so there are no surprises.</div>
+      </div>
+    </div>
+
+    <div class="impl-step">
+      <div class="impl-num">2</div>
+      <div class="impl-body">
+        <div class="impl-title">Provider selection — right for your specific situation</div>
+        <div class="impl-desc">The cheapest rate on paper isn't always the right choice. Outdoor market traders need reliable offline mode. Shop owners need solid POS software and inventory. Kiosk operators need compact, durable hardware and fast settlement. Some providers won't onboard certain business types at all.</div>
+        <div class="impl-value">I match the provider to your actual use case — not just the rate. That includes reliability, support response times, onboarding speed, and compatibility with any existing kit.</div>
+      </div>
+    </div>
+
+    <div class="impl-step">
+      <div class="impl-num">3</div>
+      <div class="impl-body">
+        <div class="impl-title">Hardware sourcing</div>
+        <div class="impl-desc">Card readers vary widely in build quality, battery life, and weather resistance. The right hardware depends on your setup — a robust portable reader for a market stall, a countertop terminal for a shop, or a compact unit for a kiosk. Buying the wrong one is an expensive mistake. Refurbished options can save £50–£100 but need to come from the right sources.</div>
+        <div class="impl-value">I source the right hardware for your environment — with warranty, at the best price available. No guesswork on Amazon.</div>
+      </div>
+    </div>
+
+    <div class="impl-step">
+      <div class="impl-num">4</div>
+      <div class="impl-body">
+        <div class="impl-title">Merchant account setup &amp; verification</div>
+        <div class="impl-desc">Opening a merchant account requires ID verification, business registration details, and bank linking. Done correctly it takes 2–5 business days. Done incorrectly it can stall for weeks — or get rejected entirely.</div>
+        <div class="impl-value">I help you with the application, making sure the right documents are submitted in the right format so approvals go through first time — no back-and-forth with support.</div>
+      </div>
+    </div>
+
+    <div class="impl-step">
+      <div class="impl-num">5</div>
+      <div class="impl-body">
+        <div class="impl-title">Product catalogue &amp; pricing setup</div>
+        <div class="impl-desc">If you want itemised receipts, sales reporting by product, or low-stock alerts, your catalogue needs to be built properly from day one. This is tedious to do yourself and easy to get wrong.</div>
+        <div class="impl-value">I build your product catalogue, configure tax rates and categories, and set up reporting so your data is clean from the first transaction.</div>
+      </div>
+    </div>
+
+    <div class="impl-step">
+      <div class="impl-num">6</div>
+      <div class="impl-body">
+        <div class="impl-title">Full system test before go-live</div>
+        <div class="impl-desc">Every component needs testing together — card reader, POS app, receipt flow, payout routing to bank. A test transaction doesn't tell you much. A full end-to-end run does.</div>
+        <div class="impl-value">I run a complete pre-launch test and sign off that every part of the system works before you take your first real payment.</div>
+      </div>
+    </div>
+
+    <div class="impl-step">
+      <div class="impl-num">7</div>
+      <div class="impl-body">
+        <div class="impl-title">Go-live day support</div>
+        <div class="impl-desc">Launch day problems happen. A card reader that won't connect, an app update that breaks something, a payout that doesn't arrive — all of these are solvable, but not while you're serving customers.</div>
+        <div class="impl-value">I'm available on launch day to deal with anything that comes up, so you can focus on selling.</div>
+      </div>
+    </div>
+
+    <div class="impl-step">
+      <div class="impl-num">8</div>
+      <div class="impl-body">
+        <div class="impl-title">Staff handover &amp; training</div>
+        <div class="impl-desc">A new payment system is only useful if everyone using it is confident with it. Most providers offer a help centre. That's not the same as a 20-minute walkthrough with someone who set it up.</div>
+        <div class="impl-value">I walk through the system with you and any staff — refunds, daily close, reports, what to do if the reader loses connection. Hands on, not a YouTube link.</div>
+      </div>
+    </div>
+
+    <div class="impl-step">
+      <div class="impl-num">9</div>
+      <div class="impl-body">
+        <div class="impl-title">Ongoing first-line support</div>
+        <div class="impl-desc">After setup, small things come up — a software update changes the interface, a reader needs replacing, a payout is delayed. Most traders don't have the time or inclination to deal with a provider's support line.</div>
+        <div class="impl-value">I remain your first call. I either fix it directly or navigate the provider's support on your behalf — saving you the hold time and the headache.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- ═══ STEP 4: ENGAGEMENT ═══ -->
+<div class="step reveal">
+  <div class="step-num">Step 4</div>
+  <h2 class="step-heading">Unlock your<br><em>recommendation.</em></h2>
+  <p class="step-body">Leave your details below and I'll reveal the exact provider you should switch to, the rate you'll pay, and walk you through everything needed to make it happen. One project, done properly — no forum posts at midnight, no 45-minute hold music.</p>
+
+  <div class="engagement-box">
+    <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem">Fee options</div>
+    <div class="fee-options">
+      <div class="fee-option">
+        <div class="fee-name">Fixed project fee</div>
+        <div class="fee-amount">£150</div>
+        <div class="fee-desc">Flat fee agreed upfront. Covers everything in Step 3. Includes exit audit, provider selection, hardware sourcing, merchant account setup, product catalogue, testing, go-live support, and staff training.</div>
+      </div>
+    </div>
+
+    <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;margin-top:1.75rem">Your details — unlocks your full recommendation</div>
+    <div id="contact-form">
+      <div class="contact-grid">
+        <div class="field">
+          <label class="field-label" for="e-name">Your name</label>
+          <input class="field-input" type="text" id="e-name" placeholder="First name">
+        </div>
+        <div class="field">
+          <label class="field-label" for="e-phone">Phone</label>
+          <input class="field-input" type="tel" id="e-phone" placeholder="07700 000000">
+        </div>
+        <div class="field">
+          <label class="field-label" for="e-email">Email</label>
+          <input class="field-input" type="email" id="e-email" placeholder="you@example.com">
+        </div>
+
+      </div>
+      <div class="consent-row">
+        <input type="checkbox" id="e-consent">
+        <label for="e-consent">I'm happy for IToldYouSo to contact me about this consultation. I understand this is not a binding commitment — it's the start of a conversation.</label>
+      </div>
+      <button class="btn-primary" onclick="submitEngagement()">Unlock my recommendation →</button>
+    </div>
+
+    <div class="confirmation" id="confirmation">
+      <strong>Details received.</strong>
+      Your full recommendation is now unlocked below. I'll follow up within 24 hours to walk through next steps. Any questions in the meantime: <span style="color:var(--gold)">hello@itoldyouso.tech</span>
+    </div>
+  </div>
+
+  <p style="font-size:11px;color:rgba(248,245,239,0.2);margin-top:1.5rem;line-height:1.6">Leaving your details is not a commitment. It simply means you'd like to have a conversation. No payment is taken until a fee option is agreed in writing.</p>
+</div>
+
+<!-- ═══ RECOMMENDATION (revealed after form) ═══ -->
+<div class="step" id="recommendation-section" style="display:none; opacity:0; transition: opacity 0.7s ease;">
+  <div class="step-num">Your recommendation</div>
+  <h2 class="step-heading">Every UK provider,<br><em>side by side.</em></h2>
+  <p class="step-body">Rates sourced directly from each provider's own website. Your recommended provider is highlighted. Click any card to view their pricing page. Cards marked <em>Rate indicative</em> use figures not publicly confirmed — verify before committing.</p>
+
+  <div class="sort-row">
+    <span class="sort-label">Sort by</span>
+    <button class="sort-btn active" id="sb-tco" onclick="setSortBy('tco')">5yr cost</button>
+    <button class="sort-btn" id="sb-rate" onclick="setSortBy('rate')">Tx rate</button>
+    <button class="sort-btn" id="sb-monthly" onclick="setSortBy('monthly')">Monthly fees</button>
+  </div>
+
+  <div class="provider-grid" id="provider-grid"></div>
+
+  <p style="font-size:10px;color:rgba(248,245,239,0.18);margin-top:1rem;line-height:1.6">All rates sourced directly from provider websites April 2026. Rates subject to change — verify before committing.</p>
+</div>
+
 <footer>
-  <div class="footer-brand">TIARA</div>
-  <div class="footer-tagline">Where Timeless Elegance Meets Modern Commerce</div>
-  <div class="footer-note">Rates verified April 2026 from each provider's own website. Rates are subject to change — always verify current pricing directly with the provider before committing. This document is confidential and prepared exclusively for Tiara.</div>
-  <div style="margin-top:2rem;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(248,245,239,0.2)">Prepared by <a href="https://itoldyouso.tech" target="_blank" style="color:rgba(201,168,76,0.5);text-decoration:none;border-bottom:1px solid rgba(201,168,76,0.25)">IToldYouSo</a></div>
+  <div class="footer-brand">IToldYouSo</div>
+  <div class="footer-note">Payment provider data sourced directly from provider websites, April 2026. Rates are subject to change — verify before committing. This document is prepared exclusively for use in IToldYouSo consultations and is not for redistribution.</div>
+  <button onclick="openAdmin()" style="background:none;border:none;cursor:pointer;margin-top:2rem;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.1);font-family:var(--font-sans)">Admin</button>
 </footer>
 
+<!-- ═══ ADMIN PASSWORD MODAL ═══ -->
+<div id="admin-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;display:none;align-items:center;justify-content:center;">
+  <div style="background:var(--black2);border:1px solid var(--border2);padding:2.5rem 2rem;width:100%;max-width:360px;margin:1rem;">
+    <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem">Admin access</div>
+    <input class="field-input" type="password" id="admin-pw" placeholder="Password" style="width:100%;margin-bottom:1rem" onkeydown="if(event.key==='Enter')checkAdmin()">
+    <div id="admin-pw-err" style="display:none;font-size:11px;color:rgba(220,80,80,0.8);margin-bottom:.75rem">Incorrect password.</div>
+    <div style="display:flex;gap:.75rem">
+      <button class="btn-primary" onclick="checkAdmin()" style="flex:1;margin-top:0">Unlock</button>
+      <button onclick="closeAdmin()" style="flex:1;background:transparent;border:1px solid var(--border2);color:var(--muted);padding:.9rem;font-family:var(--font-sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN SECTION ═══ -->
+<div id="admin-section" style="display:none;background:var(--black2);border-top:1px solid var(--border2);">
+  <div style="max-width:1140px;margin:0 auto;padding:4rem 1.5rem 5rem;">
+
+    <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem">
+      <div>
+        <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem">Admin — internal view</div>
+        <div style="font-family:var(--font-serif);font-size:1.8rem;font-weight:400;color:var(--white)">Rates &amp; referral table</div>
+      </div>
+      <button onclick="document.getElementById('admin-section').style.display='none'" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:4px 14px;font-family:var(--font-sans);font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Close</button>
+    </div>
+
+    <!-- Stats strip -->
+    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Summary at current volumes</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:3rem">
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-mvol">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Monthly volume</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-rev5">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">5yr revenue</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-cheapest">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Cheapest 5yr cost</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-expensive">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Most expensive 5yr</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-spread">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Max saving available</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-stripe-save">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">5yr saving vs Stripe</span></div>
+    </div>
+
+    <!-- Full provider table -->
+    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">All providers — full rate table</div>
+    <div style="overflow-x:auto">
+      <table id="admin-table" style="width:100%;border-collapse:collapse;font-size:12px;min-width:900px">
+        <thead>
+          <tr>
+            <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Provider</th>
+            <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Plan</th>
+            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Rate</th>
+            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Flat fee</th>
+            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Monthly sub</th>
+            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Reader</th>
+            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Monthly fees</th>
+            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">5yr TCO</th>
+            <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Source</th>
+            <th style="text-align:center;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Confirmed</th>
+          </tr>
+        </thead>
+        <tbody id="admin-table-body"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─────────── HIDDEN SLIDER INPUTS (used by calc engine) ─────────── -->
+<input type="hidden" id="r-txn" value="8">
+<input type="hidden" id="r-val" value="50">
+<input type="hidden" id="r-days" value="22">
+
 <script>
+// ── NAV DATE ──
+document.getElementById('nav-date').textContent =
+  new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+
 // ── SCROLL REVEAL ──
-const rEls = document.querySelectorAll('.reveal');
 const obs = new IntersectionObserver(entries => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) {
@@ -572,16 +966,31 @@ const obs = new IntersectionObserver(entries => {
       obs.unobserve(e.target);
     }
   });
-}, { threshold: 0.08 });
-rEls.forEach(r => obs.observe(r));
+}, { threshold: 0.06 });
+document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+
+// ── ADVANCED TOGGLE ──
+function toggleAdvanced() {
+  const btn = document.getElementById('adv-toggle');
+  const panel = document.getElementById('adv-panel');
+  btn.classList.toggle('open');
+  panel.classList.toggle('open');
+}
+
+// ── SYNC form inputs → hidden slider values ──
+function syncFromForm() {
+  const txn  = parseInt(document.getElementById('f-txn').value)  || 8;
+  const val  = parseInt(document.getElementById('f-val').value)  || 50;
+  const days = parseInt(document.getElementById('f-days').value) || 22;
+  document.getElementById('r-txn').value  = txn;
+  document.getElementById('r-val').value  = val;
+  document.getElementById('r-days').value = days;
+  calc();
+}
 
 // ── PRICING ENGINE ──
-// BASE_HW = Tiara system hardware excluding card reader (£829)
 const BASE_HW = 829;
 
-// extra = estimated cost of provider-specific card reader hardware
-// source = provider's own pricing page (each card links here)
-// indicative = true means rates could not be fully confirmed from a public pricing page
 const PROVIDERS = [
 
   // ── SumUp ── source: https://sumup.com/en-gb/card-readers/
@@ -607,7 +1016,7 @@ const PROVIDERS = [
     warn:'£29.99/month fee applies if monthly card turnover falls below £2,500. Add 0.10% if not using Teya Business Account.',
     pros:['Simple flat 1.59% rate','Next-day settlement 7 days/week','No lock-in contract'] },
 
-  // ── Revolut Business ── source: https://www.revolut.com/business/revolut-reader/
+  // ── Revolut Business ── source: https://www.revolut.com/business/accept-payments-pricing/
   { id:'revolut_basic',
     name:'Revolut', plan:'Basic',
     sub:0, rate:0.008, flat:0.02, extra:49,
@@ -699,7 +1108,6 @@ const PROVIDERS = [
     pros:['Lowest Shopify rate: 1.5%','Advanced analytics & custom reports','Multi-location inventory'] },
 
   // ── Lightspeed ── source: https://www.lightspeedhq.com/uk/pos/retail/pricing/
-  // Transaction rates not publicly disclosed
   { id:'lightspeed_basic',
     name:'Lightspeed', plan:'Basic',
     sub:75, rate:0.020, flat:0.08, extra:0,
@@ -742,7 +1150,6 @@ const PROVIDERS = [
     pros:['Indicative 1.4%+5p consumer cards','Strong UK retail hardware','Same-day settlement option'] },
 
   // ── Worldpay ── source: https://www.worldpay.com/en-gb/small-business
-  // Rates not publicly disclosed — all pricing is bespoke
   { id:'worldpay_payg',
     name:'Worldpay', plan:'Pay as you go',
     sub:0, rate:0.0275, flat:0.20, extra:0,
@@ -760,7 +1167,6 @@ const PROVIDERS = [
     pros:['Negotiated rates from ~0.3% debit','Full-service merchant account','Best for high-volume multi-channel'] },
 
   // ── Barclaycard ── source: https://www.barclaycard.co.uk/business/accepting-payments/card-readers/pocket-sized-card-reader
-  // Indicative — actual rate tailored on application
   { id:'barclaycard',
     name:'Barclaycard', plan:'Anywhere (PAYG)',
     sub:0, rate:0.016, flat:0, extra:29,
@@ -769,18 +1175,32 @@ const PROVIDERS = [
     warn:'Indicative rate only — actual rate tailored on application · Authorisation fee ~3p per transaction may apply · 12–36 month contracts on some plans',
     pros:['~1.6% flat rate indication','No setup fee on PAYG','Trusted UK bank brand'] },
 
-  // ── Clover ── source: https://uk.clover.com/start-taking-payments/
-  // Transaction rates not publicly disclosed
+  // ── Clover / Fiserv ── source: https://uk.clover.com/start-taking-payments/
   { id:'clover',
-    name:'Clover', plan:'Starter',
+    name:'Clover / Fiserv', plan:'Starter',
     sub:9.99, rate:0.026, flat:0.10, extra:0,
     indicative:true,
     source:'https://uk.clover.com/start-taking-payments/',
-    warn:'Transaction rates NOT publicly disclosed — set individually at sign-up. Rate shown is indicative only. Device included in monthly fee. Short-term contract.',
+    warn:'Transaction rates NOT publicly disclosed — set individually at sign-up. Rate shown is indicative only. Device included in monthly fee. Powered by Fiserv.',
     pros:['Integrated POS + payments device','Wide app marketplace','Device included in £9.99/month'] },
 
+  { id:'clover_standard',
+    name:'Clover / Fiserv', plan:'Standard',
+    sub:24.99, rate:0.022, flat:0.10, extra:0,
+    indicative:true,
+    source:'https://uk.clover.com/start-taking-payments/',
+    warn:'Transaction rates NOT publicly disclosed — set individually at sign-up. Rate shown is indicative only. Includes more capable POS hardware. Powered by Fiserv.',
+    pros:['More capable POS hardware than Starter','Broader app ecosystem','Device included in monthly fee'] },
+
+  { id:'clover_advanced',
+    name:'Clover / Fiserv', plan:'Advanced',
+    sub:54.99, rate:0.018, flat:0.10, extra:0,
+    indicative:true,
+    source:'https://uk.clover.com/start-taking-payments/',
+    warn:'Transaction rates NOT publicly disclosed — set individually at sign-up. Rate shown is indicative only. Full POS suite. Powered by Fiserv.',
+    pros:['Full POS suite with advanced reporting','Priority support','Device included in monthly fee'] },
+
   // ── Elavon / Opayo ── source: https://www.elavon.co.uk
-  // Rates not published — all pricing bespoke
   { id:'elavon',
     name:'Elavon / Opayo', plan:'Standard',
     sub:25, rate:0.0175, flat:0, extra:0,
@@ -789,6 +1209,7 @@ const PROVIDERS = [
     warn:'Rates NOT published online — all pricing is bespoke/quoted · 36-month contracts typical · PCI DSS fee ~£6/month · International card handling fee 0.80% (from Feb 2026)',
     pros:['Established UK processor','Opayo gateway included','Multi-currency support'] },
 
+<<<<<<< HEAD
   // ── Lopay ── source: https://lopay.com/en-gb/pricing
   { id:'lopay_essential',
     name:'Lopay', plan:'Essential',
@@ -835,7 +1256,190 @@ const PROVIDERS = [
     source:'https://www.takepayments.com/quotation-tool/',
     warn:'Rates NOT publicly disclosed — all pricing is custom-quoted. Figures shown are indicative. Monthly charge covers terminal rental, PCI DSS fee & minimum monthly service charge. Call 01472 306 695 or use online quotation tool.',
     pros:['Accepts Visa, MC, Amex, JCB & Diners','Contracts available from 30 days','Next-day settlement · Terminal included in monthly rental'] },
+=======
+  // ── Lopay ── source: https://lopay.com/pricing
+  { id:'lopay_essential',
+    name:'Lopay', plan:'Essential',
+    sub:0, rate:0.0079, flat:0, extra:0,
+    source:'https://lopay.com/pricing',
+    warn:'Payouts on Thursdays only on Essential plan · Amex, international & corporate cards +1% · Tap to Pay +8p per transaction',
+    pros:['0.79% — among lowest published rates','No monthly fee or contract','No setup costs'] },
+
+  { id:'lopay_standard',
+    name:'Lopay', plan:'Standard',
+    sub:0, rate:0.0099, flat:0, extra:0,
+    source:'https://lopay.com/pricing',
+    warn:'Amex, international & corporate cards +1% · Tap to Pay +8p per transaction · Payment links 1.79% min £0.50',
+    pros:['0.99% rate — no monthly fee','Flexible next-day payouts Mon–Fri','No contract or setup costs'] },
+
+  { id:'lopay_instant',
+    name:'Lopay', plan:'Instant to Bank',
+    sub:0, rate:0.0179, flat:0, extra:0,
+    source:'https://lopay.com/pricing',
+    warn:'1.79% rate is higher — premium is for instant 24/7 payouts · Amex, international & corporate cards +1%',
+    pros:['Instant 24/7 payouts to bank','No monthly fee or contract','No setup costs'] },
+
+  // ── Tide ── source: https://www.tide.co/features/card-reader/
+  { id:'tide_payg',
+    name:'Tide', plan:'Pay as you go',
+    sub:0, rate:0.0139, flat:0.05, extra:159,
+    source:'https://www.tide.co/features/card-reader/',
+    warn:'Domestic consumer debit cards only at this rate · All other card types at different rates per Tide terms · Settlement up to 3 working days (next-day +£2.99+VAT/month) · Reader from £159+VAT',
+    pros:['1.39%+5p — no monthly fee','No contract','Integrated Tide business banking'] },
+
+  { id:'tide_subscription',
+    name:'Tide', plan:'Sell In-Person',
+    sub:17.99, rate:0.0079, flat:0.03, extra:99,
+    source:'https://www.tide.co/features/card-reader/',
+    warn:'Sub rising to £17.99+VAT from 27 April 2026 · Domestic consumer debit cards only at this rate · Settlement up to 3 working days · Reader from £99+VAT',
+    pros:['0.79%+3p — competitive rate','Integrated Tide business banking','Reader from £99+VAT'] },
+
+  // ── takepayments ── source: https://www.takepayments.com/card-machines/
+  { id:'takepayments',
+    name:'takepayments', plan:'Bespoke quote',
+    sub:0, rate:0.015, flat:0.05, extra:0,
+    indicative:true,
+    source:'https://www.takepayments.com/card-machines/',
+    warn:'Rates NOT published — all pricing is a bespoke quote. Rate shown is indicative only. 12-month contract. Contact via their quote form or 0808 274 2017.',
+    pros:['Competitive negotiated rates','Next-day settlement (approved customers)','12-month contract (shorter than some)'] },
+
+  // ── Zeller ── source: https://myzeller.com
+  { id:'zeller',
+    name:'Zeller', plan:'Standard',
+    sub:0, rate:0.017, flat:0, extra:0,
+    indicative:true,
+    source:'https://myzeller.com',
+    warn:'Zeller currently operates in Australia only — UK availability not confirmed. Included for reference. Verify UK availability before recommending.',
+    pros:['Flat-rate pricing (AU)','Integrated business account','No monthly fee'] },
+
+  // ── Fluxa ── source: https://fluxa.io
+  { id:'fluxa',
+    name:'Fluxa', plan:'Pay as you go',
+    sub:0, rate:0.015, flat:0, extra:0,
+    indicative:true,
+    source:'https://fluxa.io',
+    warn:'Rates not publicly disclosed — indicative only. Limited publicly available information. Verify pricing and UK availability directly before recommending.',
+    pros:['No monthly fee','Simple onboarding','UK-focused'] },
+
+  // ── Adyen ── source: https://www.adyen.com/pricing
+  { id:'adyen',
+    name:'Adyen', plan:'Interchange++',
+    sub:0, rate:0.013, flat:0.10, extra:0,
+    indicative:true,
+    source:'https://www.adyen.com/pricing',
+    warn:'Interchange++ pricing — effective rate varies by card type (~0.3% markup + interchange). Minimum monthly processing volume expected. Enterprise-focused — not suited to low volumes or new businesses.',
+    pros:['Transparent interchange++ model','Unified in-person and online','Global multi-currency support'] },
+
+  // ── Checkout.com ── source: https://www.checkout.com/pricing
+  { id:'checkout',
+    name:'Checkout.com', plan:'Enterprise',
+    sub:0, rate:0.015, flat:0.10, extra:0,
+    indicative:true,
+    source:'https://www.checkout.com/pricing',
+    warn:'Pricing not publicly disclosed — enterprise bespoke quotes only. Primarily serves high-volume merchants. Not suited to small traders, shops, or kiosks.',
+    pros:['Enterprise-grade infrastructure','Unified global payment platform','Advanced fraud tools'] },
+
+  // ── Global Payments ── source: https://www.globalpayments.com/en-gb
+  { id:'globalpay',
+    name:'Global Payments', plan:'Bespoke',
+    sub:20, rate:0.012, flat:0.05, extra:0,
+    indicative:true,
+    source:'https://www.globalpayments.com/en-gb',
+    warn:'Rates not publicly disclosed — all pricing bespoke. Terminal rental £15–25/month may apply in addition to subscription shown. 24-month contracts common.',
+    pros:['Full-service UK merchant account','Wide hardware range','Established UK presence'] },
+
+  // ── Nexi ── source: https://www.nexigroup.com/en/uk
+  { id:'nexi',
+    name:'Nexi', plan:'Standard',
+    sub:0, rate:0.016, flat:0.05, extra:0,
+    indicative:true,
+    source:'https://www.nexigroup.com/en/uk',
+    warn:'Rates not publicly disclosed — indicative only. Major European processor with UK presence following acquisition of Nets. Pricing confirmed on application.',
+    pros:['Major European processor','Multi-currency support','Wide terminal range'] },
+
+  // ── Nuvei ── source: https://www.nuvei.com/en-gb
+  { id:'nuvei',
+    name:'Nuvei', plan:'Enterprise',
+    sub:0, rate:0.015, flat:0.10, extra:0,
+    indicative:true,
+    source:'https://www.nuvei.com/en-gb',
+    warn:'Pricing not publicly disclosed — enterprise bespoke quotes only. Primarily serves mid-to-large businesses. Not suited to small traders, shops, or kiosks.',
+    pros:['Global payment processing','Wide payment method support','Enterprise-grade reliability'] },
+
+  // ── Airwallex ── source: https://www.airwallex.com/uk/pricing
+  { id:'airwallex',
+    name:'Airwallex', plan:'Pay as you go',
+    sub:0, rate:0.013, flat:0.20, extra:0,
+    indicative:true,
+    source:'https://www.airwallex.com/uk/pricing',
+    warn:'In-person payments via Tap to Pay on iPhone — no dedicated card reader. Primarily an online and multi-currency platform. Limited suitability for high-volume in-person retail or kiosks.',
+    pros:['No monthly fee','Multi-currency business account','Competitive FX rates'] },
+
+  // ── Handepay ── source: https://www.handepay.co.uk/card-machines/
+  { id:'handepay',
+    name:'Handepay', plan:'Standard',
+    sub:15, rate:0.009, flat:0.03, extra:0,
+    indicative:true,
+    source:'https://www.handepay.co.uk/card-machines/',
+    warn:'Rates not publicly disclosed — bespoke quotes only. Terminal rental £10–20/month typically included in or added to subscription shown. 12–36 month contracts. Part of PayPoint Group.',
+    pros:['Competitive negotiated debit rates','PayPoint Group backing','UK-based support'] },
+
+  // ── Paymentsense ── source: https://www.paymentsense.com/gb/
+  { id:'paymentsense',
+    name:'Paymentsense', plan:'Standard',
+    sub:20, rate:0.013, flat:0.05, extra:0,
+    indicative:true,
+    source:'https://www.paymentsense.com/gb/',
+    warn:'Paymentsense was acquired by Dojo in 2021 — new customers may be onboarded under Dojo branding. Rates not publicly disclosed — indicative only. 12–36 month contracts typical.',
+    pros:['Established UK brand','Terminal included on some plans','UK-based support'] },
+>>>>>>> 52b6742 (Updating)
 ];
+
+const PROVIDER_CONS = {
+  sumup_payg:          ['Higher 1.69% rate than most competitors','No business banking','Basic reporting on free plan'],
+  sumup_plus:          ['0.99% applies to UK/EU consumer cards only — Amex reverts to 1.69%','£19/month subscription','Custom pricing required above £10k/month'],
+  teya:                ['Rates negotiated individually — no public price guarantee','£29.99/month penalty if turnover under £2,500','Less established brand than SumUp or Square'],
+  revolut_basic:       ['Requires Revolut Business account','No Amex acceptance','2.6%+2p for international/commercial cards','No native Loyverse integration'],
+  revolut_grow:        ['Same payment rate as Basic — £25/month buys banking features only','No Amex','No Loyverse integration'],
+  revolut_scale:       ['Same payment rate as Basic/Grow — £100/month is expensive for same rate','No Amex','No Loyverse integration'],
+  stripe:              ['No native retail POS — requires custom development work','Non-EEA cards 2.9%+10p','Tap to Pay costs extra 10p per auth','Technical setup complexity'],
+  square_free:         ['1.5% surcharge on non-UK cards','Customer support can be slow','Limited offline functionality'],
+  square_plus:         ['Same 1.75% in-person rate as Free tier','Subscription only unlocks software features, not a better rate','1.5% surcharge on non-UK cards'],
+  zettle:              ['Invoice/payment links charged at 2.5%','Limited business banking integration','PayPal brand can deter some customers'],
+  mypos:               ['Amex 2.45%+7p — significantly higher','International/commercial cards 2.85%+7p','Instant settlement only to myPOS account (not your bank)'],
+  tyl:                 ['Requires NatWest business account','12-month contract on terminals','Business/international cards 1.99%+5p','Locked into NatWest ecosystem'],
+  shopify_basic:       ['2% extra fee if not using Shopify Payments','Advanced retail features (POS Pro) cost extra £69/month','Best value only if also selling online'],
+  shopify_grow:        ['Same in-person rate applies whether you pay £25 or £65 — extra cost is for online features','POS Pro still +£69/month','1% extra for third-party processor'],
+  shopify_advanced:    ['Very high £344/month subscription','POS Pro still required at +£69/month','Only viable at very high combined online + offline volume'],
+  lightspeed_basic:    ['Transaction rates not publicly disclosed','£400/month penalty for non-Lightspeed payments','Expensive at £75/month for entry level'],
+  lightspeed_core:     ['Transaction rates not publicly disclosed','£400/month penalty for non-Lightspeed payments','£149/month is very high for mid-tier'],
+  lightspeed_plus:     ['Transaction rates not publicly disclosed','£400/month penalty for non-Lightspeed payments','£189/month — highest Lightspeed tier'],
+  dojo_payg:           ['Rates not publicly disclosed — pricing page inaccessible','Terminal rental model adds ongoing cost','Rate shown is indicative only'],
+  dojo_fix:            ['12-month contract required','£24.95 minimum monthly charge','Business cards charged at higher rate','Rates not publicly disclosed'],
+  worldpay_payg:       ['Very high indicative 2.75%+20p rate','Terminal rental £17.50–22.50/month on top','Setup fee ~£25–50','18-month contract on some plans'],
+  worldpay_contract:   ['18-month minimum contract','Early termination fees apply','Rate requires custom quote — figure shown is illustrative','Better suited to £75k+/year turnover'],
+  barclaycard:         ['Rate is indicative only — actual rate confirmed on application','Authorisation fee ~3p per transaction may apply','12–36 month contracts on some plans'],
+  clover:              ['Transaction rates not publicly disclosed — set individually at sign-up','Contract terms unclear','Limited pricing transparency'],
+  elavon:              ['Rates not published online — all pricing bespoke','36-month contracts typical','PCI DSS fee ~£6/month','International card handling fee 0.80%'],
+  lopay_essential:     ['Thursday payouts only — no flexible payout schedule','Amex, international & corporate cards +1%','Tap to Pay costs extra 8p','Less established brand'],
+  lopay_standard:      ['Amex, international & corporate cards +1%','Payment links 1.79% minimum £0.50','Tap to Pay costs extra 8p','Less established than SumUp or Square'],
+  lopay_instant:       ['1.79% rate is significantly higher — premium is for instant payouts only','Amex/international +1%','Poor value unless instant settlement is essential'],
+  tide_payg:           ['Reader from £159+VAT — expensive hardware','Settlement up to 3 working days (next-day costs extra)','Advertised rate for domestic consumer debit only','Tied to Tide business banking'],
+  tide_subscription:   ['Monthly fee rising to £17.99+VAT from 27 April 2026','Reader still £99+VAT','Settlement up to 3 working days','Advertised rate for domestic consumer debit only','Locked into Tide ecosystem'],
+  takepayments:        ['Rates not published — bespoke quote required','12-month contract','No self-service pricing — must speak to sales','Limited price transparency'],
+  clover_standard:     ['Transaction rates not publicly disclosed — set individually','Higher monthly fee than Starter for marginal rate improvement','Contract terms unclear','Limited pricing transparency'],
+  clover_advanced:     ['Very high monthly fee for small traders','Transaction rates not publicly disclosed','Only worthwhile at high volumes with complex POS needs','Contract terms unclear'],
+  zeller:              ['Not currently available in the UK — Australian provider only','No UK customer support or onboarding','Cannot be recommended for UK traders'],
+  fluxa:               ['Very limited publicly available information','Rates not confirmed — verify before recommending','Unproven track record in UK market'],
+  adyen:               ['Interchange++ pricing is complex — effective rate hard to predict','Minimum monthly processing volume expected','Enterprise-focused — not suitable for small traders or kiosks','Technical integration required'],
+  checkout:            ['Pricing not publicly disclosed — enterprise bespoke only','Not suited to small traders, shops, or low volumes','No self-service onboarding','Technical integration required'],
+  globalpay:           ['Rates not publicly disclosed — bespoke quote required','24-month contracts common','Terminal rental adds to monthly cost','Better suited to established high-volume businesses'],
+  nexi:                ['Rates not publicly disclosed — pricing confirmed on application only','Limited UK brand recognition vs SumUp or Square','Contract terms not published'],
+  nuvei:               ['Pricing not publicly disclosed — enterprise bespoke only','Not suited to small traders or kiosks','Minimum volume expectations','Technical integration typically required'],
+  airwallex:           ['In-person limited to Tap to Pay on iPhone — no card reader','Primarily an online and multi-currency platform','Not suited to high-volume in-person retail or kiosks','Less established for UK in-person payments'],
+  handepay:            ['Rates not publicly disclosed — bespoke quote required','12–36 month contracts','Terminal rental adds ongoing cost','Less transparent pricing than SumUp or Square'],
+  paymentsense:        ['Acquired by Dojo in 2021 — brand future uncertain','Rates not publicly disclosed','12–36 month contracts typical','New customers may be redirected to Dojo'],
+};
 
 let sortBy = 'tco';
 
@@ -853,21 +1457,19 @@ function setSortBy(s) {
 }
 
 function calc() {
-  const txn    = parseInt(document.getElementById('r-txn').value);
-  const val    = parseInt(document.getElementById('r-val').value);
-  const days   = parseInt(document.getElementById('r-days').value);
+  // Read from form inputs
+  const txn    = parseInt(document.getElementById('f-txn')?.value)   || parseInt(document.getElementById('r-txn').value) || 8;
+  const val    = parseInt(document.getElementById('f-val')?.value)   || parseInt(document.getElementById('r-val').value) || 50;
+  const days   = parseInt(document.getElementById('f-days')?.value)  || parseInt(document.getElementById('r-days').value) || 22;
   const infl   = parseFloat(document.getElementById('r-infl').value) / 100;
   const growth = parseFloat(document.getElementById('r-growth').value) / 100;
-  document.getElementById('v-txn').textContent    = txn;
-  document.getElementById('v-val').textContent    = '£' + val;
-  document.getElementById('v-days').textContent   = days;
+
   document.getElementById('v-infl').textContent   = (infl * 100).toFixed(1) + '%';
   document.getElementById('v-growth').textContent = (growth * 100).toFixed(0) + '%';
 
   const mVol  = txn * val * days;
   const mTxns = txn * days;
 
-  // Compound over 5 years (12 months each)
   let rev5y = 0;
   const yearlyFees = Array(PROVIDERS.length).fill(0);
   for (let y = 0; y < 5; y++) {
@@ -894,12 +1496,10 @@ function calc() {
   else if (sortBy === 'rate')    rows.sort((a,b) => a.rate - b.rate);
   else                           rows.sort((a,b) => a.mFee - b.mFee);
 
-  // Recommended = lowest TCO overall
   const recommended = rows.reduce((a, b) => a.tco < b.tco ? a : b);
 
-  const maxTco = Math.max(...rows.map(r => r.tco));
-  const minTco = rows[0].tco;
-  const stripeTco = rows.find(r => r.id === 'stripe')?.tco ?? 0;
+  const minTco  = recommended.tco;
+  const maxTco  = Math.max(...rows.map(r => r.tco));
   const winner  = rows[0];
   const brkEven = winner.sub > 0
     ? Math.ceil(winner.sub / ((0.0169 - winner.rate) * val))
@@ -908,9 +1508,64 @@ function calc() {
   document.getElementById('be-mvol').textContent = fmt(mVol);
   document.getElementById('be-rev5').textContent = fmt(rev5y);
   document.getElementById('be-brkn').textContent = brkEven > 0 ? brkEven + ' sales' : 'N/A';
-  document.getElementById('be-pct').textContent  = (recommended.tco / rev5y * 100).toFixed(1) + '%';
+  document.getElementById('be-pct').textContent  = (minTco / rev5y * 100).toFixed(1) + '%';
 
-  // Derive the hostname for the source label
+  // ── Populate provider dropdown on first run ──
+  const sel = document.getElementById('current-provider');
+  if (sel.options.length === 1) {
+    rows.forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.id;
+      opt.textContent = r.name + ' — ' + r.plan;
+      sel.appendChild(opt);
+    });
+  }
+
+  // ── Savings hook ──
+  const currentId = sel.value;
+  const emptyEl   = document.getElementById('sh-empty');
+  const contentEl = document.getElementById('sh-content');
+
+  if (!currentId) {
+    emptyEl.style.display  = 'block';
+    contentEl.style.display = 'none';
+  } else {
+    const current = rows.find(r => r.id === currentId);
+    if (current) {
+      const saving5y   = current.tco - recommended.tco;
+      const savingMo   = saving5y / 5;
+      emptyEl.style.display   = 'none';
+      contentEl.style.display = 'block';
+      document.getElementById('sh-current-cost').textContent  = fmt(current.tco);
+      document.getElementById('sh-current-detail').textContent = current.name + ' ' + current.plan + ' · 5-year total';
+      const savingNumEl   = document.getElementById('sh-saving-num');
+      const savingDetailEl = document.getElementById('sh-saving-detail');
+      if (saving5y > 0) {
+        if (unlocked) {
+          savingNumEl.textContent    = fmt(recommended.tco);
+          savingNumEl.style.fontSize = '';
+          savingNumEl.style.color    = '';
+          savingDetailEl.textContent = recommended.name + ' ' + recommended.plan + ' · best alternative';
+          savingDetailEl.style.color = '';
+        } else {
+          savingNumEl.textContent    = 'Locked';
+          savingNumEl.style.fontSize = '2rem';
+          savingNumEl.style.color    = 'rgba(201,168,76,0.25)';
+          savingDetailEl.textContent = 'Leave your details below to unlock';
+          savingDetailEl.style.color = 'rgba(248,245,239,0.2)';
+        }
+        document.getElementById('sh-net-saving').textContent     = fmt(saving5y);
+        document.getElementById('sh-monthly-saving').textContent = fmtD(savingMo);
+      } else {
+        savingNumEl.textContent    = unlocked ? fmt(recommended.tco) : 'Locked';
+        savingDetailEl.textContent = unlocked ? 'You\'re already on the cheapest option' : 'Leave your details below to unlock';
+        document.getElementById('sh-net-saving').textContent     = '—';
+        document.getElementById('sh-monthly-saving').textContent = '—';
+      }
+    }
+  }
+
+  // ── Provider grid ──
   function sourceHost(url) {
     try { return new URL(url).hostname.replace(/^www\./, ''); }
     catch(e) { return url; }
@@ -925,10 +1580,10 @@ function calc() {
 
     const badge = isRecommended
       ? '<div class="p-badge">Recommended</div>'
-      : '<div style="height:21px"></div>';
+      : '<div style="height:19px"></div>';
 
     const indicativeBadge = r.indicative
-      ? `<div class="p-indicative">⚠ Rate indicative — not fully confirmed from public pricing page</div>`
+      ? `<div class="p-indicative">⚠ Rate indicative — not publicly confirmed</div>`
       : '';
 
     return `<a class="provider-card${cardClass}" href="${r.source}" target="_blank" rel="noopener">
@@ -936,11 +1591,11 @@ function calc() {
       <div class="p-name">${r.name}</div>
       <div class="p-plan">${r.plan}</div>
       <div class="p-tco">${fmt(r.tco)}</div>
-      <div class="p-tco-label">5-year total (inflation-adjusted)</div>
+      <div class="p-tco-label">5-year total</div>
       <div>
-        <div class="mini-bar-row"><span style="min-width:30px">HW</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${hwPct}%;background:#6b4e1a"></div></div><span style="min-width:38px;text-align:right">${fmt(r.hw)}</span></div>
-        <div class="mini-bar-row"><span style="min-width:30px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#c9a84c"></div></div><span style="min-width:38px;text-align:right">${fmt(r.fees)}</span></div>
-        <div class="mini-bar-row"><span style="min-width:30px">Sub</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${subPct}%;background:#4a5a3a"></div></div><span style="min-width:38px;text-align:right">${fmt(r.subs)}</span></div>
+        <div class="mini-bar-row"><span style="min-width:26px">HW</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${hwPct}%;background:#6b4e1a"></div></div><span style="min-width:34px;text-align:right">${fmt(r.hw)}</span></div>
+        <div class="mini-bar-row"><span style="min-width:26px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#c9a84c"></div></div><span style="min-width:34px;text-align:right">${fmt(r.fees)}</span></div>
+        <div class="mini-bar-row"><span style="min-width:26px">Sub</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${subPct}%;background:#4a5a3a"></div></div><span style="min-width:34px;text-align:right">${fmt(r.subs)}</span></div>
       </div>
       <div class="p-rate">In-person rate</div>
       <div class="p-rate-val">${fmtPct(r.rate * 100)}${r.flat ? ' + ' + Math.round(r.flat * 100) + 'p' : ''} · Sub: ${r.sub ? '£' + r.sub + '/mo' : 'None'}</div>
@@ -952,37 +1607,41 @@ function calc() {
       <span class="p-source">↗ ${sourceHost(r.source)}</span>
     </a>`;
   }).join('');
+}
 
-  // ── SAVINGS BANNER ──
-  // Populate dropdown on first run
-  const sel = document.getElementById('current-provider');
-  if (sel.options.length === 1) {
-    rows.forEach(r => {
-      const opt = document.createElement('option');
-      opt.value = r.id;
-      opt.textContent = r.name + ' — ' + r.plan;
-      sel.appendChild(opt);
-    });
+// ── ENGAGEMENT FORM ──
+let unlocked = false;
+
+function submitEngagement() {
+  const name    = document.getElementById('e-name').value.trim();
+  const phone   = document.getElementById('e-phone').value.trim();
+  const email   = document.getElementById('e-email').value.trim();
+  const consent = document.getElementById('e-consent').checked;
+
+  if (!consent) {
+    alert('Please tick the consent box to continue.');
+    return;
+  }
+  if (!name || (!phone && !email)) {
+    alert('Please enter your name and at least one way to contact you.');
+    return;
   }
 
-  const currentId = sel.value;
-  const resultEl  = document.getElementById('savings-result');
-  if (!currentId) {
-    resultEl.style.display = 'none';
-  } else {
-    const current = rows.find(r => r.id === currentId);
-    const saving  = current ? current.tco - recommended.tco : null;
-    if (saving !== null && saving > 0) {
-      document.getElementById('sb-saving-num').textContent   = fmt(saving);
-      document.getElementById('sb-saving-detail').textContent =
-        'vs ' + recommended.name + ' ' + recommended.plan +
-        ' (' + fmtPct(recommended.rate * 100) + (recommended.flat ? ' + ' + Math.round(recommended.flat * 100) + 'p' : '') + ')';
-    } else if (saving !== null && saving <= 0) {
-      document.getElementById('sb-saving-num').textContent   = 'Already cheapest';
-      document.getElementById('sb-saving-detail').textContent = 'No cheaper option found at these volumes';
-    }
-    resultEl.style.display = 'block';
-  }
+  unlocked = true;
+
+  document.getElementById('contact-form').style.display  = 'none';
+  document.getElementById('confirmation').style.display  = 'block';
+
+  // Reveal the recommendation section
+  const section = document.getElementById('recommendation-section');
+  section.style.display = 'block';
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { section.style.opacity = '1'; });
+  });
+  setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+
+  // Unlock the savings hook best-alternative reveal
+  calc();
 }
 
 // ── COMMON COMPLAINTS & ADVANTAGES (provider cons keyed by id) ──
@@ -1150,6 +1809,7 @@ const CONS = {
 
 calc();
 
+<<<<<<< HEAD
 // ── PARTNER / ISC DATA ──
 // hasResiduals: 2=confirmed, 1=likely/undisclosed, 0=none/not found
 const PARTNERS = [
@@ -1410,6 +2070,102 @@ function calcResiduals() {
 
 renderPartnerTable();
 calcResiduals();
+=======
+// ── ADMIN ──
+function openAdmin() {
+  const overlay = document.getElementById('admin-overlay');
+  overlay.style.display = 'flex';
+  setTimeout(() => document.getElementById('admin-pw').focus(), 50);
+}
+
+function closeAdmin() {
+  document.getElementById('admin-overlay').style.display = 'none';
+  document.getElementById('admin-pw').value = '';
+  document.getElementById('admin-pw-err').style.display = 'none';
+}
+
+function checkAdmin() {
+  const pw = document.getElementById('admin-pw').value;
+  if (pw === 'moneyrea') {
+    closeAdmin();
+    populateAdmin();
+    const section = document.getElementById('admin-section');
+    section.style.display = 'block';
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    document.getElementById('admin-pw-err').style.display = 'block';
+    document.getElementById('admin-pw').value = '';
+    document.getElementById('admin-pw').focus();
+  }
+}
+
+function populateAdmin() {
+  const txn    = parseInt(document.getElementById('f-txn')?.value)  || 8;
+  const val    = parseInt(document.getElementById('f-val')?.value)  || 50;
+  const days   = parseInt(document.getElementById('f-days')?.value) || 22;
+  const infl   = parseFloat(document.getElementById('r-infl').value) / 100;
+  const growth = parseFloat(document.getElementById('r-growth').value) / 100;
+
+  const mVol  = txn * val * days;
+  const mTxns = txn * days;
+
+  let rev5y = 0;
+  const yearlyFees = Array(PROVIDERS.length).fill(0);
+  for (let y = 0; y < 5; y++) {
+    const valY  = val  * Math.pow(1 + infl,   y);
+    const txnY  = txn  * Math.pow(1 + growth, y);
+    const mVolY = txnY * valY * days;
+    const mTxnY = txnY * days;
+    rev5y += mVolY * 12;
+    PROVIDERS.forEach((p, i) => {
+      yearlyFees[i] += (mVolY * p.rate + mTxnY * p.flat) * 12;
+    });
+  }
+
+  const rows = PROVIDERS.map((p, i) => {
+    const hw   = BASE_HW + p.extra;
+    const fees = yearlyFees[i];
+    const subs = p.sub * 60;
+    const tco  = hw + fees + subs;
+    const mFee = mVol * p.rate + mTxns * p.flat;
+    return { ...p, hw, fees, subs, tco, mFee };
+  }).sort((a, b) => a.tco - b.tco);
+
+  const cheapest   = rows[0];
+  const mostExp    = rows[rows.length - 1];
+  const stripeRow  = rows.find(r => r.id === 'stripe');
+
+  document.getElementById('adm-mvol').textContent      = fmt(mVol);
+  document.getElementById('adm-rev5').textContent      = fmt(rev5y);
+  document.getElementById('adm-cheapest').textContent  = fmt(cheapest.tco) + ' (' + cheapest.name + ')';
+  document.getElementById('adm-expensive').textContent = fmt(mostExp.tco)  + ' (' + mostExp.name + ')';
+  document.getElementById('adm-spread').textContent    = fmt(mostExp.tco - cheapest.tco);
+  document.getElementById('adm-stripe-save').textContent = stripeRow ? fmt(stripeRow.tco - cheapest.tco) : '—';
+
+  const tbody = document.getElementById('admin-table-body');
+  tbody.innerHTML = rows.map((r, i) => {
+    const isWinner = i === 0;
+    const rowStyle = isWinner
+      ? 'background:rgba(201,168,76,0.06)'
+      : (i % 2 === 0 ? 'background:var(--black3)' : 'background:var(--black2)');
+    const td = (content, right, extra='') =>
+      `<td style="padding:.75rem 1rem;border-bottom:1px solid var(--border);color:rgba(248,245,239,0.75);${right?'text-align:right':''}${extra}">${content}</td>`;
+    const hostname = url => { try { return new URL(url).hostname.replace(/^www\./,''); } catch(e) { return url; } };
+    return `<tr style="${rowStyle}">
+      ${td((isWinner ? '★ ' : '') + r.name, false, isWinner ? ';color:var(--gold2);font-weight:500' : '')}
+      ${td(r.plan)}
+      ${td(fmtPct(r.rate * 100), true)}
+      ${td(r.flat ? Math.round(r.flat * 100) + 'p' : '—', true)}
+      ${td(r.sub ? '£' + r.sub + '/mo' : '—', true)}
+      ${td(r.extra ? '£' + r.extra : '—', true)}
+      ${td(fmtD(r.mFee), true)}
+      ${td(fmt(r.tco), true, isWinner ? ';color:var(--gold2)' : '')}
+      ${td('<a href="' + r.source + '" target="_blank" style="color:rgba(201,168,76,0.5);text-decoration:none;font-size:10px">' + hostname(r.source) + ' ↗</a>')}
+      ${td(r.indicative ? '<span style="color:rgba(180,130,50,0.7)">Indicative</span>' : '<span style="color:rgba(100,180,100,0.8)">✓ Confirmed</span>', true)}
+    </tr>`;
+  }).join('');
+}
+>>>>>>> 52b6742 (Updating)
 </script>
 </body>
 </html>
