@@ -14,40 +14,65 @@
 </script>
 <title>Payment Consultation — TillSwift</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --black:    #0a0a0a;
-  --black2:   #111111;
-  --black3:   #1a1a1a;
-  --gold:     #c9a84c;
-  --gold2:    #e2c47a;
-  --white:    #f8f5ef;
-  --muted:    rgba(248,245,239,0.45);
-  --border:   rgba(201,168,76,0.18);
-  --border2:  rgba(201,168,76,0.38);
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-sans:  'Jost', sans-serif;
-  --red:      rgba(220,80,80,0.85);
+  /* Light fintech palette */
+  --bg:          #ffffff;
+  --surface:     #f8fafc;
+  --surface2:    #eef2f7;
+  --ink:         #0f172a;
+  --ink2:        #334155;
+  --muted:       #64748b;
+  --dim:         #94a3b8;
+  --hairline:    #f1f5f9;
+  --border:      #e2e8f0;
+  --border2:     #cbd5e1;
+  --accent:      #0f766e;
+  --accent2:     #0d9488;
+  --accent-soft: #ccfbf1;
+  --accent-tint: #f0fdfa;
+  --info:        #2563eb;
+  --info-soft:   #dbeafe;
+  --red:         #dc2626;
+  --green:       #059669;
+  --font-sans:   'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono:   'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Legacy aliases for older selectors */
+  --black:       var(--bg);
+  --black2:      var(--surface);
+  --black3:      var(--surface2);
+  --gold:        var(--accent);
+  --gold2:       var(--accent2);
+  --white:       var(--ink);
+  --font-serif:  var(--font-sans);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; }
 
 body {
-  background: var(--black);
-  color: var(--white);
+  background: var(--bg);
+  color: var(--ink);
   font-family: var(--font-sans);
-  font-weight: 300;
-  line-height: 1.65;
+  font-weight: 400;
+  line-height: 1.6;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none; z-index: 1000; opacity: 0.4;
+/* Tabular numerals on any displayed figure */
+.sh-saving-num, .sh-current-cost, .stat-num, .p-tco, .p-rate-val,
+.fee-amount, .sl-val, .lp-value, .card-lock-rank {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.p-name, .fee-name, .footer-brand, .confirmation strong {
+  font-weight: 600;
 }
 
 /* ── NAV ── */
@@ -55,13 +80,13 @@ nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 500;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 2rem; height: 56px;
-  background: rgba(10,10,10,0.92);
+  background: rgba(255,255,255,0.92);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
 }
 .nav-brand {
-  font-family: var(--font-serif); font-size: 1.1rem; font-weight: 400;
-  letter-spacing: 0.25em; color: var(--gold2); text-transform: uppercase; text-decoration: none;
+  font-family: var(--font-sans); font-size: 1rem; font-weight: 700;
+  letter-spacing: 0.12em; color: var(--ink); text-transform: uppercase; text-decoration: none;
 }
 .nav-date { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
 
@@ -77,22 +102,23 @@ nav {
 
 .step-num {
   display: inline-flex; align-items: center; gap: 0.75rem;
-  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 1rem;
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  font-weight: 600; color: var(--accent); margin-bottom: 1rem;
 }
-.step-num::before { content:''; display:block; width:24px; height:1px; background:var(--gold); }
+.step-num::before { content:''; display:block; width:24px; height:1px; background:var(--accent); }
 
 .step-heading {
-  font-family: var(--font-serif);
-  font-size: clamp(1.6rem, 4vw, 2.5rem);
-  font-weight: 400; line-height: 1.2;
-  color: var(--white); margin-bottom: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: clamp(1.75rem, 4vw, 2.6rem);
+  font-weight: 700; line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink); margin-bottom: 0.5rem;
 }
-.step-heading em { font-style: italic; color: var(--gold2); }
+.step-heading em { font-style: normal; color: var(--accent); }
 
 .step-body {
-  font-size: 0.9rem; color: var(--muted);
-  max-width: 540px; line-height: 1.8; margin-bottom: 2rem;
+  font-size: 0.95rem; color: var(--ink2);
+  max-width: 540px; line-height: 1.7; margin-bottom: 2rem;
 }
 
 /* ── RULE ── */
@@ -125,44 +151,92 @@ nav {
 .field-input:focus { border-color: var(--gold); }
 .field-select {
   appearance: none; -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a84c'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%230f766e'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 0.9rem center;
   cursor: pointer; padding-right: 2rem;
 }
 .field-select option { background: var(--black3); }
-.field-hint { font-size: 11px; color: rgba(248,245,239,0.5); line-height: 1.5; }
+.field-hint { font-size: 11px; color: rgba(15,23,42,0.5); line-height: 1.5; }
 
 /* ── SAVINGS HOOK ── */
 .savings-hook {
   background: var(--black2);
   border: 1px solid var(--border2);
-  padding: 2rem 2rem 1.75rem;
+  border-radius: 6px;
+  padding: 1.75rem 2rem;
   margin-top: 2rem;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1.5rem;
-  align-items: center;
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
 }
-@media (max-width: 520px) { .savings-hook { grid-template-columns: 1fr; } }
-
+.savings-hook.hook-pop {
+  animation: hookPop 2.4s cubic-bezier(.22,.61,.36,1) 1;
+  z-index: 5;
+}
+.savings-hook.hook-pop .sh-hero-num {
+  animation: heroNumPop 2.4s cubic-bezier(.22,.61,.36,1) 1;
+}
+@keyframes hookPop {
+  0%   { transform: scale(1);     box-shadow: 0 0 0 0 rgba(15,118,110,0); border-color: var(--border2); }
+  15%  { transform: scale(1.02);  box-shadow: 0 0 0 6px rgba(15,118,110,0.3), 0 18px 40px -12px rgba(15,118,110,0.35); border-color: var(--accent); }
+  45%  { transform: scale(1.008); box-shadow: 0 0 0 10px rgba(15,118,110,0), 0 12px 28px -14px rgba(15,118,110,0.25); border-color: var(--accent2); }
+  100% { transform: scale(1);     box-shadow: 0 0 0 0 rgba(15,118,110,0); border-color: var(--border2); }
+}
+@keyframes heroNumPop {
+  0%   { transform: scale(1); }
+  15%  { transform: scale(1.08); }
+  40%  { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+.sh-hero {
+  text-align: center;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.sh-hero-label {
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--accent); font-weight: 600; margin-bottom: 0.55rem;
+}
+.sh-hero-num {
+  font-family: var(--font-mono);
+  font-size: clamp(2.25rem, 5vw, 3rem);
+  font-weight: 700; color: var(--accent); line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.sh-hero-sub {
+  font-size: 12px; color: var(--muted); margin-top: 0.65rem;
+  letter-spacing: 0.02em;
+}
+.sh-hero-sub strong {
+  font-family: var(--font-mono); color: var(--ink);
+  font-weight: 600; font-variant-numeric: tabular-nums;
+}
+.sh-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.sh-compare > div { text-align: center; min-width: 0; }
 .sh-label {
   font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 0.25rem;
+  color: var(--muted); font-weight: 500; margin-bottom: 0.55rem;
 }
 .sh-current-cost {
-  font-family: var(--font-serif); font-size: 2.2rem; font-weight: 400;
-  color: rgba(248,245,239,0.5); line-height: 1;
+  font-family: var(--font-mono); font-size: 1.55rem; font-weight: 500;
+  color: var(--ink2); line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
-.sh-current-detail { font-size: 12px; color: var(--muted); margin-top: 4px; }
-.sh-arrow {
-  font-size: 1.5rem; color: var(--border2); text-align: center; padding: 0 0.5rem;
-  align-self: center;
-}
+.sh-current-detail { font-size: 12px; color: var(--muted); margin-top: 0.45rem; line-height: 1.4; }
 .sh-saving-num {
-  font-family: var(--font-serif); font-size: 3.5rem; font-weight: 400;
-  color: var(--gold2); line-height: 1;
+  font-family: var(--font-mono); font-size: 1.55rem; font-weight: 600;
+  color: var(--ink); line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
-.sh-saving-detail { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.sh-saving-detail { font-size: 12px; color: var(--muted); margin-top: 0.45rem; line-height: 1.4; }
+@media (max-width: 520px) {
+  .savings-hook { padding: 1.5rem 1.25rem; }
+  .sh-compare { grid-template-columns: 1fr; gap: 1.25rem; }
+}
 
 /* ── ADVANCED SLIDERS ── */
 .advanced-toggle {
@@ -190,7 +264,7 @@ nav {
 input[type="range"] {
   -webkit-appearance: none; appearance: none;
   width: 100%; height: 1px;
-  background: rgba(201,168,76,0.25);
+  background: rgba(15,118,110,0.25);
   outline: none; margin: 8px 0;
 }
 input[type="range"]::-webkit-slider-thumb {
@@ -246,7 +320,7 @@ input[type="range"]::-moz-range-thumb {
   letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s;
 }
 .sort-btn:hover { border-color: var(--border2); color: var(--gold2); }
-.sort-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.07); }
+.sort-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(15,118,110,0.07); }
 
 /* ── PROVIDER GRID ── */
 .provider-grid {
@@ -272,9 +346,45 @@ a.provider-card:hover {
   z-index: 2;
 }
 .provider-card.winner {
-  background: rgba(201,168,76,0.05);
+  background: rgba(15,118,110,0.05);
   border: 1px solid var(--border2);
   margin: -1px; z-index: 1; position: relative;
+}
+.provider-card.winner.winner-flash {
+  animation: winnerFlash 2.4s cubic-bezier(.22,.61,.36,1) 1;
+  z-index: 5;
+}
+@keyframes winnerFlash {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(15,118,110,0);
+    background: rgba(15,118,110,0.05);
+    border-color: var(--border2);
+  }
+  15% {
+    transform: scale(1.035);
+    box-shadow: 0 0 0 6px rgba(15,118,110,0.35), 0 18px 40px -12px rgba(15,118,110,0.45);
+    background: rgba(15,118,110,0.18);
+    border-color: var(--accent);
+  }
+  40% {
+    transform: scale(1.015);
+    box-shadow: 0 0 0 10px rgba(15,118,110,0), 0 14px 32px -14px rgba(15,118,110,0.35);
+    background: rgba(15,118,110,0.12);
+    border-color: var(--accent);
+  }
+  70% {
+    transform: scale(1.005);
+    box-shadow: 0 0 0 0 rgba(15,118,110,0), 0 8px 20px -14px rgba(15,118,110,0.2);
+    background: rgba(15,118,110,0.08);
+    border-color: var(--accent2);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(15,118,110,0);
+    background: rgba(15,118,110,0.05);
+    border-color: var(--border2);
+  }
 }
 .p-badge {
   font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
@@ -282,47 +392,47 @@ a.provider-card:hover {
   padding: 2px 8px; display: inline-block;
 }
 .p-badge-current {
-  color: rgba(180,210,235,0.75); border-color: rgba(180,210,235,0.2);
+  color: rgba(37,99,235,0.75); border-color: rgba(37,99,235,0.2);
 }
 .p-rank {
   font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(248,245,239,0.45); padding: 2px 6px;
-  border: 1px solid rgba(248,245,239,0.18);
+  color: rgba(15,23,42,0.45); padding: 2px 6px;
+  border: 1px solid rgba(15,23,42,0.18);
 }
 .p-badge-row {
   display: flex; justify-content: space-between; align-items: center;
   margin-bottom: 0.6rem; min-height: 19px;
 }
 .card-current {
-  background: rgba(180,210,235,0.06) !important;
-  border-color: rgba(180,210,235,0.45) !important;
+  background: rgba(37,99,235,0.06) !important;
+  border-color: rgba(37,99,235,0.45) !important;
   margin: -1px; z-index: 1; position: relative;
 }
-.card-current:hover { background: rgba(180,210,235,0.09) !important; }
+.card-current:hover { background: rgba(37,99,235,0.09) !important; }
 .p-name { font-family: var(--font-serif); font-size: 1rem; font-weight: 400; color: var(--white); line-height: 1.2; margin-bottom: 1px; }
-.p-plan { font-size: 11px; color: rgba(248,245,239,0.65); margin-bottom: 0.75rem; }
+.p-plan { font-size: 11px; color: rgba(15,23,42,0.65); margin-bottom: 0.75rem; }
 .p-tco { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 400; color: var(--gold2); line-height: 1; margin-bottom: 2px; }
-.p-tco-label { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(248,245,239,0.65); margin-bottom: 0.75rem; }
-.mini-bar-row { display: flex; align-items: center; gap: 5px; margin: 2px 0; font-size: 9px; color: rgba(248,245,239,0.6); }
-.mini-bar-track { flex: 1; height: 2px; background: rgba(255,255,255,0.06); border-radius: 1px; overflow: hidden; }
+.p-tco-label { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(15,23,42,0.65); margin-bottom: 0.75rem; }
+.mini-bar-row { display: flex; align-items: center; gap: 5px; margin: 2px 0; font-size: 9px; color: rgba(15,23,42,0.6); }
+.mini-bar-track { flex: 1; height: 2px; background: rgba(15,23,42,0.08); border-radius: 1px; overflow: hidden; }
 .mini-bar-fill { height: 2px; border-radius: 1px; transition: width 0.4s ease; }
-.p-rate { font-size: 11px; color: rgba(248,245,239,0.7); margin: 0.6rem 0 2px; }
-.p-rate-val { font-size: 12px; font-weight: 500; color: rgba(248,245,239,0.88); margin-bottom: 0.4rem; }
-.p-monthly { font-size: 10px; color: rgba(248,245,239,0.65); border-top: 1px solid var(--border); padding-top: 6px; margin-top: 6px; }
-.p-monthly strong { color: rgba(248,245,239,0.8); }
+.p-rate { font-size: 11px; color: rgba(15,23,42,0.7); margin: 0.6rem 0 2px; }
+.p-rate-val { font-size: 12px; font-weight: 500; color: rgba(15,23,42,0.88); margin-bottom: 0.4rem; }
+.p-monthly { font-size: 10px; color: rgba(15,23,42,0.65); border-top: 1px solid var(--border); padding-top: 6px; margin-top: 6px; }
+.p-monthly strong { color: rgba(15,23,42,0.8); }
 .p-pros { list-style: none; margin-top: 0.5rem; }
-.p-pros li { font-size: 10px; color: rgba(248,245,239,0.65); padding: 2px 0 2px 12px; position: relative; line-height: 1.4; }
+.p-pros li { font-size: 10px; color: rgba(15,23,42,0.65); padding: 2px 0 2px 12px; position: relative; line-height: 1.4; }
 .p-pros li::before { content: '+'; position: absolute; left: 0; color: var(--gold); }
-.p-warn { font-size: 9px; color: rgba(201,168,76,0.8); margin-top: 5px; line-height: 1.4; }
-.p-indicative { font-size: 9px; color: rgba(180,130,50,0.88); margin-top: 5px; line-height: 1.4; border-top: 1px solid var(--border); padding-top: 5px; }
-.p-source { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(201,168,76,0.6); margin-top: 7px; display: block; }
-.provider-card:hover .p-source { color: rgba(201,168,76,0.82); }
+.p-warn { font-size: 9px; color: rgba(15,118,110,0.8); margin-top: 5px; line-height: 1.4; }
+.p-indicative { font-size: 9px; color: rgba(180,83,9,0.88); margin-top: 5px; line-height: 1.4; border-top: 1px solid var(--border); padding-top: 5px; }
+.p-source { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(15,118,110,0.6); margin-top: 7px; display: block; }
+.provider-card:hover .p-source { color: rgba(15,118,110,0.82); }
 .p-source-arrow { display: inline-block; transition: transform 0.2s ease; }
 a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
 
 .p-cons { list-style: none; margin-top: 0.3rem; }
 .p-cons li {
-  font-size: 11px; color: rgba(248,245,239,0.65);
+  font-size: 11px; color: rgba(15,23,42,0.65);
   padding: 2px 0 2px 13px; position: relative; line-height: 1.45;
 }
 .p-cons li::before { content: '−'; position: absolute; left: 0; color: rgba(220,80,80,0.75); }
@@ -434,7 +544,7 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
 
 .confirmation {
   display: none;
-  background: rgba(201,168,76,0.06);
+  background: rgba(15,118,110,0.06);
   border: 1px solid var(--border2);
   padding: 1.5rem;
   margin-top: 1rem;
@@ -455,7 +565,7 @@ footer {
   letter-spacing: 0.3em; text-transform: uppercase;
   color: var(--gold2); margin-bottom: 0.5rem;
 }
-.footer-note { font-size: 11px; color: rgba(248,245,239,0.5); max-width: 540px; margin: 0 auto; line-height: 1.7; }
+.footer-note { font-size: 11px; color: rgba(15,23,42,0.5); max-width: 540px; margin: 0 auto; line-height: 1.7; }
 
 @media (max-width: 600px) {
   .step { padding: 4rem 1rem 2rem; }
@@ -469,7 +579,7 @@ footer {
 /* ── PROGRESS BAR ── */
 #step-bar {
   position: fixed; top: 56px; left: 0; right: 0;
-  height: 2px; background: rgba(201,168,76,0.1); z-index: 400;
+  height: 2px; background: rgba(15,118,110,0.1); z-index: 400;
 }
 #progress-bar {
   height: 100%;
@@ -481,21 +591,21 @@ footer {
 /* ── LOCKED PROVIDER CARD ── */
 .card-locked { cursor: default; }
 .card-locked:hover { background: var(--black2) !important; }
-.card-lock-badge { color: rgba(201,168,76,0.6) !important; border-color: rgba(201,168,76,0.3) !important; }
+.card-lock-badge { color: rgba(15,118,110,0.6) !important; border-color: rgba(15,118,110,0.3) !important; }
 .card-lock-body {
   display: flex; flex-direction: column; align-items: center;
   padding: 1.25rem 0 0.75rem; gap: 7px;
 }
 .card-lock-rank {
   font-family: var(--font-serif); font-size: 2.2rem; font-weight: 400;
-  color: rgba(201,168,76,0.15); line-height: 1; margin-bottom: 0.25rem;
+  color: rgba(15,118,110,0.15); line-height: 1; margin-bottom: 0.25rem;
 }
 .card-lock-redact {
-  height: 7px; background: rgba(248,245,239,0.07); border-radius: 2px; width: 100%;
+  height: 7px; background: rgba(15,23,42,0.07); border-radius: 2px; width: 100%;
 }
 .card-lock-msg {
   font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: rgba(201,168,76,0.7); line-height: 1.8; text-align: center; margin-top: 0.4rem;
+  color: rgba(15,118,110,0.7); line-height: 1.8; text-align: center; margin-top: 0.4rem;
 }
 .wiz-unlock-cta {
   margin-top: 2.5rem; padding: 2rem; border: 1px solid var(--border2);
@@ -513,15 +623,76 @@ footer {
   transform: translateY(28px);
   transition: opacity 0.55s ease, transform 0.55s ease;
   pointer-events: none;
+  display: none;
 }
+#wiz-1.path-switch #live-preview { display: block; }
 #live-preview.lp-visible {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
+
+/* Path-specific visibility */
+#wiz-1.path-new #current-provider-field { display: none; }
+#wiz-1 .defaults-notice { display: none; }
+#wiz-1.path-new .defaults-notice { display: flex; }
+.defaults-notice {
+  align-items: flex-start; gap: 0.75rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--accent-tint);
+  border: 1px solid var(--accent-soft);
+  border-radius: 6px;
+  font-size: 13px; line-height: 1.55; color: var(--ink2);
+  margin-bottom: 1.5rem;
+}
+.defaults-notice strong {
+  display: block; color: var(--accent); font-weight: 600; margin-bottom: 2px;
+}
+.dn-icon {
+  flex-shrink: 0;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  margin-top: 2px;
+}
+
+/* Modern "ready to progress" CTA */
+#wiz-cta { margin-top: 2.5rem; display: none; }
+#wiz-1.is-ready #wiz-cta { display: block; animation: ctaRise 0.55s cubic-bezier(.22,.61,.36,1) both; }
+.wiz-cta-hint {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 0.75rem; text-align: center;
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+}
+.wiz-cta-hint::before, .wiz-cta-hint::after {
+  content: ''; flex: 0 1 60px; height: 1px; background: var(--border2);
+}
+.wiz-cta-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  display: inline-block; box-shadow: 0 0 0 0 rgba(15,118,110,0.55);
+  animation: ctaPulse 1.8s ease-out infinite;
+}
+@keyframes ctaPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(15,118,110,0.55); }
+  70%  { box-shadow: 0 0 0 10px rgba(15,118,110,0); }
+  100% { box-shadow: 0 0 0 0 rgba(15,118,110,0); }
+}
+@keyframes ctaRise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.btn-primary.btn-ready {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  box-shadow: 0 4px 14px rgba(15,118,110,0.25), 0 1px 2px rgba(15,23,42,0.08);
+}
+.btn-primary.btn-ready:hover {
+  box-shadow: 0 6px 20px rgba(15,118,110,0.32), 0 1px 2px rgba(15,23,42,0.08);
+  transform: translateY(-1px);
+}
 .lp-eyebrow {
   font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(201,168,76,0.4); margin-bottom: 0.9rem; text-align: center;
+  color: rgba(15,118,110,0.4); margin-bottom: 0.9rem; text-align: center;
 }
 .lp-grid {
   display: grid; grid-template-columns: 1fr;
@@ -540,9 +711,9 @@ footer {
   color: var(--gold2); line-height: 1; margin-bottom: 5px;
 }
 .lp-value.lp-gold { color: var(--gold); }
-.lp-value.lp-dim  { color: rgba(248,245,239,0.13); font-size: 1.1rem; font-family: var(--font-sans); letter-spacing: .03em; }
+.lp-value.lp-dim  { color: rgba(15,23,42,0.13); font-size: 1.1rem; font-family: var(--font-sans); letter-spacing: .03em; }
 .lp-sub {
-  font-size: 9px; color: rgba(248,245,239,0.22); letter-spacing: 0.04em; min-height: 12px;
+  font-size: 9px; color: rgba(15,23,42,0.22); letter-spacing: 0.04em; min-height: 12px;
 }
 
 /* ── DROPOFF SURVEY ── */
@@ -558,7 +729,7 @@ footer {
 .dropoff-opt:hover { border-color: var(--border2); }
 .dropoff-opt input[type="radio"] { accent-color: var(--gold); margin: 0; cursor: pointer; }
 .dropoff-opt input[type="radio"]:checked + span { color: var(--gold2); }
-.dropoff-opt:has(input:checked) { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+.dropoff-opt:has(input:checked) { border-color: var(--gold); background: rgba(15,118,110,0.06); }
 </style>
 </head>
 <body>
@@ -611,20 +782,23 @@ footer {
   <div class="step" style="padding-top:6rem">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
       <div class="step-num" style="margin-bottom:0">Step 2 of 3</div>
-      <button onclick="goToStep(0)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.3);font-family:var(--font-sans);padding:0">← Back</button>
+      <button onclick="goToStep(0)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(15,23,42,0.3);font-family:var(--font-sans);padding:0">← Back</button>
     </div>
     <h1 class="step-heading" id="step1-heading">Let's find out what<br><em>you're actually paying.</em></h1>
     <p class="step-body" id="step1-body">Fill in a few numbers about your business. I'll rank every UK payment provider for your exact volumes.</p>
 
-    <div class="field-grid">
-      <div class="field" style="grid-column: 1 / -1">
-        <label class="field-label" for="f-name">Business name <span style="color:rgba(248,245,239,0.2)">(optional)</span></label>
-        <input class="field-input" type="text" id="f-name" placeholder="e.g. Sarah's Candles">
+    <div class="defaults-notice" id="defaults-notice">
+      <span class="dn-icon" aria-hidden="true">✓</span>
+      <div>
+        <strong>We've pre-filled typical starter numbers.</strong>
+        Tweak them if your business is different — or skip straight to your rankings.
       </div>
+    </div>
 
-      <div class="field" style="grid-column: 1 / -1">
+    <div class="field-grid">
+      <div class="field" id="current-provider-field" style="grid-column: 1 / -1">
         <label class="field-label" for="current-provider" id="current-provider-label">Current payment provider</label>
-        <select class="field-input field-select" id="current-provider" onchange="lpInteracted=true; toggleCustomRate(); calc()">
+        <select class="field-input field-select" id="current-provider" onchange="lpInteracted=true; toggleCustomRate(); calc(); checkReadiness()">
           <option value="">— Select provider —</option>
           <option value="new">No provider yet / new to card payments</option>
           <option value="custom">I know my rate — enter it below</option>
@@ -634,7 +808,7 @@ footer {
 
       <div class="field" id="custom-rate-field" style="display:none">
         <label class="field-label" for="custom-rate-pct">Your current rate (%)</label>
-        <input class="field-input" type="number" id="custom-rate-pct" min="0" max="10" step="0.01" placeholder="e.g. 1.75" oninput="lpInteracted=true; calc()">
+        <input class="field-input" type="number" id="custom-rate-pct" min="0" max="10" step="0.01" placeholder="e.g. 1.75" oninput="lpInteracted=true; calc(); checkReadiness()">
         <span class="field-hint">Enter the percentage charged on your card takings — find it on your monthly statement, terminal receipt, or provider dashboard.</span>
       </div>
 
@@ -689,7 +863,10 @@ footer {
       </div>
     </div>
 
-    <button class="btn-primary" style="margin-top:2.5rem" onclick="goToStep(4)">See your full comparison →</button>
+    <div id="wiz-cta">
+      <div class="wiz-cta-hint"><span class="wiz-cta-dot"></span><span id="wiz-cta-hint-text">You're ready</span></div>
+      <button class="btn-primary btn-ready" onclick="goToStep(4)" id="wiz-cta-btn">See your full comparison →</button>
+    </div>
   </div>
 </div>
 
@@ -698,33 +875,27 @@ footer {
   <div class="step step--wide" style="padding-top:6rem">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
       <div class="step-num" style="margin-bottom:0">Step 3 of 3</div>
-      <button onclick="goToStep(1)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.3);font-family:var(--font-sans);padding:0">← Back</button>
+      <button onclick="goToStep(1)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(15,23,42,0.3);font-family:var(--font-sans);padding:0">← Back</button>
     </div>
     <h2 class="step-heading" id="step4-heading">Your full<br><em>recommendation.</em></h2>
     <p class="step-body" id="step4-body">Every UK provider ranked for your exact volumes. Your recommended option is highlighted. Click any card to view their official pricing page.</p>
 
     <div class="savings-hook" id="savings-hook-4" style="display:none">
-      <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:center">
+      <div class="sh-hero">
+        <div class="sh-hero-label">You save over 3 years</div>
+        <div class="sh-hero-num" id="sh-net-saving-4">—</div>
+        <div class="sh-hero-sub">That's <strong id="sh-monthly-saving-4">—</strong> per year</div>
+      </div>
+      <div class="sh-compare">
         <div>
-          <div class="sh-label">Your current 3-year cost</div>
+          <div class="sh-label">Current 3-year cost</div>
           <div class="sh-current-cost" id="sh-current-cost-4">—</div>
           <div class="sh-current-detail" id="sh-current-detail-4"></div>
         </div>
-        <div class="sh-arrow">→</div>
-        <div style="text-align:right">
+        <div>
           <div class="sh-label">Best alternative</div>
-          <div class="sh-saving-num" id="sh-saving-num-4" style="font-size:2rem">—</div>
+          <div class="sh-saving-num" id="sh-saving-num-4">—</div>
           <div class="sh-saving-detail" id="sh-saving-detail-4"></div>
-        </div>
-      </div>
-      <div style="margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:1rem">
-        <div style="text-align:center">
-          <span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">You save over 3 years</span>
-          <span class="sh-saving-num" id="sh-net-saving-4" style="font-size:2.5rem">—</span>
-        </div>
-        <div style="text-align:center">
-          <span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Yearly saving</span>
-          <span class="sh-saving-num" id="sh-monthly-saving-4" style="font-size:2.5rem">—</span>
         </div>
       </div>
     </div>
@@ -738,7 +909,7 @@ footer {
 
     <div class="provider-grid" id="provider-grid-4"></div>
 
-    <p style="font-size:10px;color:rgba(248,245,239,0.45);margin-top:1rem;line-height:1.6">All rates sourced directly from provider websites April 2026. Rates subject to change — verify before committing.</p>
+    <p style="font-size:10px;color:rgba(15,23,42,0.45);margin-top:1rem;line-height:1.6">All rates sourced directly from provider websites April 2026. Rates subject to change — verify before committing.</p>
   </div>
 </div>
 
@@ -746,7 +917,7 @@ footer {
   <div class="footer-brand">TillSwift</div>
   <div class="footer-note">Payment provider data sourced directly from provider websites, April 2026. Rates are subject to change — verify before committing. This document is prepared exclusively for use in TillSwift consultations and is not for redistribution.</div>
 
-  <button onclick="openAdmin()" style="background:none;border:none;cursor:pointer;margin-top:2rem;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.1);font-family:var(--font-sans)">Admin</button>
+  <button onclick="openAdmin()" style="background:none;border:none;cursor:pointer;margin-top:2rem;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(15,23,42,0.1);font-family:var(--font-sans)">Admin</button>
 </footer>
 
 <!-- ═══ ADMIN PASSWORD MODAL ═══ -->
@@ -783,10 +954,10 @@ footer {
       <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-expensive">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Most expensive 3yr</span></div>
       <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-spread">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Max saving available</span></div>
       <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-stripe-save">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">3yr saving vs Stripe</span></div>
-      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(201,168,76,0.9);display:block;line-height:1" id="adm-aff-lopay">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Lopay aff. 3yr</span></div>
-      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(201,168,76,0.9);display:block;line-height:1" id="adm-aff-best">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Best aff. 3yr</span></div>
-      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(201,168,76,0.9);display:block;line-height:1" id="adm-fee">£40</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Consult fee</span></div>
-      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(201,168,76,1);display:block;line-height:1" id="adm-aff-total">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Combined income</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(15,118,110,0.9);display:block;line-height:1" id="adm-aff-lopay">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Lopay aff. 3yr</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(15,118,110,0.9);display:block;line-height:1" id="adm-aff-best">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Best aff. 3yr</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(15,118,110,0.9);display:block;line-height:1" id="adm-fee">£40</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Consult fee</span></div>
+      <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(15,118,110,1);display:block;line-height:1" id="adm-aff-total">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Combined income</span></div>
     </div>
 
     <!-- Full provider table -->
@@ -802,8 +973,8 @@ footer {
             <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Monthly sub</th>
             <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Monthly fees</th>
             <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">3yr TCO</th>
-            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:rgba(201,168,76,0.6);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Affiliate (3yr)</th>
-            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:rgba(201,168,76,0.6);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Affiliate (monthly)</th>
+            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:rgba(15,118,110,0.6);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Affiliate (3yr)</th>
+            <th style="text-align:right;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:rgba(15,118,110,0.6);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Affiliate (monthly)</th>
             <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Source</th>
             <th style="text-align:center;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">App</th>
             <th style="text-align:center;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Confirmed</th>
@@ -905,8 +1076,9 @@ function updateLivePreview() {
   }
   const saving3 = cTco3 !== null ? cTco3 - bestTco3 : null;
 
-  // Slide in on first user interaction
-  if (!lpShown && lpInteracted) {
+  // Slide in only once a provider has been chosen (switch path only)
+  const hasProvider = (cIdx >= 0) || (cId === 'custom' && cTco3 !== null);
+  if (!lpShown && lpInteracted && hasProvider) {
     lpShown = true;
     requestAnimationFrame(() =>
       document.getElementById('live-preview').classList.add('lp-visible'));
@@ -1397,11 +1569,45 @@ function applyUserPath() {
 function setUserPath(path) {
   userPath = path;
   applyUserPath();
+  const wiz1 = document.getElementById('wiz-1');
+  if (wiz1) {
+    wiz1.classList.remove('path-new', 'path-switch', 'is-ready');
+    wiz1.classList.add(path === 'new' ? 'path-new' : 'path-switch');
+  }
+  const hint = document.getElementById('wiz-cta-hint-text');
+  const btn  = document.getElementById('wiz-cta-btn');
   if (path === 'new') {
     const sel = document.getElementById('current-provider');
     if (sel) { sel.value = 'new'; toggleCustomRate(); calc(); }
+    if (hint) hint.textContent = "Ready when you are";
+    if (btn)  btn.textContent  = 'See the best providers for you →';
+  } else {
+    if (hint) hint.textContent = "You're ready";
+    if (btn)  btn.textContent  = 'See your full comparison →';
   }
+  checkReadiness();
   goToStep(1);
+}
+
+function checkReadiness() {
+  const wiz1 = document.getElementById('wiz-1');
+  if (!wiz1) return;
+  let ready = false;
+  if (userPath === 'new') {
+    ready = true;
+  } else if (userPath === 'switch') {
+    const sel = document.getElementById('current-provider');
+    const v = sel ? sel.value : '';
+    if (v && v !== '' && v !== 'new') {
+      if (v === 'custom') {
+        const pct = parseFloat(document.getElementById('custom-rate-pct')?.value);
+        ready = !isNaN(pct) && pct > 0;
+      } else {
+        ready = true;
+      }
+    }
+  }
+  wiz1.classList.toggle('is-ready', ready);
 }
 
 function updateProgress(n) {
@@ -1437,12 +1643,68 @@ function goToStep(n) {
         newEl.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
         newEl.style.opacity = '1';
         newEl.style.transform = 'translateX(0)';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (n === 4 && goingForward && !stepFourSeen) {
+          stepFourSeen = true;
+          if (userPath === 'new') {
+            scrollRevealFromBottom();
+          } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(flashWinnerTile, 700);
+          }
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       });
     });
 
     setTimeout(() => { newEl.style.cssText = ''; }, 500);
   }, 220);
+}
+
+let stepFourSeen = false;
+function scrollRevealFromBottom() {
+  // Let the grid paint, then INSTANTLY jump to the bottom (bypassing
+  // CSS scroll-behavior:smooth), then animate back up so the user sees
+  // just how many providers were ranked for them.
+  requestAnimationFrame(() => {
+    const html = document.documentElement;
+    const prevBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
+
+    const max = Math.max(
+      html.scrollHeight - window.innerHeight,
+      document.body.scrollHeight - window.innerHeight,
+      0
+    );
+    window.scrollTo(0, max);
+
+    const duration = 1800;
+    const easeInOut = t => t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+    setTimeout(() => {
+      const t0 = performance.now();
+      (function step(now) {
+        const p = Math.min((now - t0) / duration, 1);
+        const e = easeInOut(p);
+        window.scrollTo(0, max * (1 - e));
+        if (p < 1) {
+          requestAnimationFrame(step);
+        } else {
+          html.style.scrollBehavior = prevBehavior;
+          flashWinnerTile();
+        }
+      })(performance.now());
+    }, 450);
+  });
+}
+
+function flashWinnerTile() {
+  const winner = document.querySelector('#wiz-4 .provider-card.winner');
+  if (!winner) return;
+  winner.classList.remove('winner-flash');
+  // force reflow so re-adding the class restarts the animation
+  void winner.offsetWidth;
+  winner.classList.add('winner-flash');
+  setTimeout(() => winner.classList.remove('winner-flash'), 2600);
 }
 
 function setSortBy(s) {
@@ -1607,7 +1869,7 @@ function calc() {
         return { num: fmt(r.tco), label: '3-year total', color: 'var(--gold2)' };
       }
       if (r.tco < currentRow.tco) {
-        return { num: fmt(currentRow.tco - r.tco), label: 'You save', color: 'rgba(110,217,138,0.9)' };
+        return { num: fmt(currentRow.tco - r.tco), label: 'You save', color: 'rgba(5,150,105,0.9)' };
       }
       return { num: fmt(r.tco - currentRow.tco), label: 'Costs more', color: 'rgba(220,100,80,0.8)' };
     }
@@ -1626,13 +1888,13 @@ function calc() {
           <div class="p-tco" style="color:var(--gold2)">${fmt(r.tco)}</div>
           <div class="p-tco-label">3-year total</div>
           <div>
-            <div class="mini-bar-row"><span style="min-width:26px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#c9a84c"></div></div><span style="min-width:34px;text-align:right">${fmt(r.fees)}</span></div>
+            <div class="mini-bar-row"><span style="min-width:26px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#0f766e"></div></div><span style="min-width:34px;text-align:right">${fmt(r.fees)}</span></div>
             <div class="mini-bar-row"><span style="min-width:26px">Sub</span><div class="mini-bar-track"></div><span style="min-width:34px;text-align:right">—</span></div>
           </div>
           <div class="p-rate">Your rate</div>
           <div class="p-rate-val">${rateStr} blended</div>
           <div class="p-monthly">Monthly on <strong>${fmt(mVol)}</strong>: <strong>${fmtD(r.mFee)}</strong></div>
-          <div style="font-size:10px;color:rgba(180,210,235,0.75);margin-top:0.75rem;line-height:1.5">Based on the rate you entered. Compare the tiles above to see what you could save.</div>
+          <div style="font-size:10px;color:rgba(37,99,235,0.75);margin-top:0.75rem;line-height:1.5">Based on the rate you entered. Compare the tiles above to see what you could save.</div>
         </div>`;
       }
 
@@ -1661,8 +1923,8 @@ function calc() {
         <div class="p-tco" style="color:${mf.color}">${mf.num}</div>
         <div class="p-tco-label">${mf.label}</div>
         <div>
-          <div class="mini-bar-row"><span style="min-width:26px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#c9a84c"></div></div><span style="min-width:34px;text-align:right">${fmt(r.fees)}</span></div>
-          <div class="mini-bar-row"><span style="min-width:26px">Sub</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${subPct}%;background:#4a5a3a"></div></div><span style="min-width:34px;text-align:right">${fmt(r.subs)}</span></div>
+          <div class="mini-bar-row"><span style="min-width:26px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#0f766e"></div></div><span style="min-width:34px;text-align:right">${fmt(r.fees)}</span></div>
+          <div class="mini-bar-row"><span style="min-width:26px">Sub</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${subPct}%;background:#94a3b8"></div></div><span style="min-width:34px;text-align:right">${fmt(r.subs)}</span></div>
         </div>
         <div class="p-rate">In-person rate</div>
         <div class="p-rate-val">${fmtPct(r.rate * 100)}${r.flat ? ' + ' + Math.round(r.flat * 100) + 'p' : ''} · Sub: ${r.sub ? '£' + r.sub + '/mo' : 'None'}</div>
@@ -2030,45 +2292,45 @@ function populateAdmin() {
   tbody.innerHTML = rows.map((r, i) => {
     const isWinner = i === 0;
     const rowStyle = isWinner
-      ? 'background:rgba(201,168,76,0.06)'
+      ? 'background:rgba(15,118,110,0.06)'
       : (i % 2 === 0 ? 'background:var(--black3)' : 'background:var(--black2)');
     const td = (content, right, extra='') =>
-      `<td style="padding:.75rem 1rem;border-bottom:1px solid var(--border);color:rgba(248,245,239,0.75);${right?'text-align:right':''}${extra}">${content}</td>`;
+      `<td style="padding:.75rem 1rem;border-bottom:1px solid var(--border);color:rgba(15,23,42,0.75);${right?'text-align:right':''}${extra}">${content}</td>`;
     const hostname = url => { try { return new URL(url).hostname.replace(/^www\./,''); } catch(e) { return url; } };
 
     // Affiliate income cell
     const aff = AFFILIATE[r.id];
     let affCell, affMonthlyCell;
     if (!aff || aff.type === 'none') {
-      affCell = td('<span style="color:rgba(248,245,239,0.2)">—</span>', true);
-      affMonthlyCell = td('<span style="color:rgba(248,245,239,0.2)">—</span>', true);
+      affCell = td('<span style="color:rgba(15,23,42,0.2)">—</span>', true);
+      affMonthlyCell = td('<span style="color:rgba(15,23,42,0.2)">—</span>', true);
     } else if (aff.type === 'pct_vol') {
       const inc3y = Math.round(rev3y * aff.rate);
       const incMo = (rev3y * aff.rate / 36);
       affCell = td(
-        `<span style="color:rgba(201,168,76,0.9);font-weight:500">${fmt(inc3y)}</span>`
-        + `<span style="display:block;font-size:9px;color:rgba(201,168,76,0.45)">${aff.note}</span>`,
+        `<span style="color:rgba(15,118,110,0.9);font-weight:500">${fmt(inc3y)}</span>`
+        + `<span style="display:block;font-size:9px;color:rgba(15,118,110,0.45)">${aff.note}</span>`,
         true
       );
       affMonthlyCell = td(
-        `<span style="color:rgba(201,168,76,0.9);font-weight:500">£${incMo.toFixed(2)}</span>`
-        + `<span style="display:block;font-size:9px;color:rgba(201,168,76,0.45)">avg/month</span>`,
+        `<span style="color:rgba(15,118,110,0.9);font-weight:500">£${incMo.toFixed(2)}</span>`
+        + `<span style="display:block;font-size:9px;color:rgba(15,118,110,0.45)">avg/month</span>`,
         true
       );
     } else if (aff.type === 'flat') {
       affCell = td(
-        `<span style="color:rgba(201,168,76,0.75)">£${aff.rate} / client</span>`
-        + `<span style="display:block;font-size:9px;color:rgba(248,245,239,0.3)">${aff.note}</span>`,
+        `<span style="color:rgba(15,118,110,0.75)">£${aff.rate} / client</span>`
+        + `<span style="display:block;font-size:9px;color:rgba(15,23,42,0.3)">${aff.note}</span>`,
         true
       );
-      affMonthlyCell = td('<span style="color:rgba(248,245,239,0.2)">—</span><span style="display:block;font-size:9px;color:rgba(248,245,239,0.2)">per referral</span>', true);
+      affMonthlyCell = td('<span style="color:rgba(15,23,42,0.2)">—</span><span style="display:block;font-size:9px;color:rgba(15,23,42,0.2)">per referral</span>', true);
     } else {
       // programme — rate undisclosed
       affCell = td(
-        `<span style="color:rgba(248,245,239,0.35);font-size:10px">${aff.note}</span>`,
+        `<span style="color:rgba(15,23,42,0.35);font-size:10px">${aff.note}</span>`,
         true
       );
-      affMonthlyCell = td('<span style="color:rgba(248,245,239,0.2)">—</span>', true);
+      affMonthlyCell = td('<span style="color:rgba(15,23,42,0.2)">—</span>', true);
     }
 
     return `<tr style="${rowStyle}">
@@ -2081,9 +2343,9 @@ function populateAdmin() {
       ${td(fmt(r.tco), true, isWinner ? ';color:var(--gold2)' : '')}
       ${affCell}
       ${affMonthlyCell}
-      ${td('<a href="' + r.source + '" target="_blank" style="color:rgba(201,168,76,0.5);text-decoration:none;font-size:10px">' + hostname(r.source) + ' ↗</a>')}
-      ${td(r.app === true ? '<span style="color:rgba(110,217,138,0.85)">✓ Yes</span>' : r.app === 'partial' ? '<span style="color:rgba(201,168,76,0.7)">~ Partial</span>' : '<span style="color:rgba(248,245,239,0.25)">✗ No</span>', true)}
-      ${td(r.indicative ? '<span style="color:rgba(180,130,50,0.7)">Indicative</span>' : '<span style="color:rgba(100,180,100,0.8)">✓ Confirmed</span>', true)}
+      ${td('<a href="' + r.source + '" target="_blank" style="color:rgba(15,118,110,0.5);text-decoration:none;font-size:10px">' + hostname(r.source) + ' ↗</a>')}
+      ${td(r.app === true ? '<span style="color:rgba(5,150,105,0.85)">✓ Yes</span>' : r.app === 'partial' ? '<span style="color:rgba(15,118,110,0.7)">~ Partial</span>' : '<span style="color:rgba(15,23,42,0.25)">✗ No</span>', true)}
+      ${td(r.indicative ? '<span style="color:rgba(180,83,9,0.7)">Indicative</span>' : '<span style="color:rgba(100,180,100,0.8)">✓ Confirmed</span>', true)}
     </tr>`;
   }).join('');
 }
