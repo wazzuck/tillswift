@@ -88,7 +88,7 @@ nav {
   font-family: var(--font-sans); font-size: 1rem; font-weight: 700;
   letter-spacing: 0.12em; color: var(--ink); text-transform: uppercase; text-decoration: none;
 }
-.nav-date { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+
 
 /* ── STEP SHELL ── */
 .step {
@@ -334,21 +334,21 @@ input[type="range"]::-moz-range-thumb {
   display: block; text-decoration: none; color: inherit;
   background: var(--black2);
   padding: 1.6rem 1.3rem 1.3rem;
-  transition: background 0.2s, outline-color 0.2s;
+  transition: background 0.2s, border-color 0.2s;
   position: relative;
-  outline: 1px solid transparent;
-  outline-offset: -1px;
+  border: 1px solid var(--border2);
+  margin: -1px;
 }
 .provider-card:hover { background: var(--black3); }
 a.provider-card { cursor: pointer; }
 a.provider-card:hover {
-  outline-color: var(--border2);
+  border-color: var(--ink2);
   z-index: 2;
 }
 .provider-card.winner {
   background: rgba(15,118,110,0.05);
-  border: 1px solid var(--border2);
-  margin: -1px; z-index: 1; position: relative;
+  border-color: rgba(15,118,110,0.5);
+  z-index: 1;
 }
 .provider-card.winner.winner-flash {
   animation: winnerFlash 2.4s cubic-bezier(.22,.61,.36,1) 1;
@@ -396,8 +396,8 @@ a.provider-card:hover {
 }
 .p-rank {
   font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(15,23,42,0.45); padding: 2px 6px;
-  border: 1px solid rgba(15,23,42,0.18);
+  color: rgba(15,23,42,0.9); padding: 2px 6px;
+  border: 1px solid rgba(15,23,42,0.4);
 }
 .p-badge-row {
   display: flex; justify-content: space-between; align-items: center;
@@ -567,7 +567,7 @@ footer {
 .footer-brand {
   font-family: var(--font-serif); font-size: 1.1rem;
   letter-spacing: 0.3em; text-transform: uppercase;
-  color: var(--gold2); margin-bottom: 0.5rem;
+  color: var(--gold2); margin-bottom: 0.5rem; text-decoration: none;
 }
 .footer-note { font-size: 11px; color: rgba(15,23,42,0.5); max-width: 540px; margin: 0 auto; line-height: 1.7; }
 .footer-links {
@@ -755,8 +755,8 @@ footer {
 <body>
 
 <nav>
-  <span class="nav-brand">TillSwift</span>
-  <span class="nav-date" id="nav-date"></span>
+  <a href="#wiz-0" class="nav-brand" onclick="goToStep(0); return false;">TillSwift</a>
+
 </nav>
 
 <!-- ═══ PROGRESS BAR ═══ -->
@@ -934,7 +934,7 @@ footer {
 </div>
 
 <footer>
-  <div class="footer-brand">TillSwift</div>
+  <a href="#wiz-0" class="footer-brand" onclick="goToStep(0); return false;">TillSwift</a>
   <div class="footer-note">Payment provider data sourced directly from provider websites. Rates are subject to change — verify before committing. This document is prepared exclusively for use in TillSwift consultations and is not for redistribution.</div>
   
   <div class="footer-links">
@@ -1018,10 +1018,6 @@ footer {
 <input type="hidden" id="r-days" value="22">
 
 <script>
-// ── NAV DATE ──
-document.getElementById('nav-date').textContent =
-  new Date().toLocaleDateString('en-GB', { month:'long', year:'numeric' });
-
 // ── ADVANCED TOGGLE ──
 function toggleAdvanced() {
   const btn = document.getElementById('adv-toggle');
