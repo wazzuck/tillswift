@@ -693,127 +693,6 @@ footer {
   </div>
 </div>
 
-<!-- ─── STEP 2: ALL PROVIDERS (top 10 locked) ─── -->
-<div class="wiz-step" id="wiz-2">
-  <div class="step step--wide" style="padding-top:6rem">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
-      <div class="step-num" style="margin-bottom:0">Step 2 of 4</div>
-      <button onclick="goToStep(1)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.3);font-family:var(--font-sans);padding:0">← Back</button>
-    </div>
-    <h2 class="step-heading">Every UK provider,<br><em>ranked for your numbers.</em></h2>
-    <p class="step-body">All 44 providers compared side by side. The top 10 cheapest options for your exact volumes are locked — complete step 3 to reveal your full recommendation.</p>
-
-    <div class="savings-hook" id="savings-hook" style="display:none">
-      <div id="sh-content">
-        <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:center">
-          <div>
-            <div class="sh-label">Your current 3-year cost</div>
-            <div class="sh-current-cost" id="sh-current-cost">—</div>
-            <div class="sh-current-detail" id="sh-current-detail"></div>
-          </div>
-          <div class="sh-arrow">→</div>
-          <div style="text-align:right">
-            <div class="sh-label">Best alternative</div>
-            <div class="sh-saving-num" style="font-size:2rem;letter-spacing:.1em;color:rgba(201,168,76,0.25)" id="sh-saving-num">Locked</div>
-            <div class="sh-saving-detail" id="sh-saving-detail" style="color:rgba(248,245,239,0.2)">Complete your details to unlock</div>
-          </div>
-        </div>
-        <div style="margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:1rem">
-          <div style="text-align:center">
-            <span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">You save over 3 years</span>
-            <span class="sh-saving-num" id="sh-net-saving" style="font-size:2.5rem">—</span>
-          </div>
-          <div style="text-align:center">
-            <span style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px">Yearly saving</span>
-            <span class="sh-saving-num" id="sh-monthly-saving" style="font-size:2.5rem">—</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="stats-row">
-      <div class="stat-cell"><span class="stat-num" id="be-mvol">—</span><span class="stat-lbl">Monthly card volume</span></div>
-      <div class="stat-cell"><span class="stat-num" id="be-rev5">—</span><span class="stat-lbl">3yr projected revenue</span></div>
-      <div class="stat-cell"><span class="stat-num" id="be-brkn">—</span><span class="stat-lbl">Txns to break even on sub</span></div>
-      <div class="stat-cell"><span class="stat-num" id="be-pct">—</span><span class="stat-lbl">Best cost as % of revenue</span></div>
-    </div>
-
-    <div class="sort-row">
-      <span class="sort-label">Sort by</span>
-      <button class="sort-btn active" id="sb-tco" onclick="setSortBy('tco')">3yr cost</button>
-      <button class="sort-btn" id="sb-rate" onclick="setSortBy('rate')">Tx rate</button>
-      <button class="sort-btn" id="sb-monthly" onclick="setSortBy('monthly')">Monthly fees</button>
-    </div>
-
-    <div class="provider-grid" id="provider-grid-2"></div>
-
-    <p style="font-size:10px;color:rgba(248,245,239,0.45);margin-top:1rem;line-height:1.6">Rates sourced directly from provider websites, April 2026. Subject to change — verify before committing.</p>
-
-    <div class="wiz-unlock-cta">
-      <p>Ready to see your top 10? Leave your details and I'll reveal your personalised recommendation — and walk you through switching.</p>
-      <button class="btn-primary" style="max-width:320px" onclick="goToStep(3)">Unlock my top 10 →</button>
-    </div>
-  </div>
-</div>
-
-<!-- ─── STEP 3: ENGAGEMENT FORM ─── -->
-<div class="wiz-step" id="wiz-3">
-  <div class="step" style="padding-top:6rem">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
-      <div class="step-num" style="margin-bottom:0">Step 3 of 4</div>
-      <button onclick="goToStep(2)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.3);font-family:var(--font-sans);padding:0">← Back</button>
-    </div>
-    <h2 class="step-heading">Unlock your<br><em>recommendation.</em></h2>
-    <p class="step-body">Leave your details below and I'll reveal the exact provider you should switch to — and walk you through everything needed to make it happen. One flat fee, done properly.</p>
-
-    <div class="engagement-box">
-      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem">Fee options</div>
-      <div class="fee-options">
-        <div class="fee-option">
-          <div class="fee-name">Amount due today</div>
-          <div class="fee-amount">£40</div>
-          <div class="fee-desc">Flat fee agreed upfront.</div>
-        </div>
-      </div>
-
-      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;margin-top:1.75rem">Your details — unlocks your full recommendation</div>
-      <div id="contact-form">
-        <div class="contact-grid">
-          <div class="field">
-            <label class="field-label" for="e-name">Your name</label>
-            <input class="field-input" type="text" id="e-name" placeholder="e.g. Sarah Jones">
-          </div>
-          <div class="field">
-            <label class="field-label" for="e-email">Email</label>
-            <input class="field-input" type="email" id="e-email" placeholder="you@example.com">
-          </div>
-        </div>
-
-        <div style="margin-top:1.5rem;padding:1.25rem;border:1px solid var(--border);background:var(--black3)">
-          <div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(248,245,239,0.3);margin-bottom:0.75rem">Terms &amp; Conditions</div>
-          <div style="font-size:10px;color:rgba(248,245,239,0.35);line-height:1.8;margin-bottom:1rem">
-            The £40 consultation fee is charged as a single upfront payment prior to work commencing. The fee covers provider recommendation, setup assistance, and handover as described during the consultation. No subscription, retainer, or ongoing charges apply.<br><br>
-            <strong style="color:rgba(248,245,239,0.5)">14-day satisfaction guarantee.</strong> If you are not satisfied with the service, a full refund will be issued on request within 14 days of payment. No questions asked.<br><br>
-            TillSwift is a trading name operating as an independent payment consultant. We are not affiliated with, endorsed by, or acting as an agent of any payment provider listed on this page. Provider rates and terms are sourced from public sources and are subject to change — always verify with the provider before signing any agreement.
-          </div>
-          <div class="consent-row">
-            <input type="checkbox" id="e-consent">
-            <label for="e-consent">I have read and agree to the terms and conditions above.</label>
-          </div>
-        </div>
-
-        <button onclick="openDropoffSurvey()" style="display:block;width:100%;margin-top:1rem;background:#d94a5a;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#000;font-family:var(--font-sans);padding:.9rem 1.25rem">Not for you? Tell us why</button>
-      </div>
-
-      <div class="confirmation" id="confirmation">
-        <strong id="confirmation-msg">Thanks</strong>
-      </div>
-    </div>
-
-    <p style="font-size:11px;color:rgba(248,245,239,0.45);margin-top:1.5rem;line-height:1.6">Leaving your details is not a commitment. It simply means you'd like to have a conversation. No payment is taken until a fee option is agreed in writing.</p>
-  </div>
-</div>
-
 <!-- ─── STEP 4: FULL RECOMMENDATION ─── -->
 <div class="wiz-step" id="wiz-4">
   <div class="step step--wide" style="padding-top:6rem">
@@ -869,47 +748,6 @@ footer {
 
   <button onclick="openAdmin()" style="background:none;border:none;cursor:pointer;margin-top:2rem;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.1);font-family:var(--font-sans)">Admin</button>
 </footer>
-
-<!-- ═══ DROPOFF SURVEY MODAL ═══ -->
-<div id="dropoff-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;align-items:center;justify-content:center;padding:1rem;">
-  <div style="background:var(--black2);border:1px solid var(--border2);padding:2.25rem 2rem;width:100%;max-width:440px;max-height:90vh;overflow-y:auto;">
-    <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem">A quick favour</div>
-    <div style="font-family:var(--font-serif);font-size:1.4rem;font-weight:400;color:var(--white);line-height:1.25;margin-bottom:.5rem">Mind telling me why?</div>
-    <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:1.25rem">No pressure — just helps me improve the service for the next person.</div>
-
-    <div id="dropoff-form">
-      <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem">
-        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="price"><span>The fee is a strange price</span></label>
-        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="scam"><span>I think this is a scam</span></label>
-        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="researching"><span>Still researching — not ready to pay</span></label>
-        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="trust"><span>Not sure I trust the recommendation</span></label>
-        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="info"><span>I need more detail before deciding</span></label>
-        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="already"><span>Already switching via another route</span></label>
-        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="browsing"><span>Just browsing / curious</span></label>
-        <label class="dropoff-opt"><input type="radio" name="dropoff-reason" value="other"><span>Other</span></label>
-      </div>
-
-      <div class="field" style="margin-bottom:1rem">
-        <label class="field-label" for="dropoff-comment">Anything else? <span style="color:rgba(248,245,239,0.2)">(optional)</span></label>
-        <textarea class="field-input" id="dropoff-comment" rows="3" style="font-family:var(--font-sans);resize:vertical" placeholder="Free-text feedback welcome"></textarea>
-      </div>
-
-      <div class="field" style="margin-bottom:1.25rem">
-        <label class="field-label" for="dropoff-email">Email <span style="color:rgba(248,245,239,0.2)">(optional — only if you want a follow-up)</span></label>
-        <input class="field-input" type="email" id="dropoff-email" placeholder="you@example.com">
-      </div>
-
-      <div id="dropoff-error" style="display:none;font-size:11px;color:rgba(220,80,80,0.85);margin-bottom:.75rem"></div>
-
-      <div style="display:flex;gap:.75rem">
-        <button class="btn-primary" onclick="submitDropoffSurvey()" style="flex:1;margin-top:0">Send</button>
-        <button onclick="closeDropoffSurvey()" style="flex:1;background:transparent;border:1px solid var(--border2);color:var(--muted);padding:.9rem;font-family:var(--font-sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer">Cancel</button>
-      </div>
-    </div>
-
-    <div id="dropoff-thanks" style="display:none;font-family:var(--font-serif);font-size:1.2rem;color:var(--gold2);text-align:center;padding:1.5rem 0">Thanks — really appreciated.</div>
-  </div>
-</div>
 
 <!-- ═══ ADMIN PASSWORD MODAL ═══ -->
 <div id="admin-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;display:none;align-items:center;justify-content:center;">
@@ -1610,19 +1448,10 @@ function goToStep(n) {
 function setSortBy(s) {
   sortBy = s;
   ['tco', 'rate', 'monthly'].forEach(k => {
-    const b2 = document.getElementById('sb-' + k);
     const b4 = document.getElementById('sb-' + k + '-4');
-    if (b2) b2.classList.toggle('active', k === s);
     if (b4) b4.classList.toggle('active', k === s);
   });
   calc();
-  if (currentStep === 2) {
-    const cId = document.getElementById('current-provider').value;
-    if (cId && cId !== 'new') {
-      const card = document.querySelector('#provider-grid-2 [data-pid="' + cId + '"]');
-      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }
 }
 
 function calc() {
@@ -1662,12 +1491,7 @@ function calc() {
 
   // Always sort by TCO first to get stable ranking & recommendation
   const byTco = [...allRows].sort((a, b) => a.tco - b.tco);
-  const top10ids  = new Set(byTco.slice(0, 10).map(r => r.id));
   const recommended = byTco[0];
-
-  // Rank lookup for locked card labels
-  const tcoRank = {};
-  byTco.forEach((r, i) => { tcoRank[r.id] = i + 1; });
 
   // Sort rows per user's selected sort key
   const rows = [...allRows];
@@ -1680,16 +1504,6 @@ function calc() {
   rows.forEach((r, i) => { displayRank[r.id] = i + 1; });
 
   let maxTco = Math.max(...rows.map(r => r.tco));
-  const winner  = byTco[0];
-  const brkEven = winner.sub > 0
-    ? Math.ceil(winner.sub / ((0.0169 - winner.rate) * val))
-    : 0;
-
-  // Stats strip
-  document.getElementById('be-mvol').textContent = fmt(mVol);
-  document.getElementById('be-rev5').textContent = fmt(rev3y);
-  document.getElementById('be-brkn').textContent = brkEven > 0 ? brkEven + ' sales' : 'N/A — no contract';
-  document.getElementById('be-pct').textContent  = (recommended.tco / rev3y * 100).toFixed(1) + '%';
 
   // Populate provider dropdown (first run only), sorted by popularity
   const sel = document.getElementById('current-provider');
@@ -1748,26 +1562,6 @@ function calc() {
   const currentForHook = currentId === 'custom' ? customRow
     : (currentId && currentId !== 'new' ? rows.find(r => r.id === currentId) : null);
 
-  const hookEl = document.getElementById('savings-hook');
-  if (currentForHook) {
-    hookEl.style.display = '';
-    const saving3y = currentForHook.tco - recommended.tco;
-    const savingMo = saving3y / 3;
-    document.getElementById('sh-current-cost').textContent    = fmt(currentForHook.tco);
-    document.getElementById('sh-current-detail').textContent  = currentId === 'custom'
-      ? 'Your current rate · 3-year estimate'
-      : currentForHook.name + ' ' + currentForHook.plan + ' · 3-year total';
-    document.getElementById('sh-saving-num').textContent      = 'Locked';
-    document.getElementById('sh-saving-num').style.fontSize   = '2rem';
-    document.getElementById('sh-saving-num').style.color      = 'rgba(201,168,76,0.25)';
-    document.getElementById('sh-saving-detail').textContent   = 'Complete your details to unlock';
-    document.getElementById('sh-saving-detail').style.color   = 'rgba(248,245,239,0.2)';
-    document.getElementById('sh-net-saving').textContent      = saving3y > 0 ? fmt(saving3y)   : '—';
-    document.getElementById('sh-monthly-saving').textContent  = saving3y > 0 ? fmtD(savingMo) : '—';
-  } else {
-    hookEl.style.display = 'none';
-  }
-
   // ── Savings hook — Step 4 (fully unlocked) ──
   const hookEl4 = document.getElementById('savings-hook-4');
   if (currentForHook) {
@@ -1802,7 +1596,7 @@ function calc() {
     catch(e) { return url; }
   }
 
-  function renderGrid(containerId, lockSet) {
+  function renderGrid(containerId) {
     const effectiveCurrent = (currentId && currentId !== 'new') ? currentId : null;
     const currentRow = effectiveCurrent === 'custom' ? customRow
       : (effectiveCurrent ? rows.find(r2 => r2.id === effectiveCurrent) : null);
@@ -1819,8 +1613,6 @@ function calc() {
     }
 
     document.getElementById(containerId).innerHTML = rows.map(r => {
-      const isLocked = lockSet && lockSet.has(r.id);
-
       if (r.isCustom) {
         const feesPct = Math.round(r.fees / maxTco * 100);
         const rateStr = fmtPct(r.rate * 100);
@@ -1841,37 +1633,6 @@ function calc() {
           <div class="p-rate-val">${rateStr} blended</div>
           <div class="p-monthly">Monthly on <strong>${fmt(mVol)}</strong>: <strong>${fmtD(r.mFee)}</strong></div>
           <div style="font-size:10px;color:rgba(180,210,235,0.75);margin-top:0.75rem;line-height:1.5">Based on the rate you entered. Compare the tiles above to see what you could save.</div>
-        </div>`;
-      }
-
-      if (isLocked) {
-        const rank      = tcoRank[r.id];
-        const rateStr   = fmtPct(r.rate * 100) + (r.flat ? ' + ' + Math.round(r.flat * 100) + 'p' : '');
-        const feesPct   = Math.round(r.fees / maxTco * 100);
-        const subPct    = Math.round(r.subs / maxTco * 100);
-        const isCurLock = effectiveCurrent && r.id === effectiveCurrent;
-        const lockClass = isCurLock ? ' card-current' : '';
-        const mf        = mainFigure(r, isCurLock);
-        const topBadge  = isCurLock
-          ? `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem">
-               <div class="p-badge p-badge-current">Your provider</div>
-               <div class="p-badge card-lock-badge" style="margin-bottom:0">Top ${rank}</div>
-             </div>`
-          : `<div class="p-badge card-lock-badge">Top ${rank}</div>`;
-        return `<div class="provider-card card-locked${lockClass}" data-pid="${r.id}">
-          ${topBadge}
-          <div class="card-lock-body">
-            <div class="card-lock-rank">#${rank}</div>
-            <div class="p-tco" style="margin-top:0.5rem;color:${mf.color}">${mf.num}</div>
-            <div class="p-tco-label">${mf.label}</div>
-            <div style="margin:0.5rem 0">
-              <div class="mini-bar-row"><span style="min-width:26px">Fees</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${feesPct}%;background:#c9a84c"></div></div><span style="min-width:34px;text-align:right">${fmt(r.fees)}</span></div>
-              <div class="mini-bar-row"><span style="min-width:26px">Sub</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${subPct}%;background:#4a5a3a"></div></div><span style="min-width:34px;text-align:right">${fmt(r.subs)}</span></div>
-            </div>
-            <div style="font-size:11px;color:rgba(248,245,239,0.65);letter-spacing:0.04em">${rateStr} in-person</div>
-            <div class="card-lock-msg" style="margin-top:0.75rem">Submit your details<br>to reveal this provider</div>
-          </div>
-          <span class="p-source" style="opacity:0.25">&#x1F512; locked</span>
         </div>`;
       }
 
@@ -1915,12 +1676,9 @@ function calc() {
     }).join('');
   }
 
-  // Render Step 2 grid — top 10 locked
-  renderGrid('provider-grid-2', top10ids);
-
-  // Render Step 4 grid — all revealed (only once unlocked)
+  // Render Step 4 grid — only once the user has navigated there
   if (unlocked) {
-    renderGrid('provider-grid-4', null);
+    renderGrid('provider-grid-4');
   }
 
   // Stash the latest computation so the lead export can pick it up.
@@ -1943,46 +1701,7 @@ function calc() {
   if (currentStep === 1) updateLivePreview();
 }
 
-// ── ENGAGEMENT FORM ──
 let unlocked = false;
-
-// ── Dropoff survey modal ──
-function openDropoffSurvey() {
-  document.getElementById('dropoff-overlay').style.display = 'flex';
-  document.getElementById('dropoff-error').style.display = 'none';
-  document.getElementById('dropoff-thanks').style.display = 'none';
-  document.getElementById('dropoff-form').style.display = 'block';
-}
-
-function closeDropoffSurvey() {
-  document.getElementById('dropoff-overlay').style.display = 'none';
-  // Reset the form so reopening is clean
-  document.querySelectorAll('input[name="dropoff-reason"]').forEach(el => { el.checked = false; });
-  document.getElementById('dropoff-comment').value = '';
-  document.getElementById('dropoff-email').value = '';
-}
-
-async function submitDropoffSurvey() {
-  const errEl = document.getElementById('dropoff-error');
-  errEl.style.display = 'none';
-
-  const chosen = document.querySelector('input[name="dropoff-reason"]:checked');
-  if (!chosen) {
-    errEl.textContent = 'Please pick a reason.';
-    errEl.style.display = '';
-    return;
-  }
-  const comment = document.getElementById('dropoff-comment').value.trim();
-  const email   = document.getElementById('dropoff-email').value.trim();
-
-  // Make sure the computed snapshot is current before we save.
-  calc();
-
-  document.getElementById('dropoff-form').style.display = 'none';
-  document.getElementById('dropoff-thanks').style.display = 'block';
-  setTimeout(closeDropoffSurvey, 2500);
-}
-
 
 // ── COMMON COMPLAINTS & ADVANTAGES (provider cons keyed by id) ──
 const CONS = {
