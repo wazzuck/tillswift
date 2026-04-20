@@ -50,6 +50,7 @@
             max-width: 780px;
             margin: 0 auto;
             padding: 3rem 1.5rem;
+            padding-top: calc(56px + 3rem);
         }
 
         h1, h2, h3 {
@@ -98,15 +99,36 @@
             text-decoration: underline;
         }
 
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 56px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-brand {
+            font-family: var(--font-sans); font-size: 1rem; font-weight: 700;
+            letter-spacing: 0.12em; color: var(--ink); text-transform: uppercase;
+            text-decoration: none;
+        }
+
         .back-link {
-            display: inline-block;
-            margin-bottom: 2rem;
-            color: var(--muted);
-            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            background: #0f172a;
+            color: #ffffff !important;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            padding: 0.4rem 1rem;
+            text-decoration: none !important;
         }
 
         .back-link:hover {
-            color: var(--ink);
+            background: #334155;
+            color: #ffffff !important;
         }
 
         .section {
@@ -137,9 +159,11 @@
     </style>
 </head>
 <body>
+    <nav>
+        <a href="index.html" class="nav-brand">TillSwift</a>
+        <a href="index.html" class="back-link">&larr; Back</a>
+    </nav>
     <div class="container">
-        <a href="index.html" class="back-link">&larr; Back to TillSwift</a>
-        
         <h1>Legal</h1>
         
         <div class="section">

@@ -802,7 +802,7 @@ footer {
   <div class="step" style="padding-top:6rem">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
       <div class="step-num" style="margin-bottom:0">Step 2 of 3</div>
-      <button onclick="goToStep(0)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(15,23,42,0.3);font-family:var(--font-sans);padding:0">← Back</button>
+      <button onclick="goToStep(0)" style="background:#0f172a;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#fff;font-family:var(--font-sans);padding:4px 12px;font-weight:600">← Back</button>
     </div>
     <h1 class="step-heading" id="step1-heading">Let's find out what<br><em>you're actually paying.</em></h1>
     <p class="step-body" id="step1-body">Fill in a few numbers about your business. I'll rank every UK payment provider for your exact volumes.</p>
@@ -895,7 +895,7 @@ footer {
   <div class="step step--wide" style="padding-top:6rem">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
       <div class="step-num" style="margin-bottom:0">Step 3 of 3</div>
-      <button onclick="goToStep(1)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(15,23,42,0.3);font-family:var(--font-sans);padding:0">← Back</button>
+      <button onclick="goToStep(1)" style="background:#0f172a;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#fff;font-family:var(--font-sans);padding:4px 12px;font-weight:600">← Back</button>
     </div>
     <h2 class="step-heading" id="step4-heading">Your full<br><em>recommendation.</em></h2>
     <p class="step-body" id="step4-body">Every UK provider ranked for your exact volumes. Your recommended option is highlighted. Click any card to view their official pricing page.</p>
@@ -1317,10 +1317,9 @@ const PROVIDERS = [
   // ── Worldpay ── source: https://www.worldpay.com/en-gb/small-business
   { id:'worldpay_payg', app:'partial',
     name:'Worldpay', plan:'Pay as you go',
-    sub:0, rate:0.0275, flat:0.20, extra:0,
-    indicative:true,
+    sub:0, rate:0.006, flat:0.045, extra:0,
     source:'https://www.worldpay.com/en-gb/small-business',
-    warn:'Rates not publicly disclosed — figures shown are indicative only · Terminal rental £17.50–22.50/month extra · 18-month minimum contract on some plans · Setup fee ~£25–50',
+    warn:'In-person: UK debit 0.6%, UK credit 1.4%, UK business 2.5% + 4.5p auth fee per transaction · Online/phone: UK debit 1.0%, UK credit 1.8%, UK business 2.9% · Chargeback fee £20 · Rate shown uses UK debit in-person as base',
     pros:['No long-term contract on PAYG','Widely trusted UK brand','Multi-channel support'] },
 
   { id:'worldpay_contract', app:'partial',
@@ -1447,41 +1446,9 @@ const PROVIDERS = [
     warn:'Interchange++ pricing — effective rate varies by card type (~0.3% markup + interchange). Minimum monthly processing volume expected. Enterprise-focused — not suited to low volumes or new businesses.',
     pros:['Transparent interchange++ model','Unified in-person and online','Global multi-currency support'] },
 
-  // ── Checkout.com ── source: https://www.checkout.com/pricing
-  { id:'checkout', app:false,
-    name:'Checkout.com', plan:'Enterprise',
-    sub:0, rate:0.015, flat:0.10, extra:0,
-    indicative:true,
-    source:'https://www.checkout.com/pricing',
-    warn:'Pricing not publicly disclosed — enterprise bespoke quotes only. Primarily serves high-volume merchants. Not suited to small traders, shops, or kiosks.',
-    pros:['Enterprise-grade infrastructure','Unified global payment platform','Advanced fraud tools'] },
 
-  // ── Global Payments ── source: https://www.globalpayments.com/en-gb
-  { id:'globalpay', app:'partial',
-    name:'Global Payments', plan:'Bespoke',
-    sub:20, rate:0.012, flat:0.05, extra:0,
-    indicative:true,
-    source:'https://www.globalpayments.com/en-gb',
-    warn:'Rates not publicly disclosed — all pricing bespoke. Terminal rental £15–25/month may apply in addition to subscription shown. 24-month contracts common.',
-    pros:['Full-service UK merchant account','Wide hardware range','Established UK presence'] },
 
-  // ── Nexi ── source: https://www.nexigroup.com/en/uk
-  { id:'nexi', app:'partial',
-    name:'Nexi', plan:'Standard',
-    sub:0, rate:0.016, flat:0.05, extra:0,
-    indicative:true,
-    source:'https://www.nexigroup.com/en/uk',
-    warn:'Rates not publicly disclosed — indicative only. Major European processor with UK presence following acquisition of Nets. Pricing confirmed on application.',
-    pros:['Major European processor','Multi-currency support','Wide terminal range'] },
 
-  // ── Nuvei ── source: https://www.nuvei.com/en-gb
-  { id:'nuvei', app:false,
-    name:'Nuvei', plan:'Enterprise',
-    sub:0, rate:0.015, flat:0.10, extra:0,
-    indicative:true,
-    source:'https://www.nuvei.com/en-gb',
-    warn:'Pricing not publicly disclosed — enterprise bespoke quotes only. Primarily serves mid-to-large businesses. Not suited to small traders, shops, or kiosks.',
-    pros:['Global payment processing','Wide payment method support','Enterprise-grade reliability'] },
 
   // ── Airwallex ── source: https://www.airwallex.com/uk/pricing
   { id:'airwallex', app:'partial',
@@ -1535,10 +1502,6 @@ const POP_ORDER = [
   'paymentsense', // legacy — now Dojo
   'teya',         // formerly Teya/SaltPay — UK presence
   'adyen',        // enterprise
-  'checkout',     // enterprise
-  'globalpay',    // enterprise
-  'nexi',         // enterprise / EU focus
-  'nuvei',        // enterprise
   'airwallex',    // multi-currency / online focus
   'zeller',       // Australia only — listed last
   'fluxa',        // unverified / minimal info
@@ -2092,9 +2055,9 @@ const CONS = {
     'Rates not publicly disclosed — individual quote required before committing',
   ],
   worldpay_payg: [
-    'Terminal rental (£17.50–£22.50/month) is an additional cost on top of transaction fees',
-    'Setup fee of approximately £25–£50 may apply',
-    'All rates indicative — actual pricing requires a quote and may differ significantly',
+    'Tiered rates: in-person UK debit 0.6%, credit 1.4%, business 2.5% — plus 4.5p authorisation fee per transaction',
+    'Online/phone rates higher: UK debit 1.0%, credit 1.8%, business 2.9%',
+    'Chargeback fee £20 per dispute',
   ],
   worldpay_contract: [
     '18-month minimum contract with early termination fees',
@@ -2196,10 +2159,6 @@ const AFFILIATE = {
   elavon:              { type:'programme', note:'B2B partner — rate negotiated',        url:'https://www.elavon.co.uk/partners' },
   zeller:              { type:'programme', note:'Programme — rate undisclosed',         url:'https://www.myzeller.com' },
   adyen:               { type:'programme', note:'Partner programme — rate negotiated',  url:'https://www.adyen.com/partners' },
-  checkout:            { type:'programme', note:'Partner programme — rate negotiated',  url:'https://www.checkout.com/partners' },
-  globalpay:           { type:'programme', note:'Revenue-share — rate negotiated',      url:'https://www.globalpayments.com/en-gb/partners' },
-  nexi:                { type:'programme', note:'Partner programme — rate negotiated',  url:'https://www.nexigroup.com/en/business/partners/' },
-  nuvei:               { type:'programme', note:'Revenue-share — rate negotiated',      url:'https://www.nuvei.com/partners' },
   airwallex:           { type:'programme', note:'Commission — rate undisclosed',        url:'https://www.airwallex.com/uk/partners' },
   paymentsense:        { type:'programme', note:'Programme — rate undisclosed',         url:'https://www.paymentsense.com' },
 
