@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us — TillSwift</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light fintech palette */
+            --bg:          #ffffff;
+            --surface:     #f8fafc;
+            --surface2:    #eef2f7;
+            --ink:         #0f172a;
+            --ink2:        #334155;
+            --muted:       #64748b;
+            --dim:         #94a3b8;
+            --hairline:    #f1f5f9;
+            --border:      #e2e8f0;
+            --border2:     #cbd5e1;
+            --accent:      #0f766e;
+            --accent2:     #0d9488;
+            --accent-soft: #ccfbf1;
+            --accent-tint: #f0fdfa;
+            --info:        #2563eb;
+            --info-soft:   #dbeafe;
+            --red:         #dc2626;
+            --green:       #059669;
+            --font-sans:   'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            --font-mono:   'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: var(--font-sans);
+            font-weight: 400;
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        h1, h2, h3 {
+            color: var(--ink);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: clamp(1.75rem, 4vw, 2.6rem);
+            font-weight: 700;
+            line-height: 1.15;
+        }
+
+        h2 {
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+            font-weight: 500;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--ink2);
+        }
+
+        .contact-info, .contact-form {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .contact-info h3, .contact-form h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            margin-top: 4px;
+            color: var(--accent);
+        }
+
+        .info-content {
+            margin-left: 1rem;
+        }
+
+        .info-content h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--ink);
+            font-size: 1.1rem;
+        }
+
+        .info-content p {
+            margin: 0;
+            color: var(--ink2);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border2);
+            border-radius: 4px;
+            background: var(--surface2);
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: var(--ink);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--black);
+            border: none;
+            padding: 0.9rem 2.5rem;
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            border-radius: 4px;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent2);
+            transform: translateY(-1px);
+        }
+
+        .form-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .form-message.success {
+            background: var(--accent-tint);
+            border: 1px solid var(--accent-soft);
+            color: var(--green);
+        }
+
+        .form-message.error {
+            background: var(--red);
+            color: white;
+        }
+
+
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            color: var(--ink);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+            
+            .contact-info, .contact-form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">&larr; Back to TillSwift</a>
+        
+        <h1>Contact Us</h1>
+        
+        <div class="contact-info">
+            <h3>Get in Touch</h3>
+            
+            <div class="info-item">
+                <div class="info-icon">📧</div>
+                <div class="info-content">
+                    <h4>Email</h4>
+                    <p><a href="mailto:hello@tillswift.co.uk">hello@tillswift.co.uk</a></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="contact-form">
+            <h3>Send Us a Message</h3>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Your Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="company">Company (Optional)</label>
+                    <input type="text" id="company" name="company">
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn-primary">Send Message</button>
+                
+                <div id="formMessage" class="form-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formMessage = document.getElementById('formMessage');
+            formMessage.style.display = 'block';
+            formMessage.className = 'form-message success';
+            formMessage.textContent = 'Thank you for your message! We will get back to you soon.';
+            
+            // Reset form
+            this.reset();
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                formMessage.style.display = 'none';
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

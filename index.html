@@ -20,8 +20,8 @@
 :root {
   /* Light fintech palette */
   --bg:          #ffffff;
-  --surface:     #f8fafc;
-  --surface2:    #eef2f7;
+--surface:          #f0fdfa;
+--surface2:         #ccfbf1;
   --ink:         #0f172a;
   --ink2:        #334155;
   --muted:       #64748b;
@@ -559,6 +559,10 @@ footer {
   padding: 3rem 1.5rem;
   border-top: 1px solid var(--border);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
 }
 .footer-brand {
   font-family: var(--font-serif); font-size: 1.1rem;
@@ -566,6 +570,22 @@ footer {
   color: var(--gold2); margin-bottom: 0.5rem;
 }
 .footer-note { font-size: 11px; color: rgba(15,23,42,0.5); max-width: 540px; margin: 0 auto; line-height: 1.7; }
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+.footer-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.footer-links a:hover {
+  color: var(--ink);
+}
 
 @media (max-width: 600px) {
   .step { padding: 4rem 1rem 2rem; }
@@ -909,13 +929,18 @@ footer {
 
     <div class="provider-grid" id="provider-grid-4"></div>
 
-    <p style="font-size:10px;color:rgba(15,23,42,0.45);margin-top:1rem;line-height:1.6">All rates sourced directly from provider websites April 2026. Rates subject to change — verify before committing.</p>
+    <p style="font-size:10px;color:rgba(15,23,42,0.45);margin-top:1rem;line-height:1.6">All rates sourced directly from provider websites. Rates subject to change — verify before committing.</p>
   </div>
 </div>
 
 <footer>
   <div class="footer-brand">TillSwift</div>
-  <div class="footer-note">Payment provider data sourced directly from provider websites, April 2026. Rates are subject to change — verify before committing. This document is prepared exclusively for use in TillSwift consultations and is not for redistribution.</div>
+  <div class="footer-note">Payment provider data sourced directly from provider websites. Rates are subject to change — verify before committing. This document is prepared exclusively for use in TillSwift consultations and is not for redistribution.</div>
+  
+  <div class="footer-links">
+    <a href="legal.html">Legal</a>
+    <a href="contact.html">Contact Us</a>
+  </div>
 
   <button onclick="openAdmin()" style="background:none;border:none;cursor:pointer;margin-top:2rem;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(15,23,42,0.1);font-family:var(--font-sans)">Admin</button>
 </footer>
@@ -1387,7 +1412,7 @@ const PROVIDERS = [
     name:'Tide', plan:'Sell In-Person',
     sub:17.99, rate:0.0079, flat:0.03, extra:99,
     source:'https://www.tide.co/features/card-reader/',
-    warn:'Sub rising to £17.99+VAT from 27 April 2026 · Domestic consumer debit cards only at this rate · Settlement up to 3 working days · Reader from £99+VAT',
+    warn:'Sub rising to £17.99+VAT from 27th · Domestic consumer debit cards only at this rate · Settlement up to 3 working days · Reader from £99+VAT',
     pros:['0.79%+3p — competitive rate','Integrated Tide business banking','Reader from £99+VAT'] },
 
   // ── takepayments ── source: https://www.takepayments.com/card-machines/
