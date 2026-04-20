@@ -251,9 +251,17 @@ input[type="range"]::-moz-range-thumb {
   display: block; text-decoration: none; color: inherit;
   background: var(--black2);
   padding: 1.6rem 1.3rem 1.3rem;
-  transition: background 0.2s;
+  transition: background 0.2s, outline-color 0.2s;
+  position: relative;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
 }
 .provider-card:hover { background: var(--black3); }
+a.provider-card { cursor: pointer; }
+a.provider-card:hover {
+  outline-color: var(--border2);
+  z-index: 2;
+}
 .provider-card.winner {
   background: rgba(201,168,76,0.05);
   border: 1px solid var(--border2);
@@ -300,6 +308,8 @@ input[type="range"]::-moz-range-thumb {
 .p-indicative { font-size: 9px; color: rgba(180,130,50,0.88); margin-top: 5px; line-height: 1.4; border-top: 1px solid var(--border); padding-top: 5px; }
 .p-source { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(201,168,76,0.6); margin-top: 7px; display: block; }
 .provider-card:hover .p-source { color: rgba(201,168,76,0.82); }
+.p-source-arrow { display: inline-block; transition: transform 0.2s ease; }
+a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
 
 .p-cons { list-style: none; margin-top: 0.3rem; }
 .p-cons li {
@@ -1840,7 +1850,7 @@ function calc() {
         ${(CONS[r.id] && CONS[r.id].length) ? `<hr class="p-pros-cons-divider"><ul class="p-cons">${CONS[r.id].map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
         ${r.warn ? `<div class="p-warn">⚠ ${r.warn}</div>` : ''}
         ${indicativeBadge}
-        <span class="p-source">↗ ${sourceHost(r.source)}</span>
+        <span class="p-source"><span class="p-source-arrow">↗</span> ${sourceHost(r.source)}</span>
       </a>`;
     }).join('');
   }
