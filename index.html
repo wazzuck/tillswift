@@ -3,6 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V22KGRG9RS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-V22KGRG9RS');
+</script>
 <title>Payment Consultation — TillSwift</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -792,8 +801,6 @@ footer {
             <label for="e-consent">I have read and agree to the terms and conditions above.</label>
           </div>
         </div>
-
-        <button class="btn-primary" onclick="submitEngagement()">Unlock my recommendation →</button>
 
         <button onclick="openDropoffSurvey()" style="display:block;width:100%;margin-top:1rem;background:#d94a5a;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#000;font-family:var(--font-sans);padding:.9rem 1.25rem">Not for you? Tell us why</button>
       </div>
