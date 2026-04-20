@@ -403,7 +403,7 @@ footer {
   height: 100%;
   background: linear-gradient(to right, var(--gold), var(--gold2));
   transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
-  width: 50%;
+  width: 33%;
 }
 
 /* ── LOCKED PROVIDER CARD ── */
@@ -502,12 +502,47 @@ footer {
 
 <!-- ═══ WIZARD ═══ -->
 
-<!-- ─── STEP 1: DISCOVERY ─── -->
-<div class="wiz-step active" id="wiz-1">
+<!-- ─── STEP 0: INTRO ─── -->
+<div class="wiz-step active" id="wiz-0">
   <div class="step" style="padding-top:6rem">
-    <div class="step-num">Step 1 of 2</div>
-    <h1 class="step-heading">Let's find out what<br><em>you're actually paying.</em></h1>
-    <p class="step-body">Fill in a few numbers about your business. I'll rank every UK payment provider for your exact volumes.</p>
+    <div class="step-num">Step 1 of 3</div>
+    <h1 class="step-heading">Find the right<br><em>payment provider for you.</em></h1>
+    <p class="step-body">Whether you're about to take your first card payment or you've been with the same provider for years, TillSwift compares every major UK payment provider against your actual volumes — transaction rates, monthly fees, and total cost over three years — so you can pick the cheapest option with total confidence.</p>
+
+    <div style="margin-top:2rem;padding:1.75rem;border:1px solid var(--border);background:var(--black2)">
+      <div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem">What you'll get</div>
+      <div style="display:flex;flex-direction:column;gap:.9rem">
+        <div style="display:flex;gap:.9rem;align-items:flex-start">
+          <span style="color:var(--gold);font-size:1rem;line-height:1.4">→</span>
+          <span style="font-size:13px;color:var(--white);line-height:1.6;font-weight:300">Every UK payment provider ranked for your exact transaction volumes</span>
+        </div>
+        <div style="display:flex;gap:.9rem;align-items:flex-start">
+          <span style="color:var(--gold);font-size:1rem;line-height:1.4">→</span>
+          <span style="font-size:13px;color:var(--white);line-height:1.6;font-weight:300">A clear three-year cost comparison — fees, rates, and subscriptions included</span>
+        </div>
+        <div style="display:flex;gap:.9rem;align-items:flex-start">
+          <span style="color:var(--gold);font-size:1rem;line-height:1.4">→</span>
+          <span style="font-size:13px;color:var(--white);line-height:1.6;font-weight:300">The best provider for your business, highlighted — whether you're switching or starting fresh</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:2.5rem;display:flex;flex-direction:column;gap:.85rem">
+      <button class="btn-primary" style="margin-top:0;text-align:left" onclick="setUserPath('new')">I'm new to card payments — find me the best rate →</button>
+      <button onclick="setUserPath('switch')" style="display:block;width:100%;background:transparent;border:1px solid var(--border2);color:var(--white);padding:.95rem 1.25rem;font-family:var(--font-sans);font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;text-align:left;transition:border-color .15s">I want to switch from my current provider →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── STEP 1: DISCOVERY ─── -->
+<div class="wiz-step" id="wiz-1">
+  <div class="step" style="padding-top:6rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
+      <div class="step-num" style="margin-bottom:0">Step 2 of 3</div>
+      <button onclick="goToStep(0)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.3);font-family:var(--font-sans);padding:0">← Back</button>
+    </div>
+    <h1 class="step-heading" id="step1-heading">Let's find out what<br><em>you're actually paying.</em></h1>
+    <p class="step-body" id="step1-body">Fill in a few numbers about your business. I'll rank every UK payment provider for your exact volumes.</p>
 
     <div class="field-grid">
       <div class="field" style="grid-column: 1 / -1">
@@ -516,13 +551,13 @@ footer {
       </div>
 
       <div class="field" style="grid-column: 1 / -1">
-        <label class="field-label" for="current-provider">Current payment provider</label>
+        <label class="field-label" for="current-provider" id="current-provider-label">Current payment provider</label>
         <select class="field-input field-select" id="current-provider" onchange="lpInteracted=true; toggleCustomRate(); calc()">
           <option value="">— Select provider —</option>
           <option value="new">No provider yet / new to card payments</option>
           <option value="custom">I know my rate — enter it below</option>
         </select>
-        <span class="field-hint">Not sure? Check your card reader, bank statement, or look for the name on your app.</span>
+        <span class="field-hint" id="current-provider-hint">Not sure? Check your card reader, bank statement, or look for the name on your app.</span>
       </div>
 
       <div class="field" id="custom-rate-field" style="display:none">
@@ -561,7 +596,7 @@ footer {
           <div class="lp-sub" id="lp-fees-sub">select a provider above</div>
         </div>
         <div class="lp-cell">
-          <div class="lp-label">You will save</div>
+          <div class="lp-label" id="lp-save-label">You will save</div>
           <div class="lp-value lp-dim" id="lp-save">—</div>
           <div class="lp-sub" id="lp-save-sub">vs best alternative</div>
         </div>
@@ -713,11 +748,11 @@ footer {
 <div class="wiz-step" id="wiz-4">
   <div class="step step--wide" style="padding-top:6rem">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
-      <div class="step-num" style="margin-bottom:0">Step 2 of 2</div>
+      <div class="step-num" style="margin-bottom:0">Step 3 of 3</div>
       <button onclick="goToStep(1)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.3);font-family:var(--font-sans);padding:0">← Back</button>
     </div>
-    <h2 class="step-heading">Your full<br><em>recommendation.</em></h2>
-    <p class="step-body">Every UK provider ranked for your exact volumes. Your recommended option is highlighted. Click any card to view their official pricing page.</p>
+    <h2 class="step-heading" id="step4-heading">Your full<br><em>recommendation.</em></h2>
+    <p class="step-body" id="step4-body">Every UK provider ranked for your exact volumes. Your recommended option is highlighted. Click any card to view their official pricing page.</p>
 
     <div class="savings-hook" id="savings-hook-4" style="display:none">
       <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:center">
@@ -1415,10 +1450,54 @@ function fmtD(n)   { return '£' + n.toFixed(2); }
 function fmtPct(n) { return n.toFixed(2) + '%'; }
 
 // ── WIZARD NAVIGATION ──
-let currentStep = 1;
+let currentStep = 0;
+let userPath = null;  // 'new' or 'switch' — chosen on the intro step
+
+const PATH_COPY = {
+  new: {
+    step1Heading: 'Let\'s find you<br><em>the best rate.</em>',
+    step1Body: 'Tell me a bit about the business you\'re about to launch — or the card volumes you\'re expecting. I\'ll rank every UK payment provider so you can start on the cheapest plan for your numbers.',
+    providerLabel: 'Current payment provider',
+    providerHint: 'You haven\'t signed up to anyone yet — no problem. Leave this as "No provider yet" and I\'ll show you the best starting option.',
+    savingsLabel: 'Starting vs most expensive',
+    step4Heading: 'The best place<br><em>to start.</em>',
+    step4Body: 'Every UK provider ranked for your expected volumes. The recommended option will save you the most over three years vs. the most expensive on the market — click any card to view their official pricing page.'
+  },
+  switch: {
+    step1Heading: 'Let\'s find out what<br><em>you\'re actually paying.</em>',
+    step1Body: 'Fill in a few numbers about your business and tell me who you\'re with today. I\'ll rank every UK payment provider for your exact volumes — so you can see exactly what switching is worth.',
+    providerLabel: 'Current payment provider',
+    providerHint: 'Not sure? Check your card reader, bank statement, or look for the name on your app.',
+    savingsLabel: 'You will save',
+    step4Heading: 'Your switching<br><em>recommendation.</em>',
+    step4Body: 'Every UK provider ranked for your exact volumes — with your current provider marked so you can see exactly where you stand. The recommended option is highlighted. Click any card to view their official pricing page.'
+  }
+};
+
+function applyUserPath() {
+  if (!userPath) return;
+  const c = PATH_COPY[userPath];
+  const h1 = document.getElementById('step1-heading'); if (h1) h1.innerHTML = c.step1Heading;
+  const p1 = document.getElementById('step1-body');    if (p1) p1.textContent = c.step1Body;
+  const lbl = document.getElementById('current-provider-label'); if (lbl) lbl.textContent = c.providerLabel;
+  const hnt = document.getElementById('current-provider-hint');  if (hnt) hnt.textContent = c.providerHint;
+  const h4 = document.getElementById('step4-heading'); if (h4) h4.innerHTML = c.step4Heading;
+  const p4 = document.getElementById('step4-body');    if (p4) p4.textContent = c.step4Body;
+  const slb = document.getElementById('lp-save-label'); if (slb) slb.textContent = c.savingsLabel;
+}
+
+function setUserPath(path) {
+  userPath = path;
+  applyUserPath();
+  if (path === 'new') {
+    const sel = document.getElementById('current-provider');
+    if (sel) { sel.value = 'new'; toggleCustomRate(); calc(); }
+  }
+  goToStep(1);
+}
 
 function updateProgress(n) {
-  const pct = n === 1 ? 50 : 100;
+  const pct = n === 0 ? 33 : n === 1 ? 67 : 100;
   document.getElementById('progress-bar').style.width = pct + '%';
 }
 
