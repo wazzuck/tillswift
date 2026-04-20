@@ -403,7 +403,7 @@ footer {
   height: 100%;
   background: linear-gradient(to right, var(--gold), var(--gold2));
   transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
-  width: 25%;
+  width: 50%;
 }
 
 /* ── LOCKED PROVIDER CARD ── */
@@ -499,29 +499,13 @@ footer {
 <!-- ═══ PROGRESS BAR ═══ -->
 <div id="step-bar"><div id="progress-bar"></div></div>
 
-<!-- ═══ LEAD-FILE SETUP GATE ═══ -->
-<div id="leadfile-gate" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.96);z-index:2500;align-items:center;justify-content:center;padding:1rem;">
-  <div style="background:var(--black2);border:1px solid var(--border2);padding:2.5rem 2rem;width:100%;max-width:460px;">
-    <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem">Lead file setup</div>
-    <div id="lfg-heading" style="font-family:var(--font-serif);font-size:1.5rem;font-weight:400;color:var(--white);line-height:1.25;margin-bottom:.75rem">Set up your leads file</div>
-    <div id="lfg-body" style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:1.5rem">
-      Click below to pick a location for <strong style="color:var(--gold2)">tillswift-leads.csv</strong>. If the file already exists at that location it will be reused; if it doesn't, it will be created automatically. Every completed consultation and drop-off is appended as a row.
-    </div>
-    <div id="lfg-error" style="display:none;font-size:11px;color:rgba(220,80,80,0.85);margin-bottom:1rem;line-height:1.5"></div>
-    <div id="lfg-actions" style="display:flex;flex-direction:column;gap:.6rem">
-      <button class="btn-primary" id="lfg-btn-primary" style="margin-top:0" onclick="lfgPrimary()">Create or open leads file</button>
-      <button id="lfg-btn-secondary" style="display:none;background:transparent;border:1px solid var(--border2);color:var(--muted);padding:.85rem;font-family:var(--font-sans);font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer" onclick="lfgSwitchFile()">Use a different file</button>
-    </div>
-    <div id="lfg-hint" style="font-size:10px;color:rgba(248,245,239,0.25);line-height:1.6;margin-top:1.25rem">Requires Chrome or Edge. File System Access API permission persists for this browser session only — you'll be asked to confirm once per page load.</div>
-  </div>
-</div>
 
 <!-- ═══ WIZARD ═══ -->
 
 <!-- ─── STEP 1: DISCOVERY ─── -->
 <div class="wiz-step active" id="wiz-1">
   <div class="step" style="padding-top:6rem">
-    <div class="step-num">Step 1 of 4</div>
+    <div class="step-num">Step 1 of 2</div>
     <h1 class="step-heading">Let's find out what<br><em>you're actually paying.</em></h1>
     <p class="step-body">Fill in a few numbers about your business. I'll rank every UK payment provider for your exact volumes — all 44 of them.</p>
 
@@ -598,7 +582,7 @@ footer {
       </div>
     </div>
 
-    <button class="btn-primary" style="margin-top:2.5rem" onclick="goToStep(2)">See how every provider compares →</button>
+    <button class="btn-primary" style="margin-top:2.5rem" onclick="goToStep(4)">See your full comparison →</button>
   </div>
 </div>
 
@@ -728,7 +712,10 @@ footer {
 <!-- ─── STEP 4: FULL RECOMMENDATION ─── -->
 <div class="wiz-step" id="wiz-4">
   <div class="step step--wide" style="padding-top:6rem">
-    <div class="step-num">Your recommendation</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem">
+      <div class="step-num" style="margin-bottom:0">Step 2 of 2</div>
+      <button onclick="goToStep(1)" style="background:none;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.3);font-family:var(--font-sans);padding:0">← Back</button>
+    </div>
     <h2 class="step-heading">Your full<br><em>recommendation.</em></h2>
     <p class="step-body">Every UK provider ranked for your exact volumes. Your recommended option is highlighted. Click any card to view their official pricing page.</p>
 
@@ -1431,12 +1418,13 @@ function fmtPct(n) { return n.toFixed(2) + '%'; }
 let currentStep = 1;
 
 function updateProgress(n) {
-  document.getElementById('progress-bar').style.width = (n / 4 * 100) + '%';
+  const pct = n === 1 ? 50 : 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
 }
 
 function goToStep(n) {
   if (n === currentStep) return;
-  if (n === 2) calc();   // ensure grids are fresh before showing step 2
+  if (n === 4) { unlocked = true; calc(); }  // unlock and render full grid before showing results
 
   const oldEl = document.getElementById('wiz-' + currentStep);
   const newEl = document.getElementById('wiz-' + n);
@@ -1468,17 +1456,6 @@ function goToStep(n) {
 
     setTimeout(() => { newEl.style.cssText = ''; }, 500);
   }, 220);
-
-  // After animation completes, scroll to the user's current provider card
-  if (n === 2) {
-    setTimeout(() => {
-      const cId = document.getElementById('current-provider').value;
-      if (cId && cId !== 'new') {
-        const card = document.querySelector('#provider-grid-2 [data-pid="' + cId + '"]');
-        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }, 750);
-  }
 }
 
 function setSortBy(s) {
@@ -1820,204 +1797,6 @@ function calc() {
 // ── ENGAGEMENT FORM ──
 let unlocked = false;
 
-// File System Access API handles — persisted in IndexedDB across reloads.
-// A setup gate on page load guarantees both are populated before any
-// submission can reach saveLeadToCsv() / saveDropoffToCsv().
-const fileHandles = { leads: null, dropoff: null };
-
-// ── IndexedDB wrapper for persisting the file handles ──
-function lfDbOpen() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open('tillswift-leads', 1);
-    req.onupgradeneeded = () => req.result.createObjectStore('handles');
-    req.onsuccess = () => resolve(req.result);
-    req.onerror   = () => reject(req.error);
-  });
-}
-async function lfDbGet(key) {
-  const db = await lfDbOpen();
-  return new Promise((resolve, reject) => {
-    const req = db.transaction('handles', 'readonly').objectStore('handles').get(key);
-    req.onsuccess = () => resolve(req.result || null);
-    req.onerror   = () => reject(req.error);
-  });
-}
-async function lfDbSet(key, handle) {
-  const db = await lfDbOpen();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction('handles', 'readwrite');
-    tx.objectStore('handles').put(handle, key);
-    tx.oncomplete = () => resolve();
-    tx.onerror    = () => reject(tx.error);
-  });
-}
-async function lfDbClear(key) {
-  const db = await lfDbOpen();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction('handles', 'readwrite');
-    tx.objectStore('handles').delete(key);
-    tx.oncomplete = () => resolve();
-    tx.onerror    = () => reject(tx.error);
-  });
-}
-
-// ── Permission helpers ──
-async function ensurePermission(handle) {
-  const opts = { mode: 'readwrite' };
-  if ((await handle.queryPermission(opts)) === 'granted') return true;
-  return (await handle.requestPermission(opts)) === 'granted';
-}
-
-const LEAD_CSV_COLUMNS = [
-  'timestamp', 'business_name', 'contact_name', 'email',
-  'current_provider_id', 'current_provider_name',
-  'txns_per_day', 'avg_txn_value_gbp', 'trading_days_per_month',
-  'inflation_pct', 'volume_growth_pct',
-  'monthly_card_volume_gbp', 'revenue_3y_gbp',
-  'current_3y_cost_gbp', 'recommended_provider_id',
-  'recommended_provider_name', 'recommended_3y_cost_gbp',
-  'saving_3y_gbp'
-];
-
-const DROPOFF_CSV_COLUMNS = [
-  'timestamp', 'business_name', 'email',
-  'dropoff_reason', 'dropoff_comment',
-  'current_provider_id', 'current_provider_name',
-  'txns_per_day', 'avg_txn_value_gbp', 'trading_days_per_month',
-  'inflation_pct', 'volume_growth_pct',
-  'monthly_card_volume_gbp', 'revenue_3y_gbp',
-  'current_3y_cost_gbp',
-  'would_recommend_provider_id', 'would_recommend_provider_name',
-  'would_recommend_3y_cost_gbp', 'would_save_3y_gbp'
-];
-
-// Role configuration keyed by identifier used in IDB / fileHandles / gate.
-const FILE_ROLES = {
-  leads: {
-    idbKey: 'csv',
-    suggestedName: 'tillswift-leads.csv',
-    columns: LEAD_CSV_COLUMNS,
-    heading: 'Set up your leads file',
-    resumeHeading: 'Continue with your leads file',
-    description: 'consultation leads'
-  },
-  dropoff: {
-    idbKey: 'dropoff_csv',
-    suggestedName: 'tillswift-dropoffs.csv',
-    columns: DROPOFF_CSV_COLUMNS,
-    heading: 'Set up your drop-off survey file',
-    resumeHeading: 'Continue with your drop-off file',
-    description: 'drop-off survey responses'
-  }
-};
-
-function csvEscape(v) {
-  const s = v == null ? '' : String(v);
-  return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
-}
-
-function buildCalcSnapshot() {
-  const c = window._lastCalc || {};
-  const inp = c.inputs || {};
-  const rec = c.recommended || {};
-  const cur = c.current || {};
-  const round = n => (typeof n === 'number' ? Math.round(n) : '');
-  return {
-    current_provider_id: inp.currentId || '',
-    current_provider_name: cur.name ? (cur.name + (cur.plan ? ' ' + cur.plan : '')) : '',
-    txns_per_day: inp.txn ?? '',
-    avg_txn_value_gbp: inp.val ?? '',
-    trading_days_per_month: inp.days ?? '',
-    inflation_pct: inp.infl != null ? (inp.infl * 100).toFixed(1) : '',
-    volume_growth_pct: inp.growth != null ? (inp.growth * 100).toFixed(0) : '',
-    monthly_card_volume_gbp: round(c.monthlyVolume),
-    revenue_3y_gbp: round(c.revenue3y),
-    current_3y_cost_gbp: round(cur.tco),
-    recommended_provider_id: rec.id || '',
-    recommended_provider_name: rec.name ? (rec.name + (rec.plan ? ' ' + rec.plan : '')) : '',
-    recommended_3y_cost_gbp: round(rec.tco),
-    saving_3y_gbp: round(c.saving3y)
-  };
-}
-
-function buildLeadRow(contact) {
-  return {
-    timestamp: new Date().toISOString(),
-    business_name: contact.bizName,
-    contact_name: contact.name,
-    email: contact.email,
-    ...buildCalcSnapshot()
-  };
-}
-
-function buildDropoffRow(survey) {
-  const snap = buildCalcSnapshot();
-  return {
-    timestamp: new Date().toISOString(),
-    business_name: document.getElementById('f-name')?.value.trim() || '',
-    email: survey.email || '',
-    dropoff_reason: survey.reason || '',
-    dropoff_comment: survey.comment || '',
-    current_provider_id: snap.current_provider_id,
-    current_provider_name: snap.current_provider_name,
-    txns_per_day: snap.txns_per_day,
-    avg_txn_value_gbp: snap.avg_txn_value_gbp,
-    trading_days_per_month: snap.trading_days_per_month,
-    inflation_pct: snap.inflation_pct,
-    volume_growth_pct: snap.volume_growth_pct,
-    monthly_card_volume_gbp: snap.monthly_card_volume_gbp,
-    revenue_3y_gbp: snap.revenue_3y_gbp,
-    current_3y_cost_gbp: snap.current_3y_cost_gbp,
-    would_recommend_provider_id: snap.recommended_provider_id,
-    would_recommend_provider_name: snap.recommended_provider_name,
-    would_recommend_3y_cost_gbp: snap.recommended_3y_cost_gbp,
-    would_save_3y_gbp: snap.saving_3y_gbp
-  };
-}
-
-async function appendRowToCsv(role, row) {
-  const cfg = FILE_ROLES[role];
-  const handle = fileHandles[role];
-  const rowLine = cfg.columns.map(k => csvEscape(row[k])).join(',');
-
-  // No API or no handle (unsupported browser / gate was bypassed) — download instead.
-  if (!window.showSaveFilePicker || !handle) {
-    downloadSingleRowCsv(cfg.columns, rowLine, cfg.suggestedName);
-    return;
-  }
-
-  try {
-    if (!(await ensurePermission(handle))) {
-      alert('Permission to write the ' + cfg.description + ' file was denied — downloading this row instead.');
-      downloadSingleRowCsv(cfg.columns, rowLine, cfg.suggestedName);
-      return;
-    }
-
-    const file = await handle.getFile();
-    const existing = await file.text();
-    const needsHeader = !existing.trim();
-    let out = existing;
-    if (needsHeader) out = cfg.columns.join(',') + '\n';
-    else if (!out.endsWith('\n')) out += '\n';
-    out += rowLine + '\n';
-
-    const writable = await handle.createWritable();
-    await writable.write(out);
-    await writable.close();
-  } catch (e) {
-    console.error('CSV save failed, falling back to download:', e);
-    downloadSingleRowCsv(cfg.columns, rowLine, cfg.suggestedName);
-  }
-}
-
-async function saveLeadToCsv(contact) {
-  return appendRowToCsv('leads', buildLeadRow(contact));
-}
-
-async function saveDropoffToCsv(survey) {
-  return appendRowToCsv('dropoff', buildDropoffRow(survey));
-}
-
 // ── Dropoff survey modal ──
 function openDropoffSurvey() {
   document.getElementById('dropoff-overlay').style.display = 'flex';
@@ -2050,228 +1829,11 @@ async function submitDropoffSurvey() {
   // Make sure the computed snapshot is current before we save.
   calc();
 
-  try {
-    await saveDropoffToCsv({ reason: chosen.value, comment, email });
-    document.getElementById('dropoff-form').style.display = 'none';
-    document.getElementById('dropoff-thanks').style.display = 'block';
-    setTimeout(closeDropoffSurvey, 2500);
-  } catch (e) {
-    console.error('Dropoff save failed:', e);
-    errEl.textContent = 'Could not save — try again.';
-    errEl.style.display = '';
-  }
+  document.getElementById('dropoff-form').style.display = 'none';
+  document.getElementById('dropoff-thanks').style.display = 'block';
+  setTimeout(closeDropoffSurvey, 2500);
 }
 
-// ── Setup gate (used sequentially for each file role) ──
-let lfgRole = 'leads';  // which role the gate is currently configuring
-let lfgResolver = null;  // resolves when the operator closes the gate
-
-function lfgShowError(msg) {
-  const el = document.getElementById('lfg-error');
-  el.textContent = msg;
-  el.style.display = msg ? '' : 'none';
-}
-
-function lfgOpen() {
-  document.getElementById('leadfile-gate').style.display = 'flex';
-  return new Promise(resolve => { lfgResolver = resolve; });
-}
-
-function lfgClose() {
-  document.getElementById('leadfile-gate').style.display = 'none';
-  if (lfgResolver) { const r = lfgResolver; lfgResolver = null; r(); }
-}
-
-function lfgRenderExisting(handle) {
-  const cfg = FILE_ROLES[lfgRole];
-  document.getElementById('lfg-heading').textContent = cfg.resumeHeading;
-  const body = document.getElementById('lfg-body');
-  body.textContent = '';
-  body.appendChild(document.createTextNode('Ready to append to '));
-  const strong = document.createElement('strong');
-  strong.style.color = 'var(--gold2)';
-  strong.textContent = handle.name;
-  body.appendChild(strong);
-  body.appendChild(document.createTextNode('. Click continue to grant write access for this session.'));
-  const primary = document.getElementById('lfg-btn-primary');
-  primary.textContent = 'Continue';
-  primary.onclick = lfgPrimary;
-  const secondary = document.getElementById('lfg-btn-secondary');
-  secondary.style.display = '';
-  secondary.textContent = 'Use a different file';
-  secondary.onclick = lfgSwitchFile;
-}
-
-function lfgRenderFresh() {
-  const cfg = FILE_ROLES[lfgRole];
-  document.getElementById('lfg-heading').textContent = cfg.heading;
-  const body = document.getElementById('lfg-body');
-  body.textContent = '';
-  body.appendChild(document.createTextNode('Click below to pick a location for '));
-  const strong = document.createElement('strong');
-  strong.style.color = 'var(--gold2)';
-  strong.textContent = cfg.suggestedName;
-  body.appendChild(strong);
-  body.appendChild(document.createTextNode(
-    '. If the file already exists at that location it will be reused; if it doesn\'t, it will be created automatically. Every ' + cfg.description + ' entry is appended as a row.'
-  ));
-  const primary = document.getElementById('lfg-btn-primary');
-  primary.textContent = 'Create or open ' + (lfgRole === 'leads' ? 'leads file' : 'drop-off file');
-  primary.onclick = lfgPrimary;
-  const secondary = document.getElementById('lfg-btn-secondary');
-  secondary.style.display = 'none';
-}
-
-// Primary action — either confirm existing, or create new
-async function lfgPrimary() {
-  lfgShowError('');
-  const cfg = FILE_ROLES[lfgRole];
-  const existing = fileHandles[lfgRole];
-
-  if (existing) {
-    if (!(await ensurePermission(existing))) {
-      lfgShowError('Permission denied. Please grant write access, or choose a different file.');
-      return;
-    }
-    if (!(await handleFileStillExists(existing))) {
-      fileHandles[lfgRole] = null;
-      await lfDbClear(cfg.idbKey);
-      lfgRenderFresh();
-      lfgShowError('The previous file is gone. Please pick a new location.');
-      return;
-    }
-    lfgClose();
-    return;
-  }
-
-  try {
-    const handle = await window.showSaveFilePicker({
-      suggestedName: cfg.suggestedName,
-      types: [{ description: 'CSV file', accept: { 'text/csv': ['.csv'] } }]
-    });
-    if (!(await ensurePermission(handle))) {
-      lfgShowError('Write permission was denied.');
-      return;
-    }
-    // Seed new/empty file with headers so it's valid CSV from the start
-    const file = await handle.getFile();
-    if (!(await file.text()).trim()) {
-      const w = await handle.createWritable();
-      await w.write(cfg.columns.join(',') + '\n');
-      await w.close();
-    }
-    fileHandles[lfgRole] = handle;
-    await lfDbSet(cfg.idbKey, handle);
-    lfgClose();
-  } catch (e) {
-    if (e && e.name !== 'AbortError') lfgShowError('Could not create file: ' + e.message);
-  }
-}
-
-// Switch from a stored handle to a different file
-async function lfgSwitchFile() {
-  const cfg = FILE_ROLES[lfgRole];
-  fileHandles[lfgRole] = null;
-  await lfDbClear(cfg.idbKey);
-  lfgRenderFresh();
-  lfgShowError('');
-}
-
-// Probe whether the underlying file still exists on disk. Requires read permission
-// to return a definitive answer — callers should only rely on this after permission
-// has been granted or queried as 'granted'.
-async function handleFileStillExists(handle) {
-  try {
-    await handle.getFile();
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-// Set up a single file role. Skips the gate silently if a persisted handle is
-// still valid; otherwise prompts and waits for the operator.
-async function initFileRole(role) {
-  const cfg = FILE_ROLES[role];
-  lfgRole = role;
-
-  try {
-    const stored = await lfDbGet(cfg.idbKey);
-    if (stored) {
-      const perm = await stored.queryPermission({ mode: 'readwrite' });
-      if (perm === 'granted' && await handleFileStillExists(stored)) {
-        fileHandles[role] = stored;
-        return;
-      }
-      if (perm !== 'granted') {
-        fileHandles[role] = stored;
-        lfgRenderExisting(stored);
-      } else {
-        // Permission granted but file missing — clear and start fresh.
-        await lfDbClear(cfg.idbKey);
-        lfgRenderFresh();
-      }
-    } else {
-      lfgRenderFresh();
-    }
-    await lfgOpen();
-  } catch (e) {
-    console.error('File role init failed:', role, e);
-    lfgRenderFresh();
-    await lfgOpen();
-  }
-}
-
-async function initLeadFile() {
-  // Unsupported browser — skip the gate; submit-time fallback will download each row.
-  if (!window.showSaveFilePicker) return;
-  await initFileRole('leads');
-  await initFileRole('dropoff');
-}
-
-function downloadSingleRowCsv(columns, rowLine, suggestedName) {
-  const csv = columns.join(',') + '\n' + rowLine + '\n';
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  const base = suggestedName ? suggestedName.replace(/\.csv$/i, '') : 'tillswift-row';
-  a.download = base + '-' + Date.now() + '.csv';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-async function submitEngagement() {
-  const name    = document.getElementById('e-name').value.trim();
-  const email   = document.getElementById('e-email').value.trim();
-  const bizName = document.getElementById('f-name').value.trim();
-  const consent = document.getElementById('e-consent').checked;
-
-  if (!consent) {
-    alert('Please tick the consent box to continue.');
-    return;
-  }
-  if (!name || !email) {
-    alert('Please enter your name and email to continue.');
-    return;
-  }
-
-  unlocked = true;
-
-  const firstName = name.split(/\s+/)[0];
-  document.getElementById('confirmation-msg').textContent = 'Thanks ' + firstName;
-  document.getElementById('contact-form').style.display = 'none';
-  document.getElementById('confirmation').style.display = 'block';
-
-  calc(); // render step-4 grid AND refresh window._lastCalc
-
-  // Fire-and-forget write so the transition isn't blocked by the file picker.
-  saveLeadToCsv({ name, email, bizName });
-
-  setTimeout(() => goToStep(4), 5000);
-}
 
 // ── COMMON COMPLAINTS & ADVANTAGES (provider cons keyed by id) ──
 const CONS = {
@@ -2503,7 +2065,6 @@ const AFFILIATE = {
 };
 
 calc();
-initLeadFile();
 
 // ── ADMIN ──
 function openAdmin() {
