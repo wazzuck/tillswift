@@ -323,6 +323,58 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
   margin: 0.5rem 0 0.3rem;
 }
 
+/* ── MOBILE: compact row for ordinary provider tiles ── */
+@media (max-width: 600px) {
+  .provider-grid { grid-template-columns: 1fr; }
+
+  a.provider-card:not(.winner):not(.card-current) {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-areas:
+      "rank name tco  arrow"
+      "rank rate tcol arrow";
+    column-gap: 0.75rem;
+    row-gap: 2px;
+    align-items: center;
+    padding: 0.9rem 1rem;
+  }
+  a.provider-card:not(.winner):not(.card-current) .p-badge-row {
+    grid-area: rank; margin: 0; min-height: 0; display: block;
+  }
+  a.provider-card:not(.winner):not(.card-current) .p-badge { display: none; }
+  a.provider-card:not(.winner):not(.card-current) .p-rank { font-size: 10px; padding: 3px 7px; }
+  a.provider-card:not(.winner):not(.card-current) .p-name {
+    grid-area: name; font-size: 0.95rem; margin: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  a.provider-card:not(.winner):not(.card-current) .p-plan { display: none; }
+  a.provider-card:not(.winner):not(.card-current) .p-tco {
+    grid-area: tco; font-size: 1.15rem; text-align: right; margin: 0;
+  }
+  a.provider-card:not(.winner):not(.card-current) .p-tco-label {
+    grid-area: tcol; font-size: 8px; text-align: right; margin: 0;
+  }
+  a.provider-card:not(.winner):not(.card-current) .p-rate { display: none; }
+  a.provider-card:not(.winner):not(.card-current) .p-rate-val {
+    grid-area: rate; font-size: 11px; margin: 0;
+  }
+  a.provider-card:not(.winner):not(.card-current) > div:has(> .mini-bar-row) { display: none; }
+  a.provider-card:not(.winner):not(.card-current) .p-monthly,
+  a.provider-card:not(.winner):not(.card-current) .p-pros,
+  a.provider-card:not(.winner):not(.card-current) .p-cons,
+  a.provider-card:not(.winner):not(.card-current) .p-pros-cons-divider,
+  a.provider-card:not(.winner):not(.card-current) .p-warn,
+  a.provider-card:not(.winner):not(.card-current) .p-indicative { display: none; }
+  a.provider-card:not(.winner):not(.card-current) .p-source {
+    grid-area: arrow; font-size: 16px; color: var(--gold);
+    margin: 0; padding-left: 0.25rem; letter-spacing: 0;
+  }
+  a.provider-card:not(.winner):not(.card-current) .p-source-host { display: none; }
+  a.provider-card:not(.winner):not(.card-current):hover .p-source-arrow {
+    transform: none;
+  }
+}
+
 /* ── ENGAGEMENT SECTION ── */
 .engagement-box {
   background: var(--black2);
@@ -398,6 +450,7 @@ footer {
 
 @media (max-width: 600px) {
   .step { padding: 4rem 1rem 2rem; }
+  .step--wide { max-width: 100%; }
 }
 
 /* ── WIZARD STEPS ── */
@@ -1850,7 +1903,7 @@ function calc() {
         ${(CONS[r.id] && CONS[r.id].length) ? `<hr class="p-pros-cons-divider"><ul class="p-cons">${CONS[r.id].map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
         ${r.warn ? `<div class="p-warn">⚠ ${r.warn}</div>` : ''}
         ${indicativeBadge}
-        <span class="p-source"><span class="p-source-arrow">↗</span> ${sourceHost(r.source)}</span>
+        <span class="p-source"><span class="p-source-arrow">↗</span> <span class="p-source-host">${sourceHost(r.source)}</span></span>
       </a>`;
     }).join('');
   }
