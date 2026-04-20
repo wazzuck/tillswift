@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payment Consultation — IToldYouSo</title>
+<title>Payment Consultation — TillSwift</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -492,7 +492,7 @@ footer {
 <body>
 
 <nav>
-  <span class="nav-brand">IToldYouSo</span>
+  <span class="nav-brand">TillSwift</span>
   <span class="nav-date" id="nav-date"></span>
 </nav>
 
@@ -505,7 +505,7 @@ footer {
     <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem">Lead file setup</div>
     <div id="lfg-heading" style="font-family:var(--font-serif);font-size:1.5rem;font-weight:400;color:var(--white);line-height:1.25;margin-bottom:.75rem">Set up your leads file</div>
     <div id="lfg-body" style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:1.5rem">
-      Click below to pick a location for <strong style="color:var(--gold2)">itoldyouso-leads.csv</strong>. If the file already exists at that location it will be reused; if it doesn't, it will be created automatically. Every completed consultation and drop-off is appended as a row.
+      Click below to pick a location for <strong style="color:var(--gold2)">tillswift-leads.csv</strong>. If the file already exists at that location it will be reused; if it doesn't, it will be created automatically. Every completed consultation and drop-off is appended as a row.
     </div>
     <div id="lfg-error" style="display:none;font-size:11px;color:rgba(220,80,80,0.85);margin-bottom:1rem;line-height:1.5"></div>
     <div id="lfg-actions" style="display:flex;flex-direction:column;gap:.6rem">
@@ -703,7 +703,7 @@ footer {
           <div style="font-size:10px;color:rgba(248,245,239,0.35);line-height:1.8;margin-bottom:1rem">
             The £40 consultation fee is charged as a single upfront payment prior to work commencing. The fee covers provider recommendation, setup assistance, and handover as described during the consultation. No subscription, retainer, or ongoing charges apply.<br><br>
             <strong style="color:rgba(248,245,239,0.5)">14-day satisfaction guarantee.</strong> If you are not satisfied with the service, a full refund will be issued on request within 14 days of payment. No questions asked.<br><br>
-            IToldYouSo is a trading name operating as an independent payment consultant. We are not affiliated with, endorsed by, or acting as an agent of any payment provider listed on this page. Provider rates and terms are sourced from public sources and are subject to change — always verify with the provider before signing any agreement.
+            TillSwift is a trading name operating as an independent payment consultant. We are not affiliated with, endorsed by, or acting as an agent of any payment provider listed on this page. Provider rates and terms are sourced from public sources and are subject to change — always verify with the provider before signing any agreement.
           </div>
           <div class="consent-row">
             <input type="checkbox" id="e-consent">
@@ -772,8 +772,8 @@ footer {
 </div>
 
 <footer>
-  <div class="footer-brand">IToldYouSo</div>
-  <div class="footer-note">Payment provider data sourced directly from provider websites, April 2026. Rates are subject to change — verify before committing. This document is prepared exclusively for use in IToldYouSo consultations and is not for redistribution.</div>
+  <div class="footer-brand">TillSwift</div>
+  <div class="footer-note">Payment provider data sourced directly from provider websites, April 2026. Rates are subject to change — verify before committing. This document is prepared exclusively for use in TillSwift consultations and is not for redistribution.</div>
 
   <button onclick="openAdmin()" style="background:none;border:none;cursor:pointer;margin-top:2rem;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(248,245,239,0.1);font-family:var(--font-sans)">Admin</button>
 </footer>
@@ -1828,7 +1828,7 @@ const fileHandles = { leads: null, dropoff: null };
 // ── IndexedDB wrapper for persisting the file handles ──
 function lfDbOpen() {
   return new Promise((resolve, reject) => {
-    const req = indexedDB.open('itoldyouso-leads', 1);
+    const req = indexedDB.open('tillswift-leads', 1);
     req.onupgradeneeded = () => req.result.createObjectStore('handles');
     req.onsuccess = () => resolve(req.result);
     req.onerror   = () => reject(req.error);
@@ -1895,7 +1895,7 @@ const DROPOFF_CSV_COLUMNS = [
 const FILE_ROLES = {
   leads: {
     idbKey: 'csv',
-    suggestedName: 'itoldyouso-leads.csv',
+    suggestedName: 'tillswift-leads.csv',
     columns: LEAD_CSV_COLUMNS,
     heading: 'Set up your leads file',
     resumeHeading: 'Continue with your leads file',
@@ -1903,7 +1903,7 @@ const FILE_ROLES = {
   },
   dropoff: {
     idbKey: 'dropoff_csv',
-    suggestedName: 'itoldyouso-dropoffs.csv',
+    suggestedName: 'tillswift-dropoffs.csv',
     columns: DROPOFF_CSV_COLUMNS,
     heading: 'Set up your drop-off survey file',
     resumeHeading: 'Continue with your drop-off file',
@@ -2235,7 +2235,7 @@ function downloadSingleRowCsv(columns, rowLine, suggestedName) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  const base = suggestedName ? suggestedName.replace(/\.csv$/i, '') : 'itoldyouso-row';
+  const base = suggestedName ? suggestedName.replace(/\.csv$/i, '') : 'tillswift-row';
   a.download = base + '-' + Date.now() + '.csv';
   document.body.appendChild(a);
   a.click();
