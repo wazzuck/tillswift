@@ -985,6 +985,22 @@ footer {
       <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(15,118,110,1);display:block;line-height:1" id="adm-aff-total">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Combined income</span></div>
     </div>
 
+    <!-- Pricing transparency table -->
+    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Pricing transparency</div>
+    <div style="overflow-x:auto;margin-bottom:3rem">
+      <table id="transparency-table" style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px">
+        <thead>
+          <tr>
+            <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Provider</th>
+            <th style="text-align:center;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Prices published?</th>
+            <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Notes</th>
+            <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Source</th>
+          </tr>
+        </thead>
+        <tbody id="transparency-table-body"></tbody>
+      </table>
+    </div>
+
     <!-- Full provider table -->
     <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">All providers — full rate table</div>
     <div style="overflow-x:auto">
@@ -1316,19 +1332,35 @@ const PROVIDERS = [
 
   // ── Worldpay ── source: https://www.worldpay.com/en-gb/small-business
   { id:'worldpay_payg', app:'partial',
-    name:'Worldpay', plan:'Pay as you go',
-    sub:0, rate:0.006, flat:0.045, extra:0,
+    name:'Worldpay', plan:'Standard (under £75k/yr)',
+    sub:17.50, rate:0.015, flat:0, extra:0,
     source:'https://www.worldpay.com/en-gb/small-business',
-    warn:'In-person: UK debit 0.6%, UK credit 1.4%, UK business 2.5% + 4.5p auth fee per transaction · Online/phone: UK debit 1.0%, UK credit 1.8%, UK business 2.9% · Chargeback fee £20 · Rate shown uses UK debit in-person as base',
-    pros:['No long-term contract on PAYG','Widely trusted UK brand','Multi-channel support'] },
+    warn:'1.5% for UK personal Visa & Mastercard in-person · Terminal rental from £17.50+VAT/month (required) · PCI compliance fee from £5/month additional · No published PAYG option — terminal rental is mandatory',
+    pros:['Widely trusted UK brand','Multi-channel support','Next-day settlement'] },
 
   { id:'worldpay_contract', app:'partial',
-    name:'Worldpay', plan:'Contract',
-    sub:20, rate:0.010, flat:0, extra:0,
+    name:'Worldpay', plan:'High Volume (£75k+/yr)',
+    sub:20, rate:0.0075, flat:0.045, extra:0,
     indicative:true,
     source:'https://www.worldpay.com/en-gb/small-business',
-    warn:'Rate requires custom quote — figure shown is illustrative only · 18-month minimum contract · Early termination fees · Better suited to £75k+/year',
-    pros:['Negotiated rates from ~0.3% debit','Full-service merchant account','Best for high-volume multi-channel'] },
+    warn:'Rate requires custom quote — 0.75%+4.5p is published floor, actual rate varies · 18-month minimum contract with early termination fees · £15+/month service charge + £5+/month PCI compliance on top · Only available to businesses over £75k annual card turnover',
+    pros:['From 0.75%+4.5p — competitive at high volume','Full-service merchant account','Multi-channel support'] },
+
+  // ── Lloyds Cardnet ── source: https://www.lloydsbank.com/business/take-payments-with-cardnet/our-prices.html
+  { id:'lloyds_payg', app:'partial',
+    name:'Lloyds Cardnet', plan:'Pay as you go',
+    sub:15, rate:0.0175, flat:0, extra:49,
+    source:'https://www.lloydsbank.com/business/take-payments-with-cardnet/our-prices.html',
+    warn:'1.75% flat rate for all UK card types · Terminal from £49 one-off · Minimum monthly service charge £10 + PCI DSS fee £5–£10/month (shown as £15/mo combined) · Settlement within 5 working days (next-day costs extra) · Chargeback fee £20–£25',
+    pros:['Simple flat 1.75% rate — no surprises','No monthly contract on PAYG','Lloyds Bank-backed — strong brand trust'] },
+
+  { id:'lloyds_bespoke', app:'partial',
+    name:'Lloyds Cardnet', plan:'Bespoke (£25k+/yr)',
+    sub:15, rate:0.0054, flat:0.03, extra:0,
+    indicative:true,
+    source:'https://www.lloydsbank.com/business/take-payments-with-cardnet/our-prices.html',
+    warn:'Rates require custom quote — 0.54%+3p shown is the published example for ~£25k/yr in-person debit; credit cards ~0.96%, business cards ~2.09% · MMSC £10 + PCI £5–£10/month · Settlement within 5 working days · Chargeback fee £20–£25',
+    pros:['From 0.54% debit — competitive at volume','Established bank acquirer','Multi-channel in-person and online'] },
 
   // ── Barclaycard ── source: https://www.barclaycard.co.uk/business/accepting-payments/card-readers/pocket-sized-card-reader
   { id:'barclaycard', app:'partial',
@@ -1459,6 +1491,77 @@ const PROVIDERS = [
     warn:'In-person payments via Tap to Pay on iPhone — no dedicated card reader. Primarily an online and multi-currency platform. Limited suitability for high-volume in-person retail or kiosks.',
     pros:['No monthly fee','Multi-currency business account','Competitive FX rates'] },
 
+  // ── Trust Payments ── source: https://www.trustpayments.com/
+  { id:'trustpayments', app:'partial',
+    name:'Trust Payments', plan:'Bespoke',
+    sub:20, rate:0.015, flat:0.03, extra:0,
+    indicative:true,
+    source:'https://www.trustpayments.com/',
+    warn:'Rates not publicly disclosed — bespoke quotes only. Known for high-risk merchant support (Forex, Crypto, Travel). Additional fees for high-risk: £50/month risk premium, £100 re-instatement fee. PCI and chargeback fees apply.',
+    pros:['High-risk merchant support','Multi-currency and global acquiring','Next-day settlement'] },
+
+  // ── Global Payments ── source: https://www.globalpayments.com/en-gb
+  { id:'globalpayments', app:'partial',
+    name:'Global Payments', plan:'Standard',
+    sub:80, rate:0.017, flat:0.04, extra:0,
+    indicative:true,
+    source:'https://www.globalpayments.com/en-gb',
+    warn:'Indicative blended rate of 1.7%+4p based on published examples for standard retail under £2.5m/year · Monthly costs add up fast: £30 MMSC + £25 PCI + £25 terminal rental = ~£80/month minimum · Rate improves significantly above £2.5m/year · Note: Global Payments completed acquisition of Worldpay in January 2026',
+    pros:['Large global acquirer','Next-day settlement','Multi-channel in-person and online'] },
+
+  // ── Cashflows ── source: https://www.cashflows.com/
+  { id:'cashflows', app:'partial',
+    name:'Cashflows', plan:'Bespoke',
+    sub:15, rate:0.015, flat:0.03, extra:0,
+    indicative:true,
+    source:'https://www.cashflows.com/',
+    warn:'Rates not publicly disclosed — tiered or interchange-plus pricing on application. Cloud-based UK acquirer. Anytime settlement available. Minimum ~£15/month. FCA regulated electronic money institution.',
+    pros:['Tiered and IC+ pricing options','Anytime/instant settlement','FCA regulated UK acquirer'] },
+
+  // ── Mollie ── source: https://www.mollie.com/pricing
+  { id:'mollie', app:false,
+    name:'Mollie', plan:'Pay as you go',
+    sub:0, rate:0.0325, flat:0.21, extra:0,
+    source:'https://www.mollie.com/pricing',
+    warn:'Online payments only — no in-person card machine for UK businesses. Post-Brexit UK-issued cards are classed as non-EEA: 3.25% + €0.25 (~£0.21) per transaction. EEA consumer cards 1.80% + €0.25. Business/commercial cards 2.90% + €0.25. FX markup ~2.5–3% on non-GBP transactions.',
+    pros:['No monthly fee','Wide payment method support (Klarna, PayPal, etc.)','Pay per successful transaction only'] },
+
+  // ── Worldline ── source: https://uk.worldline.com/
+  { id:'worldline', app:'partial',
+    name:'Worldline', plan:'Bespoke',
+    sub:25, rate:0.015, flat:0.03, extra:0,
+    indicative:true,
+    source:'https://uk.worldline.com/',
+    warn:'Rates not publicly disclosed — custom quotes only. Typical IC++ or blended pricing for UK merchants. Card scheme fees published separately. Terminal rental typically £20–£30/month. Enterprise and mid-market focus.',
+    pros:['Large European acquirer','IC++ transparent pricing option','Multi-channel support'] },
+
+  // ── AIB Merchant Services ── source: https://www.aibms.com/
+  { id:'aibms', app:'partial',
+    name:'AIB Merchant Services', plan:'Bespoke',
+    sub:25, rate:0.015, flat:0.02, extra:0,
+    indicative:true,
+    source:'https://www.aibms.com/',
+    warn:'Rates not publicly disclosed — bespoke quotes only. Interchange++ pricing model. Auth fee ~2p per transaction. Terminal rental from £25/month. Contracts typically 1–4 years with early termination fees. Online gateway (AuthiPay) from £21.99/month extra.',
+    pros:['Interchange++ transparent pricing','Established acquirer — Visa & Mastercard principal member','PSR comparison tool published'] },
+
+  // ── Checkout.com ── source: https://www.checkout.com/pricing
+  { id:'checkoutcom', app:false,
+    name:'Checkout.com', plan:'Custom',
+    sub:0, rate:0.020, flat:0.20, extra:0,
+    indicative:true,
+    source:'https://www.checkout.com/pricing',
+    warn:'Rates not publicly disclosed — negotiated on application. Online and enterprise-focused — not suited to in-person small business use. No monthly fee or minimum commitment. Better suited to high-volume ecommerce.',
+    pros:['No monthly fee','Enterprise-grade infrastructure','Global acquiring and currency support'] },
+
+  // ── DNA Payments ── source: https://www.dnapayments.com/
+  { id:'dnapayments', app:'partial',
+    name:'DNA Payments', plan:'Bespoke',
+    sub:10, rate:0.005, flat:0.03, extra:0,
+    indicative:true,
+    source:'https://www.dnapayments.com/',
+    warn:'Rates not publicly disclosed — bespoke quotes only. IC+ model: debit markup from ~0.26%+3p on top of interchange (effective blended ~0.5%+3p shown). Credit and business cards higher. 2–4 year contracts with £159 early cancellation fee. Next-day settlement costs £7.99/month extra.',
+    pros:['Competitive debit rates from ~0.26% markup','IC+ transparent pricing model','UK-based acquirer'] },
+
   // ── Handepay ── source: https://www.handepay.co.uk/card-machines/
   { id:'handepay', app:'partial',
     name:'Handepay', plan:'Standard',
@@ -1493,6 +1596,7 @@ const POP_ORDER = [
   'mypos',        // popular in UK independent retail
   'tyl',          // NatWest — large existing business base
   'barclaycard',  // established bank brand
+  'lloyds',       // Lloyds Bank Cardnet
   'worldpay',     // large legacy estate
   'lightspeed',   // growing in hospitality & retail
   'takepayments', // UK-focused mid-market
@@ -1501,10 +1605,18 @@ const POP_ORDER = [
   'elavon',       // established acquirer
   'paymentsense', // legacy — now Dojo
   'teya',         // formerly Teya/SaltPay — UK presence
-  'adyen',        // enterprise
-  'airwallex',    // multi-currency / online focus
-  'zeller',       // Australia only — listed last
-  'fluxa',        // unverified / minimal info
+  'adyen',          // enterprise
+  'airwallex',      // multi-currency / online focus
+  'checkoutcom',    // enterprise / online
+  'worldline',      // enterprise acquirer
+  'globalpayments', // large acquirer
+  'aibms',          // established acquirer
+  'cashflows',      // UK cloud acquirer
+  'dnapayments',    // UK acquirer IC+
+  'trustpayments',  // high-risk / enterprise
+  'mollie',         // online only
+  'zeller',         // Australia only — listed last
+  'fluxa',          // unverified / minimal info
 ];
 
 let sortBy = 'tco';
@@ -2204,7 +2316,49 @@ function checkAdmin() {
   }
 }
 
+function populatePricingTransparency() {
+  // Group plans by provider name, determine published status from indicative flag
+  const byProvider = {};
+  PROVIDERS.forEach(p => {
+    if (!byProvider[p.name]) byProvider[p.name] = { plans: [], source: p.source };
+    byProvider[p.name].plans.push(p);
+  });
+
+  const rows = Object.entries(byProvider).map(([name, { plans, source }]) => {
+    const allIndicative  = plans.every(p => p.indicative);
+    const noneIndicative = plans.every(p => !p.indicative);
+    const status = noneIndicative ? 'yes' : allIndicative ? 'no' : 'partial';
+    return { name, status, source, plans };
+  });
+
+  // Sort: published first, then partial, then no
+  const order = { yes: 0, partial: 1, no: 2 };
+  rows.sort((a, b) => order[a.status] - order[b.status] || a.name.localeCompare(b.name));
+
+  const statusLabel = {
+    yes:     '<span style="color:var(--green);font-weight:600">✓ Yes</span>',
+    partial: '<span style="color:#d97706;font-weight:600">~ Partial</span>',
+    no:      '<span style="color:var(--red);font-weight:600">✗ No</span>',
+  };
+  const statusNote = {
+    yes:     'Rates confirmed directly from provider website',
+    partial: 'Some plans confirmed; others require a custom quote',
+    no:      'All rates indicative — custom quote required',
+  };
+  const hostname = url => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return url; } };
+
+  const tbody = document.getElementById('transparency-table-body');
+  tbody.innerHTML = rows.map(r => `
+    <tr style="border-bottom:1px solid var(--hairline)">
+      <td style="padding:.6rem 1rem;color:var(--white);font-weight:500">${r.name}</td>
+      <td style="padding:.6rem 1rem;text-align:center">${statusLabel[r.status]}</td>
+      <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px">${statusNote[r.status]}</td>
+      <td style="padding:.6rem 1rem"><a href="${r.source}" target="_blank" style="color:rgba(15,118,110,0.6);font-size:10px;text-decoration:none">${hostname(r.source)} ↗</a></td>
+    </tr>`).join('');
+}
+
 function populateAdmin() {
+  populatePricingTransparency();
   const txn    = parseInt(document.getElementById('f-txn')?.value)  || 8;
   const val    = parseInt(document.getElementById('f-val')?.value)  || 50;
   const days   = parseInt(document.getElementById('f-days')?.value) || 22;
@@ -2329,6 +2483,58 @@ function populateAdmin() {
     </tr>`;
   }).join('');
 }
+
+// ── URL PARAMETER PRE-FILL ──
+// Supports: ?txn=20&val=35&days=26&path=new&provider=lopay
+// Share a link to land users directly on a pre-calculated result.
+function loadFromURLParams() {
+  const p = new URLSearchParams(window.location.search);
+  if (!p.has('txn') && !p.has('val') && !p.has('days') && !p.has('path') && !p.has('provider')) return;
+
+  // Apply path copy + wiz-1 classes without triggering the goToStep(1) animation
+  const path = p.get('path') || 'new';
+  userPath = path;
+  applyUserPath();
+  const wiz1 = document.getElementById('wiz-1');
+  if (wiz1) {
+    wiz1.classList.remove('path-new', 'path-switch', 'is-ready');
+    wiz1.classList.add(path === 'path-new' ? 'path-new' : 'path-switch');
+  }
+
+  // Pre-fill form values
+  if (p.has('txn'))  { const el = document.getElementById('f-txn');  if (el) el.value = parseInt(p.get('txn'))  || 8; }
+  if (p.has('val'))  { const el = document.getElementById('f-val');  if (el) el.value = parseInt(p.get('val'))  || 50; }
+  if (p.has('days')) { const el = document.getElementById('f-days'); if (el) el.value = parseInt(p.get('days')) || 22; }
+
+  // Run calc() now so the provider dropdown gets populated
+  unlocked = true;
+  calc();
+
+  // Set provider after dropdown is populated, then re-calc and jump to results
+  if (p.has('provider')) {
+    const sel = document.getElementById('current-provider');
+    if (sel) {
+      sel.value = p.get('provider');
+      toggleCustomRate();
+    }
+  }
+  if (path === 'new') {
+    const sel = document.getElementById('current-provider');
+    if (sel && !p.has('provider')) { sel.value = 'new'; toggleCustomRate(); }
+  }
+  checkReadiness();
+  calc();
+
+  // Skip straight to step 4 without animation
+  currentStep = 0;
+  document.querySelectorAll('.wiz-step').forEach(el => el.classList.remove('active'));
+  const step4 = document.getElementById('wiz-4');
+  if (step4) step4.classList.add('active');
+  currentStep = 4;
+  updateProgress(4);
+}
+
+document.addEventListener('DOMContentLoaded', loadFromURLParams);
 </script>
 </body>
 </html>
