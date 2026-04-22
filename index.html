@@ -921,6 +921,11 @@ footer {
     <h2 class="step-heading" id="step4-heading">Your full<br><em>recommendation.</em></h2>
     <p class="step-body" id="step4-body">Every UK provider ranked for your exact volumes. Your recommended option is highlighted. Click any card to view their official pricing page.</p>
 
+    <div style="margin-bottom:1.5rem">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:0.75rem">Get notified when TillSwift launches in May 2026.</p>
+      <button class="btn-primary" style="width:auto;margin-top:0" onclick="openNotifyForm()">Notify me at launch →</button>
+    </div>
+
     <div class="savings-hook" id="savings-hook-4" style="display:none">
       <div class="sh-hero">
         <div class="sh-hero-label">You save over 3 years</div>
@@ -1781,6 +1786,18 @@ function showBetaModal(onComplete) {
   var overlay = document.getElementById('beta-overlay');
   overlay.style.display = 'flex';
   overlay._onComplete = onComplete;
+}
+
+function openNotifyForm() {
+  // Reset modal to initial state in case it was already submitted
+  document.getElementById('beta-form').style.display = '';
+  document.getElementById('beta-skip').style.display = '';
+  document.getElementById('beta-thanks').style.display = 'none';
+  document.getElementById('beta-err').style.display = 'none';
+  var btn = document.getElementById('beta-submit');
+  btn.disabled = false;
+  btn.textContent = 'Notify me at launch →';
+  document.getElementById('beta-overlay').style.display = 'flex';
 }
 
 function dismissBeta() {
