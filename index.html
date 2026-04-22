@@ -553,6 +553,74 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
 }
 .confirmation strong { color: var(--gold2); display: block; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.5rem; }
 
+/* ── BETA SIGN-UP MODAL ── */
+#beta-overlay {
+  position: fixed; inset: 0; z-index: 900;
+  background: rgba(8,12,20,0.82);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+}
+#beta-modal {
+  background: var(--black2);
+  border: 1px solid var(--border2);
+  max-width: 420px; width: 100%;
+  padding: 2.5rem 2rem 2rem;
+  position: relative;
+}
+#beta-badge {
+  display: inline-block;
+  background: var(--gold); color: var(--black);
+  font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
+  padding: 3px 9px; margin-bottom: 1rem;
+}
+#beta-modal h2 {
+  font-family: var(--font-serif); font-size: 1.75rem; font-weight: 400;
+  color: var(--white); margin: 0 0 0.75rem; line-height: 1.2;
+}
+#beta-body {
+  font-size: 13px; color: var(--muted); line-height: 1.7; margin: 0 0 1.5rem;
+}
+.beta-field { margin-bottom: 1rem; }
+.beta-field label {
+  display: block; font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem;
+}
+.beta-field input {
+  width: 100%; box-sizing: border-box;
+  background: var(--black3); border: 1px solid var(--border2);
+  color: var(--white); font-family: var(--font-sans); font-size: 13px;
+  padding: 0.65rem 0.85rem; outline: none; transition: border-color 0.2s;
+}
+.beta-field input:focus { border-color: var(--accent); }
+.beta-field input::placeholder { color: rgba(148,163,184,0.4); }
+#beta-skip {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(148,163,184,0.5);
+  margin-top: 1.25rem; padding: 0; display: block; width: 100%; text-align: center;
+  transition: color 0.2s;
+}
+#beta-skip:hover { color: var(--muted); }
+
+/* ── DEFAULT: top 12 provider tiles blurred until ?demo is added ── */
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) { pointer-events: none; }
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-name,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-plan,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-badge-row { filter: blur(7px); user-select: none; }
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) > div:has(.mini-bar-row),
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-rate,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-rate-val,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-monthly,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-pros,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-cons,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-pros-cons-divider,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-warn,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-indicative,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-source { display: none; }
+body:not(.demo-mode) .sh-current-detail,
+body:not(.demo-mode) .sh-saving-detail { filter: blur(7px); user-select: none; }
+
 /* ── FOOTER ── */
 footer {
   max-width: 780px; margin: 0 auto;
@@ -933,6 +1001,37 @@ footer {
   </div>
 </div>
 
+<!-- ─── BETA SIGN-UP MODAL ─── -->
+<div id="beta-overlay" style="display:none" aria-modal="true" role="dialog" aria-labelledby="beta-title">
+  <div id="beta-modal">
+    <div id="beta-badge">BETA</div>
+    <h2 id="beta-title">Launching May 2026.</h2>
+    <p id="beta-body">TillSwift is in its final checks before launch. You can still explore a preview of your results below — sign up and we'll notify you the moment the full platform goes live.</p>
+    <form id="beta-form" onsubmit="submitBeta(event)">
+      <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+      <div class="beta-field">
+        <label for="beta-name">Your name</label>
+        <input type="text" id="beta-name" name="name" placeholder="Jane Smith" autocomplete="name">
+      </div>
+      <div class="beta-field">
+        <label for="beta-company">Company name <span style="font-size:9px;opacity:0.5;text-transform:none;letter-spacing:0">(optional)</span></label>
+        <input type="text" id="beta-company" name="company" placeholder="Acme Ltd" autocomplete="organization">
+      </div>
+      <div class="beta-field">
+        <label for="beta-email">Email address</label>
+        <input type="email" id="beta-email" name="email" placeholder="jane@acme.co.uk" autocomplete="email" required>
+      </div>
+      <div id="beta-err" style="display:none;font-size:12px;color:rgba(220,80,60,0.9);margin-top:0.25rem"></div>
+      <button type="submit" id="beta-submit" class="btn-primary" style="margin-top:1.25rem">Notify me at launch →</button>
+    </form>
+    <div id="beta-thanks" style="display:none;text-align:center;padding:1rem 0">
+      <div style="font-family:var(--font-serif);font-size:1.6rem;color:var(--gold2);margin-bottom:0.5rem">You're on the list.</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7">We'll be in touch when TillSwift launches.<br>In the meantime, here's a preview of your results.</div>
+    </div>
+    <button id="beta-skip" onclick="dismissBeta()" type="button">Skip for now →</button>
+  </div>
+</div>
+
 <footer>
   <a href="#wiz-0" class="footer-brand" onclick="goToStep(0); return false;">TillSwift</a>
   <div class="footer-note">Payment provider data sourced directly from provider websites. Rates are subject to change — verify before committing. This document is prepared exclusively for use in TillSwift consultations and is not for redistribution.</div>
@@ -1034,6 +1133,17 @@ footer {
 <input type="hidden" id="r-days" value="22">
 
 <script>
+// ── DEMO MODE — ?demo in URL reveals full provider details ──
+(function() {
+  if (new URLSearchParams(location.search).has('demo')) {
+    document.body.classList.add('demo-mode');
+    // Update TillSwift brand links to preserve ?demo on navigation
+    document.querySelectorAll('.nav-brand, .footer-brand').forEach(function(a) {
+      a.href = '?demo';
+    });
+  }
+})();
+
 // ── ADVANCED TOGGLE ──
 function toggleAdvanced() {
   const btn = document.getElementById('adv-toggle');
@@ -1711,8 +1821,58 @@ function updateProgress(n) {
   document.getElementById('progress-bar').style.width = pct + '%';
 }
 
+// ── BETA MODAL — URL of your deployed Google Apps Script web app ──
+var BETA_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwrWPfxST_38ohRDCF4DmEEHwoLOwfwaMSosxDVnZzWaTDDz4P3b_Z9KxaxYfRuQm0/exec';
+
+function showBetaModal(onComplete) {
+  var overlay = document.getElementById('beta-overlay');
+  overlay.style.display = 'flex';
+  overlay._onComplete = onComplete;
+}
+
+function dismissBeta() {
+  var overlay = document.getElementById('beta-overlay');
+  overlay.style.display = 'none';
+  sessionStorage.setItem('beta_seen', '1');
+  if (overlay._onComplete) overlay._onComplete();
+}
+
+function submitBeta(e) {
+  e.preventDefault();
+  var name    = document.getElementById('beta-name').value.trim();
+  var company = document.getElementById('beta-company').value.trim();
+  var email   = document.getElementById('beta-email').value.trim();
+  var errEl   = document.getElementById('beta-err');
+  errEl.style.display = 'none';
+
+  if (!email) { errEl.textContent = 'Please enter your email address.'; errEl.style.display = 'block'; return; }
+
+  var btn = document.getElementById('beta-submit');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  var params = new URLSearchParams({ name: name, company: company, email: email,
+    timestamp: new Date().toISOString(), page: location.href });
+
+  fetch(BETA_SCRIPT_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' })
+    .catch(function() {})  // still show thanks even if network fails
+    .finally(function() {
+      document.getElementById('beta-form').style.display = 'none';
+      document.getElementById('beta-skip').style.display = 'none';
+      document.getElementById('beta-thanks').style.display = 'block';
+      sessionStorage.setItem('beta_seen', '1');
+      setTimeout(dismissBeta, 2200);
+    });
+}
+
 function goToStep(n) {
   if (n === currentStep) return;
+  // Show beta modal on first visit to results, unless in demo mode
+  if (n === 4 && !document.body.classList.contains('demo-mode') && !sessionStorage.getItem('beta_seen')) {
+    unlocked = true; calc();
+    showBetaModal(function() { goToStep(4); });
+    return;
+  }
   if (n === 4) { unlocked = true; calc(); }  // unlock and render full grid before showing results
 
   const oldEl = document.getElementById('wiz-' + currentStep);
