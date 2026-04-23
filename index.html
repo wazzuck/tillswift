@@ -15,7 +15,7 @@
 <title>Payment Consultation — TillSwift</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root {
   /* Light fintech palette */
@@ -39,6 +39,16 @@
   --green:       #059669;
   --font-sans:   'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono:   'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display:'Instrument Serif', 'Fraunces', 'Times New Roman', serif;
+
+  /* 2026 luminous glow system */
+  --glow-accent: 0 0 60px -12px rgba(13,148,136,0.55), 0 0 20px -6px rgba(13,148,136,0.35);
+  --glow-accent-sm: 0 0 24px -8px rgba(13,148,136,0.45);
+  --glow-ring:   0 0 0 3px rgba(13,148,136,0.12), 0 8px 32px -12px rgba(13,148,136,0.35);
+
+  /* Glass/frosted layer */
+  --glass-bg:    rgba(255,255,255,0.65);
+  --glass-border:rgba(15,118,110,0.12);
 
   /* Legacy aliases for older selectors */
   --black:       var(--bg);
@@ -47,7 +57,27 @@
   --gold:        var(--accent);
   --gold2:       var(--accent2);
   --white:       var(--ink);
-  --font-serif:  var(--font-sans);
+  --font-serif:  var(--font-display);
+}
+
+/* ── 2026 AMBIENT GRADIENT MESH ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: -1;
+  background:
+    radial-gradient(ellipse 90% 60% at 15% 10%,  rgba(13,148,136,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 85% 30%,  rgba(45,212,191,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 100% 70% at 50% 100%, rgba(20,184,166,0.06) 0%, transparent 60%);
+  pointer-events: none;
+  animation: meshDrift 28s ease-in-out infinite alternate;
+}
+@keyframes meshDrift {
+  0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+  50%  { transform: translate(-1.5%, 1%) scale(1.04); opacity: 0.92; }
+  100% { transform: translate(1.5%, -1%) scale(1.02); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -85,9 +115,11 @@ nav {
   border-bottom: 1px solid var(--border);
 }
 .nav-brand {
-  font-family: var(--font-sans); font-size: 1rem; font-weight: 700;
-  letter-spacing: 0.12em; color: var(--ink); text-transform: uppercase; text-decoration: none;
+  font-family: var(--font-display); font-size: 1.35rem; font-weight: 400;
+  letter-spacing: -0.01em; color: var(--ink); text-decoration: none;
+  font-style: italic;
 }
+.nav-brand::first-letter { color: var(--accent); }
 
 
 /* ── STEP SHELL ── */
@@ -109,12 +141,18 @@ nav {
 
 .step-heading {
   font-family: var(--font-sans);
-  font-size: clamp(1.75rem, 4vw, 2.6rem);
-  font-weight: 700; line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--ink); margin-bottom: 0.5rem;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 600; line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: var(--ink); margin-bottom: 0.75rem;
 }
-.step-heading em { font-style: normal; color: var(--accent); }
+.step-heading em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
 
 .step-body {
   font-size: 0.95rem; color: var(--ink2);
@@ -158,15 +196,31 @@ nav {
 .field-select option { background: var(--black3); }
 .field-hint { font-size: 11px; color: rgba(15,23,42,0.5); line-height: 1.5; }
 
-/* ── SAVINGS HOOK ── */
+/* ── SAVINGS HOOK (glassmorphism, 2026) ── */
 .savings-hook {
-  background: var(--black2);
-  border: 1px solid var(--border2);
-  border-radius: 6px;
-  padding: 1.75rem 2rem;
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 2.25rem 2.25rem;
   margin-top: 2rem;
-  transition: box-shadow 0.4s ease, border-color 0.4s ease;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.6) inset,
+    0 30px 60px -24px rgba(15,118,110,0.22),
+    0 10px 30px -10px rgba(15,23,42,0.08);
+  transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
+  overflow: hidden;
 }
+.savings-hook::before {
+  content: '';
+  position: absolute; inset: -40%;
+  background: radial-gradient(ellipse 50% 40% at 50% 0%, rgba(13,148,136,0.12), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+.savings-hook > * { position: relative; z-index: 1; }
 .savings-hook.hook-pop {
   animation: hookPop 2.4s cubic-bezier(.22,.61,.36,1) 1;
   z-index: 5;
@@ -197,11 +251,13 @@ nav {
   color: var(--accent); font-weight: 600; margin-bottom: 0.55rem;
 }
 .sh-hero-num {
-  font-family: var(--font-mono);
-  font-size: clamp(2.25rem, 5vw, 3rem);
-  font-weight: 700; color: var(--accent); line-height: 1;
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 9vw, 6rem);
+  font-weight: 400; color: var(--accent); line-height: 0.95;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.04em;
+  text-shadow: 0 0 40px rgba(13,148,136,0.18);
+  display: inline-block;
 }
 .sh-hero-sub {
   font-size: 12px; color: var(--muted); margin-top: 0.65rem;
@@ -322,33 +378,80 @@ input[type="range"]::-moz-range-thumb {
 .sort-btn:hover { border-color: var(--border2); color: var(--gold2); }
 .sort-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(15,118,110,0.07); }
 
-/* ── PROVIDER GRID ── */
+/* ── Scroll-triggered card reveal (2026 stagger) ── */
+.pc-reveal {
+  opacity: 0;
+  transform: translateY(18px) scale(0.98);
+  transition: opacity 0.55s cubic-bezier(.2,.8,.2,1), transform 0.55s cubic-bezier(.2,.8,.2,1);
+}
+.pc-reveal.pc-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pc-reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ── PROVIDER GRID (bento, 2026) ── */
 .provider-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(208px, 1fr));
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
+  gap: 10px;
+  background: transparent;
+  border: none;
 }
 .provider-card {
   display: block; text-decoration: none; color: inherit;
-  background: var(--black2);
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   padding: 1.6rem 1.3rem 1.3rem;
-  transition: background 0.2s, border-color 0.2s;
   position: relative;
-  border: 1px solid var(--border2);
-  margin: -1px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin: 0;
+  transition: transform 0.25s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease, border-color 0.25s ease, background 0.25s ease;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04);
 }
-.provider-card:hover { background: var(--black3); }
+.provider-card:hover {
+  background: rgba(255,255,255,0.92);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px -14px rgba(15,23,42,0.12), 0 4px 10px -4px rgba(15,23,42,0.06);
+}
 a.provider-card { cursor: pointer; }
 a.provider-card:hover {
-  border-color: var(--ink2);
+  border-color: rgba(13,148,136,0.3);
   z-index: 2;
 }
+
+/* Winner bento — larger, luminous, commanding */
 .provider-card.winner {
-  background: rgba(15,118,110,0.05);
-  border-color: rgba(15,118,110,0.5);
+  grid-column: span 2;
+  background: linear-gradient(135deg, rgba(240,253,250,0.95) 0%, rgba(204,251,241,0.7) 100%);
+  border-color: rgba(13,148,136,0.35);
   z-index: 1;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.8) inset,
+    var(--glow-ring),
+    0 30px 70px -20px rgba(13,148,136,0.30);
+  overflow: hidden;
+}
+.provider-card.winner::before {
+  content: '';
+  position: absolute; inset: -50%;
+  background: radial-gradient(ellipse 40% 50% at 80% 20%, rgba(13,148,136,0.18), transparent 60%);
+  pointer-events: none;
+}
+.provider-card.winner > * { position: relative; }
+.provider-card.winner:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.9) inset,
+    0 0 0 4px rgba(13,148,136,0.15),
+    0 40px 80px -20px rgba(13,148,136,0.40);
+}
+@media (max-width: 640px) {
+  .provider-card.winner { grid-column: span 1; }
 }
 .provider-card.winner.winner-flash {
   animation: winnerFlash 2.4s cubic-bezier(.22,.61,.36,1) 1;
@@ -532,15 +635,42 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
 .consent-row input[type="checkbox"] { accent-color: var(--gold); margin-top: 3px; flex-shrink: 0; }
 
 .btn-primary {
+  position: relative;
   display: inline-block;
-  background: var(--gold); color: var(--black);
-  border: none; padding: 0.9rem 2.5rem;
-  font-family: var(--font-sans); font-size: 11px; font-weight: 500;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  cursor: pointer; transition: background 0.2s, transform 0.15s;
+  background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+  color: #ffffff;
+  border: none;
+  padding: 1.05rem 2.5rem;
+  border-radius: 14px;
+  font-family: var(--font-sans); font-size: 11.5px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  cursor: pointer;
   margin-top: 1.25rem; width: 100%; text-align: center;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.18) inset,
+    0 -1px 0 0 rgba(0,0,0,0.08) inset,
+    var(--glow-accent);
+  transition: transform 0.2s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease, filter 0.25s ease;
+  overflow: hidden;
 }
-.btn-primary:hover { background: var(--gold2); transform: translateY(-1px); }
+.btn-primary::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.8s ease;
+  pointer-events: none;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.22) inset,
+    0 0 0 4px rgba(13,148,136,0.12),
+    0 20px 50px -12px rgba(13,148,136,0.55);
+}
+.btn-primary:hover::before { transform: translateX(100%); }
+.btn-primary:active { transform: translateY(0); }
 
 .confirmation {
   display: none;
@@ -599,13 +729,21 @@ footer {
 /* ── PROGRESS BAR ── */
 #step-bar {
   position: fixed; top: 56px; left: 0; right: 0;
-  height: 2px; background: rgba(15,118,110,0.1); z-index: 400;
+  height: 3px; background: rgba(15,118,110,0.08); z-index: 400;
+  overflow: hidden;
 }
 #progress-bar {
   height: 100%;
-  background: linear-gradient(to right, var(--gold), var(--gold2));
+  background: linear-gradient(90deg, var(--accent2), var(--accent), var(--accent2));
+  background-size: 200% 100%;
   transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
   width: 33%;
+  box-shadow: 0 0 14px rgba(13,148,136,0.5), 0 0 4px rgba(13,148,136,0.7);
+  animation: progressShimmer 3s ease-in-out infinite;
+}
+@keyframes progressShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
 }
 
 /* ── LOCKED PROVIDER CARD ── */
@@ -716,19 +854,30 @@ footer {
 }
 .lp-grid {
   display: grid; grid-template-columns: 1fr;
-  gap: 1px; background: var(--border); border: 1px solid var(--border);
+  gap: 8px; background: transparent; border: none;
 }
 @media (min-width: 560px) { .lp-grid { grid-template-columns: 1fr 1fr 1fr; } }
 .lp-cell {
-  background: var(--black2); padding: 1.4rem 1rem; text-align: center;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem 1rem; text-align: center;
+  transition: transform 0.3s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s;
+}
+.lp-cell:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px -10px rgba(15,118,110,0.18);
 }
 .lp-label {
   font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--muted); margin-bottom: 0.55rem;
 }
 .lp-value {
-  font-family: var(--font-serif); font-size: 1.85rem; font-weight: 400;
+  font-family: var(--font-display); font-size: 2.4rem; font-weight: 400;
   color: var(--gold2); line-height: 1; margin-bottom: 5px;
+  letter-spacing: -0.03em;
 }
 .lp-value.lp-gold { color: var(--gold); }
 .lp-value.lp-dim  { color: rgba(15,23,42,0.13); font-size: 1.1rem; font-family: var(--font-sans); letter-spacing: .03em; }
@@ -772,7 +921,7 @@ footer {
     <h1 class="step-heading">Find the right<br><em>payment provider for you.</em></h1>
     <p class="step-body">Whether you're about to take your first card payment or you've been with the same provider for years, TillSwift compares every major UK payment provider against your actual volumes — transaction rates, monthly fees, and total cost over three years — so you can pick the cheapest option with total confidence.</p>
 
-    <div style="margin-top:2rem;padding:1.75rem;border:1px solid var(--border);background:var(--black2)">
+    <div style="margin-top:2rem;padding:1.75rem;border:1px solid var(--glass-border);background:var(--glass-bg);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border-radius:16px;box-shadow:0 1px 0 0 rgba(255,255,255,0.6) inset, 0 20px 40px -20px rgba(15,118,110,0.15)">
       <div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem">What you'll get</div>
       <div style="display:flex;flex-direction:column;gap:.9rem">
         <div style="display:flex;gap:.9rem;align-items:flex-start">
@@ -792,7 +941,7 @@ footer {
 
     <div style="margin-top:2.5rem;display:flex;flex-direction:column;gap:.85rem">
       <button class="btn-primary" style="margin-top:0;text-align:left" onclick="setUserPath('new')">I'm new to card payments — find me the best rate →</button>
-      <button onclick="setUserPath('switch')" style="display:block;width:100%;background:transparent;border:1px solid var(--border2);color:var(--white);padding:.95rem 1.25rem;font-family:var(--font-sans);font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;text-align:left;transition:border-color .15s">I want to switch from my current provider →</button>
+      <button onclick="setUserPath('switch')" style="display:block;width:100%;background:rgba(255,255,255,0.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--border2);color:var(--ink2);padding:1.05rem 1.25rem;font-family:var(--font-sans);font-size:11.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;text-align:left;border-radius:14px;transition:border-color .2s, background .2s, transform .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.background='rgba(240,253,250,0.9)';this.style.transform='translateY(-1px)'" onmouseout="this.style.borderColor='var(--border2)';this.style.background='rgba(255,255,255,0.5)';this.style.transform='translateY(0)'">I want to switch from my current provider →</button>
     </div>
   </div>
 </div>
@@ -1625,6 +1774,49 @@ function fmt(n)    { return '£' + Math.round(n).toLocaleString(); }
 function fmtD(n)   { return '£' + n.toFixed(2); }
 function fmtPct(n) { return n.toFixed(2) + '%'; }
 
+// ── 2026 UI: staggered scroll-triggered reveal for bento cards ──
+function applyCardReveal(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const cards = container.querySelectorAll('.provider-card');
+  if (!cards.length) return;
+
+  cards.forEach(c => { c.classList.add('pc-reveal'); c.classList.remove('pc-visible'); });
+
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) {
+    cards.forEach(c => c.classList.add('pc-visible'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        const idx = Array.from(cards).indexOf(entry.target);
+        const delay = Math.min(idx, 12) * 45;  // cap stagger so later cards don't lag
+        setTimeout(() => entry.target.classList.add('pc-visible'), delay);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { root: null, rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  cards.forEach(c => io.observe(c));
+}
+
+// ── 2026 UI: kinetic count-up animation for hero numbers ──
+function animateCountUp(el, to, duration) {
+  if (!el) return;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) { el.textContent = '£' + Math.round(to).toLocaleString(); return; }
+  const from = 0;
+  const t0 = performance.now();
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  (function tick(now) {
+    const p = Math.min((now - t0) / duration, 1);
+    const v = from + (to - from) * ease(p);
+    el.textContent = '£' + Math.round(v).toLocaleString();
+    if (p < 1) requestAnimationFrame(tick);
+  })(t0);
+}
+
 // ── WIZARD NAVIGATION ──
 let currentStep = 0;
 let userPath = null;  // 'new' or 'switch' — chosen on the intro step
@@ -1741,6 +1933,11 @@ function goToStep(n) {
         newEl.style.transform = 'translateX(0)';
         if (n === 4 && goingForward && !stepFourSeen) {
           stepFourSeen = true;
+          // Kinetic count-up on the hero savings number (2026 UI)
+          const heroNumEl = document.getElementById('sh-net-saving-4');
+          if (heroNumEl && window._lastCalc && window._lastCalc.saving3y > 0) {
+            animateCountUp(heroNumEl, window._lastCalc.saving3y, 1600);
+          }
           if (userPath === 'new') {
             scrollRevealFromBottom();
           } else {
@@ -2037,6 +2234,7 @@ function calc() {
   // Render Step 4 grid — only once the user has navigated there
   if (unlocked) {
     renderGrid('provider-grid-4');
+    requestAnimationFrame(() => applyCardReveal('provider-grid-4'));
   }
 
   // Stash the latest computation so the lead export can pick it up.
