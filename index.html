@@ -337,18 +337,146 @@ input[type="range"]::-moz-range-thumb {
 .sl-val {
   font-family: var(--font-serif); font-size: 1.6rem; font-weight: 400; color: var(--gold2);
 }
-.dna-mix-panel input[type="number"] {
+/* ── DNA tuner ── */
+.dna-tuner-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 1.5rem; margin-bottom: 1.25rem; flex-wrap: wrap;
+}
+.dna-tuner-sub {
+  font-size: 11px; color: var(--muted); line-height: 1.55;
+  max-width: 460px;
+}
+.dna-preset-wrap { min-width: 220px; }
+.dna-preset-wrap select {
   width: 100%; box-sizing: border-box;
   background: var(--black3); border: 1px solid var(--border);
-  color: var(--ink); font-family: var(--font-sans); font-size: 13px;
-  padding: 0.4rem 0.55rem; outline: none;
-  -moz-appearance: textfield;
+  color: var(--ink); font-family: var(--font-sans); font-size: 12px;
+  padding: 0.55rem 0.7rem; outline: none; cursor: pointer;
+  margin-top: 0.25rem;
 }
-.dna-mix-panel input[type="number"]::-webkit-outer-spin-button,
-.dna-mix-panel input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none; margin: 0;
+.dna-preset-wrap select:focus { border-color: var(--gold); }
+
+.dna-sliders {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+  margin-bottom: 1.5rem;
 }
-.dna-mix-panel input[type="number"]:focus { border-color: var(--gold); }
+@media (max-width: 600px) { .dna-sliders { grid-template-columns: 1fr; gap: 1.25rem; } }
+.dna-sliders-title {
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+}
+.dna-slider-row {
+  display: grid; grid-template-columns: 110px 1fr 44px;
+  gap: 0.75rem; align-items: center; margin-bottom: 0.5rem;
+}
+.dna-slider-name {
+  font-size: 12px; color: var(--ink); line-height: 1.3;
+}
+.dna-slider-pct {
+  font-family: var(--font-serif); font-size: 14px;
+  color: var(--gold2); text-align: right;
+}
+.dna-slider-total {
+  font-size: 10px; color: var(--muted); margin-top: 0.5rem;
+  letter-spacing: 0.05em;
+}
+.dna-slider-total.warn { color: rgba(220,100,80,0.85); }
+
+.dna-amex-toggle {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.55rem;
+  row-gap: 0.2rem;
+  align-items: center;
+  margin-top: 0.85rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  background: var(--black3);
+  cursor: pointer;
+  user-select: none;
+}
+.dna-amex-toggle input[type="checkbox"] {
+  width: 14px; height: 14px;
+  accent-color: var(--gold2);
+  cursor: pointer;
+}
+.dna-amex-toggle > span:nth-of-type(1) {
+  font-size: 12px; letter-spacing: 0.04em;
+  color: var(--text);
+}
+.dna-amex-hint {
+  grid-column: 2;
+  font-size: 10px; color: var(--muted);
+  letter-spacing: 0.03em; line-height: 1.4;
+}
+
+.dna-matrix-wrap {
+  background: var(--black3); border: 1px solid var(--border);
+  padding: 1.1rem 1.2rem; margin-bottom: 1.25rem;
+}
+.dna-matrix-header { margin-bottom: 0.85rem; }
+.dna-matrix-title {
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold2); margin-bottom: 0.3rem;
+}
+.dna-matrix-sub { font-size: 10px; color: var(--muted); line-height: 1.5; }
+.dna-matrix {
+  width: 100%; border-collapse: collapse; font-size: 12px;
+}
+.dna-matrix th, .dna-matrix td {
+  padding: 0.55rem 0.5rem; text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.dna-matrix thead th {
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); font-weight: 500;
+}
+.dna-matrix tbody th {
+  text-align: left; color: var(--ink); font-weight: 500;
+  font-size: 11px;
+}
+.dna-matrix .dna-matrix-row-label {
+  text-align: right; color: var(--muted); font-weight: 500;
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.dna-matrix-cell {
+  position: relative; font-family: var(--font-mono);
+  color: var(--ink);
+}
+.dna-matrix-cell-bg {
+  position: absolute; inset: 0;
+  background: rgba(15,118,110,0.18); pointer-events: none;
+}
+.dna-matrix-cell-text { position: relative; }
+.dna-matrix-cell-share {
+  font-size: 9px; color: var(--muted); display: block; margin-top: 1px;
+}
+.dna-matrix tfoot td, .dna-matrix tfoot th {
+  border-bottom: none; padding-top: 0.7rem;
+  color: var(--muted); font-size: 10px;
+}
+
+.dna-summary {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+}
+.dna-summary > div {
+  background: var(--black3); padding: 0.85rem 1rem;
+}
+.dna-summary-label {
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 0.3rem;
+}
+.dna-summary-val {
+  font-family: var(--font-serif); font-size: 1.05rem;
+  color: var(--ink); line-height: 1.2;
+}
+.dna-summary-rate { color: var(--gold2); font-size: 1.4rem; }
+@media (max-width: 600px) {
+  .dna-summary { grid-template-columns: 1fr; }
+}
 
 /* ── STATS ROW ── */
 .stats-row {
@@ -1062,45 +1190,111 @@ footer {
         <div class="sl-val" id="v-growth">3%</div>
       </div>
 
-      <div class="dna-mix-panel" style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:1rem;margin-top:0.25rem">
-        <div class="sl-label" style="margin-bottom:0.4rem">DNA Payments — IC+ tiered pricing tuner</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.55;margin-bottom:0.85rem">DNA uses tiered IC+ pricing where the rate depends on yearly card revenue, channel (in-person/online/CNP) and card type (debit/credit/Amex). Set your mix to estimate the blended DNA rate.</div>
-
-        <div style="font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.5rem">Channel mix</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:1rem">
-          <div>
-            <span class="sl-label">In-person (F2F)</span>
-            <input type="number" id="dna-f2f" min="0" max="100" value="100" oninput="calc()">
-          </div>
-          <div>
-            <span class="sl-label">Online</span>
-            <input type="number" id="dna-online" min="0" max="100" value="0" oninput="calc()">
-          </div>
-          <div>
-            <span class="sl-label">CNP / phone</span>
-            <input type="number" id="dna-cnp" min="0" max="100" value="0" oninput="calc()">
+      <div class="dna-mix-panel" style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:1.25rem;margin-top:0.25rem">
+        <div class="dna-tuner-header">
+          <div></div>
+          <div class="dna-preset-wrap">
+            <span class="sl-label">Business profile</span>
+            <select id="dna-preset" onchange="applyDnaPreset()">
+              <option value="custom">Custom</option>
+              <option value="retail_highstreet">High-street retail</option>
+              <option value="cafe_restaurant">Café / restaurant</option>
+              <option value="medical_london" selected>Private medical</option>
+              <option value="ecommerce_only">E-commerce only</option>
+              <option value="mixed_omnichannel">Mixed omnichannel</option>
+              <option value="b2b_invoicing">B2B invoicing / professional services</option>
+            </select>
           </div>
         </div>
 
-        <div style="font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.5rem">Card type mix</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem">
-          <div>
-            <span class="sl-label">Debit (DR)</span>
-            <input type="number" id="dna-dr" min="0" max="100" value="70" oninput="calc()">
+        <div class="dna-sliders">
+          <div class="dna-sliders-col">
+            <div class="dna-sliders-title">Where do you take payments?</div>
+            <div class="dna-slider-row">
+              <span class="dna-slider-name">In-person (F2F)</span>
+              <input type="range" min="0" max="100" step="1" value="35" id="dna-f2f" oninput="onDnaSliderInput('channel')">
+              <span class="dna-slider-pct" id="dna-f2f-val">35%</span>
+            </div>
+            <div class="dna-slider-row">
+              <span class="dna-slider-name">Online</span>
+              <input type="range" min="0" max="100" step="1" value="5" id="dna-online" oninput="onDnaSliderInput('channel')">
+              <span class="dna-slider-pct" id="dna-online-val">5%</span>
+            </div>
+            <div class="dna-slider-row">
+              <span class="dna-slider-name">CNP / phone-billed</span>
+              <input type="range" min="0" max="100" step="1" value="60" id="dna-cnp" oninput="onDnaSliderInput('channel')">
+              <span class="dna-slider-pct" id="dna-cnp-val">60%</span>
+            </div>
+            <div class="dna-slider-total" id="dna-channel-total">Total: 100%</div>
           </div>
-          <div>
-            <span class="sl-label">Credit (CR)</span>
-            <input type="number" id="dna-cr" min="0" max="100" value="25" oninput="calc()">
-          </div>
-          <div>
-            <span class="sl-label">Amex / premium</span>
-            <input type="number" id="dna-pcr" min="0" max="100" value="5" oninput="calc()">
+
+          <div class="dna-sliders-col">
+            <div class="dna-sliders-title">Card type mix</div>
+            <div class="dna-slider-row">
+              <span class="dna-slider-name">Debit cards</span>
+              <input type="range" min="0" max="100" step="1" value="25" id="dna-dr" oninput="onDnaSliderInput('card')">
+              <span class="dna-slider-pct" id="dna-dr-val">25%</span>
+            </div>
+            <div class="dna-slider-row">
+              <span class="dna-slider-name">Credit cards</span>
+              <input type="range" min="0" max="100" step="1" value="35" id="dna-cr" oninput="onDnaSliderInput('card')">
+              <span class="dna-slider-pct" id="dna-cr-val">35%</span>
+            </div>
+            <div class="dna-slider-row">
+              <span class="dna-slider-name">Amex / premium</span>
+              <input type="range" min="0" max="100" step="1" value="40" id="dna-pcr" oninput="onDnaSliderInput('card')">
+              <span class="dna-slider-pct" id="dna-pcr-val">40%</span>
+            </div>
+            <div class="dna-slider-total" id="dna-card-total">Total: 100%</div>
+            <label class="dna-amex-toggle">
+              <input type="checkbox" id="dna-accept-amex" checked onchange="onDnaSliderInput('amex')">
+              <span>Accept Amex / premium cards</span>
+              <span class="dna-amex-hint">Most providers let you disable Amex; uncheck to redistribute that share onto debit and credit.</span>
+            </label>
           </div>
         </div>
 
-        <div style="font-size:11px;color:var(--muted);margin-top:0.85rem;padding-top:0.75rem;border-top:1px solid var(--border)">
-          DNA tier (yearly card revenue): <strong id="dna-tier-label">—</strong><br>
-          Estimated blended rate: <strong id="dna-blended-rate" style="color:var(--gold2)">—</strong>
+        <div class="dna-matrix-wrap">
+          <div class="dna-matrix-header">
+            <div class="dna-matrix-title">Rate breakdown at your tier</div>
+            <div class="dna-matrix-sub">Each cell shows the rate that applies. Cell shading reflects how much of your volume flows through that combination.</div>
+          </div>
+          <table class="dna-matrix">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Debit</th>
+                <th>Credit</th>
+                <th>Amex / premium</th>
+                <th class="dna-matrix-row-label">Channel</th>
+              </tr>
+            </thead>
+            <tbody id="dna-matrix-body"></tbody>
+            <tfoot>
+              <tr>
+                <th class="dna-matrix-row-label">Card mix</th>
+                <td id="dna-mat-col-dr">—</td>
+                <td id="dna-mat-col-cr">—</td>
+                <td id="dna-mat-col-pcr">—</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="dna-summary">
+          <div>
+            <div class="dna-summary-label">DNA tier</div>
+            <div class="dna-summary-val" id="dna-tier-label">—</div>
+          </div>
+          <div>
+            <div class="dna-summary-label">Year-1 card volume</div>
+            <div class="dna-summary-val" id="dna-volume-label">—</div>
+          </div>
+          <div>
+            <div class="dna-summary-label">Blended rate</div>
+            <div class="dna-summary-val dna-summary-rate" id="dna-blended-rate">—</div>
+          </div>
         </div>
       </div>
     </div>
@@ -2192,45 +2386,205 @@ function setSortBy(s) {
   calc();
 }
 
-// ── DNA Payments tiered IC+ pricing ──
-// Each tier covers yearly card revenue up to `upto` (£). Rates are decimal (0.005 = 0.5%).
-// Source: dna.png pricing model (IC+ tiered structure)
-const DNA_TIERS = [
-  { upto: 50000,    label: '£0–50k',         f2f_dr: 0.0060, f2f_cr: 0.0100, f2f_pcr: 0.0200, on_dr: 0.0090, on_cr: 0.0130, on_pcr: 0.0230, cnp_dr: 0.0090, cnp_cr: 0.0130, cnp_pcr: 0.0230 },
-  { upto: 100000,   label: '£50k–100k',      f2f_dr: 0.0050, f2f_cr: 0.0100, f2f_pcr: 0.0200, on_dr: 0.0085, on_cr: 0.0130, on_pcr: 0.0230, cnp_dr: 0.0085, cnp_cr: 0.0130, cnp_pcr: 0.0230 },
-  { upto: 200000,   label: '£100k–200k',     f2f_dr: 0.0035, f2f_cr: 0.0065, f2f_pcr: 0.0185, on_dr: 0.0075, on_cr: 0.0095, on_pcr: 0.0220, cnp_dr: 0.0075, cnp_cr: 0.0095, cnp_pcr: 0.0220 },
-  { upto: 300000,   label: '£200k–300k',     f2f_dr: 0.0035, f2f_cr: 0.0065, f2f_pcr: 0.0185, on_dr: 0.0075, on_cr: 0.0095, on_pcr: 0.0215, cnp_dr: 0.0075, cnp_cr: 0.0095, cnp_pcr: 0.0215 },
-  { upto: 400000,   label: '£300k–400k',     f2f_dr: 0.0035, f2f_cr: 0.0065, f2f_pcr: 0.0185, on_dr: 0.0065, on_cr: 0.0095, on_pcr: 0.0215, cnp_dr: 0.0065, cnp_cr: 0.0095, cnp_pcr: 0.0215 },
-  { upto: 500000,   label: '£400k–500k',     f2f_dr: 0.0035, f2f_cr: 0.0065, f2f_pcr: 0.0185, on_dr: 0.0065, on_cr: 0.0095, on_pcr: 0.0215, cnp_dr: 0.0065, cnp_cr: 0.0095, cnp_pcr: 0.0215 },
-  { upto: 750000,   label: '£500k–750k',     f2f_dr: 0.0035, f2f_cr: 0.0065, f2f_pcr: 0.0185, on_dr: 0.0065, on_cr: 0.0095, on_pcr: 0.0215, cnp_dr: 0.0065, cnp_cr: 0.0095, cnp_pcr: 0.0215 },
-  { upto: 1000000,  label: '£750k–1M',       f2f_dr: 0.0030, f2f_cr: 0.0060, f2f_pcr: 0.0185, on_dr: 0.0065, on_cr: 0.0090, on_pcr: 0.0215, cnp_dr: 0.0065, cnp_cr: 0.0090, cnp_pcr: 0.0215 },
-  { upto: Infinity, label: '£1M+',           f2f_dr: 0.0030, f2f_cr: 0.0060, f2f_pcr: 0.0185, on_dr: 0.0060, on_cr: 0.0090, on_pcr: 0.0215, cnp_dr: 0.0060, cnp_cr: 0.0090, cnp_pcr: 0.0215 },
-];
+// ──────────────────────────────────────────────────────────────────────────
+// Pluggable rate-sheet system for providers with complex pricing
+// ──────────────────────────────────────────────────────────────────────────
+// A rate sheet expresses a provider's pricing as a 3×3 matrix indexed by
+// channel (f2f / online / cnp) and card type (dr / cr / pcr). Rates may
+// vary by yearly-volume tier; flat fees may vary by channel. Both DNA's
+// volume-tiered IC+ model and Revolut's channel-varying flat model fit
+// the same shape.
+//
+// To add a new complex-pricing provider:
+//   1. Build a rate sheet with `makeRateSheet({ tiers, flats })`.
+//   2. Register it in `RATE_SHEETS`.
+//   3. Map each affected provider id to that sheet in `PROVIDER_SHEETS`.
+// The calc() and populateAdmin() loops resolve sheets generically.
+//
+// Tier shape: { upto, label, rates: { f2f:{dr,cr,pcr}, online:{...}, cnp:{...} } }
+// `flats` is a number (same fee on every channel) or {f2f,online,cnp}.
+
+function makeRateSheet({ tiers, flats }) {
+  const flatObj = (typeof flats === 'number')
+    ? { f2f: flats, online: flats, cnp: flats }
+    : flats;
+  const tierFor = vol => tiers.find(t => vol <= t.upto) || tiers[tiers.length - 1];
+  const blended = (mix, yearlyVol) => {
+    const r = tierFor(yearlyVol).rates;
+    const rate = mix.f2f    * (mix.dr * r.f2f.dr    + mix.cr * r.f2f.cr    + mix.pcr * r.f2f.pcr)
+               + mix.online * (mix.dr * r.online.dr + mix.cr * r.online.cr + mix.pcr * r.online.pcr)
+               + mix.cnp    * (mix.dr * r.cnp.dr    + mix.cr * r.cnp.cr    + mix.pcr * r.cnp.pcr);
+    const flat = mix.f2f * flatObj.f2f + mix.online * flatObj.online + mix.cnp * flatObj.cnp;
+    return { rate, flat, tier: tierFor(yearlyVol) };
+  };
+  return { tiers, flats: flatObj, tierFor, blended };
+}
+
+// DNA Payments — tiered IC+. Source: custom_pricing_models/dna.png
+const DNA_RATE_SHEET = makeRateSheet({
+  flats: 0.03,
+  tiers: [
+    { upto: 50000,    label: '£0–50k',     rates: { f2f:{dr:0.0060,cr:0.0100,pcr:0.0200}, online:{dr:0.0090,cr:0.0130,pcr:0.0230}, cnp:{dr:0.0090,cr:0.0130,pcr:0.0230} } },
+    { upto: 100000,   label: '£50k–100k',  rates: { f2f:{dr:0.0050,cr:0.0100,pcr:0.0200}, online:{dr:0.0085,cr:0.0130,pcr:0.0230}, cnp:{dr:0.0085,cr:0.0130,pcr:0.0230} } },
+    { upto: 200000,   label: '£100k–200k', rates: { f2f:{dr:0.0035,cr:0.0065,pcr:0.0185}, online:{dr:0.0075,cr:0.0095,pcr:0.0220}, cnp:{dr:0.0075,cr:0.0095,pcr:0.0220} } },
+    { upto: 300000,   label: '£200k–300k', rates: { f2f:{dr:0.0035,cr:0.0065,pcr:0.0185}, online:{dr:0.0075,cr:0.0095,pcr:0.0215}, cnp:{dr:0.0075,cr:0.0095,pcr:0.0215} } },
+    { upto: 400000,   label: '£300k–400k', rates: { f2f:{dr:0.0035,cr:0.0065,pcr:0.0185}, online:{dr:0.0065,cr:0.0095,pcr:0.0215}, cnp:{dr:0.0065,cr:0.0095,pcr:0.0215} } },
+    { upto: 500000,   label: '£400k–500k', rates: { f2f:{dr:0.0035,cr:0.0065,pcr:0.0185}, online:{dr:0.0065,cr:0.0095,pcr:0.0215}, cnp:{dr:0.0065,cr:0.0095,pcr:0.0215} } },
+    { upto: 750000,   label: '£500k–750k', rates: { f2f:{dr:0.0035,cr:0.0065,pcr:0.0185}, online:{dr:0.0065,cr:0.0095,pcr:0.0215}, cnp:{dr:0.0065,cr:0.0095,pcr:0.0215} } },
+    { upto: 1000000,  label: '£750k–1M',   rates: { f2f:{dr:0.0030,cr:0.0060,pcr:0.0185}, online:{dr:0.0065,cr:0.0090,pcr:0.0215}, cnp:{dr:0.0065,cr:0.0090,pcr:0.0215} } },
+    { upto: Infinity, label: '£1M+',       rates: { f2f:{dr:0.0030,cr:0.0060,pcr:0.0185}, online:{dr:0.0060,cr:0.0090,pcr:0.0215}, cnp:{dr:0.0060,cr:0.0090,pcr:0.0215} } },
+  ],
+});
+
+// Revolut Business — flat across plans; rate/flat vary by channel + card type.
+// Source: revolut.com/business/accept-payments-pricing/
+// DR/CR → UK consumer Visa/Mastercard. PCR → commercial-card rate (Revolut
+// rejects Amex; commercial-card pricing is the closest published equivalent).
+const REVOLUT_RATE_SHEET = makeRateSheet({
+  flats: { f2f: 0.02, online: 0.20, cnp: 0.20 },
+  tiers: [
+    { upto: Infinity, label: 'All volumes', rates: {
+      f2f:    { dr: 0.008, cr: 0.008, pcr: 0.026 },
+      online: { dr: 0.010, cr: 0.010, pcr: 0.028 },
+      cnp:    { dr: 0.010, cr: 0.010, pcr: 0.028 },
+    } },
+  ],
+});
+
+const RATE_SHEETS = {
+  dna:     DNA_RATE_SHEET,
+  revolut: REVOLUT_RATE_SHEET,
+};
+
+// Provider id → rate sheet name. Providers not listed here use their static
+// p.rate / p.flat from PROVIDERS unchanged.
+const PROVIDER_SHEETS = {
+  dnapayments:    'dna',
+  revolut_basic:  'revolut',
+  revolut_grow:   'revolut',
+  revolut_scale:  'revolut',
+};
+
+function rateSheetFor(p) {
+  const key = PROVIDER_SHEETS[p.id];
+  return key ? RATE_SHEETS[key] : null;
+}
+
+// Business profile presets — channel split + card-type mix percentages
+const DNA_PRESETS = {
+  retail_highstreet:  { f2f: 95, online: 5,  cnp: 0,  dr: 70, cr: 25, pcr: 5  },
+  cafe_restaurant:    { f2f: 92, online: 5,  cnp: 3,  dr: 60, cr: 32, pcr: 8  },
+  medical_london:     { f2f: 40, online: 25, cnp: 35, dr: 10, cr: 30, pcr: 60 },
+  ecommerce_only:     { f2f: 0,  online: 95, cnp: 5,  dr: 50, cr: 38, pcr: 12 },
+  mixed_omnichannel:  { f2f: 60, online: 30, cnp: 10, dr: 50, cr: 35, pcr: 15 },
+  b2b_invoicing:      { f2f: 5,  online: 35, cnp: 60, dr: 30, cr: 45, pcr: 25 },
+};
+
+function applyDnaPreset() {
+  const key = document.getElementById('dna-preset').value;
+  const p = DNA_PRESETS[key];
+  if (!p) return;
+  ['f2f','online','cnp','dr','cr','pcr'].forEach(k => {
+    document.getElementById('dna-' + k).value = p[k];
+  });
+  calc();
+}
+
+// When sliders are dragged, mark the preset as "Custom"
+function onDnaSliderInput(/*group*/) {
+  const sel = document.getElementById('dna-preset');
+  if (sel && sel.value !== 'custom') sel.value = 'custom';
+  calc();
+}
 
 function getDnaMix() {
   const f2f    = parseFloat(document.getElementById('dna-f2f')?.value)    || 0;
   const online = parseFloat(document.getElementById('dna-online')?.value) || 0;
   const cnp    = parseFloat(document.getElementById('dna-cnp')?.value)    || 0;
-  const dr     = parseFloat(document.getElementById('dna-dr')?.value)     || 0;
-  const cr     = parseFloat(document.getElementById('dna-cr')?.value)     || 0;
-  const pcr    = parseFloat(document.getElementById('dna-pcr')?.value)    || 0;
+  const drRaw  = parseFloat(document.getElementById('dna-dr')?.value)     || 0;
+  const crRaw  = parseFloat(document.getElementById('dna-cr')?.value)     || 0;
+  const pcrRaw = parseFloat(document.getElementById('dna-pcr')?.value)    || 0;
+  const acceptAmex = document.getElementById('dna-accept-amex')?.checked !== false;
+  // When Amex is disabled, redistribute its share onto debit and credit
+  // proportionally to their existing weights (preserves their relative ratio)
+  let drEff = drRaw, crEff = crRaw, pcrEff = pcrRaw;
+  if (!acceptAmex) {
+    const drCrTot = drRaw + crRaw;
+    if (drCrTot > 0) {
+      drEff = drRaw + pcrRaw * (drRaw / drCrTot);
+      crEff = crRaw + pcrRaw * (crRaw / drCrTot);
+    } else {
+      drEff = pcrRaw / 2; crEff = pcrRaw / 2;
+    }
+    pcrEff = 0;
+  }
   const chTot  = f2f + online + cnp || 1;
-  const ctTot  = dr + cr + pcr || 1;
+  const ctTot  = drEff + crEff + pcrEff || 1;
   return {
     f2f: f2f / chTot, online: online / chTot, cnp: cnp / chTot,
-    dr:  dr  / ctTot, cr:     cr     / ctTot, pcr: pcr / ctTot
+    dr:  drEff / ctTot, cr: crEff / ctTot, pcr: pcrEff / ctTot,
+    acceptAmex,
+    raw: { f2f, online, cnp, dr: drRaw, cr: crRaw, pcr: pcrRaw, chTot, ctTot }
   };
 }
 
-function dnaTier(yearlyVol) {
-  return DNA_TIERS.find(t => yearlyVol <= t.upto) || DNA_TIERS[DNA_TIERS.length - 1];
-}
+// Render the live percentage labels, totals, and 3x3 rate matrix
+function renderDnaTuner(yearlyVol1, mix, tier) {
+  const r = mix.raw;
+  const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+  setText('dna-f2f-val',    Math.round(r.f2f)    + '%');
+  setText('dna-online-val', Math.round(r.online) + '%');
+  setText('dna-cnp-val',    Math.round(r.cnp)    + '%');
+  setText('dna-dr-val',     Math.round(r.dr)     + '%');
+  setText('dna-cr-val',     Math.round(r.cr)     + '%');
+  setText('dna-pcr-val',    Math.round(r.pcr)    + '%');
 
-function dnaBlendedRate(yearlyVol, mix) {
-  const t = dnaTier(yearlyVol);
-  return mix.f2f    * (mix.dr * t.f2f_dr + mix.cr * t.f2f_cr + mix.pcr * t.f2f_pcr)
-       + mix.online * (mix.dr * t.on_dr  + mix.cr * t.on_cr  + mix.pcr * t.on_pcr)
-       + mix.cnp    * (mix.dr * t.cnp_dr + mix.cr * t.cnp_cr + mix.pcr * t.cnp_pcr);
+  const chTot = Math.round(r.chTot);
+  const ctTot = Math.round(r.ctTot);
+  const chEl = document.getElementById('dna-channel-total');
+  const ctEl = document.getElementById('dna-card-total');
+  if (chEl) {
+    chEl.textContent = chTot === 100 ? 'Total: 100% ✓' : 'Total: ' + chTot + '% — normalised to 100%';
+    chEl.classList.toggle('warn', chTot !== 100);
+  }
+  if (ctEl) {
+    ctEl.textContent = ctTot === 100 ? 'Total: 100% ✓' : 'Total: ' + ctTot + '% — normalised to 100%';
+    ctEl.classList.toggle('warn', ctTot !== 100);
+  }
+
+  // Build the 3×3 matrix from the tier's nested rates object
+  const channels = [
+    { key: 'f2f',    label: 'In-person'   },
+    { key: 'online', label: 'Online'      },
+    { key: 'cnp',    label: 'CNP / phone' },
+  ];
+  const cardKeys = ['dr', 'cr', 'pcr'];
+  const body = document.getElementById('dna-matrix-body');
+  if (body) {
+    let maxShare = 0;
+    channels.forEach(ch => cardKeys.forEach(ck => {
+      maxShare = Math.max(maxShare, mix[ch.key] * mix[ck]);
+    }));
+    body.innerHTML = channels.map(ch => {
+      const cells = cardKeys.map(ck => {
+        const rate = tier.rates[ch.key][ck];
+        const share = mix[ch.key] * mix[ck];
+        const intensity = maxShare > 0 ? share / maxShare : 0;
+        return `<td class="dna-matrix-cell">
+          <div class="dna-matrix-cell-bg" style="opacity:${intensity.toFixed(3)}"></div>
+          <span class="dna-matrix-cell-text">${(rate * 100).toFixed(2)}%
+            <span class="dna-matrix-cell-share">${(share * 100).toFixed(1)}% of vol</span>
+          </span>
+        </td>`;
+      }).join('');
+      return `<tr><th>${ch.label}</th>${cells}<td class="dna-matrix-row-label">${(mix[ch.key] * 100).toFixed(0)}%</td></tr>`;
+    }).join('');
+  }
+
+  setText('dna-mat-col-dr',  (mix.dr  * 100).toFixed(0) + '%');
+  setText('dna-mat-col-cr',  (mix.cr  * 100).toFixed(0) + '%');
+  setText('dna-mat-col-pcr', (mix.pcr * 100).toFixed(0) + '%');
+  setText('dna-volume-label', '£' + Math.round(yearlyVol1).toLocaleString());
 }
 
 function calc() {
@@ -2247,8 +2601,10 @@ function calc() {
   const mVol  = txn * val * days;
   const mTxns = txn * days;
 
-  // DNA Payments: blended rate based on yearly card revenue tier + channel/card mix
-  const dnaMix = getDnaMix();
+  // Resolve complex pricing once — providers with a rate sheet recompute
+  // their blended rate/flat per year from the user's channel × card-type mix.
+  const mix = getDnaMix();
+  const sheets = PROVIDERS.map(rateSheetFor);
 
   let rev3y = 0;
   const yearlyFees = Array(PROVIDERS.length).fill(0);
@@ -2259,30 +2615,32 @@ function calc() {
     const mTxnY = txnY * days;
     const yearlyVolY = mVolY * 12;
     rev3y += yearlyVolY;
-    const dnaRateY = dnaBlendedRate(yearlyVolY, dnaMix);
     PROVIDERS.forEach((p, i) => {
-      const rate = (p.id === 'dnapayments') ? dnaRateY : p.rate;
-      yearlyFees[i] += (mVolY * rate + mTxnY * p.flat) * 12;
+      let rate = p.rate, flat = p.flat;
+      if (sheets[i]) { const b = sheets[i].blended(mix, yearlyVolY); rate = b.rate; flat = b.flat; }
+      yearlyFees[i] += (mVolY * rate + mTxnY * flat) * 12;
     });
   }
 
-  // Update DNA mix display: tier + blended rate based on year-1 yearly volume
+  // Update DNA tuner panel: tier label, year-1 blended rate, 3×3 rate matrix.
+  // The panel is themed around DNA's tiered model — Revolut just happens to share the same mix.
   const yearlyVol1 = mVol * 12;
-  const dnaTierObj = dnaTier(yearlyVol1);
-  const dnaRate1   = dnaBlendedRate(yearlyVol1, dnaMix);
+  const dnaYr1     = DNA_RATE_SHEET.blended(mix, yearlyVol1);
   const dnaTierEl  = document.getElementById('dna-tier-label');
   const dnaRateEl  = document.getElementById('dna-blended-rate');
-  if (dnaTierEl) dnaTierEl.textContent = dnaTierObj.label + ' (year 1: £' + Math.round(yearlyVol1).toLocaleString() + ')';
-  if (dnaRateEl) dnaRateEl.textContent = (dnaRate1 * 100).toFixed(2) + '%';
+  if (dnaTierEl) dnaTierEl.textContent = dnaYr1.tier.label;
+  if (dnaRateEl) dnaRateEl.textContent = (dnaYr1.rate * 100).toFixed(2) + '%';
+  renderDnaTuner(yearlyVol1, mix, dnaYr1.tier);
 
   const allRows = PROVIDERS.map((p, i) => {
     const fees = yearlyFees[i];
     const subs = p.sub * 36;
     const tco  = fees + subs;
-    // For DNA, surface the year-1 blended rate so card displays + monthly fee match TCO
-    const effRate = (p.id === 'dnapayments') ? dnaRate1 : p.rate;
-    const mFee = mVol * effRate + mTxns * p.flat;
-    return { ...p, rate: effRate, fees, subs, tco, mFee };
+    // Surface year-1 blended rate/flat for sheet-driven providers so card displays match TCO
+    let effRate = p.rate, effFlat = p.flat;
+    if (sheets[i]) { const b = sheets[i].blended(mix, yearlyVol1); effRate = b.rate; effFlat = b.flat; }
+    const mFee = mVol * effRate + mTxns * effFlat;
+    return { ...p, rate: effRate, flat: effFlat, fees, subs, tco, mFee };
   });
 
   // Always sort by TCO first to get stable ranking & recommendation
@@ -2807,7 +3165,9 @@ function populateAdmin() {
   const mVol  = txn * val * days;
   const mTxns = txn * days;
 
-  const dnaMix = getDnaMix();
+  const mix = getDnaMix();
+  const sheets = PROVIDERS.map(rateSheetFor);
+  const yearlyVol1 = mVol * 12;
 
   let rev3y = 0;
   const yearlyFees = Array(PROVIDERS.length).fill(0);
@@ -2818,10 +3178,10 @@ function populateAdmin() {
     const mTxnY = txnY * days;
     const yearlyVolY = mVolY * 12;
     rev3y += yearlyVolY;
-    const dnaRateY = dnaBlendedRate(yearlyVolY, dnaMix);
     PROVIDERS.forEach((p, i) => {
-      const rate = (p.id === 'dnapayments') ? dnaRateY : p.rate;
-      yearlyFees[i] += (mVolY * rate + mTxnY * p.flat) * 12;
+      let rate = p.rate, flat = p.flat;
+      if (sheets[i]) { const b = sheets[i].blended(mix, yearlyVolY); rate = b.rate; flat = b.flat; }
+      yearlyFees[i] += (mVolY * rate + mTxnY * flat) * 12;
     });
   }
 
@@ -2829,7 +3189,9 @@ function populateAdmin() {
     const fees = yearlyFees[i];
     const subs = p.sub * 36;
     const tco  = fees + subs;
-    const mFee = mVol * p.rate + mTxns * p.flat;
+    let effRate = p.rate, effFlat = p.flat;
+    if (sheets[i]) { const b = sheets[i].blended(mix, yearlyVol1); effRate = b.rate; effFlat = b.flat; }
+    const mFee = mVol * effRate + mTxns * effFlat;
     const aff  = AFFILIATE[p.id];
     let affInc = 0;
     if (aff) {
