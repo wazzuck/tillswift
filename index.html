@@ -458,7 +458,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .dna-summary {
-  display: grid; grid-template-columns: repeat(3, 1fr);
+  display: grid; grid-template-columns: repeat(2, 1fr);
   gap: 1px; background: var(--border);
   border: 1px solid var(--border);
 }
@@ -1191,27 +1191,25 @@ footer {
       </div>
 
       <div class="dna-mix-panel" style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:1.25rem;margin-top:0.25rem">
-        <div class="dna-tuner-header">
-          <div></div>
-          <div class="dna-preset-wrap">
-            <span class="sl-label">Business profile</span>
-            <select id="dna-preset" onchange="applyDnaPreset()">
-              <option value="custom">Custom</option>
-              <option value="retail_highstreet">High-street retail</option>
-              <option value="cafe_restaurant">Café / restaurant</option>
-              <option value="medical_london" selected>Private medical</option>
-              <option value="ecommerce_only">E-commerce only</option>
-              <option value="mixed_omnichannel">Mixed omnichannel</option>
-              <option value="b2b_invoicing">B2B invoicing / professional services</option>
-            </select>
-          </div>
+        <div class="dna-preset-wrap" style="margin-bottom:1.25rem">
+          <span class="sl-label">Business profile</span>
+          <select id="dna-preset" onchange="applyDnaPreset()">
+            <option value="custom">Custom</option>
+            <option value="retail_highstreet">High-street retail</option>
+            <option value="cafe_restaurant">Café / restaurant</option>
+            <option value="medical_london" selected>Private medical</option>
+            <option value="ecommerce_only">E-commerce only</option>
+            <option value="mixed_omnichannel">Mixed omnichannel</option>
+            <option value="b2b_invoicing">B2B invoicing / professional services</option>
+            <option value="market_seller">Market / outdoor trader</option>
+          </select>
         </div>
 
         <div class="dna-sliders">
           <div class="dna-sliders-col">
             <div class="dna-sliders-title">Where do you take payments?</div>
             <div class="dna-slider-row">
-              <span class="dna-slider-name">In-person (F2F)</span>
+              <span class="dna-slider-name">In-person</span>
               <input type="range" min="0" max="100" step="1" value="35" id="dna-f2f" oninput="onDnaSliderInput('channel')">
               <span class="dna-slider-pct" id="dna-f2f-val">35%</span>
             </div>
@@ -1240,7 +1238,7 @@ footer {
               <input type="range" min="0" max="100" step="1" value="35" id="dna-cr" oninput="onDnaSliderInput('card')">
               <span class="dna-slider-pct" id="dna-cr-val">35%</span>
             </div>
-            <div class="dna-slider-row">
+            <div class="dna-slider-row" id="dna-pcr-row">
               <span class="dna-slider-name">Amex / premium</span>
               <input type="range" min="0" max="100" step="1" value="40" id="dna-pcr" oninput="onDnaSliderInput('card')">
               <span class="dna-slider-pct" id="dna-pcr-val">40%</span>
@@ -1283,10 +1281,6 @@ footer {
         </div>
 
         <div class="dna-summary">
-          <div>
-            <div class="dna-summary-label">DNA tier</div>
-            <div class="dna-summary-val" id="dna-tier-label">—</div>
-          </div>
           <div>
             <div class="dna-summary-label">Year-1 card volume</div>
             <div class="dna-summary-val" id="dna-volume-label">—</div>
@@ -1810,22 +1804,6 @@ const PROVIDERS = [
     warn:'Rate requires custom quote — 0.75%+4.5p is published floor, actual rate varies · 18-month minimum contract with early termination fees · £15+/month service charge + £5+/month PCI compliance on top · Only available to businesses over £75k annual card turnover',
     pros:['From 0.75%+4.5p — competitive at high volume','Full-service merchant account','Multi-channel support'] },
 
-  // ── Lloyds Cardnet ── source: https://www.lloydsbank.com/business/take-payments-with-cardnet/our-prices.html
-  { id:'lloyds_payg', app:'partial',
-    name:'Lloyds Cardnet', plan:'Pay as you go',
-    sub:15, rate:0.0175, flat:0, extra:49,
-    source:'https://www.lloydsbank.com/business/take-payments-with-cardnet/our-prices.html',
-    warn:'1.75% flat rate for all UK card types · Terminal from £49 one-off · Minimum monthly service charge £10 + PCI DSS fee £5–£10/month (shown as £15/mo combined) · Settlement within 5 working days (next-day costs extra) · Chargeback fee £20–£25',
-    pros:['Simple flat 1.75% rate — no surprises','No monthly contract on PAYG','Lloyds Bank-backed — strong brand trust'] },
-
-  { id:'lloyds_bespoke', app:'partial',
-    name:'Lloyds Cardnet', plan:'Bespoke (£25k+/yr)',
-    sub:15, rate:0.0054, flat:0.03, extra:0,
-    indicative:true,
-    source:'https://www.lloydsbank.com/business/take-payments-with-cardnet/our-prices.html',
-    warn:'Rates require custom quote — 0.54%+3p shown is the published example for ~£25k/yr in-person debit; credit cards ~0.96%, business cards ~2.09% · MMSC £10 + PCI £5–£10/month · Settlement within 5 working days · Chargeback fee £20–£25',
-    pros:['From 0.54% debit — competitive at volume','Established bank acquirer','Multi-channel in-person and online'] },
-
   // ── Barclaycard ── source: https://www.barclaycard.co.uk/business/accepting-payments/card-readers/pocket-sized-card-reader
   { id:'barclaycard', app:'partial',
     name:'Barclaycard', plan:'Anywhere (PAYG)',
@@ -1869,42 +1847,42 @@ const PROVIDERS = [
     warn:'Rates NOT published online — all pricing is bespoke/quoted · 36-month contracts typical · PCI DSS fee ~£6/month · International card handling fee 0.80% (from Feb 2026)',
     pros:['Established UK processor','Opayo gateway included','Multi-currency support'] },
 
-  // ── Lopay ── source: https://lopay.com/pricing
+  // ── Lopay ── source: https://lopay.com/en-gb/pricing
   { id:'lopay_essential', app:true,
     name:'Lopay', plan:'Essential',
-    sub:0, rate:0.0079, flat:0.08, extra:0,
-    source:'https://lopay.com/pricing',
-    warn:'Payouts on Thursdays only on Essential plan · Amex, international & corporate cards +1% · Tap to Pay +8p per transaction',
+    sub:0, rate:0.0079, flat:0, extra:0,
+    source:'https://lopay.com/en-gb/pricing',
+    warn:'Payouts on Thursdays only on Essential plan · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Optional: Tap to Pay +8p/txn · Optional: Next Day Settlement +£2.99+VAT/mo',
     pros:['0.79% — among lowest published rates','No monthly fee or contract','No setup costs'] },
 
   { id:'lopay_standard', app:true,
     name:'Lopay', plan:'Standard',
     sub:0, rate:0.0099, flat:0, extra:0,
-    source:'https://lopay.com/pricing',
-    warn:'Amex, international & corporate cards +1% · Tap to Pay +8p per transaction · Payment links 1.79% min £0.50',
+    source:'https://lopay.com/en-gb/pricing',
+    warn:'Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Optional: Tap to Pay +8p/txn · Optional: Next Day Settlement +£2.99+VAT/mo',
     pros:['0.99% rate — no monthly fee','Flexible next-day payouts Mon–Fri','No contract or setup costs'] },
 
   { id:'lopay_instant', app:true,
     name:'Lopay', plan:'Instant to Bank',
     sub:0, rate:0.0179, flat:0, extra:0,
-    source:'https://lopay.com/pricing',
-    warn:'1.79% rate is higher — premium is for instant 24/7 payouts · Amex, international & corporate cards +1%',
+    source:'https://lopay.com/en-gb/pricing',
+    warn:'1.79% rate is the premium for instant 24/7 payouts · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Optional: Tap to Pay +8p/txn',
     pros:['Instant 24/7 payouts to bank','No monthly fee or contract','No setup costs'] },
 
   // ── Tide ── source: https://www.tide.co/features/card-reader/
   { id:'tide_payg', app:true,
     name:'Tide', plan:'Pay as you go',
-    sub:0, rate:0.0139, flat:0.05, extra:159,
+    sub:0, rate:0.015, flat:0.05, extra:159,
     source:'https://www.tide.co/features/card-reader/',
     warn:'Domestic consumer debit cards only at this rate · All other card types at different rates per Tide terms · Settlement up to 3 working days (next-day +£2.99+VAT/month) · Reader from £159+VAT',
-    pros:['1.39%+5p — no monthly fee','No contract','Integrated Tide business banking'] },
+    pros:['1.5%+5p — no monthly fee','No contract','Integrated Tide business banking'] },
 
   { id:'tide_subscription', app:true,
     name:'Tide', plan:'Sell In-Person',
-    sub:17.99, rate:0.0079, flat:0.03, extra:99,
+    sub:17.99, rate:0.0089, flat:0.03, extra:99,
     source:'https://www.tide.co/features/card-reader/',
-    warn:'Sub rising to £17.99+VAT from 27th · Domestic consumer debit cards only at this rate · Settlement up to 3 working days · Reader from £99+VAT',
-    pros:['0.79%+3p — competitive rate','Integrated Tide business banking','Reader from £99+VAT'] },
+    warn:'Domestic consumer debit cards only at this rate · All other card types at different rates per Tide terms · Settlement up to 3 working days (next-day +£2.99+VAT/month) · Reader from £99+VAT',
+    pros:['0.89%+3p — competitive rate','Integrated Tide business banking','Reader from £99+VAT'] },
 
   // ── takepayments ── source: https://www.takepayments.com/card-machines/
   { id:'takepayments', app:'partial',
@@ -1924,14 +1902,20 @@ const PROVIDERS = [
     warn:'Zeller currently operates in Australia only — UK availability not confirmed. Included for reference. Verify UK availability before recommending.',
     pros:['Flat-rate pricing (AU)','Integrated business account','No monthly fee'] },
 
-  // ── Fluxa ── source: https://fluxa.io
-  { id:'fluxa', app:false,
-    name:'Fluxa', plan:'Pay as you go',
-    sub:0, rate:0.015, flat:0, extra:0,
-    indicative:true,
-    source:'https://fluxa.io',
-    warn:'Rates not publicly disclosed — indicative only. Limited publicly available information. Verify pricing and UK availability directly before recommending.',
-    pros:['No monthly fee','Simple onboarding','UK-focused'] },
+  // ── Fluxa ── source: https://fluxapay.co.uk/
+  { id:'fluxa_founding', app:false,
+    name:'Fluxa', plan:'Founding Merchant',
+    sub:0, rate:0.018, flat:0, extra:0,
+    source:'https://fluxapay.co.uk/',
+    warn:'Invite-only — limited to 10 founding spots · 12-month lock-in at this rate · Online/API only — no card reader or in-person payments · No FX uplift, refund fee, or chargeback markup',
+    pros:['1.8% flat — genuinely simple pricing','No FX, refund, or chargeback fees','No monthly fee or setup cost'] },
+
+  { id:'fluxa_standard', app:false,
+    name:'Fluxa', plan:'Standard',
+    sub:0, rate:0.02, flat:0, extra:0,
+    source:'https://fluxapay.co.uk/',
+    warn:'Online/API only — no card reader or in-person payments · No FX uplift, refund fee, or chargeback markup · No monthly minimum',
+    pros:['2% flat — no hidden fees','No lock-in — cancel anytime','No FX, refund, or chargeback fees'] },
 
   // ── Adyen ── source: https://www.adyen.com/pricing
   { id:'adyen', app:false,
@@ -2021,7 +2005,6 @@ const PROVIDERS = [
   { id:'dnapayments', app:'partial',
     name:'DNA Payments', plan:'Bespoke',
     sub:10, rate:0.005, flat:0.03, extra:0,
-    indicative:true,
     source:'https://www.dnapayments.com/',
     warn:'Rates not publicly disclosed — bespoke quotes only. IC+ model: debit markup from ~0.26%+3p on top of interchange (effective blended ~0.5%+3p shown). Credit and business cards higher. 2–4 year contracts with £159 early cancellation fee. Next-day settlement costs £7.99/month extra.',
     pros:['Competitive debit rates from ~0.26% markup','IC+ transparent pricing model','UK-based acquirer'] },
@@ -2060,7 +2043,6 @@ const POP_ORDER = [
   'mypos',        // popular in UK independent retail
   'tyl',          // NatWest — large existing business base
   'barclaycard',  // established bank brand
-  'lloyds',       // Lloyds Bank Cardnet
   'worldpay',     // large legacy estate
   'lightspeed',   // growing in hospitality & retail
   'takepayments', // UK-focused mid-market
@@ -2142,7 +2124,7 @@ const PATH_COPY = {
     step1Body: 'Tell me a bit about the business you\'re about to launch — or the card volumes you\'re expecting. I\'ll rank every UK payment provider so you can start on the cheapest plan for your numbers.',
     providerLabel: 'Current payment provider',
     providerHint: 'You haven\'t signed up to anyone yet — no problem. Leave this as "No provider yet" and I\'ll show you the best starting option.',
-    savingsLabel: 'Starting vs most expensive',
+    savingsLabel: 'YOU SAVE',
     step4Heading: 'The best place<br><em>to start.</em>',
     step4Body: 'Every UK provider ranked for your expected volumes. The recommended option will save you the most over three years vs. the most expensive on the market — click any card to view their official pricing page.'
   },
@@ -2451,18 +2433,63 @@ const REVOLUT_RATE_SHEET = makeRateSheet({
   ],
 });
 
+// Lopay — channel × card-type rate sheets.
+// Source: https://lopay.com/en-gb/pricing
+// In-person/CNP: published plan rate for debit/credit; +1% for Amex, international & corporate (pcr).
+// Online (payment links/subscriptions): 1.79% flat regardless of plan, +1% for Amex/international.
+// Tap to Pay (+8p), Next Day Settlement (£2.99+VAT/mo), and Terminal rental (£15/mo) are optional
+// add-ons and are not modelled here.
+const LOPAY_ESSENTIAL_SHEET = makeRateSheet({
+  flats: 0,
+  tiers: [
+    { upto: Infinity, label: 'All volumes', rates: {
+      f2f:    { dr: 0.0079, cr: 0.0079, pcr: 0.0179 },
+      online: { dr: 0.0179, cr: 0.0179, pcr: 0.0279 },
+      cnp:    { dr: 0.0079, cr: 0.0079, pcr: 0.0179 },
+    } },
+  ],
+});
+
+const LOPAY_STANDARD_SHEET = makeRateSheet({
+  flats: 0,
+  tiers: [
+    { upto: Infinity, label: 'All volumes', rates: {
+      f2f:    { dr: 0.0099, cr: 0.0099, pcr: 0.0199 },
+      online: { dr: 0.0179, cr: 0.0179, pcr: 0.0279 },
+      cnp:    { dr: 0.0099, cr: 0.0099, pcr: 0.0199 },
+    } },
+  ],
+});
+
+const LOPAY_INSTANT_SHEET = makeRateSheet({
+  flats: 0,
+  tiers: [
+    { upto: Infinity, label: 'All volumes', rates: {
+      f2f:    { dr: 0.0179, cr: 0.0179, pcr: 0.0279 },
+      online: { dr: 0.0179, cr: 0.0179, pcr: 0.0279 },
+      cnp:    { dr: 0.0179, cr: 0.0179, pcr: 0.0279 },
+    } },
+  ],
+});
+
 const RATE_SHEETS = {
-  dna:     DNA_RATE_SHEET,
-  revolut: REVOLUT_RATE_SHEET,
+  dna:              DNA_RATE_SHEET,
+  revolut:          REVOLUT_RATE_SHEET,
+  lopay_essential:  LOPAY_ESSENTIAL_SHEET,
+  lopay_standard:   LOPAY_STANDARD_SHEET,
+  lopay_instant:    LOPAY_INSTANT_SHEET,
 };
 
 // Provider id → rate sheet name. Providers not listed here use their static
 // p.rate / p.flat from PROVIDERS unchanged.
 const PROVIDER_SHEETS = {
-  dnapayments:    'dna',
-  revolut_basic:  'revolut',
-  revolut_grow:   'revolut',
-  revolut_scale:  'revolut',
+  dnapayments:     'dna',
+  revolut_basic:   'revolut',
+  revolut_grow:    'revolut',
+  revolut_scale:   'revolut',
+  lopay_essential: 'lopay_essential',
+  lopay_standard:  'lopay_standard',
+  lopay_instant:   'lopay_instant',
 };
 
 function rateSheetFor(p) {
@@ -2474,10 +2501,11 @@ function rateSheetFor(p) {
 const DNA_PRESETS = {
   retail_highstreet:  { f2f: 95, online: 5,  cnp: 0,  dr: 70, cr: 25, pcr: 5  },
   cafe_restaurant:    { f2f: 92, online: 5,  cnp: 3,  dr: 60, cr: 32, pcr: 8  },
-  medical_london:     { f2f: 40, online: 25, cnp: 35, dr: 10, cr: 30, pcr: 60 },
+  medical_london:     { f2f: 40, online: 25, cnp: 35, dr: 60, cr: 20, pcr: 20, txn: 4, val: 350, days: 22 },
   ecommerce_only:     { f2f: 0,  online: 95, cnp: 5,  dr: 50, cr: 38, pcr: 12 },
   mixed_omnichannel:  { f2f: 60, online: 30, cnp: 10, dr: 50, cr: 35, pcr: 15 },
   b2b_invoicing:      { f2f: 5,  online: 35, cnp: 60, dr: 30, cr: 45, pcr: 25 },
+  market_seller:      { f2f: 100, online: 0, cnp: 0,  dr: 80, cr: 18, pcr: 2,  days: 8, txn: 20, val: 20 },
 };
 
 function applyDnaPreset() {
@@ -2487,13 +2515,38 @@ function applyDnaPreset() {
   ['f2f','online','cnp','dr','cr','pcr'].forEach(k => {
     document.getElementById('dna-' + k).value = p[k];
   });
+  if (p.txn  != null) { const el = document.getElementById('f-txn');  if (el) el.value = p.txn; }
+  if (p.val  != null) { const el = document.getElementById('f-val');  if (el) el.value = p.val; }
+  if (p.days != null) { const el = document.getElementById('f-days'); if (el) el.value = p.days; }
+  if (p.txn != null || p.val != null || p.days != null) syncFromForm();
   calc();
 }
 
 // When sliders are dragged, mark the preset as "Custom"
-function onDnaSliderInput(/*group*/) {
+function onDnaSliderInput(group) {
   const sel = document.getElementById('dna-preset');
   if (sel && sel.value !== 'custom') sel.value = 'custom';
+  if (group === 'amex') {
+    const checked = document.getElementById('dna-accept-amex')?.checked;
+    const row = document.getElementById('dna-pcr-row');
+    if (row) row.style.display = checked ? '' : 'none';
+    if (!checked) {
+      const drEl  = document.getElementById('dna-dr');
+      const crEl  = document.getElementById('dna-cr');
+      const pcrEl = document.getElementById('dna-pcr');
+      if (drEl && crEl && pcrEl) {
+        const dr = parseFloat(drEl.value) || 0;
+        const cr = parseFloat(crEl.value) || 0;
+        const pcr = parseFloat(pcrEl.value) || 0;
+        const total = dr + cr + pcr;
+        const drCr = dr + cr;
+        const drNew = drCr > 0 ? Math.round(dr / drCr * total) : Math.round(total / 2);
+        drEl.value  = drNew;
+        crEl.value  = total - drNew;
+        pcrEl.value = 0;
+      }
+    }
+  }
   calc();
 }
 
@@ -2626,9 +2679,7 @@ function calc() {
   // The panel is themed around DNA's tiered model — Revolut just happens to share the same mix.
   const yearlyVol1 = mVol * 12;
   const dnaYr1     = DNA_RATE_SHEET.blended(mix, yearlyVol1);
-  const dnaTierEl  = document.getElementById('dna-tier-label');
   const dnaRateEl  = document.getElementById('dna-blended-rate');
-  if (dnaTierEl) dnaTierEl.textContent = dnaYr1.tier.label;
   if (dnaRateEl) dnaRateEl.textContent = (dnaYr1.rate * 100).toFixed(2) + '%';
   renderDnaTuner(yearlyVol1, mix, dnaYr1.tier);
 
@@ -3019,6 +3070,16 @@ const CONS = {
     'PCI DSS fee and minimum monthly service charge are additional costs on top of transaction fees',
     'Must enter a formal contract — terms vary and require careful review',
   ],
+  fluxa_founding: [
+    'Invite-only with only 10 founding spots — not available to most applicants',
+    '12-month lock-in at the founding rate',
+    'Online/API only — no in-person or card reader payments at any price point',
+  ],
+  fluxa_standard: [
+    '2% is higher than many established alternatives at equivalent volumes',
+    'Online/API only — no in-person or card reader payments at any price point',
+    'Early-stage provider — limited public track record compared to incumbents',
+  ],
 };
 
 // ── AFFILIATE / REFERRAL PROGRAMME DATA ──
@@ -3080,7 +3141,8 @@ const AFFILIATE = {
   barclaycard:         { type:'none', note:'No public programme found' },
   dojo_payg:           { type:'none', note:'No public programme found' },
   dojo_fix:            { type:'none', note:'No public programme found' },
-  fluxa:               { type:'none', note:'No public programme found' },
+  fluxa_founding:      { type:'none', note:'No public programme found' },
+  fluxa_standard:      { type:'none', note:'No public programme found' },
 };
 
 calc();
@@ -3291,11 +3353,21 @@ function populateAdmin() {
 }
 
 // ── URL PARAMETER PRE-FILL ──
-// Supports: ?txn=20&val=35&days=26&path=new&provider=lopay
-// Share a link to land users directly on a pre-calculated result.
+// URL parameter reference:
+//   Transaction data:   ?txn=20&val=35&days=26
+//   Journey:            &path=new|switch   &provider=lopay_standard
+//   Business profile:   &preset=retail_highstreet|cafe_restaurant|medical_london|
+//                               ecommerce_only|mixed_omnichannel|b2b_invoicing|market_seller
+//                       (market_seller also pre-sets trading days to 8)
+//   Individual sliders: &f2f=60&online=30&cnp=10&dr=50&cr=35&pcr=15  (override preset or stand alone)
+//   Amex toggle:        &amex=false  (or &amex=0 to uncheck)
+//
+// Individual slider params applied after preset, so they take precedence over preset defaults.
+// Example: ?txn=15&val=80&days=20&preset=cafe_restaurant&provider=lopay_standard
 function loadFromURLParams() {
   const p = new URLSearchParams(window.location.search);
-  if (!p.has('txn') && !p.has('val') && !p.has('days') && !p.has('path') && !p.has('provider')) return;
+  const knownKeys = ['txn','val','days','path','provider','preset','f2f','online','cnp','dr','cr','pcr','amex'];
+  if (!knownKeys.some(k => p.has(k))) return;
 
   // Apply path copy + wiz-1 classes without triggering the goToStep(1) animation
   const path = p.get('path') || 'new';
@@ -3307,37 +3379,88 @@ function loadFromURLParams() {
     wiz1.classList.add(path === 'path-new' ? 'path-new' : 'path-switch');
   }
 
-  // Pre-fill form values
+  // Pre-fill transaction data
   if (p.has('txn'))  { const el = document.getElementById('f-txn');  if (el) el.value = parseInt(p.get('txn'))  || 8; }
   if (p.has('val'))  { const el = document.getElementById('f-val');  if (el) el.value = parseInt(p.get('val'))  || 50; }
   if (p.has('days')) { const el = document.getElementById('f-days'); if (el) el.value = parseInt(p.get('days')) || 22; }
 
-  // Run calc() now so the provider dropdown gets populated
-  unlocked = true;
-  calc();
-
-  // Set provider after dropdown is populated, then re-calc and jump to results
-  if (p.has('provider')) {
-    const sel = document.getElementById('current-provider');
-    if (sel) {
-      sel.value = p.get('provider');
-      toggleCustomRate();
+  // Apply named business profile preset — sets all sliders and the dropdown label
+  if (p.has('preset')) {
+    const presetKey = p.get('preset');
+    const preset = DNA_PRESETS[presetKey];
+    if (preset) {
+      ['f2f','online','cnp','dr','cr','pcr'].forEach(k => {
+        const el = document.getElementById('dna-' + k);
+        if (el) el.value = preset[k];
+      });
+      const sel = document.getElementById('dna-preset');
+      if (sel) sel.value = presetKey;
+      // Apply preset transaction defaults unless overridden explicitly in the URL
+      if (preset.txn  != null && !p.has('txn'))  { const el = document.getElementById('f-txn');  if (el) el.value = preset.txn; }
+      if (preset.val  != null && !p.has('val'))  { const el = document.getElementById('f-val');  if (el) el.value = preset.val; }
+      if (preset.days != null && !p.has('days')) { const el = document.getElementById('f-days'); if (el) el.value = preset.days; }
+      if ((preset.txn ?? preset.val ?? preset.days) != null) syncFromForm();
     }
   }
-  if (path === 'new') {
-    const sel = document.getElementById('current-provider');
-    if (sel && !p.has('provider')) { sel.value = 'new'; toggleCustomRate(); }
-  }
-  checkReadiness();
-  calc();
 
-  // Skip straight to step 4 without animation
-  currentStep = 0;
-  document.querySelectorAll('.wiz-step').forEach(el => el.classList.remove('active'));
-  const step4 = document.getElementById('wiz-4');
-  if (step4) step4.classList.add('active');
-  currentStep = 4;
-  updateProgress(4);
+  // Individual slider overrides — applied after preset so they take precedence
+  ['f2f','online','cnp','dr','cr','pcr'].forEach(k => {
+    if (!p.has(k)) return;
+    const el = document.getElementById('dna-' + k);
+    if (el) el.value = parseInt(p.get(k)) || 0;
+    if (!p.has('preset')) {
+      const sel = document.getElementById('dna-preset');
+      if (sel) sel.value = 'custom';
+    }
+  });
+
+  // Amex toggle: amex=false or amex=0 unchecks it
+  if (p.has('amex')) {
+    const checked = p.get('amex') !== 'false' && p.get('amex') !== '0';
+    const el = document.getElementById('dna-accept-amex');
+    if (el) el.checked = checked;
+    const row = document.getElementById('dna-pcr-row');
+    if (row) row.style.display = checked ? '' : 'none';
+  }
+
+  const hasTransactionData = p.has('txn') || p.has('val') || p.has('days');
+
+  if (hasTransactionData) {
+    // Run calc() now so the provider dropdown gets populated
+    unlocked = true;
+    calc();
+
+    // Set provider after dropdown is populated, then re-calc and jump to results
+    if (p.has('provider')) {
+      const sel = document.getElementById('current-provider');
+      if (sel) {
+        sel.value = p.get('provider');
+        toggleCustomRate();
+      }
+    }
+    if (path === 'new') {
+      const sel = document.getElementById('current-provider');
+      if (sel && !p.has('provider')) { sel.value = 'new'; toggleCustomRate(); }
+    }
+    checkReadiness();
+    calc();
+
+    // Skip straight to step 4 without animation
+    currentStep = 0;
+    document.querySelectorAll('.wiz-step').forEach(el => el.classList.remove('active'));
+    const step4 = document.getElementById('wiz-4');
+    if (step4) step4.classList.add('active');
+    currentStep = 4;
+    updateProgress(4);
+  } else {
+    // Preset/slider only — go to step 1 and open the advanced panel so the
+    // user can see the pre-applied assumptions and fill in their own numbers.
+    goToStep(1);
+    const btn   = document.getElementById('adv-toggle');
+    const panel = document.getElementById('adv-panel');
+    if (btn && !btn.classList.contains('open'))   btn.classList.add('open');
+    if (panel && !panel.classList.contains('open')) panel.classList.add('open');
+  }
 }
 
 document.addEventListener('DOMContentLoaded', loadFromURLParams);
