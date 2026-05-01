@@ -2509,22 +2509,24 @@ function scrollRevealFromBottom() {
     window.scrollTo(0, max);
 
     const lowPerf = isLowPerfDevice();
+    const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
 
     if (lowPerf) {
       // On low-memory tablets, native smooth scrolling is usually less janky
       // than per-frame JS scroll loops.
+      const lowPerfDuration = isMobile ? 2300 : 1300;
       setTimeout(() => {
         html.style.scrollBehavior = 'smooth';
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => {
           html.style.scrollBehavior = prevBehavior;
           flashWinnerTile();
-        }, 950);
+        }, lowPerfDuration);
       }, 120);
       return;
     }
 
-    const duration = 1800;
+    const duration = isMobile ? 3000 : 1800;
     const easeInOut = t => t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
     setTimeout(() => {
       const t0 = performance.now();
