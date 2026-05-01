@@ -816,30 +816,48 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
 }
 .beta-field input:focus { border-color: var(--accent); }
 .beta-field input::placeholder { color: rgba(148,163,184,0.4); }
+.beta-ack {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.55rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border);
+  background: var(--black3);
+  font-size: 11px;
+  color: var(--ink2);
+  line-height: 1.55;
+}
+.beta-ack input[type="checkbox"] {
+  margin-top: 2px;
+  accent-color: var(--accent2);
+}
+.beta-ack strong { color: var(--accent); font-weight: 600; }
 #beta-skip {
   background: none; border: none; cursor: pointer;
   font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: rgba(148,163,184,0.5);
+  text-transform: uppercase; color: rgba(15,23,42,0.72);
   margin-top: 1.25rem; padding: 0; display: block; width: 100%; text-align: center;
   transition: color 0.2s;
 }
-#beta-skip:hover { color: var(--muted); }
+#beta-skip:hover { color: rgba(15,23,42,0.9); }
 
 /* ── DEFAULT: top 12 provider tiles blurred until ?demo is added ── */
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) { pointer-events: none; }
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-name,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-plan,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-badge-row { filter: blur(7px); user-select: none; }
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) > div:has(.mini-bar-row),
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-rate,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-rate-val,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-monthly,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-pros,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-cons,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-pros-cons-divider,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-warn,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-indicative,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12) .p-source { display: none; }
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) { pointer-events: none; }
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-name,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-plan,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-badge-row { filter: blur(7px); user-select: none; }
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) > div:has(.mini-bar-row),
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-rate,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-rate-val,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-monthly,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-pros,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-cons,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-pros-cons-divider,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-warn,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-indicative,
+body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-source { display: none; }
 body:not(.demo-mode) .sh-current-detail,
 body:not(.demo-mode) .sh-saving-detail { filter: blur(7px); user-select: none; }
 
@@ -1359,21 +1377,25 @@ footer {
     <p id="beta-body">TillSwift is in its final checks before launch. You can still explore a preview of your results below — sign up and we'll notify you the moment the full platform goes live.</p>
     <form id="beta-form" onsubmit="submitBeta(event)">
       <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+      <label class="beta-ack" for="beta-ack">
+        <input type="checkbox" id="beta-ack" required>
+        <span>I acknowledge that TillSwift is <strong>completely free</strong> for merchants, all comparison research is <strong>impartial</strong> and in the client's best interests, and the service is funded by <strong>commission paid by the payment companies to the consultant</strong>.</span>
+      </label>
       <div class="beta-field">
         <label for="beta-name">Your name</label>
         <input type="text" id="beta-name" name="name" placeholder="Jane Smith" autocomplete="name">
       </div>
       <div class="beta-field">
-        <label for="beta-company">Company name <span style="font-size:9px;opacity:0.5;text-transform:none;letter-spacing:0">(optional)</span></label>
-        <input type="text" id="beta-company" name="company" placeholder="Acme Ltd" autocomplete="organization">
+        <label for="beta-company">Company name</label>
+        <input type="text" id="beta-company" name="company" placeholder="Acme Ltd" autocomplete="organization" required>
       </div>
       <div class="beta-field">
         <label for="beta-email">Email address</label>
         <input type="email" id="beta-email" name="email" placeholder="jane@acme.co.uk" autocomplete="email" required>
       </div>
       <div class="beta-field">
-        <label for="beta-phone">Phone number <span style="font-size:9px;opacity:0.5;text-transform:none;letter-spacing:0">(optional)</span></label>
-        <input type="tel" id="beta-phone" name="phone" placeholder="+44 7xxx xxxxxx" autocomplete="tel">
+        <label for="beta-phone">Phone number</label>
+        <input type="tel" id="beta-phone" name="phone" placeholder="+44 7xxx xxxxxx" autocomplete="tel" required>
       </div>
       <div id="beta-err" style="display:none;font-size:12px;color:rgba(220,80,60,0.9);margin-top:0.25rem"></div>
       <button type="submit" id="beta-submit" class="btn-primary" style="margin-top:1.25rem">Notify me at launch →</button>
@@ -2443,13 +2465,24 @@ function sendBetaConfirmationEmail(payload) {
 function showBetaModal(onComplete) {
   var overlay = document.getElementById('beta-overlay');
   overlay.style.display = 'flex';
+  setBetaSkipVisibility();
   overlay._onComplete = onComplete;
+}
+
+function getBetaSeenKey() {
+  return document.body.classList.contains('demo-mode') ? 'beta_seen_demo' : 'beta_seen';
+}
+
+function setBetaSkipVisibility() {
+  var skip = document.getElementById('beta-skip');
+  if (!skip) return;
+  skip.style.display = document.body.classList.contains('demo-mode') ? 'none' : '';
 }
 
 function openNotifyForm() {
   // Reset modal to initial state in case it was already submitted
   document.getElementById('beta-form').style.display = '';
-  document.getElementById('beta-skip').style.display = '';
+  setBetaSkipVisibility();
   document.getElementById('beta-thanks').style.display = 'none';
   document.getElementById('beta-err').style.display = 'none';
   var btn = document.getElementById('beta-submit');
@@ -2458,10 +2491,12 @@ function openNotifyForm() {
   document.getElementById('beta-overlay').style.display = 'flex';
 }
 
-function dismissBeta() {
+function dismissBeta(forceClose) {
+  const isDemoMode = document.body.classList.contains('demo-mode');
+  if (isDemoMode && !forceClose) return;
   var overlay = document.getElementById('beta-overlay');
   overlay.style.display = 'none';
-  sessionStorage.setItem('beta_seen', '1');
+  sessionStorage.setItem(getBetaSeenKey(), '1');
   if (overlay._onComplete) overlay._onComplete();
 }
 
@@ -2504,17 +2539,20 @@ function submitBeta(e) {
       document.getElementById('beta-form').style.display = 'none';
       document.getElementById('beta-skip').style.display = 'none';
       document.getElementById('beta-thanks').style.display = 'block';
-      sessionStorage.setItem('beta_seen', '1');
-      setTimeout(dismissBeta, 2200);
+      sessionStorage.setItem(getBetaSeenKey(), '1');
+      setTimeout(function() { dismissBeta(true); }, 2200);
     });
 }
 
-function goToStep(n) {
+function goToStep(n, skipBetaGate) {
   if (n === currentStep) return;
-  // Show beta modal on first visit to results, unless in demo mode
-  if (n === 4 && !document.body.classList.contains('demo-mode') && !sessionStorage.getItem('beta_seen')) {
+  // Show beta modal on first visit to results
+  const isDemoMode = document.body.classList.contains('demo-mode');
+  const isNewTrack = userPath === 'new';
+  const shouldShowBeta = isDemoMode ? true : (isNewTrack || !sessionStorage.getItem(getBetaSeenKey()));
+  if (!skipBetaGate && n === 4 && shouldShowBeta) {
     unlocked = true; calc();
-    showBetaModal(function() { goToStep(4); });
+    showBetaModal(function() { goToStep(4, true); });
     return;
   }
   if (n === 4) { unlocked = true; calc(); }  // unlock and render full grid before showing results
@@ -3749,6 +3787,7 @@ function loadFromURLParams() {
     if (step4) step4.classList.add('active');
     currentStep = 4;
     updateProgress(4);
+
   } else {
     // Preset/slider only — go to step 1 and open the advanced panel so the
     // user can see the pre-applied assumptions and fill in their own numbers.
