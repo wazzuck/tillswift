@@ -12,6 +12,7 @@
 
   gtag('config', 'G-V22KGRG9RS');
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <title>Payment Consultation — TillSwift</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1126,7 +1127,7 @@ footer {
     <div class="field-grid">
       <div class="field" id="current-provider-field" style="grid-column: 1 / -1">
         <label class="field-label" for="current-provider" id="current-provider-label">Current payment provider</label>
-        <select class="field-input field-select" id="current-provider" onchange="lpInteracted=true; toggleCustomRate(); calc(); checkReadiness()">
+        <select class="field-input field-select" id="current-provider" onchange="handleProviderSelection(this)">
           <option value="">— Select provider —</option>
           <option value="new">No provider yet / new to card payments</option>
           <option value="custom">I know my rate — enter it below</option>
@@ -1142,17 +1143,17 @@ footer {
 
       <div class="field">
         <label class="field-label" for="f-txn">Transactions per day</label>
-        <input class="field-input" type="number" id="f-txn" min="1" max="500" value="8" oninput="syncFromForm()">
+        <input class="field-input" type="number" id="f-txn" min="1" max="500" value="20" oninput="syncFromForm()">
       </div>
 
       <div class="field">
         <label class="field-label" for="f-val">Average transaction (£)</label>
-        <input class="field-input" type="number" id="f-val" min="5" max="1000" value="50" oninput="syncFromForm()">
+        <input class="field-input" type="number" id="f-val" min="5" max="1000" value="20" oninput="syncFromForm()">
       </div>
 
       <div class="field">
         <label class="field-label" for="f-days">Trading days per month</label>
-        <input class="field-input" type="number" id="f-days" min="1" max="31" value="22" oninput="syncFromForm()">
+        <input class="field-input" type="number" id="f-days" min="1" max="31" value="8" oninput="syncFromForm()">
       </div>
     </div>
 
@@ -1197,11 +1198,11 @@ footer {
             <option value="custom">Custom</option>
             <option value="retail_highstreet">High-street retail</option>
             <option value="cafe_restaurant">Café / restaurant</option>
-            <option value="medical_london" selected>Private medical</option>
+            <option value="medical_london">Private medical</option>
             <option value="ecommerce_only">E-commerce only</option>
             <option value="mixed_omnichannel">Mixed omnichannel</option>
             <option value="b2b_invoicing">B2B invoicing / professional services</option>
-            <option value="market_seller">Market / outdoor trader</option>
+            <option value="market_seller" selected>Market / outdoor trader</option>
           </select>
         </div>
 
@@ -1369,6 +1370,10 @@ footer {
         <label for="beta-email">Email address</label>
         <input type="email" id="beta-email" name="email" placeholder="jane@acme.co.uk" autocomplete="email" required>
       </div>
+      <div class="beta-field">
+        <label for="beta-phone">Phone number <span style="font-size:9px;opacity:0.5;text-transform:none;letter-spacing:0">(optional)</span></label>
+        <input type="tel" id="beta-phone" name="phone" placeholder="+44 7xxx xxxxxx" autocomplete="tel">
+      </div>
       <div id="beta-err" style="display:none;font-size:12px;color:rgba(220,80,60,0.9);margin-top:0.25rem"></div>
       <button type="submit" id="beta-submit" class="btn-primary" style="margin-top:1.25rem">Notify me at launch →</button>
     </form>
@@ -1432,6 +1437,120 @@ footer {
       <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(15,118,110,1);display:block;line-height:1" id="adm-aff-total">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Combined income</span></div>
     </div>
 
+    <!-- URL parameters reference -->
+    <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">URL parameters</div>
+    <div style="margin-bottom:3rem">
+
+      <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:2rem">
+        <thead>
+          <tr>
+            <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400;white-space:nowrap">Parameter</th>
+            <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Accepted values</th>
+            <th style="text-align:left;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;border-bottom:1px solid var(--border2);font-weight:400">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--hairline)">
+            <td style="padding:.6rem 1rem;font-family:var(--font-mono);color:var(--accent2);white-space:nowrap">demo</td>
+            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px">no value needed</td>
+            <td style="padding:.6rem 1rem;color:var(--ink2);font-size:11px">Unlocks full provider detail cards and skips the beta gate. Always include this when sharing a consultation link.</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--hairline)">
+            <td style="padding:.6rem 1rem;font-family:var(--font-mono);color:var(--accent2);white-space:nowrap">preset</td>
+            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px;white-space:nowrap">retail_highstreet<br>cafe_restaurant<br>medical_london<br>ecommerce_only<br>mixed_omnichannel<br>b2b_invoicing<br>market_seller</td>
+            <td style="padding:.6rem 1rem;color:var(--ink2);font-size:11px">Applies a business profile preset — sets channel split, card-type mix sliders, and (for profiles that have them) transaction defaults. Without transaction data the page lands on step 1 with the advanced panel open; add <code style="font-family:var(--font-mono);font-size:10px">txn</code>/<code style="font-family:var(--font-mono);font-size:10px">val</code> to jump straight to results.</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--hairline)">
+            <td style="padding:.6rem 1rem;font-family:var(--font-mono);color:var(--accent2);white-space:nowrap">txn</td>
+            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px">integer</td>
+            <td style="padding:.6rem 1rem;color:var(--ink2);font-size:11px">Transactions per day. Triggers a jump to step 4 (results) when present.</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--hairline)">
+            <td style="padding:.6rem 1rem;font-family:var(--font-mono);color:var(--accent2);white-space:nowrap">val</td>
+            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px">integer (£)</td>
+            <td style="padding:.6rem 1rem;color:var(--ink2);font-size:11px">Average transaction value in pounds. Triggers a jump to step 4 when present.</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--hairline)">
+            <td style="padding:.6rem 1rem;font-family:var(--font-mono);color:var(--accent2);white-space:nowrap">days</td>
+            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px">integer (1–31)</td>
+            <td style="padding:.6rem 1rem;color:var(--ink2);font-size:11px">Trading days per month. Overrides the preset default when both are provided.</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--hairline)">
+            <td style="padding:.6rem 1rem;font-family:var(--font-mono);color:var(--accent2);white-space:nowrap">provider</td>
+            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px;white-space:nowrap">e.g. lopay_standard<br>sumup_payg<br>square_free</td>
+            <td style="padding:.6rem 1rem;color:var(--ink2);font-size:11px">Pre-selects the client's current provider in the dropdown. Uses the internal provider ID (visible in the full rate table below).</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--hairline)">
+            <td style="padding:.6rem 1rem;font-family:var(--font-mono);color:var(--accent2);white-space:nowrap">path</td>
+            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px">new · switch</td>
+            <td style="padding:.6rem 1rem;color:var(--ink2);font-size:11px">Sets the user journey. <code style="font-family:var(--font-mono);font-size:10px">new</code> = new to card payments; <code style="font-family:var(--font-mono);font-size:10px">switch</code> = switching from an existing provider.</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--hairline)">
+            <td style="padding:.6rem 1rem;font-family:var(--font-mono);color:var(--accent2);white-space:nowrap">f2f · online · cnp</td>
+            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px">0–100 (must sum to 100)</td>
+            <td style="padding:.6rem 1rem;color:var(--ink2);font-size:11px">Override individual channel-split sliders. Applied after a preset, so they take precedence. Values are normalised automatically if they don't sum to 100.</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--hairline)">
+            <td style="padding:.6rem 1rem;font-family:var(--font-mono);color:var(--accent2);white-space:nowrap">dr · cr · pcr</td>
+            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px">0–100 (must sum to 100)</td>
+            <td style="padding:.6rem 1rem;color:var(--ink2);font-size:11px">Override individual card-type mix sliders. <code style="font-family:var(--font-mono);font-size:10px">dr</code> = debit, <code style="font-family:var(--font-mono);font-size:10px">cr</code> = credit, <code style="font-family:var(--font-mono);font-size:10px">pcr</code> = Amex / international / corporate. Applied after a preset.</td>
+          </tr>
+          <tr>
+            <td style="padding:.6rem 1rem;font-family:var(--font-mono);color:var(--accent2);white-space:nowrap">amex</td>
+            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px">false · 0</td>
+            <td style="padding:.6rem 1rem;color:var(--ink2);font-size:11px">Unchecks the "Accept Amex / premium cards" toggle and hides the Amex slider, redistributing its share proportionally to debit and credit.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Example links</div>
+      <div style="display:grid;gap:.75rem">
+
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Demo mode only</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Lands on step 0 in demo mode. User fills in everything manually.</div>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Business profile — step 1, no data pre-filled</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=cafe_restaurant</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Lands on step 1 with the café / restaurant channel and card-type sliders pre-applied. Advanced panel opens automatically. Client fills in their own transaction numbers.</div>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Market trader — jump straight to results</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=market_seller&amp;txn=20&amp;val=20</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Market seller profile (100% in-person, debit-heavy). 20 transactions/day at £20 average. Trading days defaults to 8 from the preset. Jumps directly to the ranked results on step 4.</div>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Private medical — full pre-filled consultation</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=medical_london&amp;txn=4&amp;val=350&amp;days=22</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Private medical profile (40% in-person, 35% CNP, 60% debit, 20% credit, 20% Amex). 4 transactions at £350 over 22 days. Jumps to results.</div>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Switching client — pre-select current provider</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=retail_highstreet&amp;txn=35&amp;val=28&amp;days=26&amp;provider=sumup_payg&amp;path=switch</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">High-street retail profile. Client currently on SumUp PAYG. 35 txn/day at £28 over 26 trading days. Results show their current cost vs. every alternative.</div>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Custom card mix — no Amex</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=retail_highstreet&amp;txn=20&amp;val=45&amp;days=24&amp;dr=75&amp;cr=25&amp;amex=false</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Retail profile but with a custom card mix — 75% debit, 25% credit, no Amex accepted. Amex slider is hidden and its share redistributed automatically.</div>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">B2B / professional services — full example</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=b2b_invoicing&amp;txn=6&amp;val=800&amp;days=20&amp;provider=stripe&amp;path=switch</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">B2B invoicing profile (mostly CNP / online). 6 transactions at £800 over 20 days. Client currently on Stripe. Shows how much they could save by switching.</div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- Pricing transparency table -->
     <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Pricing transparency</div>
     <div style="overflow-x:auto;margin-bottom:3rem">
@@ -1476,9 +1595,9 @@ footer {
 </div>
 
 <!-- ─────────── HIDDEN SLIDER INPUTS (used by calc engine) ─────────── -->
-<input type="hidden" id="r-txn" value="8">
-<input type="hidden" id="r-val" value="50">
-<input type="hidden" id="r-days" value="22">
+<input type="hidden" id="r-txn" value="20">
+<input type="hidden" id="r-val" value="20">
+<input type="hidden" id="r-days" value="8">
 
 <script>
 // ── DEMO MODE — ?demo in URL reveals full provider details ──
@@ -1503,6 +1622,25 @@ function toggleAdvanced() {
 function toggleCustomRate() {
   const v = document.getElementById('current-provider').value;
   document.getElementById('custom-rate-field').style.display = v === 'custom' ? '' : 'none';
+}
+
+function handleProviderSelection(el) {
+  if (!el) return;
+  const selectedValue = el.value;
+  lpInteracted = true;
+  toggleCustomRate();
+  checkReadiness();
+  // Let the browser commit native select state first, then run heavier updates.
+  setTimeout(function() {
+    if (el.value !== selectedValue) el.value = selectedValue;
+    calc();
+    closeProviderDropdown(el);
+  }, 0);
+}
+
+function closeProviderDropdown(el) {
+  if (!el) return;
+  el.blur();
 }
 
 // ── SYNC form inputs → hidden slider values ──
@@ -2200,8 +2338,45 @@ function updateProgress(n) {
   document.getElementById('progress-bar').style.width = pct + '%';
 }
 
-// ── BETA MODAL — URL of your deployed Google Apps Script web app ──
-var BETA_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwrWPfxST_38ohRDCF4DmEEHwoLOwfwaMSosxDVnZzWaTDDz4P3b_Z9KxaxYfRuQm0/exec';
+// ── BETA MODAL INTEGRATIONS ──
+var BETA_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnB4lfiYdd8SGlhLj1K8dqIri7sYywxmTE2w5zARxiLz7Tfjp21ph_v6XLfOiHWiQ/exec';
+var BETA_CONTACT_EMAIL = 'hello@tillswift.com';
+var BETA_CONTACT_PHONE = '';
+
+// EmailJS config (fill these in with your EmailJS IDs)
+var EMAILJS_PUBLIC_KEY = 'K160_i8A3AXGSYFFl';
+var EMAILJS_SERVICE_ID = 'service_lxc7ozk';
+var EMAILJS_TEMPLATE_ID = 'template_bpsxi4b';
+
+function isEmailJsConfigured() {
+  return !!(EMAILJS_PUBLIC_KEY && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && window.emailjs);
+}
+
+function sendBetaConfirmationEmail(payload) {
+  if (!isEmailJsConfigured()) return Promise.resolve();
+
+  try {
+    window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  } catch (_) {
+    // Ignore duplicate init calls.
+  }
+
+  var templateParams = {
+    name: payload.name || 'there',
+    to_name: payload.name || 'there',
+    email: payload.email,
+    to_email: payload.email,
+    company: payload.company || '',
+    phone: payload.phone || '',
+    user_phone: payload.phone || '',
+    company_line: payload.company ? ' from ' + payload.company : '',
+    contact_email: BETA_CONTACT_EMAIL,
+    contact_phone: BETA_CONTACT_PHONE,
+    contact_page: location.origin + '/contact.html'
+  };
+
+  return window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+}
 
 function showBetaModal(onComplete) {
   var overlay = document.getElementById('beta-overlay');
@@ -2233,6 +2408,7 @@ function submitBeta(e) {
   var name    = document.getElementById('beta-name').value.trim();
   var company = document.getElementById('beta-company').value.trim();
   var email   = document.getElementById('beta-email').value.trim();
+  var phone   = document.getElementById('beta-phone').value.trim();
   var errEl   = document.getElementById('beta-err');
   errEl.style.display = 'none';
 
@@ -2242,11 +2418,26 @@ function submitBeta(e) {
   btn.disabled = true;
   btn.textContent = 'Sending…';
 
-  var params = new URLSearchParams({ name: name, company: company, email: email,
+  var params = new URLSearchParams({
+    name: name,
+    company: company,
+    email: email,
+    phone: phone,
+    Phone: phone,
+    phone_number: phone,
     timestamp: new Date().toISOString(), page: location.href });
 
-  fetch(BETA_SCRIPT_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' })
-    .catch(function() {})  // still show thanks even if network fails
+  var saveLeadPromise = fetch(BETA_SCRIPT_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' })
+    .catch(function() {}); // still show thanks even if network fails
+
+  var confirmationPromise = sendBetaConfirmationEmail({
+    name: name,
+    company: company,
+    email: email,
+    phone: phone
+  }).catch(function() {}); // keep flow resilient if email fails
+
+  Promise.allSettled([saveLeadPromise, confirmationPromise])
     .finally(function() {
       document.getElementById('beta-form').style.display = 'none';
       document.getElementById('beta-skip').style.display = 'none';
@@ -2290,19 +2481,16 @@ function goToStep(n) {
         newEl.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
         newEl.style.opacity = '1';
         newEl.style.transform = 'translateX(0)';
-        if (n === 4 && goingForward && !stepFourSeen) {
-          stepFourSeen = true;
-          // Kinetic count-up on the hero savings number (2026 UI)
-          const heroNumEl = document.getElementById('sh-net-saving-4');
-          if (heroNumEl && window._lastCalc && window._lastCalc.saving3y > 0) {
-            animateCountUp(heroNumEl, window._lastCalc.saving3y, 1600);
+        if (n === 4) {
+          if (goingForward && !stepFourSeen) {
+            stepFourSeen = true;
+            // Kinetic count-up on the hero savings number (2026 UI)
+            const heroNumEl = document.getElementById('sh-net-saving-4');
+            if (heroNumEl && window._lastCalc && window._lastCalc.saving3y > 0) {
+              animateCountUp(heroNumEl, window._lastCalc.saving3y, 1600);
+            }
           }
-          if (userPath === 'new') {
-            scrollRevealFromBottom();
-          } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(flashWinnerTile, 700);
-          }
+          scrollRevealFromBottom();
         } else {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
