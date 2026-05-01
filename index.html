@@ -1143,7 +1143,7 @@ footer {
 
       <div class="field">
         <label class="field-label" for="f-val">Average transaction (£)</label>
-        <input class="field-input" type="number" id="f-val" min="5" max="1000" value="20" oninput="syncFromForm()">
+        <input class="field-input" type="number" id="f-val" min="5" max="1000" value="25" oninput="syncFromForm()">
       </div>
 
       <div class="field">
@@ -1211,18 +1211,18 @@ footer {
             <div class="dna-sliders-title">Where do you take payments?</div>
             <div class="dna-slider-row">
               <span class="dna-slider-name">In-person</span>
-              <input type="range" min="0" max="100" step="1" value="35" id="dna-f2f" oninput="onDnaSliderInput('channel')">
-              <span class="dna-slider-pct" id="dna-f2f-val">35%</span>
+              <input type="range" min="0" max="100" step="1" value="100" id="dna-f2f" oninput="onDnaSliderInput('channel')">
+              <span class="dna-slider-pct" id="dna-f2f-val">100%</span>
             </div>
             <div class="dna-slider-row">
               <span class="dna-slider-name">Online</span>
-              <input type="range" min="0" max="100" step="1" value="5" id="dna-online" oninput="onDnaSliderInput('channel')">
-              <span class="dna-slider-pct" id="dna-online-val">5%</span>
+              <input type="range" min="0" max="100" step="1" value="0" id="dna-online" oninput="onDnaSliderInput('channel')">
+              <span class="dna-slider-pct" id="dna-online-val">0%</span>
             </div>
             <div class="dna-slider-row">
               <span class="dna-slider-name">CNP / phone-billed</span>
-              <input type="range" min="0" max="100" step="1" value="60" id="dna-cnp" oninput="onDnaSliderInput('channel')">
-              <span class="dna-slider-pct" id="dna-cnp-val">60%</span>
+              <input type="range" min="0" max="100" step="1" value="0" id="dna-cnp" oninput="onDnaSliderInput('channel')">
+              <span class="dna-slider-pct" id="dna-cnp-val">0%</span>
             </div>
             <div class="dna-slider-total" id="dna-channel-total">Total: 100%</div>
           </div>
@@ -1520,8 +1520,8 @@ footer {
 
         <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
           <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Market trader — jump straight to results</div>
-          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=market_seller&amp;txn=40&amp;val=20</code>
-          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Market seller profile (100% in-person, debit-heavy). 40 transactions/day at £20 average. Trading days defaults to 8 from the preset. Jumps directly to the ranked results on step 4.</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=market_seller&amp;txn=40&amp;val=25</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Market seller profile (100% in-person, debit-heavy). 40 transactions/day at £25 average. Trading days defaults to 8 from the preset. Jumps directly to the ranked results on step 4.</div>
         </div>
 
         <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
@@ -1591,12 +1591,21 @@ footer {
       </table>
     </div>
 
+    <div style="margin-top:2rem;border-top:1px solid var(--border);padding-top:1.5rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.8rem">
+        <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Session provider visibility</div>
+        <button onclick="showAllProvidersForSession()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:4px 10px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Show all</button>
+      </div>
+      <div id="admin-provider-visibility" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem"></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:.6rem">Hidden providers are excluded from all calculations for this browser session.</div>
+    </div>
+
   </div>
 </div>
 
 <!-- ─────────── HIDDEN SLIDER INPUTS (used by calc engine) ─────────── -->
 <input type="hidden" id="r-txn" value="40">
-<input type="hidden" id="r-val" value="20">
+<input type="hidden" id="r-val" value="25">
 <input type="hidden" id="r-days" value="8">
 
 <script>
@@ -1661,11 +1670,12 @@ function updateLivePreview() {
   const infl   = parseFloat(document.getElementById('r-infl').value)   / 100;
   const growth = parseFloat(document.getElementById('r-growth').value) / 100;
   const mix    = getDnaMix();
-  const sheets = PROVIDERS.map(rateSheetFor);
+  const visibleProviders = getVisibleProviders();
+  const sheets = visibleProviders.map(rateSheetFor);
 
   // 3-year revenue + per-provider fees
   let rev3 = 0;
-  const fees3 = new Array(PROVIDERS.length).fill(0);
+  const fees3 = new Array(visibleProviders.length).fill(0);
   for (let y = 0; y < 3; y++) {
     const valY  = val  * Math.pow(1 + infl,   y);
     const txnY  = txn  * Math.pow(1 + growth, y);
@@ -1673,7 +1683,7 @@ function updateLivePreview() {
     const mTxnY = txnY * days;
     const yearlyVolY = mVolY * 12;
     rev3 += mVolY * 12;
-    PROVIDERS.forEach((p, i) => {
+    visibleProviders.forEach((p, i) => {
       let rate = p.rate, flat = p.flat;
       if (sheets[i]) {
         const blended = sheets[i].blended(mix, yearlyVolY);
@@ -1685,13 +1695,16 @@ function updateLivePreview() {
   }
 
   // 3-year TCO for every provider (fees + subs + hardware)
-  const tco3 = PROVIDERS.map((p, i) => fees3[i] + p.sub * 36);
+  const tco3 = visibleProviders.map((p, i) => fees3[i] + p.sub * 36);
+  if (!tco3.length) {
+    return;
+  }
   const bestTco3 = Math.min(...tco3);
 
   // Current provider
   const sel  = document.getElementById('current-provider');
   const cId  = sel ? sel.value : '';
-  const cIdx = (cId && cId !== 'new' && cId !== 'custom') ? PROVIDERS.findIndex(p => p.id === cId) : -1;
+  const cIdx = (cId && cId !== 'new' && cId !== 'custom') ? visibleProviders.findIndex(p => p.id === cId) : -1;
   let cTco3 = cIdx >= 0 ? tco3[cIdx] : null;
   if (cId === 'custom') {
     const customPct = parseFloat(document.getElementById('custom-rate-pct')?.value) || 0;
@@ -1719,11 +1732,11 @@ function updateLivePreview() {
   const feesEl  = document.getElementById('lp-fees');
   const feesSub = document.getElementById('lp-fees-sub');
   if (cIdx >= 0) {
-    const f = fees3[cIdx] + PROVIDERS[cIdx].sub * 36;
+    const f = fees3[cIdx] + visibleProviders[cIdx].sub * 36;
     animateLp(feesEl, lpLast.fees, f, 500);
     lpLast.fees = f;
     feesEl.className = 'lp-value';
-    feesSub.textContent = PROVIDERS[cIdx].name + ' · ' + PROVIDERS[cIdx].plan;
+    feesSub.textContent = visibleProviders[cIdx].name + ' · ' + visibleProviders[cIdx].plan;
   } else if (cId === 'custom' && cTco3 !== null) {
     const customPct = parseFloat(document.getElementById('custom-rate-pct')?.value) || 0;
     animateLp(feesEl, lpLast.fees, cTco3, 500);
@@ -1764,15 +1777,15 @@ const PROVIDERS = [
   { id:'sumup_payg', app:true,
     name:'SumUp', plan:'Pay as you go',
     sub:0, rate:0.0169, flat:0, extra:0,
-    source:'https://sumup.com/en-gb/card-readers/',
-    warn:'1.69% for all card types including Amex and international cards. No contract.',
+    source:'https://www.sumup.com/en-gb/pricing/',
+    warn:'In-person: 1.69% for all cards incl. Amex/premium. Online payments (Payment Links/Bookings and other digital products): 2.50%. No contract.',
     pros:['No monthly fee','No contract — cancel anytime','All card types at same rate incl. Amex'] },
 
   { id:'sumup_plus', app:true,
     name:'SumUp', plan:'Payments Plus',
     sub:19, rate:0.0099, flat:0, extra:0,
-    source:'https://sumup.com/en-gb/card-readers/',
-    warn:'0.99% for UK/EU consumer Visa/MC only — Amex, corporate & international revert to 1.69%. Free reader replacement. Businesses over £10k/month directed to sales.',
+    source:'https://www.sumup.com/en-gb/pricing/',
+    warn:'£19/month plan. In-person: 0.99% for debit/credit cards; Amex and premium cards 1.69%. Online payments (Payment Links/Bookings and other digital products): 2.50%.',
     pros:['0.99% rate — no long-term contract','Free reader replacement','Next-day 7am payouts incl. weekends'] },
 
   // ── Teya ── source: https://www.teya.com/pricing
@@ -1980,22 +1993,22 @@ const PROVIDERS = [
     name:'Lopay', plan:'Essential',
     sub:0, rate:0.0079, flat:0, extra:0,
     source:'https://lopay.com/en-gb/pricing',
-    warn:'Payouts on Thursdays only on Essential plan · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Optional: Tap to Pay +8p/txn · Optional: Next Day Settlement +£2.99+VAT/mo',
-    pros:['0.79% — among lowest published rates','No monthly fee or contract','No setup costs'] },
+    warn:'Payouts on Thursdays only on Essential plan · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay +8p/txn included in this model · Optional: Next Day Settlement +£2.99+VAT/mo',
+    pros:['0.79% — among lowest published rates','Great for small market stalls — combined POS + payments app','No monthly fee or contract'] },
 
   { id:'lopay_standard', app:true,
     name:'Lopay', plan:'Standard',
     sub:0, rate:0.0099, flat:0, extra:0,
     source:'https://lopay.com/en-gb/pricing',
-    warn:'Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Optional: Tap to Pay +8p/txn · Optional: Next Day Settlement +£2.99+VAT/mo',
-    pros:['0.99% rate — no monthly fee','Flexible next-day payouts Mon–Fri','No contract or setup costs'] },
+    warn:'Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay +8p/txn included in this model · Optional: Next Day Settlement +£2.99+VAT/mo',
+    pros:['0.99% rate — no monthly fee','Great for small market stalls — combined POS + payments app','Flexible next-day payouts Mon–Fri'] },
 
   { id:'lopay_instant', app:true,
     name:'Lopay', plan:'Instant to Bank',
     sub:0, rate:0.0179, flat:0, extra:0,
     source:'https://lopay.com/en-gb/pricing',
-    warn:'1.79% rate is the premium for instant 24/7 payouts · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Optional: Tap to Pay +8p/txn',
-    pros:['Instant 24/7 payouts to bank','No monthly fee or contract','No setup costs'] },
+    warn:'1.79% rate is the premium for instant 24/7 payouts · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay +8p/txn included in this model',
+    pros:['Instant 24/7 payouts to bank','Great for small market stalls — combined POS + payments app','No monthly fee or contract'] },
 
   // ── Tide ── source: https://www.tide.co/features/card-reader/
   { id:'tide_payg', app:true,
@@ -2194,6 +2207,67 @@ const POP_ORDER = [
 ];
 
 let sortBy = 'tco';
+const HIDDEN_PROVIDERS_SESSION_KEY = 'hidden_provider_groups';
+const DEFAULT_HIDDEN_PROVIDER_GROUPS = ['revolut', 'dna_payments'];
+
+function providerGroupKeyFromName(name) {
+  return String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+}
+
+function providerGroupKey(provider) {
+  return providerGroupKeyFromName(provider && provider.name);
+}
+
+function getHiddenProviderGroups() {
+  try {
+    const raw = sessionStorage.getItem(HIDDEN_PROVIDERS_SESSION_KEY);
+    const arr = raw ? JSON.parse(raw) : DEFAULT_HIDDEN_PROVIDER_GROUPS;
+    return new Set(Array.isArray(arr) ? arr : []);
+  } catch (_) {
+    return new Set(DEFAULT_HIDDEN_PROVIDER_GROUPS);
+  }
+}
+
+function setHiddenProviderGroups(hiddenSet) {
+  try {
+    sessionStorage.setItem(HIDDEN_PROVIDERS_SESSION_KEY, JSON.stringify(Array.from(hiddenSet)));
+  } catch (_) {}
+}
+
+function getVisibleProviders() {
+  const hidden = getHiddenProviderGroups();
+  return PROVIDERS.filter(p => !hidden.has(providerGroupKey(p)));
+}
+
+function toggleProviderVisibility(groupKey, isVisible) {
+  const hidden = getHiddenProviderGroups();
+  if (isVisible) hidden.delete(groupKey);
+  else hidden.add(groupKey);
+  setHiddenProviderGroups(hidden);
+  calc();
+  populateAdmin();
+}
+
+function showAllProvidersForSession() {
+  setHiddenProviderGroups(new Set());
+  calc();
+  populateAdmin();
+}
+
+function renderAdminProviderVisibilityControls() {
+  const wrap = document.getElementById('admin-provider-visibility');
+  if (!wrap) return;
+  const hidden = getHiddenProviderGroups();
+  const names = Array.from(new Set(PROVIDERS.map(p => p.name))).sort((a, b) => a.localeCompare(b));
+  wrap.innerHTML = names.map(name => {
+    const key = providerGroupKeyFromName(name);
+    const checked = !hidden.has(key);
+    return `<label style="display:flex;align-items:center;gap:.45rem;padding:.35rem .55rem;border:1px solid var(--border);background:var(--black3);font-size:11px;color:var(--ink2)">
+      <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleProviderVisibility('${key}', this.checked)" style="accent-color:var(--accent2)">
+      <span>${name}</span>
+    </label>`;
+  }).join('');
+}
 
 function fmt(n)    { return '£' + Math.round(n).toLocaleString(); }
 function fmtD(n)   { return '£' + n.toFixed(2); }
@@ -2581,6 +2655,32 @@ const REVOLUT_RATE_SHEET = makeRateSheet({
   ],
 });
 
+// SumUp Payments Plus — 0.99% for UK/EU consumer Visa/Mastercard; Amex,
+// international and corporate cards revert to 1.69%.
+const SUMUP_PAYG_SHEET = makeRateSheet({
+  flats: 0,
+  tiers: [
+    { upto: Infinity, label: 'All volumes', rates: {
+      f2f:    { dr: 0.0169, cr: 0.0169, pcr: 0.0169 },
+      online: { dr: 0.0250, cr: 0.0250, pcr: 0.0250 },
+      cnp:    { dr: 0.0250, cr: 0.0250, pcr: 0.0250 },
+    } },
+  ],
+});
+
+// SumUp Payments Plus — 0.99% in-person for debit/credit; Amex/premium 1.69%.
+// Online payments are published at 2.50%.
+const SUMUP_PLUS_SHEET = makeRateSheet({
+  flats: 0,
+  tiers: [
+    { upto: Infinity, label: 'All volumes', rates: {
+      f2f:    { dr: 0.0099, cr: 0.0099, pcr: 0.0169 },
+      online: { dr: 0.0250, cr: 0.0250, pcr: 0.0250 },
+      cnp:    { dr: 0.0250, cr: 0.0250, pcr: 0.0250 },
+    } },
+  ],
+});
+
 // Lopay — channel × card-type rate sheets.
 // Source: https://lopay.com/en-gb/pricing
 // In-person/CNP: published plan rate for debit/credit; +1% for Amex, international & corporate (pcr).
@@ -2588,7 +2688,7 @@ const REVOLUT_RATE_SHEET = makeRateSheet({
 // Tap to Pay (+8p), Next Day Settlement (£2.99+VAT/mo), and Terminal rental (£15/mo) are optional
 // add-ons and are not modelled here.
 const LOPAY_ESSENTIAL_SHEET = makeRateSheet({
-  flats: 0,
+  flats: 0.08,
   tiers: [
     { upto: Infinity, label: 'All volumes', rates: {
       f2f:    { dr: 0.0079, cr: 0.0079, pcr: 0.0179 },
@@ -2599,7 +2699,7 @@ const LOPAY_ESSENTIAL_SHEET = makeRateSheet({
 });
 
 const LOPAY_STANDARD_SHEET = makeRateSheet({
-  flats: 0,
+  flats: 0.08,
   tiers: [
     { upto: Infinity, label: 'All volumes', rates: {
       f2f:    { dr: 0.0099, cr: 0.0099, pcr: 0.0199 },
@@ -2610,7 +2710,7 @@ const LOPAY_STANDARD_SHEET = makeRateSheet({
 });
 
 const LOPAY_INSTANT_SHEET = makeRateSheet({
-  flats: 0,
+  flats: 0.08,
   tiers: [
     { upto: Infinity, label: 'All volumes', rates: {
       f2f:    { dr: 0.0179, cr: 0.0179, pcr: 0.0279 },
@@ -2623,6 +2723,8 @@ const LOPAY_INSTANT_SHEET = makeRateSheet({
 const RATE_SHEETS = {
   dna:              DNA_RATE_SHEET,
   revolut:          REVOLUT_RATE_SHEET,
+  sumup_payg:       SUMUP_PAYG_SHEET,
+  sumup_plus:       SUMUP_PLUS_SHEET,
   lopay_essential:  LOPAY_ESSENTIAL_SHEET,
   lopay_standard:   LOPAY_STANDARD_SHEET,
   lopay_instant:    LOPAY_INSTANT_SHEET,
@@ -2635,6 +2737,8 @@ const PROVIDER_SHEETS = {
   revolut_basic:   'revolut',
   revolut_grow:    'revolut',
   revolut_scale:   'revolut',
+  sumup_payg:      'sumup_payg',
+  sumup_plus:      'sumup_plus',
   lopay_essential: 'lopay_essential',
   lopay_standard:  'lopay_standard',
   lopay_instant:   'lopay_instant',
@@ -2653,7 +2757,7 @@ const DNA_PRESETS = {
   ecommerce_only:     { f2f: 0,  online: 95, cnp: 5,  dr: 50, cr: 38, pcr: 12 },
   mixed_omnichannel:  { f2f: 60, online: 30, cnp: 10, dr: 50, cr: 35, pcr: 15 },
   b2b_invoicing:      { f2f: 5,  online: 35, cnp: 60, dr: 30, cr: 45, pcr: 25 },
-  market_seller:      { f2f: 100, online: 0, cnp: 0,  dr: 75, cr: 25, pcr: 0,  days: 8, txn: 40, val: 20, acceptAmex: false },
+  market_seller:      { f2f: 100, online: 0, cnp: 0,  dr: 75, cr: 25, pcr: 0,  days: 8, txn: 40, val: 25, acceptAmex: false },
 };
 
 function applyDnaPreset() {
@@ -2807,14 +2911,18 @@ function calc() {
 
   const mVol  = txn * val * days;
   const mTxns = txn * days;
+  const sel = document.getElementById('current-provider');
+  const currentId = sel ? sel.value : '';
 
   // Resolve complex pricing once — providers with a rate sheet recompute
   // their blended rate/flat per year from the user's channel × card-type mix.
+  const visibleProviders = getVisibleProviders();
   const mix = getDnaMix();
-  const sheets = PROVIDERS.map(rateSheetFor);
+  const sheets = visibleProviders.map(rateSheetFor);
+  if (!visibleProviders.length) return;
 
   let rev3y = 0;
-  const yearlyFees = Array(PROVIDERS.length).fill(0);
+  const yearlyFees = Array(visibleProviders.length).fill(0);
   for (let y = 0; y < 3; y++) {
     const valY  = val  * Math.pow(1 + infl,   y);
     const txnY  = txn  * Math.pow(1 + growth, y);
@@ -2822,22 +2930,38 @@ function calc() {
     const mTxnY = txnY * days;
     const yearlyVolY = mVolY * 12;
     rev3y += yearlyVolY;
-    PROVIDERS.forEach((p, i) => {
+    visibleProviders.forEach((p, i) => {
       let rate = p.rate, flat = p.flat;
       if (sheets[i]) { const b = sheets[i].blended(mix, yearlyVolY); rate = b.rate; flat = b.flat; }
       yearlyFees[i] += (mVolY * rate + mTxnY * flat) * 12;
     });
   }
 
-  // Update DNA tuner panel: tier label, year-1 blended rate, 3×3 rate matrix.
-  // The panel is themed around DNA's tiered model — Revolut just happens to share the same mix.
+  // Update tuner panel with the selected provider's tiered matrix when available.
   const yearlyVol1 = mVol * 12;
   const dnaYr1     = DNA_RATE_SHEET.blended(mix, yearlyVol1);
-  const dnaRateEl  = document.getElementById('dna-blended-rate');
-  if (dnaRateEl) dnaRateEl.textContent = (dnaYr1.rate * 100).toFixed(2) + '%';
-  renderDnaTuner(yearlyVol1, mix, dnaYr1.tier);
+  let matrixTier = dnaYr1.tier;
+  if (currentId && currentId !== 'new' && currentId !== 'custom') {
+    const pIdx = visibleProviders.findIndex(p => p.id === currentId);
+    if (pIdx >= 0) {
+      if (sheets[pIdx]) {
+        matrixTier = sheets[pIdx].tierFor(yearlyVol1);
+      } else {
+        const r = visibleProviders[pIdx].rate;
+        matrixTier = {
+          label: 'Flat rate',
+          rates: {
+            f2f: { dr: r, cr: r, pcr: r },
+            online: { dr: r, cr: r, pcr: r },
+            cnp: { dr: r, cr: r, pcr: r },
+          }
+        };
+      }
+    }
+  }
+  renderDnaTuner(yearlyVol1, mix, matrixTier);
 
-  const allRows = PROVIDERS.map((p, i) => {
+  const allRows = visibleProviders.map((p, i) => {
     const fees = yearlyFees[i];
     const subs = p.sub * 36;
     const tco  = fees + subs;
@@ -2865,28 +2989,32 @@ function calc() {
   let maxTco = Math.max(...rows.map(r => r.tco));
 
   // Populate provider dropdown (first run only), sorted by popularity
-  const sel = document.getElementById('current-provider');
-  if (sel.options.length === 3) {
-    const popBase = id => { const i = id.indexOf('_'); return i >= 0 ? id.slice(0, i) : id; };
-    const popRank = id => { const r = POP_ORDER.indexOf(popBase(id)); return r >= 0 ? r : POP_ORDER.length; };
-    const dropRows = [...rows].sort((a, b) => {
-      const diff = popRank(a.id) - popRank(b.id);
-      return diff !== 0 ? diff : a.tco - b.tco; // within same provider, cheapest plan first
-    });
-    dropRows.forEach(r => {
-      const opt = document.createElement('option');
-      opt.value = r.id;
-      opt.textContent = r.name + ' — ' + r.plan;
-      sel.appendChild(opt);
-    });
+  const previousSel = sel.value;
+  while (sel.options.length > 3) sel.remove(3);
+  const popBase = id => { const i = id.indexOf('_'); return i >= 0 ? id.slice(0, i) : id; };
+  const popRank = id => { const r = POP_ORDER.indexOf(popBase(id)); return r >= 0 ? r : POP_ORDER.length; };
+  const dropRows = [...rows].sort((a, b) => {
+    const diff = popRank(a.id) - popRank(b.id);
+    return diff !== 0 ? diff : a.tco - b.tco; // within same provider, cheapest plan first
+  });
+  dropRows.forEach(r => {
+    const opt = document.createElement('option');
+    opt.value = r.id;
+    opt.textContent = r.name + ' — ' + r.plan;
+    sel.appendChild(opt);
+  });
+  if (previousSel) {
+    const exists = Array.from(sel.options).some(o => o.value === previousSel);
+    if (exists) sel.value = previousSel;
+    else if (previousSel !== 'new' && previousSel !== 'custom') sel.value = '';
   }
 
   // ── Savings hook — Step 2 (best alternative locked) ──
-  const currentId = sel.value;
+  const currentIdForHook = currentId;
 
   // Build a virtual row for custom-rate mode
   let customRow = null;
-  if (currentId === 'custom') {
+  if (currentIdForHook === 'custom') {
     const customPct = parseFloat(document.getElementById('custom-rate-pct')?.value) || 0;
     if (customPct > 0) {
       const customRate = customPct / 100;
@@ -2918,8 +3046,14 @@ function calc() {
   }
 
   // Resolve the current provider row (known provider, custom rate, or none)
-  const currentForHook = currentId === 'custom' ? customRow
-    : (currentId && currentId !== 'new' ? rows.find(r => r.id === currentId) : null);
+  const currentForHook = currentIdForHook === 'custom' ? customRow
+    : (currentIdForHook && currentIdForHook !== 'new' ? rows.find(r => r.id === currentIdForHook) : null);
+
+  // Step 2 blended rate should reflect the currently selected provider.
+  const dnaRateEl  = document.getElementById('dna-blended-rate');
+  if (dnaRateEl) {
+    dnaRateEl.textContent = currentForHook ? (currentForHook.rate * 100).toFixed(2) + '%' : '—';
+  }
 
   // ── Savings hook — Step 4 (fully unlocked) ──
   const hookEl4 = document.getElementById('savings-hook-4');
@@ -2928,7 +3062,7 @@ function calc() {
     const saving3y = currentForHook.tco - recommended.tco;
     const savingMo = saving3y / 3;
     document.getElementById('sh-current-cost-4').textContent   = fmt(currentForHook.tco);
-    document.getElementById('sh-current-detail-4').textContent = currentId === 'custom'
+    document.getElementById('sh-current-detail-4').textContent = currentIdForHook === 'custom'
       ? 'Your current rate · 3-year estimate'
       : currentForHook.name + ' ' + currentForHook.plan + ' · 3-year total';
     if (saving3y > 0) {
@@ -2956,7 +3090,7 @@ function calc() {
   }
 
   function renderGrid(containerId) {
-    const effectiveCurrent = (currentId && currentId !== 'new') ? currentId : null;
+    const effectiveCurrent = (currentIdForHook && currentIdForHook !== 'new') ? currentIdForHook : null;
     const currentRow = effectiveCurrent === 'custom' ? customRow
       : (effectiveCurrent ? rows.find(r2 => r2.id === effectiveCurrent) : null);
 
@@ -3043,7 +3177,7 @@ function calc() {
 
   // Stash the latest computation so the lead export can pick it up.
   window._lastCalc = {
-    inputs: { txn, val, days, infl, growth, currentId },
+    inputs: { txn, val, days, infl, growth, currentId: currentIdForHook },
     monthlyVolume: mVol,
     revenue3y: rev3y,
     recommended: recommended && {
@@ -3332,7 +3466,7 @@ function checkAdmin() {
 function populatePricingTransparency() {
   // Group plans by provider name, determine published status from indicative flag
   const byProvider = {};
-  PROVIDERS.forEach(p => {
+  getVisibleProviders().forEach(p => {
     if (!byProvider[p.name]) byProvider[p.name] = { plans: [], source: p.source };
     byProvider[p.name].plans.push(p);
   });
@@ -3371,6 +3505,7 @@ function populatePricingTransparency() {
 }
 
 function populateAdmin() {
+  renderAdminProviderVisibilityControls();
   populatePricingTransparency();
   const txn    = parseInt(document.getElementById('f-txn')?.value)  || 8;
   const val    = parseInt(document.getElementById('f-val')?.value)  || 50;
@@ -3381,12 +3516,13 @@ function populateAdmin() {
   const mVol  = txn * val * days;
   const mTxns = txn * days;
 
+  const visibleProviders = getVisibleProviders();
   const mix = getDnaMix();
-  const sheets = PROVIDERS.map(rateSheetFor);
+  const sheets = visibleProviders.map(rateSheetFor);
   const yearlyVol1 = mVol * 12;
 
   let rev3y = 0;
-  const yearlyFees = Array(PROVIDERS.length).fill(0);
+  const yearlyFees = Array(visibleProviders.length).fill(0);
   for (let y = 0; y < 3; y++) {
     const valY  = val  * Math.pow(1 + infl,   y);
     const txnY  = txn  * Math.pow(1 + growth, y);
@@ -3394,14 +3530,14 @@ function populateAdmin() {
     const mTxnY = txnY * days;
     const yearlyVolY = mVolY * 12;
     rev3y += yearlyVolY;
-    PROVIDERS.forEach((p, i) => {
+    visibleProviders.forEach((p, i) => {
       let rate = p.rate, flat = p.flat;
       if (sheets[i]) { const b = sheets[i].blended(mix, yearlyVolY); rate = b.rate; flat = b.flat; }
       yearlyFees[i] += (mVolY * rate + mTxnY * flat) * 12;
     });
   }
 
-  const rows = PROVIDERS.map((p, i) => {
+  const rows = visibleProviders.map((p, i) => {
     const fees = yearlyFees[i];
     const subs = p.sub * 36;
     const tco  = fees + subs;
@@ -3417,6 +3553,11 @@ function populateAdmin() {
     return { ...p, fees, subs, tco, mFee, affInc };
   }).sort((a, b) => b.affInc - a.affInc);
 
+  if (!rows.length) {
+    document.getElementById('admin-table-body').innerHTML = '';
+    return;
+  }
+
   const rowsByTco = [...rows].sort((a, b) => a.tco - b.tco);
   const cheapest   = rowsByTco[0];
   const mostExp    = rowsByTco[rowsByTco.length - 1];
@@ -3430,13 +3571,15 @@ function populateAdmin() {
   document.getElementById('adm-stripe-save').textContent = stripeRow ? fmt(stripeRow.tco - cheapest.tco) : '—';
 
   // Affiliate income summary
+  const lopayVisible = rows.some(r => r.id === 'lopay_standard');
   const lopayAff = AFFILIATE['lopay_standard'];
-  const lopayInc = (lopayAff && lopayAff.type === 'pct_vol') ? Math.round(rev3y * lopayAff.rate) : 0;
-  let bestAffInc = 0, bestAffName = '';
-  Object.entries(AFFILIATE).forEach(([id, aff]) => {
-    if (aff.type === 'pct_vol') {
+  const lopayInc = (lopayVisible && lopayAff && lopayAff.type === 'pct_vol') ? Math.round(rev3y * lopayAff.rate) : 0;
+  let bestAffInc = 0;
+  rows.forEach(r => {
+    const aff = AFFILIATE[r.id];
+    if (aff && aff.type === 'pct_vol') {
       const inc = Math.round(rev3y * aff.rate);
-      if (inc > bestAffInc) { bestAffInc = inc; bestAffName = id; }
+      if (inc > bestAffInc) bestAffInc = inc;
     }
   });
   const combinedInc = 40 + lopayInc;
