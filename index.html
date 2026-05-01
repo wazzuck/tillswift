@@ -844,22 +844,22 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
 #beta-skip:hover { color: rgba(15,23,42,0.9); }
 
 /* ── DEFAULT: top 12 provider tiles blurred until ?demo is added ── */
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) { pointer-events: none; }
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-name,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-plan,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-badge-row { filter: blur(7px); user-select: none; }
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) > div:has(.mini-bar-row),
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-rate,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-rate-val,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-monthly,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-pros,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-cons,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-pros-cons-divider,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-warn,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-indicative,
-body:not(.demo-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-source { display: none; }
-body:not(.demo-mode) .sh-current-detail,
-body:not(.demo-mode) .sh-saving-detail { filter: blur(7px); user-select: none; }
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) { pointer-events: none; }
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-name,
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-plan,
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-badge-row { filter: blur(7px); user-select: none; }
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) > div:has(.mini-bar-row),
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-rate,
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-rate-val,
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-monthly,
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-pros,
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-cons,
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-pros-cons-divider,
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-warn,
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-indicative,
+body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-source { display: none; }
+body:not(.demo-mode):not(.test-mode) .sh-current-detail,
+body:not(.demo-mode):not(.test-mode) .sh-saving-detail { filter: blur(7px); user-select: none; }
 
 /* ── FOOTER ── */
 footer {
@@ -1634,12 +1634,16 @@ footer {
 <script>
 // ── DEMO MODE — ?demo in URL reveals full provider details ──
 (function() {
-  if (new URLSearchParams(location.search).has('demo')) {
+  const params = new URLSearchParams(location.search);
+  if (params.has('demo')) {
     document.body.classList.add('demo-mode');
     // Update TillSwift brand links to preserve ?demo on navigation
     document.querySelectorAll('.nav-brand, .footer-brand').forEach(function(a) {
       a.href = '?demo';
     });
+  }
+  if (params.has('test')) {
+    document.body.classList.add('test-mode');
   }
 })();
 
@@ -2548,9 +2552,10 @@ function goToStep(n, skipBetaGate) {
   if (n === currentStep) return;
   // Show beta modal on first visit to results
   const isDemoMode = document.body.classList.contains('demo-mode');
+  const isTestMode = document.body.classList.contains('test-mode');
   const isNewTrack = userPath === 'new';
   const shouldShowBeta = isDemoMode ? true : (isNewTrack || !sessionStorage.getItem(getBetaSeenKey()));
-  if (!skipBetaGate && n === 4 && shouldShowBeta) {
+  if (!skipBetaGate && !isTestMode && n === 4 && shouldShowBeta) {
     unlocked = true; calc();
     showBetaModal(function() { goToStep(4, true); });
     return;
