@@ -2501,28 +2501,42 @@ function scrollRevealFromBottom() {
     const prevBehavior = html.style.scrollBehavior;
     html.style.scrollBehavior = 'auto';
 
-    const max = Math.max(
+    const getMaxScroll = () => Math.max(
       html.scrollHeight - window.innerHeight,
       document.body.scrollHeight - window.innerHeight,
       0
     );
+
+    let max = getMaxScroll();
     window.scrollTo(0, max);
 
     const lowPerf = isLowPerfDevice();
     const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
 
     if (lowPerf) {
-      // On low-memory tablets, native smooth scrolling is usually less janky
-      // than per-frame JS scroll loops.
-      const lowPerfDuration = isMobile ? 2300 : 1300;
+      // Fire/Silk can ignore native smooth scroll. Use a stepped JS scroll
+      // that is slower and predictable on low-memory devices.
+      const lowPerfDuration = isMobile ? 5200 : 2600;
+      const bottomPause = isMobile ? 480 : 220;
+      const stepMs = 34; // ~29fps, smoother on weak hardware than heavy RAF
+
       setTimeout(() => {
-        html.style.scrollBehavior = 'smooth';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(() => {
-          html.style.scrollBehavior = prevBehavior;
-          flashWinnerTile();
-        }, lowPerfDuration);
-      }, 120);
+        max = getMaxScroll(); // re-measure after render settles
+        window.scrollTo(0, max);
+
+        const t0 = Date.now();
+        const timer = setInterval(() => {
+          const p = Math.min((Date.now() - t0) / lowPerfDuration, 1);
+          // gentle ease-out
+          const e = 1 - Math.pow(1 - p, 2.2);
+          window.scrollTo(0, Math.round(max * (1 - e)));
+          if (p >= 1) {
+            clearInterval(timer);
+            html.style.scrollBehavior = prevBehavior;
+            flashWinnerTile();
+          }
+        }, stepMs);
+      }, bottomPause);
       return;
     }
 
