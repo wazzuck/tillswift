@@ -1143,17 +1143,17 @@ footer {
 
       <div class="field">
         <label class="field-label" for="f-val">Average transaction (£)</label>
-        <input class="field-input" type="number" id="f-val" min="5" max="1000" value="25" oninput="syncFromForm()">
+        <input class="field-input" type="number" id="f-val" min="5" max="1000" value="20" oninput="syncFromForm()">
       </div>
 
       <div class="field">
         <label class="field-label" for="f-txn">Transactions per day</label>
-        <input class="field-input" type="number" id="f-txn" min="1" max="500" value="40" oninput="syncFromForm()">
+        <input class="field-input" type="number" id="f-txn" min="1" max="500" value="15" oninput="syncFromForm()">
       </div>
 
       <div class="field">
         <label class="field-label" for="f-days">Trading days per month</label>
-        <input class="field-input" type="number" id="f-days" min="1" max="31" value="8" oninput="syncFromForm()">
+        <input class="field-input" type="number" id="f-days" min="1" max="31" value="12" oninput="syncFromForm()">
       </div>
     </div>
 
@@ -1604,9 +1604,9 @@ footer {
 </div>
 
 <!-- ─────────── HIDDEN SLIDER INPUTS (used by calc engine) ─────────── -->
-<input type="hidden" id="r-txn" value="40">
-<input type="hidden" id="r-val" value="25">
-<input type="hidden" id="r-days" value="8">
+<input type="hidden" id="r-txn" value="15">
+<input type="hidden" id="r-val" value="20">
+<input type="hidden" id="r-days" value="12">
 
 <script>
 // ── DEMO MODE — ?demo in URL reveals full provider details ──
@@ -1785,8 +1785,8 @@ const PROVIDERS = [
     name:'SumUp', plan:'Payments Plus',
     sub:19, rate:0.0099, flat:0, extra:0,
     source:'https://www.sumup.com/en-gb/pricing/',
-    warn:'£19/month plan. In-person: 0.99% for debit/credit cards; Amex and premium cards 1.69%. Online payments (Payment Links/Bookings and other digital products): 2.50%.',
-    pros:['0.99% rate — no long-term contract','Free reader replacement','Next-day 7am payouts incl. weekends'] },
+    warn:'£19/month plan. In-person: 0.99% for debit/credit; Amex and premium cards 1.69%. Online payments (Payment Links/Bookings): 2.50% — unchanged from PAYG plan. Settlement arrives in SumUp wallet next day by 7am (incl. weekends); onward transfer to external bank adds 1–2 business days. £10 chargeback admin fee (non-refundable).',
+    pros:['0.99% rate — no long-term contract','Free reader replacement (unlimited)','Next-day payouts to SumUp wallet incl. weekends'] },
 
   // ── Teya ── source: https://www.teya.com/pricing
   { id:'teya', app:true,
@@ -1993,15 +1993,15 @@ const PROVIDERS = [
     name:'Lopay', plan:'Essential',
     sub:0, rate:0.0079, flat:0, extra:0,
     source:'https://lopay.com/en-gb/pricing',
-    warn:'Payouts on Thursdays only on Essential plan · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay +8p/txn included in this model · Optional: Next Day Settlement +£2.99+VAT/mo',
-    pros:['0.79% — among lowest published rates','Great for small market stalls — combined POS + payments app','No monthly fee or contract'] },
+    warn:'Payouts on Thursdays only — no cheap add-on; flexible Mon–Fri settlement requires switching to Standard plan (0.99%, no monthly fee) · Manual instant payout available any time at +1% cost (effective 1.79%) · £20 chargeback admin fee — non-refundable even if dispute won · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay +8p/txn included in this model',
+    pros:['0.79% — lowest published UK in-person rate','No monthly fee or contract','Free Xero & QuickBooks sync included'] },
 
   { id:'lopay_standard', app:true,
     name:'Lopay', plan:'Standard',
     sub:0, rate:0.0099, flat:0, extra:0,
     source:'https://lopay.com/en-gb/pricing',
-    warn:'Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay +8p/txn included in this model · Optional: Next Day Settlement +£2.99+VAT/mo',
-    pros:['0.99% rate — no monthly fee','Great for small market stalls — combined POS + payments app','Flexible next-day payouts Mon–Fri'] },
+    warn:'£20 chargeback admin fee — non-refundable even if dispute won · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay +8p/txn included in this model',
+    pros:['0.99% rate — no monthly fee','Flexible next-day payouts Mon–Fri','Free Xero & QuickBooks sync included'] },
 
   { id:'lopay_instant', app:true,
     name:'Lopay', plan:'Instant to Bank',
@@ -2208,7 +2208,7 @@ const POP_ORDER = [
 
 let sortBy = 'tco';
 const HIDDEN_PROVIDERS_SESSION_KEY = 'hidden_provider_groups';
-const DEFAULT_HIDDEN_PROVIDER_GROUPS = ['revolut', 'dna_payments', 'worldpay'];
+const DEFAULT_HIDDEN_PROVIDER_GROUPS = ['revolut', 'dna_payments', 'worldpay', 'handepay'];
 
 function providerGroupKeyFromName(name) {
   return String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
