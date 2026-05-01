@@ -1142,13 +1142,13 @@ footer {
       </div>
 
       <div class="field">
-        <label class="field-label" for="f-txn">Transactions per day</label>
-        <input class="field-input" type="number" id="f-txn" min="1" max="500" value="40" oninput="syncFromForm()">
+        <label class="field-label" for="f-val">Average transaction (£)</label>
+        <input class="field-input" type="number" id="f-val" min="5" max="1000" value="20" oninput="syncFromForm()">
       </div>
 
       <div class="field">
-        <label class="field-label" for="f-val">Average transaction (£)</label>
-        <input class="field-input" type="number" id="f-val" min="5" max="1000" value="20" oninput="syncFromForm()">
+        <label class="field-label" for="f-txn">Transactions per day</label>
+        <input class="field-input" type="number" id="f-txn" min="1" max="500" value="40" oninput="syncFromForm()">
       </div>
 
       <div class="field">
@@ -1231,22 +1231,22 @@ footer {
             <div class="dna-sliders-title">Card type mix</div>
             <div class="dna-slider-row">
               <span class="dna-slider-name">Debit cards</span>
-              <input type="range" min="0" max="100" step="1" value="25" id="dna-dr" oninput="onDnaSliderInput('card')">
-              <span class="dna-slider-pct" id="dna-dr-val">25%</span>
+              <input type="range" min="0" max="100" step="1" value="75" id="dna-dr" oninput="onDnaSliderInput('card')">
+              <span class="dna-slider-pct" id="dna-dr-val">75%</span>
             </div>
             <div class="dna-slider-row">
               <span class="dna-slider-name">Credit cards</span>
-              <input type="range" min="0" max="100" step="1" value="35" id="dna-cr" oninput="onDnaSliderInput('card')">
-              <span class="dna-slider-pct" id="dna-cr-val">35%</span>
+              <input type="range" min="0" max="100" step="1" value="25" id="dna-cr" oninput="onDnaSliderInput('card')">
+              <span class="dna-slider-pct" id="dna-cr-val">25%</span>
             </div>
             <div class="dna-slider-row" id="dna-pcr-row">
               <span class="dna-slider-name">Amex / premium</span>
-              <input type="range" min="0" max="100" step="1" value="40" id="dna-pcr" oninput="onDnaSliderInput('card')">
-              <span class="dna-slider-pct" id="dna-pcr-val">40%</span>
+              <input type="range" min="0" max="100" step="1" value="0" id="dna-pcr" oninput="onDnaSliderInput('card')">
+              <span class="dna-slider-pct" id="dna-pcr-val">0%</span>
             </div>
             <div class="dna-slider-total" id="dna-card-total">Total: 100%</div>
             <label class="dna-amex-toggle">
-              <input type="checkbox" id="dna-accept-amex" checked onchange="onDnaSliderInput('amex')">
+              <input type="checkbox" id="dna-accept-amex" onchange="onDnaSliderInput('amex')">
               <span>Accept Amex / premium cards</span>
               <span class="dna-amex-hint">Most providers let you disable Amex; uncheck to redistribute that share onto debit and credit.</span>
             </label>
@@ -1660,6 +1660,8 @@ function updateLivePreview() {
   const days   = parseInt(document.getElementById('f-days')?.value) || 22;
   const infl   = parseFloat(document.getElementById('r-infl').value)   / 100;
   const growth = parseFloat(document.getElementById('r-growth').value) / 100;
+  const mix    = getDnaMix();
+  const sheets = PROVIDERS.map(rateSheetFor);
 
   // 3-year revenue + per-provider fees
   let rev3 = 0;
@@ -1669,9 +1671,16 @@ function updateLivePreview() {
     const txnY  = txn  * Math.pow(1 + growth, y);
     const mVolY = txnY * valY * days;
     const mTxnY = txnY * days;
+    const yearlyVolY = mVolY * 12;
     rev3 += mVolY * 12;
     PROVIDERS.forEach((p, i) => {
-      fees3[i] += (mVolY * p.rate + mTxnY * p.flat) * 12;
+      let rate = p.rate, flat = p.flat;
+      if (sheets[i]) {
+        const blended = sheets[i].blended(mix, yearlyVolY);
+        rate = blended.rate;
+        flat = blended.flat;
+      }
+      fees3[i] += (mVolY * rate + mTxnY * flat) * 12;
     });
   }
 
@@ -2466,13 +2475,8 @@ function goToStep(n) {
         if (n === 4) {
           if (goingForward && !stepFourSeen) {
             stepFourSeen = true;
-            // Kinetic count-up on the hero savings number (2026 UI)
-            const heroNumEl = document.getElementById('sh-net-saving-4');
-            if (heroNumEl && window._lastCalc && window._lastCalc.saving3y > 0) {
-              animateCountUp(heroNumEl, window._lastCalc.saving3y, 1600);
-            }
           }
-          scrollRevealFromBottom();
+          window.scrollTo(0, 0);
         } else {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -2491,71 +2495,6 @@ function isLowPerfDevice() {
   const lowRam = typeof navigator.deviceMemory === 'number' && navigator.deviceMemory <= 2;
   const lowCpu = typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency <= 4;
   return fireTablet || lowRam || lowCpu;
-}
-
-function scrollRevealFromBottom() {
-  // Let the grid paint, then INSTANTLY jump to the bottom (bypassing
-  // CSS scroll-behavior:smooth), then animate back up so the user sees
-  // just how many providers were ranked for them.
-  requestAnimationFrame(() => {
-    const html = document.documentElement;
-    const prevBehavior = html.style.scrollBehavior;
-    html.style.scrollBehavior = 'auto';
-
-    const getMaxScroll = () => Math.max(
-      html.scrollHeight - window.innerHeight,
-      document.body.scrollHeight - window.innerHeight,
-      0
-    );
-
-    let max = getMaxScroll();
-    window.scrollTo(0, max);
-
-    const lowPerf = isLowPerfDevice();
-    const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
-
-    if (lowPerf) {
-      // Fire/Silk can ignore native smooth scroll. Use a very slow, linear,
-      // stepped JS scroll so every card has time to paint.
-      const lowPerfDuration = isMobile ? 9000 : 4200;
-      const bottomPause = isMobile ? 1200 : 500;
-      const stepMs = 34; // ~29fps, smoother on weak hardware than heavy RAF
-
-      setTimeout(() => {
-        max = getMaxScroll(); // re-measure after render settles
-        window.scrollTo(0, max);
-
-        const t0 = Date.now();
-        const timer = setInterval(() => {
-          const p = Math.min((Date.now() - t0) / lowPerfDuration, 1);
-          window.scrollTo(0, Math.round(max * (1 - p)));
-          if (p >= 1) {
-            clearInterval(timer);
-            html.style.scrollBehavior = prevBehavior;
-            flashWinnerTile();
-          }
-        }, stepMs);
-      }, bottomPause);
-      return;
-    }
-
-    const duration = isMobile ? 3000 : 1800;
-    const easeInOut = t => t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
-    setTimeout(() => {
-      const t0 = performance.now();
-      (function step(now) {
-        const p = Math.min((now - t0) / duration, 1);
-        const e = easeInOut(p);
-        window.scrollTo(0, max * (1 - e));
-        if (p < 1) {
-          requestAnimationFrame(step);
-        } else {
-          html.style.scrollBehavior = prevBehavior;
-          flashWinnerTile();
-        }
-      })(performance.now());
-    }, 450);
-  });
 }
 
 function flashWinnerTile() {
@@ -2714,7 +2653,7 @@ const DNA_PRESETS = {
   ecommerce_only:     { f2f: 0,  online: 95, cnp: 5,  dr: 50, cr: 38, pcr: 12 },
   mixed_omnichannel:  { f2f: 60, online: 30, cnp: 10, dr: 50, cr: 35, pcr: 15 },
   b2b_invoicing:      { f2f: 5,  online: 35, cnp: 60, dr: 30, cr: 45, pcr: 25 },
-  market_seller:      { f2f: 100, online: 0, cnp: 0,  dr: 80, cr: 18, pcr: 2,  days: 8, txn: 40, val: 20 },
+  market_seller:      { f2f: 100, online: 0, cnp: 0,  dr: 75, cr: 25, pcr: 0,  days: 8, txn: 40, val: 20, acceptAmex: false },
 };
 
 function applyDnaPreset() {
@@ -2724,6 +2663,12 @@ function applyDnaPreset() {
   ['f2f','online','cnp','dr','cr','pcr'].forEach(k => {
     document.getElementById('dna-' + k).value = p[k];
   });
+  if (p.acceptAmex != null) {
+    const amexEl = document.getElementById('dna-accept-amex');
+    if (amexEl) amexEl.checked = !!p.acceptAmex;
+    const row = document.getElementById('dna-pcr-row');
+    if (row) row.style.display = p.acceptAmex ? '' : 'none';
+  }
   if (p.txn  != null) { const el = document.getElementById('f-txn');  if (el) el.value = p.txn; }
   if (p.val  != null) { const el = document.getElementById('f-val');  if (el) el.value = p.val; }
   if (p.days != null) { const el = document.getElementById('f-days'); if (el) el.value = p.days; }
