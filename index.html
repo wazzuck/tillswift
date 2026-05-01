@@ -2208,7 +2208,7 @@ const POP_ORDER = [
 
 let sortBy = 'tco';
 const HIDDEN_PROVIDERS_SESSION_KEY = 'hidden_provider_groups';
-const DEFAULT_HIDDEN_PROVIDER_GROUPS = ['revolut', 'dna_payments'];
+const DEFAULT_HIDDEN_PROVIDER_GROUPS = ['revolut', 'dna_payments', 'worldpay'];
 
 function providerGroupKeyFromName(name) {
   return String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
