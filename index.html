@@ -2551,11 +2551,9 @@ function submitBeta(e) {
 
 function goToStep(n, skipBetaGate) {
   if (n === currentStep) return;
-  // Show beta modal on first visit to results
-  const isDemoMode = document.body.classList.contains('demo-mode');
+  // Always show beta modal on results (except test mode)
   const isTestMode = document.body.classList.contains('test-mode');
-  const isNewTrack = userPath === 'new';
-  const shouldShowBeta = isDemoMode ? true : (isNewTrack || !sessionStorage.getItem(getBetaSeenKey()));
+  const shouldShowBeta = true;
   if (!skipBetaGate && !isTestMode && n === 4 && shouldShowBeta) {
     unlocked = true; calc();
     showBetaModal(function() { goToStep(4, true); });
@@ -3793,6 +3791,7 @@ function loadFromURLParams() {
     if (step4) step4.classList.add('active');
     currentStep = 4;
     updateProgress(4);
+    if (!document.body.classList.contains('test-mode')) showBetaModal(null);
 
   } else {
     // Preset/slider only — go to step 1 and open the advanced panel so the
