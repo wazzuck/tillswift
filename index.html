@@ -1143,7 +1143,7 @@ footer {
 
       <div class="field">
         <label class="field-label" for="f-txn">Transactions per day</label>
-        <input class="field-input" type="number" id="f-txn" min="1" max="500" value="20" oninput="syncFromForm()">
+        <input class="field-input" type="number" id="f-txn" min="1" max="500" value="40" oninput="syncFromForm()">
       </div>
 
       <div class="field">
@@ -1520,8 +1520,8 @@ footer {
 
         <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
           <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Market trader — jump straight to results</div>
-          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=market_seller&amp;txn=20&amp;val=20</code>
-          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Market seller profile (100% in-person, debit-heavy). 20 transactions/day at £20 average. Trading days defaults to 8 from the preset. Jumps directly to the ranked results on step 4.</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=market_seller&amp;txn=40&amp;val=20</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Market seller profile (100% in-person, debit-heavy). 40 transactions/day at £20 average. Trading days defaults to 8 from the preset. Jumps directly to the ranked results on step 4.</div>
         </div>
 
         <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
@@ -1595,7 +1595,7 @@ footer {
 </div>
 
 <!-- ─────────── HIDDEN SLIDER INPUTS (used by calc engine) ─────────── -->
-<input type="hidden" id="r-txn" value="20">
+<input type="hidden" id="r-txn" value="40">
 <input type="hidden" id="r-val" value="20">
 <input type="hidden" id="r-days" value="8">
 
@@ -2200,7 +2200,8 @@ function applyCardReveal(containerId) {
   cards.forEach(c => { c.classList.add('pc-reveal'); c.classList.remove('pc-visible'); });
 
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce || !('IntersectionObserver' in window)) {
+  const lowPerf = isLowPerfDevice();
+  if (reduce || lowPerf || !('IntersectionObserver' in window)) {
     cards.forEach(c => c.classList.add('pc-visible'));
     return;
   }
@@ -2514,10 +2515,10 @@ function scrollRevealFromBottom() {
     const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
 
     if (lowPerf) {
-      // Fire/Silk can ignore native smooth scroll. Use a stepped JS scroll
-      // that is slower and predictable on low-memory devices.
-      const lowPerfDuration = isMobile ? 5200 : 2600;
-      const bottomPause = isMobile ? 480 : 220;
+      // Fire/Silk can ignore native smooth scroll. Use a very slow, linear,
+      // stepped JS scroll so every card has time to paint.
+      const lowPerfDuration = isMobile ? 9000 : 4200;
+      const bottomPause = isMobile ? 1200 : 500;
       const stepMs = 34; // ~29fps, smoother on weak hardware than heavy RAF
 
       setTimeout(() => {
@@ -2527,9 +2528,7 @@ function scrollRevealFromBottom() {
         const t0 = Date.now();
         const timer = setInterval(() => {
           const p = Math.min((Date.now() - t0) / lowPerfDuration, 1);
-          // gentle ease-out
-          const e = 1 - Math.pow(1 - p, 2.2);
-          window.scrollTo(0, Math.round(max * (1 - e)));
+          window.scrollTo(0, Math.round(max * (1 - p)));
           if (p >= 1) {
             clearInterval(timer);
             html.style.scrollBehavior = prevBehavior;
@@ -2715,7 +2714,7 @@ const DNA_PRESETS = {
   ecommerce_only:     { f2f: 0,  online: 95, cnp: 5,  dr: 50, cr: 38, pcr: 12 },
   mixed_omnichannel:  { f2f: 60, online: 30, cnp: 10, dr: 50, cr: 35, pcr: 15 },
   b2b_invoicing:      { f2f: 5,  online: 35, cnp: 60, dr: 30, cr: 45, pcr: 25 },
-  market_seller:      { f2f: 100, online: 0, cnp: 0,  dr: 80, cr: 18, pcr: 2,  days: 8, txn: 20, val: 20 },
+  market_seller:      { f2f: 100, online: 0, cnp: 0,  dr: 80, cr: 18, pcr: 2,  days: 8, txn: 40, val: 20 },
 };
 
 function applyDnaPreset() {
