@@ -1013,10 +1013,10 @@ footer {
   color: rgba(15,118,110,0.4); margin-bottom: 0.9rem; text-align: center;
 }
 .lp-grid {
-  display: grid; grid-template-columns: 1fr;
+  display: grid; grid-template-columns: 1fr 1fr;
   gap: 8px; background: transparent; border: none;
 }
-@media (min-width: 560px) { .lp-grid { grid-template-columns: 1fr 1fr 1fr; } }
+@media (min-width: 600px) { .lp-grid { grid-template-columns: repeat(4, 1fr); } }
 .lp-cell {
   background: rgba(255,255,255,0.6);
   backdrop-filter: blur(10px);
@@ -1148,7 +1148,7 @@ footer {
 
       <div class="field">
         <label class="field-label" for="f-txn">Transactions per day</label>
-        <input class="field-input" type="number" id="f-txn" min="1" max="500" value="15" oninput="syncFromForm()">
+        <input class="field-input" type="number" id="f-txn" min="1" max="500" value="20" oninput="syncFromForm()">
       </div>
 
       <div class="field">
@@ -1163,17 +1163,18 @@ footer {
         <div class="lp-cell">
           <div class="lp-label">3-year card revenue</div>
           <div class="lp-value" id="lp-rev">—</div>
-          <div class="lp-sub" id="lp-rev-sub">&nbsp;</div>
         </div>
         <div class="lp-cell">
           <div class="lp-label">Fees over 3 years</div>
           <div class="lp-value lp-dim" id="lp-fees">—</div>
-          <div class="lp-sub" id="lp-fees-sub">select a provider above</div>
         </div>
         <div class="lp-cell">
           <div class="lp-label" id="lp-save-label">You will save</div>
           <div class="lp-value lp-dim" id="lp-save">—</div>
-          <div class="lp-sub" id="lp-save-sub">vs best alternative</div>
+        </div>
+        <div class="lp-cell" id="lp-pct-cell" style="display:none">
+          <div class="lp-label">% Saving</div>
+          <div class="lp-value lp-gold" id="lp-save-pct">—</div>
         </div>
       </div>
     </div>
@@ -1319,7 +1320,7 @@ footer {
 
     <div class="savings-hook" id="savings-hook-4" style="display:none">
       <div class="sh-hero">
-        <div class="sh-hero-label">You save over 3 years</div>
+        <div class="sh-hero-label" id="sh-hero-label-4">You save over 3 years</div>
         <div class="sh-hero-num" id="sh-net-saving-4">—</div>
         <div class="sh-hero-sub">That's <strong id="sh-monthly-saving-4">—</strong> per year</div>
       </div>
@@ -1520,8 +1521,8 @@ footer {
 
         <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
           <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Market trader — jump straight to results</div>
-          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=market_seller&amp;txn=40&amp;val=25</code>
-          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Market seller profile (100% in-person, debit-heavy). 40 transactions/day at £25 average. Trading days defaults to 8 from the preset. Jumps directly to the ranked results on step 4.</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=market_seller&amp;txn=20&amp;val=20</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Market seller profile (100% in-person, debit-heavy). 20 transactions/day at £20 average. Trading days defaults to 12 from the preset. Jumps directly to the ranked results on step 4.</div>
         </div>
 
         <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
@@ -1604,7 +1605,7 @@ footer {
 </div>
 
 <!-- ─────────── HIDDEN SLIDER INPUTS (used by calc engine) ─────────── -->
-<input type="hidden" id="r-txn" value="15">
+<input type="hidden" id="r-txn" value="20">
 <input type="hidden" id="r-val" value="20">
 <input type="hidden" id="r-days" value="12">
 
@@ -1721,52 +1722,48 @@ function updateLivePreview() {
   }
 
   // Revenue column (always shown)
-  const revEl  = document.getElementById('lp-rev');
-  const revSub = document.getElementById('lp-rev-sub');
+  const revEl = document.getElementById('lp-rev');
   animateLp(revEl, lpLast.rev, rev3, 500);
   lpLast.rev = rev3;
   revEl.className = 'lp-value';
-  revSub.textContent = (txn * days).toLocaleString() + ' txns/mo · £' + val + ' avg';
 
   // Fees column
-  const feesEl  = document.getElementById('lp-fees');
-  const feesSub = document.getElementById('lp-fees-sub');
+  const feesEl = document.getElementById('lp-fees');
   if (cIdx >= 0) {
     const f = fees3[cIdx] + visibleProviders[cIdx].sub * 36;
     animateLp(feesEl, lpLast.fees, f, 500);
     lpLast.fees = f;
     feesEl.className = 'lp-value';
-    feesSub.textContent = visibleProviders[cIdx].name + ' · ' + visibleProviders[cIdx].plan;
   } else if (cId === 'custom' && cTco3 !== null) {
-    const customPct = parseFloat(document.getElementById('custom-rate-pct')?.value) || 0;
     animateLp(feesEl, lpLast.fees, cTco3, 500);
     lpLast.fees = cTco3;
     feesEl.className = 'lp-value';
-    feesSub.textContent = 'Custom rate · ' + customPct.toFixed(2) + '%';
   } else {
     feesEl.className  = 'lp-value lp-dim';
     feesEl.textContent = '—';
-    feesSub.textContent = 'select a provider above';
     lpLast.fees = 0;
   }
 
-  // Savings column
-  const saveEl  = document.getElementById('lp-save');
-  const saveSub = document.getElementById('lp-save-sub');
+  // Savings column + percentage cell
+  const saveEl     = document.getElementById('lp-save');
+  const savePctEl  = document.getElementById('lp-save-pct');
+  const savePctCell = document.getElementById('lp-pct-cell');
   if (saving3 !== null && saving3 > 50) {
     animateLp(saveEl, lpLast.save, saving3, 600);
     lpLast.save = saving3;
     saveEl.className = 'lp-value lp-gold';
-    saveSub.textContent = 'over 3 years vs best alternative';
+    const savePct = cTco3 > 0 ? Math.round(saving3 / cTco3 * 100) : 0;
+    if (savePctEl) savePctEl.textContent = savePct + '%';
+    if (savePctCell) savePctCell.style.display = '';
   } else if (cIdx >= 0) {
     saveEl.className  = 'lp-value lp-dim';
     saveEl.textContent = "You're on the cheapest";
-    saveSub.textContent = 'No cheaper option found';
+    if (savePctCell) savePctCell.style.display = 'none';
     lpLast.save = 0;
   } else {
     saveEl.className  = 'lp-value lp-dim';
     saveEl.textContent = '—';
-    saveSub.textContent = 'vs best alternative';
+    if (savePctCell) savePctCell.style.display = 'none';
     lpLast.save = 0;
   }
 }
@@ -1993,22 +1990,22 @@ const PROVIDERS = [
     name:'Lopay', plan:'Essential',
     sub:0, rate:0.0079, flat:0, extra:0,
     source:'https://lopay.com/en-gb/pricing',
-    warn:'Payouts on Thursdays only — no cheap add-on; flexible Mon–Fri settlement requires switching to Standard plan (0.99%, no monthly fee) · Manual instant payout available any time at +1% cost (effective 1.79%) · £20 chargeback admin fee — non-refundable even if dispute won · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay +8p/txn included in this model',
-    pros:['0.79% — lowest published UK in-person rate','No monthly fee or contract','Free Xero & QuickBooks sync included'] },
+    warn:'Payouts on Thursdays only — no cheap add-on; flexible Mon–Fri settlement requires switching to Standard plan (0.99%, no monthly fee) · Manual instant payout available any time at +1% cost (effective 1.79%) · £20 chargeback admin fee — non-refundable even if dispute won · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay on phone +8p/txn (not modelled — assumes WisePad 3 reader)',
+    pros:['0.79% — lowest published UK in-person rate','No monthly fee or contract','Free Xero & QuickBooks sync included','Recommended: use WisePad 3 reader (£24) — avoids 8p/txn phone Tap to Pay surcharge'] },
 
   { id:'lopay_standard', app:true,
     name:'Lopay', plan:'Standard',
     sub:0, rate:0.0099, flat:0, extra:0,
     source:'https://lopay.com/en-gb/pricing',
-    warn:'£20 chargeback admin fee — non-refundable even if dispute won · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay +8p/txn included in this model',
-    pros:['0.99% rate — no monthly fee','Flexible next-day payouts Mon–Fri','Free Xero & QuickBooks sync included'] },
+    warn:'£20 chargeback admin fee — non-refundable even if dispute won · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay on phone +8p/txn (not modelled — assumes WisePad 3 reader)',
+    pros:['0.99% rate — no monthly fee','Flexible next-day payouts Mon–Fri','Free Xero & QuickBooks sync included','Recommended: use WisePad 3 reader (£24) — avoids 8p/txn phone Tap to Pay surcharge'] },
 
   { id:'lopay_instant', app:true,
     name:'Lopay', plan:'Instant to Bank',
     sub:0, rate:0.0179, flat:0, extra:0,
     source:'https://lopay.com/en-gb/pricing',
-    warn:'1.79% rate is the premium for instant 24/7 payouts · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay +8p/txn included in this model',
-    pros:['Instant 24/7 payouts to bank','Great for small market stalls — combined POS + payments app','No monthly fee or contract'] },
+    warn:'1.79% rate is the premium for instant 24/7 payouts · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay on phone +8p/txn (not modelled — assumes WisePad 3 reader)',
+    pros:['Instant 24/7 payouts to bank','No monthly fee or contract','Free Xero & QuickBooks sync included','Recommended: use WisePad 3 reader (£24) — avoids 8p/txn phone Tap to Pay surcharge'] },
 
   // ── Tide ── source: https://www.tide.co/features/card-reader/
   { id:'tide_payg', app:true,
@@ -2208,7 +2205,7 @@ const POP_ORDER = [
 
 let sortBy = 'tco';
 const HIDDEN_PROVIDERS_SESSION_KEY = 'hidden_provider_groups';
-const DEFAULT_HIDDEN_PROVIDER_GROUPS = ['revolut', 'dna_payments', 'worldpay', 'handepay'];
+const DEFAULT_HIDDEN_PROVIDER_GROUPS = ['revolut', 'dna_payments', 'worldpay', 'handepay', 'mypos'];
 
 function providerGroupKeyFromName(name) {
   return String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
@@ -2688,7 +2685,7 @@ const SUMUP_PLUS_SHEET = makeRateSheet({
 // Tap to Pay (+8p), Next Day Settlement (£2.99+VAT/mo), and Terminal rental (£15/mo) are optional
 // add-ons and are not modelled here.
 const LOPAY_ESSENTIAL_SHEET = makeRateSheet({
-  flats: 0.08,
+  flats: 0,
   tiers: [
     { upto: Infinity, label: 'All volumes', rates: {
       f2f:    { dr: 0.0079, cr: 0.0079, pcr: 0.0179 },
@@ -2699,7 +2696,7 @@ const LOPAY_ESSENTIAL_SHEET = makeRateSheet({
 });
 
 const LOPAY_STANDARD_SHEET = makeRateSheet({
-  flats: 0.08,
+  flats: 0,
   tiers: [
     { upto: Infinity, label: 'All volumes', rates: {
       f2f:    { dr: 0.0099, cr: 0.0099, pcr: 0.0199 },
@@ -2710,7 +2707,7 @@ const LOPAY_STANDARD_SHEET = makeRateSheet({
 });
 
 const LOPAY_INSTANT_SHEET = makeRateSheet({
-  flats: 0.08,
+  flats: 0,
   tiers: [
     { upto: Infinity, label: 'All volumes', rates: {
       f2f:    { dr: 0.0179, cr: 0.0179, pcr: 0.0279 },
@@ -2757,7 +2754,7 @@ const DNA_PRESETS = {
   ecommerce_only:     { f2f: 0,  online: 95, cnp: 5,  dr: 50, cr: 38, pcr: 12 },
   mixed_omnichannel:  { f2f: 60, online: 30, cnp: 10, dr: 50, cr: 35, pcr: 15 },
   b2b_invoicing:      { f2f: 5,  online: 35, cnp: 60, dr: 30, cr: 45, pcr: 25 },
-  market_seller:      { f2f: 100, online: 0, cnp: 0,  dr: 75, cr: 25, pcr: 0,  days: 8, txn: 40, val: 25, acceptAmex: false },
+  market_seller:      { f2f: 100, online: 0, cnp: 0,  dr: 75, cr: 25, pcr: 0,  days: 12, txn: 20, val: 20, acceptAmex: false },
 };
 
 function applyDnaPreset() {
@@ -3073,11 +3070,14 @@ function calc() {
       document.getElementById('sh-saving-detail-4').style.color = '';
       document.getElementById('sh-net-saving-4').textContent    = fmt(saving3y);
       document.getElementById('sh-monthly-saving-4').textContent = fmtD(savingMo);
+      const pct3 = currentForHook.tco > 0 ? Math.round(saving3y / currentForHook.tco * 100) : 0;
+      document.getElementById('sh-hero-label-4').textContent    = pct3 > 0 ? pct3 + '% saving over 3 years' : 'You save over 3 years';
     } else {
       document.getElementById('sh-saving-num-4').textContent    = fmt(recommended.tco);
       document.getElementById('sh-saving-detail-4').textContent = 'You\'re already on the cheapest option';
       document.getElementById('sh-net-saving-4').textContent    = '—';
       document.getElementById('sh-monthly-saving-4').textContent = '—';
+      document.getElementById('sh-hero-label-4').textContent    = 'You save over 3 years';
     }
   } else {
     hookEl4.style.display = 'none';
