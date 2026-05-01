@@ -1127,7 +1127,7 @@ footer {
     <div class="field-grid">
       <div class="field" id="current-provider-field" style="grid-column: 1 / -1">
         <label class="field-label" for="current-provider" id="current-provider-label">Current payment provider</label>
-        <select class="field-input field-select" id="current-provider" onchange="handleProviderSelection(this)">
+        <select class="field-input field-select" id="current-provider" onchange="lpInteracted=true; toggleCustomRate(); checkReadiness(); calc(); this.blur();">
           <option value="">— Select provider —</option>
           <option value="new">No provider yet / new to card payments</option>
           <option value="custom">I know my rate — enter it below</option>
@@ -1622,25 +1622,6 @@ function toggleAdvanced() {
 function toggleCustomRate() {
   const v = document.getElementById('current-provider').value;
   document.getElementById('custom-rate-field').style.display = v === 'custom' ? '' : 'none';
-}
-
-function handleProviderSelection(el) {
-  if (!el) return;
-  const selectedValue = el.value;
-  lpInteracted = true;
-  toggleCustomRate();
-  checkReadiness();
-  // Let the browser commit native select state first, then run heavier updates.
-  setTimeout(function() {
-    if (el.value !== selectedValue) el.value = selectedValue;
-    calc();
-    closeProviderDropdown(el);
-  }, 0);
-}
-
-function closeProviderDropdown(el) {
-  if (!el) return;
-  el.blur();
 }
 
 // ── SYNC form inputs → hidden slider values ──
@@ -2502,6 +2483,15 @@ function goToStep(n) {
 }
 
 let stepFourSeen = false;
+
+function isLowPerfDevice() {
+  const ua = navigator.userAgent || '';
+  const fireTablet = /Silk|Kindle|KF[A-Z]/i.test(ua);
+  const lowRam = typeof navigator.deviceMemory === 'number' && navigator.deviceMemory <= 2;
+  const lowCpu = typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency <= 4;
+  return fireTablet || lowRam || lowCpu;
+}
+
 function scrollRevealFromBottom() {
   // Let the grid paint, then INSTANTLY jump to the bottom (bypassing
   // CSS scroll-behavior:smooth), then animate back up so the user sees
@@ -2517,6 +2507,22 @@ function scrollRevealFromBottom() {
       0
     );
     window.scrollTo(0, max);
+
+    const lowPerf = isLowPerfDevice();
+
+    if (lowPerf) {
+      // On low-memory tablets, native smooth scrolling is usually less janky
+      // than per-frame JS scroll loops.
+      setTimeout(() => {
+        html.style.scrollBehavior = 'smooth';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => {
+          html.style.scrollBehavior = prevBehavior;
+          flashWinnerTile();
+        }, 950);
+      }, 120);
+      return;
+    }
 
     const duration = 1800;
     const easeInOut = t => t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
