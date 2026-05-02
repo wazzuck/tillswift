@@ -1641,10 +1641,11 @@ footer {
       <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem">Tracking activity</div>
       <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-bottom:.7rem">
         <label for="admin-track-link" style="font-size:11px;color:var(--ink2)">Link ID</label>
-        <input id="admin-track-link" type="text" placeholder="lnk_..." style="min-width:220px;flex:1;background:var(--black3);border:1px solid var(--border2);color:var(--ink);padding:.45rem .55rem;font-family:var(--font-mono);font-size:11px">
+        <select id="admin-track-link" onchange="if(this.value) loadTrackingView()" style="min-width:220px;flex:1;background:var(--black3);border:1px solid var(--border2);color:var(--ink);padding:.45rem .55rem;font-family:var(--font-mono);font-size:11px"></select>
+        <button onclick="loadTrackingLinkOptions()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:4px 10px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Refresh</button>
         <button onclick="loadTrackingView()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:4px 10px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Load</button>
       </div>
-      <div id="admin-track-status" style="font-size:10px;color:var(--muted);margin-bottom:.6rem">Enter a link ID and click Load.</div>
+      <div id="admin-track-status" style="font-size:10px;color:var(--muted);margin-bottom:.6rem">Select a link ID to load activity.</div>
       <div id="admin-track-summary" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:.8rem"></div>
       <div style="overflow-x:auto">
         <table style="width:100%;border-collapse:collapse;font-size:11px;min-width:680px">
@@ -2539,13 +2540,27 @@ function updateProgress(n) {
 }
 
 // ── BETA MODAL INTEGRATIONS ──
-var BETA_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfhJqjNF_Brzu5Ka992csTyWCaF5A4eoBu2Ce9t0zPqHRGn9StzZLjM9zrrDTRFds/exec';
+var BETA_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-HrdofHvat4XmMwvL0Etx5BNzPnmYeCmxyWVxJjWRbr1m23a8EOQVXfJ2Wb-yD-4/exec';
 var BETA_CONTACT_EMAIL = 'hello@tillswift.com';
 var BETA_CONTACT_PHONE = '';
+const SESSION_LINK_ID_KEY = 'tillswift_link_id';
 
 function getActiveLinkId() {
   const p = new URLSearchParams(location.search);
-  return p.get('link_id') || p.get('lead_id') || '';
+  const fromUrl = (p.get('link_id') || p.get('lead_id') || '').trim();
+  if (fromUrl) {
+    try { sessionStorage.setItem(SESSION_LINK_ID_KEY, fromUrl); } catch (_) {}
+    return fromUrl;
+  }
+  try {
+    const fromSession = (sessionStorage.getItem(SESSION_LINK_ID_KEY) || '').trim();
+    if (fromSession) return fromSession;
+    const created = generateLinkId();
+    sessionStorage.setItem(SESSION_LINK_ID_KEY, created);
+    return created;
+  } catch (_) {
+    return generateLinkId();
+  }
 }
 
 function generateLinkId() {
@@ -2643,6 +2658,56 @@ function loadTrackingView() {
     })
     .catch(function() {
       renderTrackingView(localRows, 'local session fallback');
+    });
+}
+
+function setTrackingLinkOptions(linkIds) {
+  const select = document.getElementById('admin-track-link');
+  const status = document.getElementById('admin-track-status');
+  if (!select) return;
+
+  const previous = (select.value || getActiveLinkId() || '').trim();
+  const unique = Array.from(new Set((Array.isArray(linkIds) ? linkIds : [])
+    .map(function(v) { return String(v || '').trim(); })
+    .filter(Boolean)));
+
+  if (!unique.length) {
+    select.innerHTML = '<option value="">No link IDs found</option>';
+    select.value = '';
+    if (status) status.textContent = 'No link IDs available yet. Try Refresh.';
+    return;
+  }
+
+  select.innerHTML = ['<option value="">Select a link ID</option>']
+    .concat(unique.map(function(id) { return '<option value="' + id + '">' + id + '</option>'; }))
+    .join('');
+
+  if (previous && unique.indexOf(previous) >= 0) select.value = previous;
+  else if (unique.indexOf(getActiveLinkId()) >= 0) select.value = getActiveLinkId();
+  else select.value = unique[0];
+
+  if (status) status.textContent = 'Loaded ' + unique.length + ' link IDs.';
+}
+
+function loadTrackingLinkOptions() {
+  const status = document.getElementById('admin-track-status');
+  if (status) status.textContent = 'Loading link IDs...';
+
+  const localIds = readLocalTrackingEvents().map(function(r) { return r && r.link_id; }).filter(Boolean);
+  const activeId = getActiveLinkId();
+  if (activeId) localIds.unshift(activeId);
+
+  fetch(BETA_SCRIPT_URL + '?action=link_ids')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var remoteIds = [];
+      if (Array.isArray(data)) remoteIds = data;
+      else if (Array.isArray(data.link_ids)) remoteIds = data.link_ids;
+      else if (Array.isArray(data.linkIds)) remoteIds = data.linkIds;
+      setTrackingLinkOptions(remoteIds.concat(localIds));
+    })
+    .catch(function() {
+      setTrackingLinkOptions(localIds);
     });
 }
 
@@ -2775,6 +2840,7 @@ function submitBeta(e) {
   btn.disabled = true;
   btn.textContent = 'Sending…';
   var leadLinkId = getActiveLinkId() || generateLinkId();
+  var redirectLink = makeTempAccessLink(location.origin + location.pathname, 14 * 24 * 60, leadLinkId);
 
   var params = new URLSearchParams({
     name: name,
@@ -2800,11 +2866,13 @@ function submitBeta(e) {
   Promise.allSettled([saveLeadPromise, confirmationPromise])
     .finally(function() {
       sendBrowseEvent('notify_submitted', { company: company });
-      document.getElementById('beta-form').style.display = 'none';
-      document.getElementById('beta-skip').style.display = 'none';
-      document.getElementById('beta-thanks').style.display = 'block';
       sessionStorage.setItem(getBetaSeenKey(), '1');
-      setTimeout(function() { dismissBeta(true); }, 2200);
+      try {
+        var redirectUrl = new URL(redirectLink);
+        history.replaceState({}, '', redirectUrl.pathname + redirectUrl.search + redirectUrl.hash);
+        verifyTempAccessFromURL();
+      } catch (_) {}
+      dismissBeta(true);
     });
 }
 
@@ -3743,8 +3811,7 @@ calc();
 function openAdmin() {
   const overlay = document.getElementById('admin-overlay');
   overlay.style.display = 'flex';
-  const linkInput = document.getElementById('admin-track-link');
-  if (linkInput && !linkInput.value) linkInput.value = getActiveLinkId();
+  loadTrackingLinkOptions();
   setTimeout(() => document.getElementById('admin-pw').focus(), 50);
 }
 
