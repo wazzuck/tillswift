@@ -844,22 +844,22 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
 #beta-skip:hover { color: rgba(15,23,42,0.9); }
 
 /* ── DEFAULT: top 12 provider tiles blurred until ?demo is added ── */
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) { pointer-events: none; }
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-name,
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-plan,
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-badge-row { filter: blur(7px); user-select: none; }
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) > div:has(.mini-bar-row),
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-rate,
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-rate-val,
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-monthly,
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-pros,
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-cons,
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-pros-cons-divider,
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-warn,
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-indicative,
-body:not(.demo-mode):not(.test-mode) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-source { display: none; }
-body:not(.demo-mode):not(.test-mode) .sh-current-detail,
-body:not(.demo-mode):not(.test-mode) .sh-saving-detail { filter: blur(7px); user-select: none; }
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) { pointer-events: none; }
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-name,
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-plan,
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-badge-row { filter: blur(7px); user-select: none; }
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) > div:has(.mini-bar-row),
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-rate,
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-rate-val,
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-monthly,
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-pros,
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-cons,
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-pros-cons-divider,
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-warn,
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-indicative,
+body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) .p-source { display: none; }
+body:not(.demo-mode):not(.test-mode):not(.full-access) .sh-current-detail,
+body:not(.demo-mode):not(.test-mode):not(.full-access) .sh-saving-detail { filter: blur(7px); user-select: none; }
 
 /* ── FOOTER ── */
 footer {
@@ -1624,6 +1624,19 @@ footer {
       <div style="font-size:10px;color:var(--muted);margin-top:.6rem">Hidden providers are excluded from all calculations for this browser session.</div>
     </div>
 
+    <div style="margin-top:1.5rem;border-top:1px solid var(--border);padding-top:1.5rem">
+      <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem">Temporary access link</div>
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-bottom:.6rem">
+        <label for="admin-temp-ttl" style="font-size:11px;color:var(--ink2)">Expires in</label>
+        <input id="admin-temp-ttl" type="number" min="1" value="60" style="width:90px;background:var(--black3);border:1px solid var(--border2);color:var(--ink);padding:.45rem .55rem;font-family:var(--font-mono);font-size:12px">
+        <span style="font-size:11px;color:var(--muted)">minutes</span>
+        <button onclick="generateTempAccessLinkFromAdmin()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:4px 10px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Generate</button>
+        <button onclick="copyTempAccessLink()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:4px 10px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Copy</button>
+      </div>
+      <input id="admin-temp-link" type="text" readonly style="width:100%;box-sizing:border-box;background:var(--black3);border:1px solid var(--border2);color:var(--ink2);padding:.55rem .65rem;font-family:var(--font-mono);font-size:11px">
+      <div id="admin-temp-status" style="font-size:10px;color:var(--muted);margin-top:.5rem"></div>
+    </div>
+
   </div>
 </div>
 
@@ -1633,6 +1646,72 @@ footer {
 <input type="hidden" id="r-days" value="12">
 
 <script>
+const ACCESS_LINK_SECRET = 'tillswift-temp-access-v1';
+
+function hashAccessPayload(input) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < input.length; i++) {
+    h ^= input.charCodeAt(i);
+    h = (h + (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24)) >>> 0;
+  }
+  return h.toString(16).padStart(8, '0');
+}
+
+function verifyTempAccessFromURL() {
+  document.body.classList.remove('full-access');
+  const p = new URLSearchParams(location.search);
+  const exp = parseInt(p.get('exp') || '', 10);
+  const sig = p.get('sig') || '';
+  if (!exp || !sig) return false;
+  const nowSec = Math.floor(Date.now() / 1000);
+  if (nowSec > exp) return false;
+  const expected = hashAccessPayload(String(exp) + '|' + ACCESS_LINK_SECRET);
+  if (expected !== sig) return false;
+  document.body.classList.add('full-access');
+  return true;
+}
+
+window.makeTempAccessLink = function makeTempAccessLink(baseUrl, ttlMinutes) {
+  const ttl = Math.max(1, parseInt(ttlMinutes || '60', 10));
+  const exp = Math.floor(Date.now() / 1000) + (ttl * 60);
+  const sig = hashAccessPayload(String(exp) + '|' + ACCESS_LINK_SECRET);
+  const url = new URL(baseUrl || location.origin + location.pathname);
+  url.searchParams.set('exp', String(exp));
+  url.searchParams.set('sig', sig);
+  return url.toString();
+};
+
+function generateTempAccessLinkFromAdmin() {
+  const ttlEl = document.getElementById('admin-temp-ttl');
+  const outEl = document.getElementById('admin-temp-link');
+  const statusEl = document.getElementById('admin-temp-status');
+  if (!ttlEl || !outEl) return;
+  const ttl = parseInt(ttlEl.value || '60', 10);
+  const link = makeTempAccessLink(location.origin + location.pathname, ttl);
+  outEl.value = link;
+  if (statusEl) statusEl.textContent = 'Temporary link generated.';
+}
+
+function copyTempAccessLink() {
+  const outEl = document.getElementById('admin-temp-link');
+  const statusEl = document.getElementById('admin-temp-status');
+  if (!outEl || !outEl.value) {
+    if (statusEl) statusEl.textContent = 'Generate a link first.';
+    return;
+  }
+  outEl.select();
+  outEl.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(outEl.value)
+    .then(function() {
+      if (statusEl) statusEl.textContent = 'Copied to clipboard.';
+    })
+    .catch(function() {
+      if (statusEl) statusEl.textContent = 'Could not copy automatically. Copy manually from the field above.';
+    });
+}
+
+verifyTempAccessFromURL();
+
 // ── DEMO MODE — ?demo in URL reveals full provider details ──
 (function() {
   const params = new URLSearchParams(location.search);
@@ -2450,6 +2529,19 @@ function sendBetaConfirmationEmail(payload) {
     // Ignore duplicate init calls.
   }
 
+  var tempAccessMinutes = 14 * 24 * 60;
+  var tempAccessLink = makeTempAccessLink(location.origin + location.pathname, tempAccessMinutes);
+  var expiryDate = new Date(Date.now() + tempAccessMinutes * 60 * 1000);
+  var expiryLabel = expiryDate.toLocaleString('en-GB', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZoneName: 'short'
+  });
+
   var templateParams = {
     name: payload.name || 'there',
     to_name: payload.name || 'there',
@@ -2459,6 +2551,15 @@ function sendBetaConfirmationEmail(payload) {
     phone: payload.phone || '',
     user_phone: payload.phone || '',
     company_line: payload.company ? ' from ' + payload.company : '',
+    temp_access_link: tempAccessLink,
+    temp_access_days: '14',
+    temp_access_expiry_date: expiryLabel,
+    // Aliases for template compatibility
+    tempAccessLink: tempAccessLink,
+    tempAccessDays: '14',
+    tempAccessExpiryDate: expiryLabel,
+    access_link: tempAccessLink,
+    access_expiry: expiryLabel,
     contact_email: BETA_CONTACT_EMAIL,
     contact_phone: BETA_CONTACT_PHONE,
     contact_page: location.origin + '/contact.html'
@@ -2553,7 +2654,8 @@ function goToStep(n, skipBetaGate) {
   if (n === currentStep) return;
   // Always show beta modal on results (except test mode)
   const isTestMode = document.body.classList.contains('test-mode');
-  const shouldShowBeta = true;
+  const hasValidTempAccess = document.body.classList.contains('full-access');
+  const shouldShowBeta = !hasValidTempAccess;
   if (!skipBetaGate && !isTestMode && n === 4 && shouldShowBeta) {
     unlocked = true; calc();
     showBetaModal(function() { goToStep(4, true); });
@@ -3791,7 +3893,7 @@ function loadFromURLParams() {
     if (step4) step4.classList.add('active');
     currentStep = 4;
     updateProgress(4);
-    if (!document.body.classList.contains('test-mode')) showBetaModal(null);
+    if (!document.body.classList.contains('test-mode') && !document.body.classList.contains('full-access')) showBetaModal(null);
 
   } else {
     // Preset/slider only — go to step 1 and open the advanced panel so the
