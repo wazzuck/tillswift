@@ -1146,7 +1146,7 @@ footer {
     <div class="field-grid">
       <div class="field" id="current-provider-field" style="grid-column: 1 / -1">
         <label class="field-label" for="current-provider" id="current-provider-label">Current payment provider</label>
-        <select class="field-input field-select" id="current-provider" onchange="lpInteracted=true; toggleCustomRate(); checkReadiness(); calc(); this.blur();">
+        <select class="field-input field-select" id="current-provider" onchange="lpInteracted=true; toggleCustomRate(); checkReadiness(); calc(); sendBrowseEvent('provider_selected',{ provider_id:this.value }); this.blur();">
           <option value="">— Select provider —</option>
           <option value="new">No provider yet / new to card payments</option>
           <option value="custom">I know my rate — enter it below</option>
@@ -1637,6 +1637,31 @@ footer {
       <div id="admin-temp-status" style="font-size:10px;color:var(--muted);margin-top:.5rem"></div>
     </div>
 
+    <div style="margin-top:1.5rem;border-top:1px solid var(--border);padding-top:1.5rem">
+      <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem">Tracking activity</div>
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-bottom:.7rem">
+        <label for="admin-track-link" style="font-size:11px;color:var(--ink2)">Link ID</label>
+        <input id="admin-track-link" type="text" placeholder="lnk_..." style="min-width:220px;flex:1;background:var(--black3);border:1px solid var(--border2);color:var(--ink);padding:.45rem .55rem;font-family:var(--font-mono);font-size:11px">
+        <button onclick="loadTrackingView()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:4px 10px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Load</button>
+      </div>
+      <div id="admin-track-status" style="font-size:10px;color:var(--muted);margin-bottom:.6rem">Enter a link ID and click Load.</div>
+      <div id="admin-track-summary" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:.8rem"></div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:11px;min-width:680px">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:.45rem .7rem;border-bottom:1px solid var(--border2);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:400">Time</th>
+              <th style="text-align:left;padding:.45rem .7rem;border-bottom:1px solid var(--border2);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:400">Event</th>
+              <th style="text-align:left;padding:.45rem .7rem;border-bottom:1px solid var(--border2);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:400">Provider</th>
+              <th style="text-align:left;padding:.45rem .7rem;border-bottom:1px solid var(--border2);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:400">Sort/Path</th>
+              <th style="text-align:left;padding:.45rem .7rem;border-bottom:1px solid var(--border2);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:400">Mode</th>
+            </tr>
+          </thead>
+          <tbody id="admin-track-body"></tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1671,11 +1696,17 @@ function verifyTempAccessFromURL() {
   return true;
 }
 
-window.makeTempAccessLink = function makeTempAccessLink(baseUrl, ttlMinutes) {
+window.makeTempAccessLink = function makeTempAccessLink(baseUrl, ttlMinutes, forcedLinkId) {
   const ttl = Math.max(1, parseInt(ttlMinutes || '60', 10));
   const exp = Math.floor(Date.now() / 1000) + (ttl * 60);
   const sig = hashAccessPayload(String(exp) + '|' + ACCESS_LINK_SECRET);
   const url = new URL(baseUrl || location.origin + location.pathname);
+  if (forcedLinkId) {
+    url.searchParams.set('link_id', forcedLinkId);
+  } else if (!url.searchParams.has('link_id')) {
+    const rand = Math.random().toString(36).slice(2, 8);
+    url.searchParams.set('link_id', 'lnk_' + Date.now().toString(36) + rand);
+  }
   url.searchParams.set('exp', String(exp));
   url.searchParams.set('sig', sig);
   return url.toString();
@@ -2459,6 +2490,7 @@ function applyUserPath() {
 
 function setUserPath(path) {
   userPath = path;
+  sendBrowseEvent('path_selected', { selected_path: path });
   applyUserPath();
   const wiz1 = document.getElementById('wiz-1');
   if (wiz1) {
@@ -2507,9 +2539,129 @@ function updateProgress(n) {
 }
 
 // ── BETA MODAL INTEGRATIONS ──
-var BETA_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnB4lfiYdd8SGlhLj1K8dqIri7sYywxmTE2w5zARxiLz7Tfjp21ph_v6XLfOiHWiQ/exec';
+var BETA_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfhJqjNF_Brzu5Ka992csTyWCaF5A4eoBu2Ce9t0zPqHRGn9StzZLjM9zrrDTRFds/exec';
 var BETA_CONTACT_EMAIL = 'hello@tillswift.com';
 var BETA_CONTACT_PHONE = '';
+
+function getActiveLinkId() {
+  const p = new URLSearchParams(location.search);
+  return p.get('link_id') || p.get('lead_id') || '';
+}
+
+function generateLinkId() {
+  const rand = Math.random().toString(36).slice(2, 8);
+  return 'lnk_' + Date.now().toString(36) + rand;
+}
+
+const LOCAL_TRACKING_KEY = 'tillswift_tracking_events';
+
+function readLocalTrackingEvents() {
+  try {
+    const raw = sessionStorage.getItem(LOCAL_TRACKING_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch (_) {
+    return [];
+  }
+}
+
+function writeLocalTrackingEvents(events) {
+  try {
+    sessionStorage.setItem(LOCAL_TRACKING_KEY, JSON.stringify(events.slice(-400)));
+  } catch (_) {}
+}
+
+function addLocalTrackingEvent(payload) {
+  const events = readLocalTrackingEvents();
+  events.push(payload);
+  writeLocalTrackingEvents(events);
+}
+
+function renderTrackingView(events, sourceLabel) {
+  const body = document.getElementById('admin-track-body');
+  const summary = document.getElementById('admin-track-summary');
+  const status = document.getElementById('admin-track-status');
+  if (!body || !summary || !status) return;
+
+  const rows = [...events].sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || '')));
+  if (!rows.length) {
+    body.innerHTML = '<tr><td colspan="5" style="padding:.7rem;color:var(--muted)">No events found for this link ID yet.</td></tr>';
+    summary.innerHTML = '';
+    status.textContent = 'No tracking data found.';
+    return;
+  }
+
+  const countBy = key => rows.reduce((acc, r) => acc + (r.event === key ? 1 : 0), 0);
+  const openedProviders = new Set(rows.filter(r => r.event === 'provider_opened' && r.provider_id).map(r => r.provider_id)).size;
+
+  const statCell = (label, val) => `<div style="background:var(--black3);padding:.75rem .8rem"><div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">${label}</div><div style="font-family:var(--font-serif);font-size:1.15rem;color:var(--gold2);line-height:1.2;margin-top:.25rem">${val}</div></div>`;
+  summary.innerHTML = [
+    statCell('Events', rows.length),
+    statCell('Results views', countBy('view_results')),
+    statCell('Provider opens', countBy('provider_opened')),
+    statCell('Unique providers', openedProviders),
+    statCell('Sort changes', countBy('sort_changed')),
+    statCell('Notify submitted', countBy('notify_submitted'))
+  ].join('');
+
+  body.innerHTML = rows.slice(0, 200).map(r => {
+    const provider = r.provider_name ? (r.provider_name + (r.provider_plan ? ' — ' + r.provider_plan : '')) : (r.provider_id || '—');
+    const sortPath = r.sort_by || r.selected_path || r.path || '—';
+    return `<tr style="border-bottom:1px solid var(--hairline)">
+      <td style="padding:.45rem .7rem;color:var(--muted)">${r.timestamp || '—'}</td>
+      <td style="padding:.45rem .7rem;color:var(--ink2)">${r.event || '—'}</td>
+      <td style="padding:.45rem .7rem;color:var(--ink2)">${provider}</td>
+      <td style="padding:.45rem .7rem;color:var(--ink2)">${sortPath}</td>
+      <td style="padding:.45rem .7rem;color:var(--muted)">${r.mode || '—'}</td>
+    </tr>`;
+  }).join('');
+
+  status.textContent = 'Showing ' + Math.min(rows.length, 200) + ' events (' + sourceLabel + ').';
+}
+
+function loadTrackingView() {
+  const linkInput = document.getElementById('admin-track-link');
+  const status = document.getElementById('admin-track-status');
+  if (!linkInput || !status) return;
+
+  const linkId = (linkInput.value || getActiveLinkId() || '').trim();
+  linkInput.value = linkId;
+  if (!linkId) {
+    status.textContent = 'Enter a link ID first.';
+    return;
+  }
+
+  status.textContent = 'Loading tracking data...';
+  const localRows = readLocalTrackingEvents().filter(r => r.link_id === linkId);
+
+  fetch(BETA_SCRIPT_URL + '?action=events&link_id=' + encodeURIComponent(linkId))
+    .then(r => r.json())
+    .then(data => {
+      const rows = Array.isArray(data) ? data : (Array.isArray(data.events) ? data.events : []);
+      if (rows.length) renderTrackingView(rows, 'Google Sheets');
+      else renderTrackingView(localRows, 'local session fallback');
+    })
+    .catch(function() {
+      renderTrackingView(localRows, 'local session fallback');
+    });
+}
+
+function sendBrowseEvent(eventName, extra) {
+  try {
+    const payload = Object.assign({
+      event: eventName,
+      timestamp: new Date().toISOString(),
+      page: location.href,
+      link_id: getActiveLinkId(),
+      path: userPath || '',
+      mode: document.body.classList.contains('demo-mode') ? 'demo'
+        : document.body.classList.contains('test-mode') ? 'test' : 'live'
+    }, extra || {});
+    addLocalTrackingEvent(payload);
+    const params = new URLSearchParams(payload);
+    fetch(BETA_SCRIPT_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' }).catch(function() {});
+  } catch (_) {}
+}
 
 // EmailJS config (fill these in with your EmailJS IDs)
 var EMAILJS_PUBLIC_KEY = 'K160_i8A3AXGSYFFl';
@@ -2530,7 +2682,7 @@ function sendBetaConfirmationEmail(payload) {
   }
 
   var tempAccessMinutes = 14 * 24 * 60;
-  var tempAccessLink = makeTempAccessLink(location.origin + location.pathname, tempAccessMinutes);
+  var tempAccessLink = makeTempAccessLink(location.origin + location.pathname, tempAccessMinutes, payload.link_id || '');
   var expiryDate = new Date(Date.now() + tempAccessMinutes * 60 * 1000);
   var expiryLabel = expiryDate.toLocaleString('en-GB', {
     year: 'numeric',
@@ -2560,6 +2712,7 @@ function sendBetaConfirmationEmail(payload) {
     tempAccessExpiryDate: expiryLabel,
     access_link: tempAccessLink,
     access_expiry: expiryLabel,
+    link_id: payload.link_id || '',
     contact_email: BETA_CONTACT_EMAIL,
     contact_phone: BETA_CONTACT_PHONE,
     contact_page: location.origin + '/contact.html'
@@ -2586,6 +2739,7 @@ function setBetaSkipVisibility() {
 }
 
 function openNotifyForm() {
+  sendBrowseEvent('notify_opened');
   // Reset modal to initial state in case it was already submitted
   document.getElementById('beta-form').style.display = '';
   setBetaSkipVisibility();
@@ -2620,12 +2774,14 @@ function submitBeta(e) {
   var btn = document.getElementById('beta-submit');
   btn.disabled = true;
   btn.textContent = 'Sending…';
+  var leadLinkId = getActiveLinkId() || generateLinkId();
 
   var params = new URLSearchParams({
     name: name,
     company: company,
     email: email,
     phone: phone,
+    link_id: leadLinkId,
     Phone: phone,
     phone_number: phone,
     timestamp: new Date().toISOString(), page: location.href });
@@ -2637,11 +2793,13 @@ function submitBeta(e) {
     name: name,
     company: company,
     email: email,
-    phone: phone
+    phone: phone,
+    link_id: leadLinkId
   }).catch(function() {}); // keep flow resilient if email fails
 
   Promise.allSettled([saveLeadPromise, confirmationPromise])
     .finally(function() {
+      sendBrowseEvent('notify_submitted', { company: company });
       document.getElementById('beta-form').style.display = 'none';
       document.getElementById('beta-skip').style.display = 'none';
       document.getElementById('beta-thanks').style.display = 'block';
@@ -2662,6 +2820,7 @@ function goToStep(n, skipBetaGate) {
     return;
   }
   if (n === 4) { unlocked = true; calc(); }  // unlock and render full grid before showing results
+  if (n === 4) sendBrowseEvent('view_results');
 
   const oldEl = document.getElementById('wiz-' + currentStep);
   const newEl = document.getElementById('wiz-' + n);
@@ -2724,6 +2883,7 @@ function flashWinnerTile() {
 
 function setSortBy(s) {
   sortBy = s;
+  sendBrowseEvent('sort_changed', { sort_by: s });
   ['tco', 'rate', 'monthly'].forEach(k => {
     const b4 = document.getElementById('sb-' + k + '-4');
     if (b4) b4.classList.toggle('active', k === s);
@@ -3291,7 +3451,7 @@ function calc() {
         ? `<div class="p-indicative">⚠ Rate indicative — not publicly confirmed</div>`
         : '';
 
-      return `<a class="provider-card${cardClass}" href="${r.source}" target="_blank" rel="noopener" data-pid="${r.id}">
+      return `<a class="provider-card${cardClass}" href="${r.source}" target="_blank" rel="noopener" data-pid="${r.id}" onclick="sendBrowseEvent('provider_opened',{ provider_id:'${r.id}', provider_name:'${r.name}', provider_plan:'${r.plan}' })">
         ${badge}
         <div class="p-name">${r.name}</div>
         <div class="p-plan">${r.plan}</div>
@@ -3583,6 +3743,8 @@ calc();
 function openAdmin() {
   const overlay = document.getElementById('admin-overlay');
   overlay.style.display = 'flex';
+  const linkInput = document.getElementById('admin-track-link');
+  if (linkInput && !linkInput.value) linkInput.value = getActiveLinkId();
   setTimeout(() => document.getElementById('admin-pw').focus(), 50);
 }
 
@@ -3907,6 +4069,9 @@ function loadFromURLParams() {
 }
 
 document.addEventListener('DOMContentLoaded', loadFromURLParams);
+document.addEventListener('DOMContentLoaded', function() {
+  sendBrowseEvent('session_started');
+});
 </script>
 </body>
 </html>
