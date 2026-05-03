@@ -1628,7 +1628,7 @@ footer {
       <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem">Temporary access link</div>
       <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-bottom:.6rem">
         <label for="admin-temp-ttl" style="font-size:11px;color:var(--ink2)">Expires in</label>
-        <input id="admin-temp-ttl" type="number" min="1" value="60" style="width:90px;background:var(--black3);border:1px solid var(--border2);color:var(--ink);padding:.45rem .55rem;font-family:var(--font-mono);font-size:12px">
+        <input id="admin-temp-ttl" type="number" min="1" value="10080" style="width:90px;background:var(--black3);border:1px solid var(--border2);color:var(--ink);padding:.45rem .55rem;font-family:var(--font-mono);font-size:12px">
         <span style="font-size:11px;color:var(--muted)">minutes</span>
         <button onclick="generateTempAccessLinkFromAdmin()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:4px 10px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Generate</button>
         <button onclick="copyTempAccessLink()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:4px 10px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Copy</button>
@@ -1698,7 +1698,7 @@ function verifyTempAccessFromURL() {
 }
 
 window.makeTempAccessLink = function makeTempAccessLink(baseUrl, ttlMinutes, forcedLinkId) {
-  const ttl = Math.max(1, parseInt(ttlMinutes || '60', 10));
+  const ttl = Math.max(1, parseInt(ttlMinutes || '10080', 10));
   const exp = Math.floor(Date.now() / 1000) + (ttl * 60);
   const sig = hashAccessPayload(String(exp) + '|' + ACCESS_LINK_SECRET);
   const url = new URL(baseUrl || location.origin + location.pathname);
@@ -1718,7 +1718,7 @@ function generateTempAccessLinkFromAdmin() {
   const outEl = document.getElementById('admin-temp-link');
   const statusEl = document.getElementById('admin-temp-status');
   if (!ttlEl || !outEl) return;
-  const ttl = parseInt(ttlEl.value || '60', 10);
+  const ttl = parseInt(ttlEl.value || '10080', 10);
   const link = makeTempAccessLink(location.origin + location.pathname, ttl);
   outEl.value = link;
   if (statusEl) statusEl.textContent = 'Temporary link generated.';
@@ -2746,7 +2746,7 @@ function sendBetaConfirmationEmail(payload) {
     // Ignore duplicate init calls.
   }
 
-  var tempAccessMinutes = 14 * 24 * 60;
+  var tempAccessMinutes = 7 * 24 * 60;
   var tempAccessLink = makeTempAccessLink(location.origin + location.pathname, tempAccessMinutes, payload.link_id || '');
   var expiryDate = new Date(Date.now() + tempAccessMinutes * 60 * 1000);
   var expiryLabel = expiryDate.toLocaleString('en-GB', {
@@ -2769,11 +2769,11 @@ function sendBetaConfirmationEmail(payload) {
     user_phone: payload.phone || '',
     company_line: payload.company ? ' from ' + payload.company : '',
     temp_access_link: tempAccessLink,
-    temp_access_days: '14',
+    temp_access_days: '7',
     temp_access_expiry_date: expiryLabel,
     // Aliases for template compatibility
     tempAccessLink: tempAccessLink,
-    tempAccessDays: '14',
+    tempAccessDays: '7',
     tempAccessExpiryDate: expiryLabel,
     access_link: tempAccessLink,
     access_expiry: expiryLabel,
