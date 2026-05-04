@@ -764,6 +764,45 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
 .btn-primary:hover::before { transform: translateX(100%); }
 .btn-primary:active { transform: translateY(0); }
 
+.btn-switch {
+  position: relative;
+  display: block;
+  width: 100%;
+  background: #6b8fbf;
+  color: #ffffff;
+  border: 1px solid #5a7daf;
+  padding: 1.05rem 1.25rem;
+  border-radius: 14px;
+  font-family: var(--font-sans); font-size: 11.5px; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; text-align: left;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.18) inset,
+    0 -1px 0 0 rgba(0,0,0,0.08) inset,
+    0 0 32px -10px rgba(107,143,191,0.45);
+  transition: transform 0.2s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease, filter 0.25s ease, background 0.2s;
+  overflow: hidden;
+}
+.btn-switch::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.8s ease;
+  pointer-events: none;
+}
+.btn-switch:hover {
+  background: #5a7daf;
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.22) inset,
+    0 0 0 4px rgba(107,143,191,0.15),
+    0 20px 50px -12px rgba(107,143,191,0.5);
+}
+.btn-switch:hover::before { transform: translateX(100%); }
+.btn-switch:active { transform: translateY(0); }
+
 .confirmation {
   display: none;
   background: rgba(15,118,110,0.06);
@@ -1120,7 +1159,7 @@ footer {
 
     <div style="margin-top:2.5rem;display:flex;flex-direction:column;gap:.85rem">
       <button class="btn-primary" style="margin-top:0;text-align:left" onclick="setUserPath('new')">I'm new to card payments — find me the best rate →</button>
-      <button onclick="setUserPath('switch')" style="display:block;width:100%;background:rgba(255,255,255,0.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--border2);color:var(--ink2);padding:1.05rem 1.25rem;font-family:var(--font-sans);font-size:11.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;text-align:left;border-radius:14px;transition:border-color .2s, background .2s, transform .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.background='rgba(240,253,250,0.9)';this.style.transform='translateY(-1px)'" onmouseout="this.style.borderColor='var(--border2)';this.style.background='rgba(255,255,255,0.5)';this.style.transform='translateY(0)'">I want to switch from my current provider →</button>
+      <button class="btn-switch" onclick="setUserPath('switch')">I want to switch from my current provider →</button>
     </div>
   </div>
 </div>
