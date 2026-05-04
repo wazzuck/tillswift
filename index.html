@@ -683,6 +683,9 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
   border: none; border-top: 1px solid var(--border);
   margin: 0.5rem 0 0.3rem;
 }
+.provider-card.winner .p-pros-cons-divider {
+  border-top: 1px solid rgba(13,148,136,0.35);
+}
 
 /* ── MOBILE: single column layout ── */
 @media (max-width: 768px) {
@@ -1261,7 +1264,8 @@ footer {
             <option value="ecommerce_only">E-commerce only</option>
             <option value="mixed_omnichannel">Mixed omnichannel</option>
             <option value="b2b_invoicing">B2B invoicing / professional services</option>
-            <option value="market_seller" selected>Market / outdoor trader</option>
+            <option value="market_seller">Market / outdoor trader</option>
+            <option value="barber" selected>Barber / hair salon</option>
           </select>
         </div>
 
@@ -1520,7 +1524,7 @@ footer {
           </tr>
           <tr style="border-bottom:1px solid var(--hairline)">
             <td style="padding:.6rem 1rem;font-family:var(--font-mono);color:var(--accent2);white-space:nowrap">preset</td>
-            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px;white-space:nowrap">retail_highstreet<br>cafe_restaurant<br>medical_london<br>ecommerce_only<br>mixed_omnichannel<br>b2b_invoicing<br>market_seller</td>
+            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px;white-space:nowrap">retail_highstreet<br>cafe_restaurant<br>medical_london<br>ecommerce_only<br>mixed_omnichannel<br>b2b_invoicing<br>market_seller<br>barber</td>
             <td style="padding:.6rem 1rem;color:var(--ink2);font-size:11px">Applies a business profile preset — sets channel split, card-type mix sliders, and (for profiles that have them) transaction defaults. Without transaction data the page lands on step 1 with the advanced panel open; add <code style="font-family:var(--font-mono);font-size:10px">txn</code>/<code style="font-family:var(--font-mono);font-size:10px">val</code> to jump straight to results.</td>
           </tr>
           <tr style="border-bottom:1px solid var(--hairline)">
@@ -2168,21 +2172,21 @@ const PROVIDERS = [
     sub:0, rate:0.0079, flat:0, extra:0,
     source:'https://lopay.com/en-gb/pricing',
     warn:'Payouts on Thursdays only — no cheap add-on; flexible Mon–Fri settlement requires switching to Standard plan (0.99%, no monthly fee) · Manual instant payout available any time at +1% cost (effective 1.79%) · £20 chargeback admin fee — non-refundable even if dispute won · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay on phone +8p/txn (not modelled — assumes WisePad 3 reader)',
-    pros:['0.79% — lowest published UK in-person rate','No monthly fee or contract','Ideal for market traders — integrated POS, product catalogue, receipts and sales reports built in','Recommended: use WisePad 3 reader (£24) — avoids 8p/txn phone Tap to Pay surcharge'] },
+    pros:['0.79% — lowest published UK in-person rate','No monthly fee or contract','Lopay virtual debit card: spend at ASDA, Iceland or Morrisons to offset transaction fees','Ideal for small retailers — integrated POS, product catalogue, receipts and sales reports built in','Recommended: use WisePad 3 reader (£24) — avoids 8p/txn phone Tap to Pay surcharge'] },
 
   { id:'lopay_standard', app:true,
     name:'Lopay', plan:'Standard',
     sub:0, rate:0.0099, flat:0, extra:0,
     source:'https://lopay.com/en-gb/pricing',
     warn:'£20 chargeback admin fee — non-refundable even if dispute won · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay on phone +8p/txn (not modelled — assumes WisePad 3 reader)',
-    pros:['0.99% rate — no monthly fee','Flexible next-day payouts Mon–Fri','Ideal for market traders — integrated POS, product catalogue, receipts and sales reports built in','Recommended: use WisePad 3 reader (£24) — avoids 8p/txn phone Tap to Pay surcharge'] },
+    pros:['0.99% rate — no monthly fee','Flexible next-day payouts Mon–Fri','Lopay virtual debit card: spend at ASDA, Iceland or Morrisons to offset transaction fees','Ideal for small retailers — integrated POS, product catalogue, receipts and sales reports built in','Recommended: use WisePad 3 reader (£24) — avoids 8p/txn phone Tap to Pay surcharge'] },
 
   { id:'lopay_instant', app:true,
     name:'Lopay', plan:'Instant to Bank',
     sub:0, rate:0.0179, flat:0, extra:0,
     source:'https://lopay.com/en-gb/pricing',
     warn:'1.79% rate is the premium for instant 24/7 payouts · Amex, international & corporate cards +1% (modelled) · Online/payment links always 1.79% (modelled) · Tap to Pay on phone +8p/txn (not modelled — assumes WisePad 3 reader)',
-    pros:['Instant 24/7 payouts to bank','No monthly fee or contract','Ideal for market traders — integrated POS, product catalogue, receipts and sales reports built in','Recommended: use WisePad 3 reader (£24) — avoids 8p/txn phone Tap to Pay surcharge'] },
+    pros:['Instant 24/7 payouts to bank','No monthly fee or contract','Ideal for small retailers — integrated POS, product catalogue, receipts and sales reports built in','Recommended: use WisePad 3 reader (£24) — avoids 8p/txn phone Tap to Pay surcharge'] },
 
   // ── Tide ── source: https://www.tide.co/features/card-reader/
   { id:'tide_payg', app:true,
@@ -2321,8 +2325,8 @@ const PROVIDERS = [
     name:'DNA Payments', plan:'Bespoke',
     sub:10, rate:0.005, flat:0.03, extra:0,
     source:'https://www.dnapayments.com/',
-    warn:'Rates not publicly disclosed — bespoke quotes only. IC+ model: debit markup from ~0.26%+3p on top of interchange (effective blended ~0.5%+3p shown). Credit and business cards higher. 2–4 year contracts with £159 early cancellation fee. Next-day settlement costs £7.99/month extra.',
-    pros:['Competitive debit rates from ~0.26% markup','IC+ transparent pricing model','UK-based acquirer'] },
+    warn:'IC+ model: debit markup from ~0.26%+3p on top of interchange (effective blended ~0.5%+3p shown). Credit and business cards higher. Terminal costs require a custom quote. Replacement terminals after sign-up can be slow.',
+    pros:['Competitive debit rates from ~0.26% markup','IC+ transparent pricing model','UK-based acquirer','Standard settlement T+3 · Next-day T+1 available at +£7.99/month'] },
 
   // ── Handepay ── source: https://www.handepay.co.uk/card-machines/
   { id:'handepay', app:'partial',
@@ -3166,6 +3170,7 @@ const DNA_PRESETS = {
   mixed_omnichannel:  { f2f: 60, online: 30, cnp: 10, dr: 50, cr: 35, pcr: 15 },
   b2b_invoicing:      { f2f: 5,  online: 35, cnp: 60, dr: 30, cr: 45, pcr: 25 },
   market_seller:      { f2f: 100, online: 0, cnp: 0,  dr: 75, cr: 25, pcr: 0,  days: 12, txn: 20, val: 20, acceptAmex: false },
+  barber:             { f2f: 100, online: 0, cnp: 0,  dr: 78, cr: 20, pcr: 2,  days: 22, txn: 15, val: 17, acceptAmex: false },
 };
 
 function applyDnaPreset() {
@@ -3739,6 +3744,13 @@ const CONS = {
     'International card handling fee of 0.80% added from February 2026',
     'All pricing bespoke — impossible to compare online without obtaining a full quote',
   ],
+  dnapayments: [
+    '2–4 year contracts — early exit requires buying out the remaining term plus £159 fee',
+    'Standard settlement is T+3 (3 business days); next-day costs an extra £7.99/month',
+    '£10/month minimum transaction fee applies regardless of volume processed',
+    'Some merchants report unexpected fees appearing after sign-up',
+    'Not recommended for startups or microbusinesses',
+  ],
   lopay_essential: [
     'Payouts available on Thursdays only — not suitable if daily cash-flow access is needed',
     '+1% surcharge on Amex, international and corporate cards on all accounts',
@@ -4177,6 +4189,7 @@ function loadFromURLParams() {
 document.addEventListener('DOMContentLoaded', loadFromURLParams);
 document.addEventListener('DOMContentLoaded', function() {
   sendBrowseEvent('session_started');
+  if (!new URLSearchParams(location.search).has('preset')) applyDnaPreset();
 });
 </script>
 </body>
