@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your TillSwift access link</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f6faf9;
+        font-family: Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        color: #0f172a;
+      }
+      .wrap {
+        width: 100%;
+        padding: 28px 12px;
+      }
+      .card {
+        max-width: 640px;
+        margin: 0 auto;
+        background: #ffffff;
+        border: 2px solid #14b8a6;
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .head {
+        background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+        color: #ffffff;
+        padding: 22px 26px;
+      }
+      .brand {
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 700;
+        opacity: 0.95;
+      }
+      .title {
+        margin: 8px 0 0;
+        font-size: 24px;
+        line-height: 1.25;
+        font-weight: 700;
+      }
+      .body {
+        padding: 24px 26px 14px;
+      }
+      p {
+        margin: 0 0 14px;
+        color: #334155;
+        font-size: 15px;
+        line-height: 1.75;
+      }
+      .highlight {
+        margin: 18px 0;
+        padding: 14px 16px;
+        border: 1px solid #99f6e4;
+        background: #f0fdfa;
+        border-radius: 10px;
+      }
+      .highlight strong {
+        color: #0f766e;
+      }
+      .steps {
+        margin: 14px 0 18px;
+        padding: 0;
+        list-style: none;
+      }
+      .steps li {
+        margin: 0 0 10px;
+        padding-left: 24px;
+        position: relative;
+        color: #334155;
+        line-height: 1.65;
+        font-size: 15px;
+      }
+      .steps li:before {
+        content: "•";
+        position: absolute;
+        left: 8px;
+        top: 0;
+        color: #0f766e;
+        font-weight: 700;
+      }
+      .cta {
+        text-align: center;
+        margin: 20px 0 10px;
+      }
+      .cta a {
+        display: inline-block;
+        text-decoration: none;
+        color: #ffffff !important;
+        background: linear-gradient(135deg, #0d9488, #0f766e);
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .link-box {
+        margin: 16px 0;
+        padding: 12px 14px;
+        border: 1px dashed #5eead4;
+        background: #ecfdf5;
+        border-radius: 10px;
+      }
+      .link-box a {
+        color: #0f766e;
+        text-decoration: none;
+        font-weight: 700;
+        word-break: break-all;
+      }
+      .contact {
+        text-align: center;
+        color: #475569;
+        font-size: 14px;
+        line-height: 1.7;
+        margin-top: 10px;
+      }
+      .contact a {
+        color: #0f766e;
+        text-decoration: none;
+        font-weight: 700;
+      }
+      .footer {
+        border-top: 1px solid #e6edf0;
+        padding: 14px 26px 20px;
+        color: #94a3b8;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="head">
+          <div class="brand">TillSwift</div>
+          <div class="title">Your private TillSwift access</div>
+        </div>
+        <div class="body">
+          <p>Hi {{to_name}},</p>
+          <p>TillSwift is now live, and I’d like to invite you to try your full comparison.</p>
+          <div class="highlight">
+            <p style="margin: 0;">
+              <strong>TillSwift is completely free for merchants.</strong><br />
+              Our comparison research is impartial and always focused on your best outcome.
+              The service is funded by commission paid by the payment companies to the consultant.
+            </p>
+          </div>
+          <p><strong>Your private temporary access link:</strong></p>
+          <div class="link-box">
+            <a href="{{TEMP_LINK}}" target="_blank" rel="noopener">{{TEMP_LINK}}</a>
+          </div>
+          <p>Please use this link directly to view your full results.</p>
+          <ul class="steps">
+            <li>Open your link and review your tailored provider comparison.</li>
+            <li>If you want help deciding, reply to this email.</li>
+            <li>Or call/text me directly on <strong>07809590652</strong>.</li>
+          </ul>
+          <div class="cta">
+            <a href="{{TEMP_LINK}}" target="_blank" rel="noopener">View your full comparison</a>
+          </div>
+          <p class="contact">
+            Email: <a href="mailto:hello@tillswift.com">hello@tillswift.com</a><br />
+            Phone: <a href="tel:07809590652">07809590652</a>
+          </p>
+        </div>
+        <div class="footer">
+          You’re receiving this because you requested access or updates from TillSwift.
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
