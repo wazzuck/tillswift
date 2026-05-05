@@ -831,6 +831,11 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
   max-width: 420px; width: 100%;
   padding: 2.5rem 2rem 2rem;
   position: relative;
+  max-height: min(92dvh, 780px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable both-edges;
 }
 #beta-badge {
   display: inline-block;
@@ -884,6 +889,28 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
   transition: color 0.2s;
 }
 #beta-skip:hover { color: rgba(15,23,42,0.9); }
+
+@media (max-width: 640px) {
+  #beta-overlay {
+    align-items: flex-end;
+    padding: max(0.7rem, env(safe-area-inset-top)) 0.7rem max(0.7rem, env(safe-area-inset-bottom));
+  }
+  #beta-modal {
+    max-width: 100%;
+    max-height: min(94dvh, 860px);
+    border-radius: 16px 16px 0 0;
+    padding: 1.2rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  }
+  #beta-modal h2 {
+    font-size: 1.5rem;
+  }
+  #beta-skip {
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(to top, var(--black2) 72%, rgba(11,16,24,0));
+    padding-top: 0.75rem;
+  }
+}
 
 /* ── DEFAULT: top 12 provider tiles blurred until ?demo is added ── */
 body:not(.demo-mode):not(.test-mode):not(.full-access) .provider-grid .provider-card:nth-child(-n+12):not(.card-current) { pointer-events: none; }
