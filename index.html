@@ -109,7 +109,7 @@ body {
 /* ── NAV ── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: flex-start;
   padding: 0 2rem; height: 56px;
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(16px);
@@ -118,6 +118,31 @@ nav {
 .nav-brand {
   font-family: var(--font-sans); font-size: 1rem; font-weight: 700;
   letter-spacing: 0.12em; color: var(--ink); text-transform: uppercase; text-decoration: none;
+}
+.nav-how-btn {
+  position: absolute;
+  top: 50%;
+  right: 2rem;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--accent);
+  background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+  color: #ffffff;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(15,118,110,0.24);
+}
+@media (max-width: 600px) {
+  .nav-how-btn { right: 1rem; }
 }
 
 
@@ -149,7 +174,7 @@ nav {
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
-  color: var(--accent);
+  color: #ffffff;
   letter-spacing: -0.01em;
 }
 
@@ -295,14 +320,33 @@ nav {
 
 /* ── ADVANCED SLIDERS ── */
 .advanced-toggle {
-  display: flex; align-items: center; gap: 0.5rem;
-  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--muted); cursor: pointer; margin-top: 1.25rem;
-  background: none; border: none; padding: 0;
-  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff !important;
+  cursor: pointer;
+  margin-top: 1.25rem;
+  background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  box-shadow: 0 6px 18px rgba(15,118,110,0.22);
+  transition: none;
 }
-.advanced-toggle:hover { color: var(--gold2); }
-.advanced-toggle::before { content:'›'; font-size: 14px; transition: transform 0.2s; display:inline-block; }
+.advanced-toggle::before { color: #ffffff; }
+.advanced-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(13,148,136,0.2), 0 4px 14px rgba(15,118,110,0.14);
+}
+.advanced-toggle::before {
+  content:'›';
+  font-size: 14px;
+  transition: transform 0.2s;
+  display:inline-block;
+}
 .advanced-toggle.open::before { transform: rotate(90deg); }
 
 .advanced-panel {
@@ -890,6 +934,97 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
 }
 #beta-skip:hover { color: rgba(15,23,42,0.9); }
 
+/* Keep beta/signup form buttons visually stable (no shimmer flash) */
+#beta-modal .btn-primary::before { display: none; }
+#beta-modal .btn-primary:hover {
+  filter: none;
+}
+
+/* ── SKIP-TO-RESULTS INFO POPUP ── */
+#skip-results-info {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 905;
+  width: min(420px, calc(100vw - 2rem));
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--accent-soft);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.96);
+  box-shadow: 0 16px 40px -22px rgba(15,23,42,0.32), 0 6px 14px -8px rgba(15,118,110,0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 0.8rem;
+  align-items: start;
+}
+.skip-info-close {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.5rem;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--accent-soft);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.9);
+  color: var(--accent);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.skip-info-close:hover {
+  border-color: var(--accent);
+}
+.skip-info-timer {
+  width: 44px;
+  height: 44px;
+  position: relative;
+}
+.skip-info-timer svg {
+  width: 44px;
+  height: 44px;
+  transform: rotate(-90deg);
+}
+.skip-info-ring-bg {
+  fill: none;
+  stroke: rgba(15,118,110,0.16);
+  stroke-width: 4;
+}
+.skip-info-ring-progress {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 113.1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.1s linear;
+}
+.skip-info-timer-num {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+}
+.skip-info-title {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+.skip-info-body {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink2);
+}
+
 @media (max-width: 640px) {
   #beta-overlay {
     align-items: flex-end;
@@ -1153,6 +1288,7 @@ footer {
 
 <nav>
   <a href="#wiz-0" class="nav-brand" onclick="goToStep(0); return false;">TillSwift</a>
+  <a class="nav-how-btn" href="how-it-works.html">How this works</a>
 
 </nav>
 
@@ -1166,8 +1302,8 @@ footer {
 <div class="wiz-step active" id="wiz-0">
   <div class="step" style="padding-top:6rem">
     <div class="step-num">Step 1 of 3</div>
-    <h1 class="step-heading">Find the right<br><em>payment provider for you.</em></h1>
-    <p class="step-body">Whether you're about to take your first card payment or you've been with the same provider for years, TillSwift compares every major UK payment provider against your actual volumes — transaction rates, monthly fees, and total cost over three years — so you can pick the cheapest option with total confidence.</p>
+    <h1 class="step-heading">Find the right<br><em style="color:var(--accent2)">payment provider for you.</em></h1>
+    <p class="step-body">Whether you're about to take your first card payment or you've been with the same provider for years, TillSwift compares every major UK payment provider against your actual volumes — transaction rates, monthly fees, and total cost over three years — so you can pick the cheapest option with total confidence. This is a <a href="how-it-works.html" style="color:var(--accent2);text-decoration:underline;font-weight:700">free and impartial</a> service that truly works in your best interests.</p>
 
     <div style="margin-top:2rem;padding:1.75rem;border:1px solid var(--glass-border);background:var(--glass-bg);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border-radius:16px;box-shadow:0 1px 0 0 rgba(255,255,255,0.6) inset, 0 20px 40px -20px rgba(15,118,110,0.15)">
       <div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem">What you'll get</div>
@@ -1210,6 +1346,26 @@ footer {
         <strong>We've pre-filled typical starter numbers.</strong>
         Tweak them if your business is different — or skip straight to your rankings.
       </div>
+    </div>
+
+    <div class="field" style="margin-bottom:1.25rem">
+      <label class="field-label" for="dna-preset">Business profile</label>
+      <div class="dna-preset-wrap" style="max-width:360px">
+        <select id="dna-preset" onchange="applyDnaPreset()">
+          <option value="custom">Custom</option>
+          <option value="retail_highstreet">High-street retail</option>
+          <option value="cafe">Café</option>
+          <option value="restaurant">Restaurant</option>
+          <option value="medical_london">Private medical</option>
+          <option value="ecommerce_only">E-commerce only</option>
+          <option value="mixed_omnichannel">Mixed omnichannel</option>
+          <option value="b2b_invoicing">B2B invoicing / professional services</option>
+          <option value="convenience_store">Convenience store</option>
+          <option value="barber" selected>Barber</option>
+          <option value="salon">Hair salon</option>
+        </select>
+      </div>
+      <span class="field-hint">Choose a profile to prefill channel mix, card mix, and typical transaction assumptions.</span>
     </div>
 
     <div class="field-grid">
@@ -1281,20 +1437,6 @@ footer {
       </div>
 
       <div class="dna-mix-panel" style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:1.25rem;margin-top:0.25rem">
-        <div class="dna-preset-wrap" style="margin-bottom:1.25rem">
-          <span class="sl-label">Business profile</span>
-          <select id="dna-preset" onchange="applyDnaPreset()">
-            <option value="custom">Custom</option>
-            <option value="retail_highstreet">High-street retail</option>
-            <option value="cafe_restaurant">Café / restaurant</option>
-            <option value="medical_london">Private medical</option>
-            <option value="ecommerce_only">E-commerce only</option>
-            <option value="mixed_omnichannel">Mixed omnichannel</option>
-            <option value="b2b_invoicing">B2B invoicing / professional services</option>
-            <option value="market_seller">Market / outdoor trader</option>
-            <option value="barber" selected>Barber / hair salon</option>
-          </select>
-        </div>
 
         <div class="dna-sliders">
           <div class="dna-sliders-col">
@@ -1401,10 +1543,10 @@ footer {
     <h2 class="step-heading" id="step4-heading">Your full<br><em>recommendation.</em></h2>
     <p class="step-body" id="step4-body">Every UK provider ranked for your exact volumes. Your recommended option is highlighted. Click any card to view their official pricing page.</p>
 
-    <div style="margin-bottom:1.5rem">
+    <div id="step4-notify-wrap" style="margin-bottom:1.5rem">
       <span style="display:inline-block;background:var(--gold);color:var(--black);font-size:9px;font-weight:700;letter-spacing:0.2em;padding:3px 9px;margin-bottom:0.6rem">BETA</span>
-      <p style="font-size:13px;color:var(--muted);margin-bottom:0.75rem">TillSwift is currently in beta. Get notified when we launch in May 2026.</p>
-      <button class="btn-primary" style="width:auto;margin-top:0" onclick="openNotifyForm()">Notify me at launch →</button>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:0.75rem">TillSwift is live. Unlock your full comparison to see the complete provider detail set.</p>
+      <button class="btn-primary" style="width:auto;margin-top:0" onclick="openNotifyForm()">Unlock full comparison →</button>
     </div>
 
     <div class="savings-hook" id="savings-hook-4" style="display:none">
@@ -1444,8 +1586,8 @@ footer {
 <div id="beta-overlay" style="display:none" aria-modal="true" role="dialog" aria-labelledby="beta-title">
   <div id="beta-modal">
     <div id="beta-badge">BETA</div>
-    <h2 id="beta-title">Launching May 2026.</h2>
-    <p id="beta-body">TillSwift is in its final checks before launch. You can still explore a preview of your results below — sign up and we'll notify you the moment the full platform goes live.</p>
+    <h2 id="beta-title">Unlock your full comparison.</h2>
+    <p id="beta-body">You can explore a preview of your results below — unlock full comparison to receive the complete provider detail set. Or click skip for now if you're curious how the platform works.</p>
     <form id="beta-form" onsubmit="submitBeta(event)">
       <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
       <label class="beta-ack" for="beta-ack">
@@ -1469,11 +1611,11 @@ footer {
         <input type="tel" id="beta-phone" name="phone" placeholder="+44 7xxx xxxxxx" autocomplete="tel">
       </div>
       <div id="beta-err" style="display:none;font-size:12px;color:rgba(220,80,60,0.9);margin-top:0.25rem"></div>
-      <button type="submit" id="beta-submit" class="btn-primary" style="margin-top:1.25rem">Notify me at launch →</button>
+      <button type="submit" id="beta-submit" class="btn-primary" style="margin-top:1.25rem">Unlock full comparison →</button>
     </form>
     <div id="beta-thanks" style="display:none;text-align:center;padding:1rem 0">
       <div style="font-family:var(--font-serif);font-size:1.6rem;color:var(--gold2);margin-bottom:0.5rem">You're on the list.</div>
-      <div style="font-size:13px;color:var(--muted);line-height:1.7">We'll be in touch when TillSwift launches.<br>In the meantime, here's a preview of your results.</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7">Thanks — your request is in.<br>You can continue exploring your preview results below.</div>
     </div>
     <button id="beta-skip" onclick="dismissBeta()" type="button">Skip for now →</button>
   </div>
@@ -1551,7 +1693,7 @@ footer {
           </tr>
           <tr style="border-bottom:1px solid var(--hairline)">
             <td style="padding:.6rem 1rem;font-family:var(--font-mono);color:var(--accent2);white-space:nowrap">preset</td>
-            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px;white-space:nowrap">retail_highstreet<br>cafe_restaurant<br>medical_london<br>ecommerce_only<br>mixed_omnichannel<br>b2b_invoicing<br>market_seller<br>barber</td>
+            <td style="padding:.6rem 1rem;color:var(--muted);font-size:11px;white-space:nowrap">retail_highstreet<br>cafe<br>restaurant<br>medical_london<br>ecommerce_only<br>mixed_omnichannel<br>b2b_invoicing<br>convenience_store<br>barber<br>salon</td>
             <td style="padding:.6rem 1rem;color:var(--ink2);font-size:11px">Applies a business profile preset — sets channel split, card-type mix sliders, and (for profiles that have them) transaction defaults. Without transaction data the page lands on step 1 with the advanced panel open; add <code style="font-family:var(--font-mono);font-size:10px">txn</code>/<code style="font-family:var(--font-mono);font-size:10px">val</code> to jump straight to results.</td>
           </tr>
           <tr style="border-bottom:1px solid var(--hairline)">
@@ -1608,14 +1750,20 @@ footer {
 
         <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
           <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Business profile — step 1, no data pre-filled</div>
-          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=cafe_restaurant</code>
-          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Lands on step 1 with the café / restaurant channel and card-type sliders pre-applied. Advanced panel opens automatically. Client fills in their own transaction numbers.</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=cafe</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Lands on step 1 with the café channel and card-type sliders pre-applied. Advanced panel opens automatically. Client fills in their own transaction numbers.</div>
         </div>
 
         <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
-          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Market trader — jump straight to results</div>
-          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=market_seller&amp;txn=20&amp;val=20</code>
-          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Market seller profile (100% in-person, debit-heavy). 20 transactions/day at £20 average. Trading days defaults to 12 from the preset. Jumps directly to the ranked results on step 4.</div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Convenience store — jump straight to results</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=convenience_store&amp;txn=20&amp;val=20</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Convenience store profile (mostly in-person, debit-heavy). 20 transactions/day at £20 average. Trading days defaults to 12 from the preset. Jumps directly to the ranked results on step 4.</div>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Restaurant — jump straight to results</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=restaurant&amp;txn=40&amp;val=50&amp;days=26</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Restaurant profile with £50 average ticket size. Useful for table-service and fuller-basket hospitality scenarios.</div>
         </div>
 
         <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
@@ -1640,6 +1788,12 @@ footer {
           <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">B2B / professional services — full example</div>
           <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=b2b_invoicing&amp;txn=6&amp;val=800&amp;days=20&amp;provider=stripe&amp;path=switch</code>
           <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">B2B invoicing profile (mostly CNP / online). 6 transactions at £800 over 20 days. Client currently on Stripe. Shows how much they could save by switching.</div>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1rem 1.25rem">
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem">Higher-end salon — jump straight to results</div>
+          <code style="font-family:var(--font-mono);font-size:11px;color:var(--accent2);word-break:break-all">?demo&amp;preset=salon&amp;txn=12&amp;val=65&amp;days=22</code>
+          <div style="font-size:11px;color:var(--ink2);margin-top:.4rem">Higher-ticket hair salon profile (strong card usage, higher average basket). Useful for colour, treatment and premium styling services.</div>
         </div>
 
       </div>
@@ -1755,6 +1909,7 @@ function hashAccessPayload(input) {
 
 function verifyTempAccessFromURL() {
   document.body.classList.remove('full-access');
+  setStep4NotifyVisibility();
   const p = new URLSearchParams(location.search);
   const exp = parseInt(p.get('exp') || '', 10);
   const sig = p.get('sig') || '';
@@ -1764,7 +1919,15 @@ function verifyTempAccessFromURL() {
   const expected = hashAccessPayload(String(exp) + '|' + ACCESS_LINK_SECRET);
   if (expected !== sig) return false;
   document.body.classList.add('full-access');
+  setStep4NotifyVisibility();
   return true;
+}
+
+function setStep4NotifyVisibility() {
+  var wrap = document.getElementById('step4-notify-wrap');
+  if (!wrap) return;
+  var hasFullAccess = document.body.classList.contains('full-access');
+  wrap.style.display = hasFullAccess ? 'none' : '';
 }
 
 window.makeTempAccessLink = function makeTempAccessLink(baseUrl, ttlMinutes, forcedLinkId) {
@@ -2372,6 +2535,31 @@ const PROVIDERS = [
     source:'https://www.paymentsense.com/uk/pricing/',
     warn:'Paymentsense was acquired by Dojo in 2021 — new customers may be onboarded under Dojo branding. Rates not publicly disclosed — indicative only. 12–36 month contracts typical.',
     pros:['Established UK brand','Terminal included on some plans','UK-based support'] },
+
+  // ── Paymentsave ── source: https://paymentsave.co.uk/
+  { id:'paymentsave_est_low', app:'partial',
+    name:'Paymentsave', plan:'Indicative Low',
+    sub:39, rate:0.0165, flat:0.05, extra:0,
+    indicative:true,
+    source:'https://paymentsave.co.uk/',
+    warn:'Quote-based pricing — official website does not publish a full card-rate matrix by card type/channel. This is an indicative estimate only and must be verified directly with Paymentsave. Website claims include up to 40% savings, no hidden fees, and £0 setup fees.',
+    pros:['Indicative model only — verify direct quote','Claims no hidden fees and £0 setup fees','UK-focused support and onboarding messaging'] },
+
+  { id:'paymentsave_est_mid', app:'partial',
+    name:'Paymentsave', plan:'Indicative Mid',
+    sub:99, rate:0.0135, flat:0.04, extra:0,
+    indicative:true,
+    source:'https://paymentsave.co.uk/',
+    warn:'Quote-based pricing — official website does not publish a full card-rate matrix by card type/channel. This is an indicative estimate only and must be verified directly with Paymentsave. Website claims include up to 40% savings, no hidden fees, and £0 setup fees.',
+    pros:['Indicative model only — verify direct quote','Claims no hidden fees and £0 setup fees','UK-focused support and onboarding messaging'] },
+
+  { id:'paymentsave_est_high', app:'partial',
+    name:'Paymentsave', plan:'Indicative High',
+    sub:200, rate:0.0105, flat:0.03, extra:0,
+    indicative:true,
+    source:'https://paymentsave.co.uk/',
+    warn:'Quote-based pricing — official website does not publish a full card-rate matrix by card type/channel. This is an indicative estimate only and must be verified directly with Paymentsave. Website claims include up to 40% savings, no hidden fees, and £0 setup fees.',
+    pros:['Indicative model only — verify direct quote','Claims no hidden fees and £0 setup fees','UK-focused support and onboarding messaging'] },
 ];
 
 // ── POPULARITY ORDER for provider dropdown ──
@@ -2385,6 +2573,7 @@ const POP_ORDER = [
   'shopify',      // dominant for retail + online combined
   'lopay',        // fastest-growing UK-focused newcomer
   'dojo',         // strong UK hospitality & retail push
+  'paymentsave',  // quote-based UK-focused provider
   'tide',         // business banking + card reader bundle
   'mypos',        // popular in UK independent retail
   'tyl',          // NatWest — large existing business base
@@ -2529,7 +2718,7 @@ let userPath = null;  // 'new' or 'switch' — chosen on the intro step
 const PATH_COPY = {
   new: {
     step1Heading: 'Let\'s find you<br><em>the best rate.</em>',
-    step1Body: 'Tell me a bit about the business you\'re about to launch — or the card volumes you\'re expecting. I\'ll rank every UK payment provider so you can start on the cheapest plan for your numbers.',
+    step1Body: 'Tell me a bit about your business — or the card volumes you\'re expecting. I\'ll rank every UK payment provider so you can start on the cheapest plan for your numbers.',
     providerLabel: 'Current payment provider',
     providerHint: 'You haven\'t signed up to anyone yet — no problem. Leave this as "No provider yet" and I\'ll show you the best starting option.',
     savingsLabel: 'YOU SAVE',
@@ -2863,6 +3052,73 @@ function showBetaModal(onComplete) {
   overlay._onComplete = onComplete;
 }
 
+function showSkipToResultsInfoPopup() {
+  var isDemoMode = document.body.classList.contains('demo-mode');
+  var isTestMode = document.body.classList.contains('test-mode');
+  var hasFullAccess = document.body.classList.contains('full-access');
+  if (isDemoMode || isTestMode || hasFullAccess) return;
+
+  var existing = document.getElementById('skip-results-info');
+  if (existing) existing.remove();
+
+  var el = document.createElement('div');
+  el.id = 'skip-results-info';
+  var radius = 18;
+  var circumference = 2 * Math.PI * radius;
+  el.innerHTML = '' +
+    '<button type="button" class="skip-info-close" id="skip-info-close" aria-label="Close message">×</button>' +
+    '<div class="skip-info-timer" aria-hidden="true">' +
+      '<svg viewBox="0 0 44 44">' +
+        '<circle class="skip-info-ring-bg" cx="22" cy="22" r="18"></circle>' +
+        '<circle class="skip-info-ring-progress" id="skip-info-ring" cx="22" cy="22" r="18"></circle>' +
+      '</svg>' +
+      '<div class="skip-info-timer-num" id="skip-info-num">60</div>' +
+    '</div>' +
+    '<div>' +
+    '<div class="skip-info-title">Quick note</div>' +
+    '<div class="skip-info-body">' +
+    'Some result details are blurred. This is <strong>not</strong> a paywall — your comparison is free and impartial. ' +
+    'TillSwift is funded by commission from payment providers. If you can, please click <strong>Unlock full comparison</strong> and share your contact details. ' +
+    'There are no hard sales tactics.' +
+    '</div>' +
+    '</div>';
+  document.body.appendChild(el);
+
+  var ring = document.getElementById('skip-info-ring');
+  var num = document.getElementById('skip-info-num');
+  var closeBtn = document.getElementById('skip-info-close');
+  if (ring) {
+    ring.style.strokeDasharray = String(circumference);
+    ring.style.strokeDashoffset = '0';
+  }
+
+  var totalMs = 60000;
+  var start = performance.now();
+  var rafId = null;
+  var done = false;
+  function removePopup() {
+    if (done) return;
+    done = true;
+    if (rafId) cancelAnimationFrame(rafId);
+    if (el && el.parentNode) el.parentNode.removeChild(el);
+  }
+  if (closeBtn) closeBtn.addEventListener('click', removePopup);
+  function tick(now) {
+    var elapsed = Math.min(now - start, totalMs);
+    var ratio = elapsed / totalMs;
+    var remaining = Math.max(0, Math.ceil((totalMs - elapsed) / 1000));
+    if (num) num.textContent = String(remaining);
+    if (ring) ring.style.strokeDashoffset = String(circumference * ratio);
+    if (elapsed >= totalMs) {
+      removePopup();
+      return;
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+  rafId = requestAnimationFrame(tick);
+
+}
+
 function getBetaSeenKey() {
   return document.body.classList.contains('demo-mode') ? 'beta_seen_demo' : 'beta_seen';
 }
@@ -2882,7 +3138,7 @@ function openNotifyForm() {
   document.getElementById('beta-err').style.display = 'none';
   var btn = document.getElementById('beta-submit');
   btn.disabled = false;
-  btn.textContent = 'Notify me at launch →';
+  btn.textContent = 'Unlock full comparison →';
   document.getElementById('beta-overlay').style.display = 'flex';
 }
 
@@ -2891,6 +3147,7 @@ function dismissBeta(forceClose) {
   if (isDemoMode && !forceClose) return;
   var overlay = document.getElementById('beta-overlay');
   overlay.style.display = 'none';
+  showSkipToResultsInfoPopup();
   sessionStorage.setItem(getBetaSeenKey(), '1');
   if (overlay._onComplete) overlay._onComplete();
 }
@@ -3190,14 +3447,19 @@ function rateSheetFor(p) {
 
 // Business profile presets — channel split + card-type mix percentages
 const DNA_PRESETS = {
-  retail_highstreet:  { f2f: 95, online: 5,  cnp: 0,  dr: 70, cr: 25, pcr: 5  },
-  cafe_restaurant:    { f2f: 92, online: 5,  cnp: 3,  dr: 60, cr: 32, pcr: 8  },
+  retail_highstreet:  { f2f: 95, online: 5,  cnp: 0,  dr: 70, cr: 25, pcr: 5,  txn: 35, val: 28, days: 26 },
+  cafe:               { f2f: 92, online: 5,  cnp: 3,  dr: 60, cr: 32, pcr: 8,  txn: 80, val: 10, days: 26 },
+  restaurant:         { f2f: 90, online: 7,  cnp: 3,  dr: 55, cr: 35, pcr: 10, txn: 40, val: 50, days: 26 },
   medical_london:     { f2f: 40, online: 25, cnp: 35, dr: 60, cr: 20, pcr: 20, txn: 4, val: 350, days: 22 },
-  ecommerce_only:     { f2f: 0,  online: 95, cnp: 5,  dr: 50, cr: 38, pcr: 12 },
-  mixed_omnichannel:  { f2f: 60, online: 30, cnp: 10, dr: 50, cr: 35, pcr: 15 },
-  b2b_invoicing:      { f2f: 5,  online: 35, cnp: 60, dr: 30, cr: 45, pcr: 25 },
-  market_seller:      { f2f: 100, online: 0, cnp: 0,  dr: 75, cr: 25, pcr: 0,  days: 12, txn: 20, val: 20, acceptAmex: false },
+  ecommerce_only:     { f2f: 0,  online: 95, cnp: 5,  dr: 50, cr: 38, pcr: 12, txn: 12, val: 65, days: 30 },
+  mixed_omnichannel:  { f2f: 60, online: 30, cnp: 10, dr: 50, cr: 35, pcr: 15, txn: 30, val: 40, days: 26 },
+  b2b_invoicing:      { f2f: 5,  online: 35, cnp: 60, dr: 30, cr: 45, pcr: 25, txn: 6, val: 800, days: 20 },
+  convenience_store:  { f2f: 98, online: 1, cnp: 1,  dr: 82, cr: 17, pcr: 1,  days: 30, txn: 120, val: 9, acceptAmex: false },
   barber:             { f2f: 100, online: 0, cnp: 0,  dr: 78, cr: 20, pcr: 2,  days: 22, txn: 15, val: 17, acceptAmex: false },
+  salon:              { f2f: 97, online: 2, cnp: 1,  dr: 62, cr: 30, pcr: 8,  days: 22, txn: 12, val: 65, acceptAmex: true },
+  // Backward compatibility for old links
+  cafe_restaurant:    { f2f: 92, online: 5,  cnp: 3,  dr: 60, cr: 32, pcr: 8,  txn: 80, val: 10, days: 26 },
+  market_seller:      { f2f: 98, online: 1, cnp: 1,  dr: 82, cr: 17, pcr: 1,  days: 30, txn: 120, val: 9, acceptAmex: false },
 };
 
 function applyDnaPreset() {
@@ -4104,14 +4366,14 @@ function populateAdmin() {
 // URL parameter reference:
 //   Transaction data:   ?txn=20&val=35&days=26
 //   Journey:            &path=new|switch   &provider=lopay_standard
-//   Business profile:   &preset=retail_highstreet|cafe_restaurant|medical_london|
-//                               ecommerce_only|mixed_omnichannel|b2b_invoicing|market_seller
-//                       (market_seller also pre-sets trading days to 8)
+//   Business profile:   &preset=retail_highstreet|cafe|restaurant|medical_london|
+//                               ecommerce_only|mixed_omnichannel|b2b_invoicing|convenience_store|barber|salon
+//                       (convenience_store pre-sets a high-frequency, low-ticket profile)
 //   Individual sliders: &f2f=60&online=30&cnp=10&dr=50&cr=35&pcr=15  (override preset or stand alone)
 //   Amex toggle:        &amex=false  (or &amex=0 to uncheck)
 //
 // Individual slider params applied after preset, so they take precedence over preset defaults.
-// Example: ?txn=15&val=80&days=20&preset=cafe_restaurant&provider=lopay_standard
+// Example: ?txn=15&val=80&days=20&preset=cafe&provider=lopay_standard
 function loadFromURLParams() {
   const p = new URLSearchParams(window.location.search);
   const knownKeys = ['txn','val','days','path','provider','preset','f2f','online','cnp','dr','cr','pcr','amex'];
