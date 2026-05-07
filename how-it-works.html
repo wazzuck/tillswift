@@ -61,17 +61,20 @@
       font-weight: 700;
     }
     .nav-back {
-      text-decoration: none;
-      border: 1px solid var(--accent);
-      background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+      display: inline-flex;
+      align-items: center;
+      background: #0f172a;
       color: #ffffff;
-      border-radius: 999px;
-      padding: 0.42rem 0.82rem;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      font-size: 0.8rem;
       font-weight: 600;
-      box-shadow: 0 6px 18px rgba(15,118,110,0.24);
+      letter-spacing: 0.04em;
+      padding: 0.4rem 1rem;
+      text-decoration: none;
+    }
+
+    .nav-back:hover {
+      background: #334155;
+      color: #ffffff;
     }
 
     .page {
@@ -173,7 +176,7 @@
 <body>
   <nav>
     <a class="nav-brand" href="index.html">TillSwift</a>
-    <a class="nav-back" href="index.html">Back to tool</a>
+    <a class="nav-back" href="index.html">Back</a>
   </nav>
 
   <main class="page">
@@ -223,6 +226,8 @@
       <h2>What this means for you</h2>
       <p>You get a transparent, numbers-first comparison tailored to your business behaviour — without paying for access.</p>
     </section>
+
+    <p style="margin-top:1.4rem;font-size:0.92rem"><a href="about.html" style="color:var(--accent2);font-weight:600;text-decoration:underline">About the founder</a></p>
   </main>
 </body>
 </html>

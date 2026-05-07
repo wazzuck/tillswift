@@ -127,19 +127,22 @@ nav {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--accent);
-  background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+  border: none;
+  background: #0f172a;
   color: #ffffff;
-  border-radius: 999px;
+  border-radius: 0;
   font-family: var(--font-sans);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
   font-weight: 600;
-  padding: 0.45rem 0.8rem;
+  padding: 0.4rem 1rem;
   cursor: pointer;
   text-decoration: none;
-  box-shadow: 0 6px 18px rgba(15,118,110,0.24);
+  box-shadow: none;
+}
+.nav-how-btn:hover {
+  background: #334155;
 }
 @media (max-width: 600px) {
   .nav-how-btn { right: 1rem; }
@@ -849,6 +852,35 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
 }
 .btn-switch:hover::before { transform: translateX(100%); }
 .btn-switch:active { transform: translateY(0); }
+
+/* Disable shimmer/hover FX while any modal form is open */
+body.modal-open .btn-primary::before,
+body.modal-open .btn-switch::before {
+  display: none !important;
+}
+body.modal-open .btn-primary,
+body.modal-open .btn-switch {
+  transition: none !important;
+}
+body.modal-open .btn-primary:hover,
+body.modal-open .btn-primary:active {
+  transform: none !important;
+  filter: none !important;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.18) inset,
+    0 -1px 0 0 rgba(0,0,0,0.08) inset,
+    var(--glow-accent) !important;
+}
+body.modal-open .btn-switch:hover,
+body.modal-open .btn-switch:active {
+  transform: none !important;
+  filter: none !important;
+  background: #6b8fbf !important;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.18) inset,
+    0 -1px 0 0 rgba(0,0,0,0.08) inset,
+    0 0 32px -10px rgba(107,143,191,0.45) !important;
+}
 
 .confirmation {
   display: none;
@@ -1626,6 +1658,7 @@ footer {
   <div class="footer-note">Payment provider data sourced directly from provider websites. Rates are subject to change — verify before committing. This document is prepared exclusively for use in TillSwift consultations and is not for redistribution.</div>
   
   <div class="footer-links">
+    <a href="about.html">About</a>
     <a href="legal.html">Legal</a>
     <a href="contact.html">Contact Us</a>
   </div>
@@ -1658,7 +1691,18 @@ footer {
       <button onclick="document.getElementById('admin-section').style.display='none'" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:4px 14px;font-family:var(--font-sans);font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Close</button>
     </div>
 
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.4rem">
+      <button class="admin-tab-btn" data-admin-tab-btn="tracking" onclick="setAdminTab('tracking')" style="background:rgba(15,118,110,0.18);border:1px solid rgba(15,118,110,0.45);color:var(--ink);padding:6px 12px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Tracking activity</button>
+      <button class="admin-tab-btn" data-admin-tab-btn="summary" onclick="setAdminTab('summary')" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:6px 12px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Summary</button>
+      <button class="admin-tab-btn" data-admin-tab-btn="links" onclick="setAdminTab('links')" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:6px 12px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">URL parameters</button>
+      <button class="admin-tab-btn" data-admin-tab-btn="transparency" onclick="setAdminTab('transparency')" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:6px 12px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Pricing transparency</button>
+      <button class="admin-tab-btn" data-admin-tab-btn="rates" onclick="setAdminTab('rates')" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:6px 12px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Full rate table</button>
+      <button class="admin-tab-btn" data-admin-tab-btn="visibility" onclick="setAdminTab('visibility')" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:6px 12px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Provider visibility</button>
+      <button class="admin-tab-btn" data-admin-tab-btn="access" onclick="setAdminTab('access')" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:6px 12px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Temp access link</button>
+    </div>
+
     <!-- Stats strip -->
+    <div class="admin-tab-panel" data-admin-tab-panel="summary" style="display:none">
     <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Summary at current volumes</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:3rem">
       <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:var(--gold2);display:block;line-height:1" id="adm-mvol">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Monthly volume</span></div>
@@ -1672,8 +1716,10 @@ footer {
       <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(15,118,110,0.9);display:block;line-height:1" id="adm-fee">£40</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Consult fee</span></div>
       <div style="background:var(--black3);padding:1.25rem 1rem;text-align:center"><span style="font-family:var(--font-serif);font-size:1.5rem;color:rgba(15,118,110,1);display:block;line-height:1" id="adm-aff-total">—</span><span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;display:block">Combined income</span></div>
     </div>
+    </div>
 
     <!-- URL parameters reference -->
+    <div class="admin-tab-panel" data-admin-tab-panel="links" style="display:none">
     <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">URL parameters</div>
     <div style="margin-bottom:3rem">
 
@@ -1798,8 +1844,10 @@ footer {
 
       </div>
     </div>
+    </div>
 
     <!-- Pricing transparency table -->
+    <div class="admin-tab-panel" data-admin-tab-panel="transparency" style="display:none">
     <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Pricing transparency</div>
     <div style="overflow-x:auto;margin-bottom:3rem">
       <table id="transparency-table" style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px">
@@ -1814,8 +1862,10 @@ footer {
         <tbody id="transparency-table-body"></tbody>
       </table>
     </div>
+    </div>
 
     <!-- Full provider table -->
+    <div class="admin-tab-panel" data-admin-tab-panel="rates" style="display:none">
     <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">All providers — full rate table</div>
     <div style="overflow-x:auto">
       <table id="admin-table" style="width:100%;border-collapse:collapse;font-size:12px;min-width:900px">
@@ -1838,7 +1888,9 @@ footer {
         <tbody id="admin-table-body"></tbody>
       </table>
     </div>
+    </div>
 
+    <div class="admin-tab-panel" data-admin-tab-panel="visibility" style="display:none;margin-top:0">
     <div style="margin-top:2rem;border-top:1px solid var(--border);padding-top:1.5rem">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.8rem">
         <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Session provider visibility</div>
@@ -1847,7 +1899,9 @@ footer {
       <div id="admin-provider-visibility" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem"></div>
       <div style="font-size:10px;color:var(--muted);margin-top:.6rem">Hidden providers are excluded from all calculations for this browser session.</div>
     </div>
+    </div>
 
+    <div class="admin-tab-panel" data-admin-tab-panel="access" style="display:none;margin-top:0">
     <div style="margin-top:1.5rem;border-top:1px solid var(--border);padding-top:1.5rem">
       <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem">Temporary access link</div>
       <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-bottom:.6rem">
@@ -1860,11 +1914,13 @@ footer {
       <input id="admin-temp-link" type="text" readonly style="width:100%;box-sizing:border-box;background:var(--black3);border:1px solid var(--border2);color:var(--ink2);padding:.55rem .65rem;font-family:var(--font-mono);font-size:11px">
       <div id="admin-temp-status" style="font-size:10px;color:var(--muted);margin-top:.5rem"></div>
     </div>
+    </div>
 
+    <div class="admin-tab-panel" data-admin-tab-panel="tracking" style="display:block;margin-top:0">
     <div style="margin-top:1.5rem;border-top:1px solid var(--border);padding-top:1.5rem">
       <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem">Tracking activity</div>
       <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-bottom:.7rem">
-        <label for="admin-track-link" style="font-size:11px;color:var(--ink2)">Link ID</label>
+        <label for="admin-track-link" style="font-size:11px;color:var(--ink2)">Customer</label>
         <select id="admin-track-link" onchange="if(this.value) loadTrackingView()" style="min-width:220px;flex:1;background:var(--black3);border:1px solid var(--border2);color:var(--ink);padding:.45rem .55rem;font-family:var(--font-mono);font-size:11px"></select>
         <button onclick="loadTrackingLinkOptions()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:4px 10px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Refresh</button>
         <button onclick="loadTrackingView()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:4px 10px;font-family:var(--font-sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Load</button>
@@ -1885,6 +1941,7 @@ footer {
           <tbody id="admin-track-body"></tbody>
         </table>
       </div>
+    </div>
     </div>
 
   </div>
@@ -2799,7 +2856,7 @@ function updateProgress(n) {
 }
 
 // ── BETA MODAL INTEGRATIONS ──
-var BETA_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-HrdofHvat4XmMwvL0Etx5BNzPnmYeCmxyWVxJjWRbr1m23a8EOQVXfJ2Wb-yD-4/exec';
+var BETA_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIEJ63c3H9ohPdT8bqgwfA8EPeCwmukpS49DAOhC1elTRlDjeO9QBYsvWKJ9tu6xk/exec';
 var BETA_CONTACT_EMAIL = 'hello@tillswift.com';
 var BETA_CONTACT_PHONE = '';
 const SESSION_LINK_ID_KEY = 'tillswift_link_id';
@@ -2857,7 +2914,16 @@ function renderTrackingView(events, sourceLabel) {
   const status = document.getElementById('admin-track-status');
   if (!body || !summary || !status) return;
 
-  const rows = [...events].sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || '')));
+  const toTime = v => {
+    const n = Date.parse(String(v || ''));
+    return Number.isNaN(n) ? 0 : n;
+  };
+  const rows = [...events].sort((a, b) => {
+    const bt = toTime(b.timestamp);
+    const at = toTime(a.timestamp);
+    if (bt !== at) return bt - at;
+    return String(b.timestamp || '').localeCompare(String(a.timestamp || ''));
+  });
   if (!rows.length) {
     body.innerHTML = '<tr><td colspan="5" style="padding:.7rem;color:var(--muted)">No events found for this link ID yet.</td></tr>';
     summary.innerHTML = '';
@@ -2926,35 +2992,136 @@ function setTrackingLinkOptions(linkIds) {
   if (!select) return;
 
   const previous = (select.value || getActiveLinkId() || '').trim();
-  const unique = Array.from(new Set((Array.isArray(linkIds) ? linkIds : [])
-    .map(function(v) { return String(v || '').trim(); })
-    .filter(Boolean)));
+  const raw = Array.isArray(linkIds) ? linkIds : [];
+  const byId = {};
+  raw.forEach(function(item) {
+    var id = '';
+    var name = '';
+    var company = '';
+    var email = '';
+    if (typeof item === 'string' || typeof item === 'number') {
+      id = String(item || '').trim();
+    } else if (item && typeof item === 'object') {
+      id = String(item.link_id || item.linkId || item.id || '').trim();
+      name = String(item.name || item.full_name || item.customer_name || '').trim();
+      company = String(item.company || item.company_name || '').trim();
+      email = String(item.email || '').trim();
+    }
+    if (!id) return;
+
+    var primary = name || company || email || id;
+    var label = primary === id ? id : (primary + ' (' + id + ')');
+
+    if (!byId[id] || byId[id].label === id) {
+      byId[id] = { id: id, label: label };
+    }
+  });
+  const unique = Object.keys(byId);
+
+  function esc(s) {
+    return String(s || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 
   if (!unique.length) {
-    select.innerHTML = '<option value="">No link IDs found</option>';
+    select.innerHTML = '<option value="">No customers found</option>';
     select.value = '';
-    if (status) status.textContent = 'No link IDs available yet. Try Refresh.';
+    if (status) status.textContent = 'No customers available yet. Try Refresh.';
     return;
   }
 
-  select.innerHTML = ['<option value="">Select a link ID</option>']
-    .concat(unique.map(function(id) { return '<option value="' + id + '">' + id + '</option>'; }))
+  select.innerHTML = ['<option value="">Select a customer</option>']
+    .concat(unique.map(function(id) { return '<option value="' + esc(id) + '">' + esc(byId[id].label) + '</option>'; }))
     .join('');
 
   if (previous && unique.indexOf(previous) >= 0) select.value = previous;
   else if (unique.indexOf(getActiveLinkId()) >= 0) select.value = getActiveLinkId();
   else select.value = unique[0];
 
-  if (status) status.textContent = 'Loaded ' + unique.length + ' link IDs.';
+  if (status) status.textContent = 'Loaded ' + unique.length + ' customers.';
+}
+
+const TRACKING_IDENTITY_CACHE = {};
+
+function extractTrackingIdentity(rows) {
+  var list = Array.isArray(rows) ? rows : [];
+  for (var i = 0; i < list.length; i++) {
+    var row = list[i] || {};
+    var name = String(row.name || row.full_name || row.customer_name || '').trim();
+    var company = String(row.company || row.company_name || '').trim();
+    var email = String(row.email || row.to_email || '').trim();
+    if (name || company || email) {
+      return { name: name, company: company, email: email };
+    }
+  }
+  return null;
+}
+
+function hydrateTrackingLinkOptions(items) {
+  var base = Array.isArray(items) ? items : [];
+  var ids = [];
+  base.forEach(function(item) {
+    var id = '';
+    if (typeof item === 'string' || typeof item === 'number') id = String(item || '').trim();
+    else if (item && typeof item === 'object') id = String(item.link_id || item.linkId || item.id || '').trim();
+    if (!id) return;
+    if (!TRACKING_IDENTITY_CACHE[id]) ids.push(id);
+  });
+
+  if (!ids.length) return;
+
+  Promise.all(ids.slice(0, 40).map(function(id) {
+    return fetch(BETA_SCRIPT_URL + '?action=events&link_id=' + encodeURIComponent(id))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var rows = Array.isArray(data) ? data : (Array.isArray(data.events) ? data.events : []);
+        var identity = extractTrackingIdentity(rows);
+        if (identity) TRACKING_IDENTITY_CACHE[id] = identity;
+      })
+      .catch(function() {});
+  })).finally(function() {
+    var enriched = base.map(function(item) {
+      if (typeof item === 'string' || typeof item === 'number') {
+        var id = String(item || '').trim();
+        var hit = TRACKING_IDENTITY_CACHE[id] || {};
+        return { link_id: id, name: hit.name || '', company: hit.company || '', email: hit.email || '' };
+      }
+      var obj = item && typeof item === 'object' ? item : {};
+      var id2 = String(obj.link_id || obj.linkId || obj.id || '').trim();
+      var hit2 = TRACKING_IDENTITY_CACHE[id2] || {};
+      return {
+        link_id: id2,
+        name: String(obj.name || obj.full_name || obj.customer_name || hit2.name || '').trim(),
+        company: String(obj.company || obj.company_name || hit2.company || '').trim(),
+        email: String(obj.email || hit2.email || '').trim()
+      };
+    });
+    setTrackingLinkOptions(enriched);
+  });
 }
 
 function loadTrackingLinkOptions() {
   const status = document.getElementById('admin-track-status');
-  if (status) status.textContent = 'Loading link IDs...';
+  if (status) status.textContent = 'Loading customers...';
 
-  const localIds = readLocalTrackingEvents().map(function(r) { return r && r.link_id; }).filter(Boolean);
+  const localEvents = readLocalTrackingEvents();
+  const localIds = localEvents
+    .map(function(r) {
+      if (!r || !r.link_id) return '';
+      return {
+        link_id: r.link_id,
+        name: r.name || '',
+        company: r.company || '',
+        email: r.email || ''
+      };
+    })
+    .filter(Boolean);
   const activeId = getActiveLinkId();
-  if (activeId) localIds.unshift(activeId);
+  if (activeId) localIds.unshift({ link_id: activeId });
 
   fetch(BETA_SCRIPT_URL + '?action=link_ids')
     .then(function(r) { return r.json(); })
@@ -2963,10 +3130,14 @@ function loadTrackingLinkOptions() {
       if (Array.isArray(data)) remoteIds = data;
       else if (Array.isArray(data.link_ids)) remoteIds = data.link_ids;
       else if (Array.isArray(data.linkIds)) remoteIds = data.linkIds;
-      setTrackingLinkOptions(remoteIds.concat(localIds));
+      else if (Array.isArray(data.links)) remoteIds = data.links;
+      var merged = remoteIds.concat(localIds);
+      setTrackingLinkOptions(merged);
+      hydrateTrackingLinkOptions(merged);
     })
     .catch(function() {
       setTrackingLinkOptions(localIds);
+      hydrateTrackingLinkOptions(localIds);
     });
 }
 
@@ -3045,9 +3216,19 @@ function sendBetaConfirmationEmail(payload) {
   return window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
 }
 
+function syncModalOpenState() {
+  var beta = document.getElementById('beta-overlay');
+  var admin = document.getElementById('admin-overlay');
+  var betaOpen = !!(beta && beta.style.display && beta.style.display !== 'none');
+  var adminOpen = !!(admin && admin.style.display && admin.style.display !== 'none');
+  if (betaOpen || adminOpen) document.body.classList.add('modal-open');
+  else document.body.classList.remove('modal-open');
+}
+
 function showBetaModal(onComplete) {
   var overlay = document.getElementById('beta-overlay');
   overlay.style.display = 'flex';
+  syncModalOpenState();
   setBetaSkipVisibility();
   overlay._onComplete = onComplete;
 }
@@ -3140,6 +3321,7 @@ function openNotifyForm() {
   btn.disabled = false;
   btn.textContent = 'Unlock full comparison →';
   document.getElementById('beta-overlay').style.display = 'flex';
+  syncModalOpenState();
 }
 
 function dismissBeta(forceClose) {
@@ -3147,6 +3329,7 @@ function dismissBeta(forceClose) {
   if (isDemoMode && !forceClose) return;
   var overlay = document.getElementById('beta-overlay');
   overlay.style.display = 'none';
+  syncModalOpenState();
   showSkipToResultsInfoPopup();
   sessionStorage.setItem(getBetaSeenKey(), '1');
   if (overlay._onComplete) overlay._onComplete();
@@ -3192,7 +3375,7 @@ function submitBeta(e) {
 
   Promise.allSettled([saveLeadPromise, confirmationPromise])
     .finally(function() {
-      sendBrowseEvent('notify_submitted', { company: company });
+      sendBrowseEvent('notify_submitted', { name: name, company: company, email: email });
       sessionStorage.setItem(getBetaSeenKey(), '1');
       try {
         var redirectUrl = new URL(redirectLink);
@@ -4151,12 +4334,28 @@ calc();
 function openAdmin() {
   const overlay = document.getElementById('admin-overlay');
   overlay.style.display = 'flex';
+  syncModalOpenState();
   loadTrackingLinkOptions();
   setTimeout(() => document.getElementById('admin-pw').focus(), 50);
 }
 
+function setAdminTab(tabName) {
+  var panels = document.querySelectorAll('[data-admin-tab-panel]');
+  var buttons = document.querySelectorAll('[data-admin-tab-btn]');
+  panels.forEach(function(panel) {
+    panel.style.display = panel.getAttribute('data-admin-tab-panel') === tabName ? 'block' : 'none';
+  });
+  buttons.forEach(function(btn) {
+    var active = btn.getAttribute('data-admin-tab-btn') === tabName;
+    btn.style.background = active ? 'rgba(15,118,110,0.18)' : 'transparent';
+    btn.style.borderColor = active ? 'rgba(15,118,110,0.45)' : 'var(--border2)';
+    btn.style.color = active ? 'var(--ink)' : 'var(--muted)';
+  });
+}
+
 function closeAdmin() {
   document.getElementById('admin-overlay').style.display = 'none';
+  syncModalOpenState();
   document.getElementById('admin-pw').value = '';
   document.getElementById('admin-pw-err').style.display = 'none';
 }
@@ -4166,6 +4365,7 @@ function checkAdmin() {
   if (pw === 'moneyrea') {
     closeAdmin();
     populateAdmin();
+    setAdminTab('tracking');
     const section = document.getElementById('admin-section');
     section.style.display = 'block';
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
