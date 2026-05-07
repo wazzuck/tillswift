@@ -1049,6 +1049,30 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
   }
   /* Hide the tab while the drawer is open so it doesn't overlap */
   body.filters-sheet-open .filter-pullout-tab { opacity: 0; pointer-events: none; }
+
+  /* Collapsed state — only the chevron remains as a small handle */
+  .filter-pullout-tab.collapsed {
+    width: 24px;
+    min-height: 56px;
+    padding: 0.5rem 0;
+    gap: 0;
+    animation: pulloutNudgeSmall 3.4s ease-in-out infinite;
+    box-shadow: 2px 2px 12px -4px rgba(13,118,110,0.45),
+                inset -1px 0 0 rgba(255,255,255,0.18);
+  }
+  .filter-pullout-tab.collapsed .fpt-text,
+  .filter-pullout-tab.collapsed .fpt-count {
+    display: none;
+  }
+  .filter-pullout-tab.collapsed .fpt-chevron {
+    font-size: 18px;
+    transform: translateX(0);
+  }
+  @keyframes pulloutNudgeSmall {
+    0%, 80%, 100% { transform: translateX(0); }
+    88% { transform: translateX(3px); }
+    94% { transform: translateX(0); }
+  }
 }
 
 /* ── ENGAGEMENT SECTION ── */
@@ -3433,6 +3457,24 @@ function toggleFilterSheet(open) {
   sb.classList.toggle('open', !!open);
   bd.classList.toggle('open', !!open);
   document.body.classList.toggle('filters-sheet-open', !!open);
+  // Once the user has engaged with the tab, collapse it to its minimal state.
+  if (open) collapseFilterTab();
+}
+
+// The mobile pull-out tab starts in its full form (text + chevron) for the first
+// few seconds so users notice it; then it collapses to a chevron-only handle.
+let _filterTabCollapseTimer = null;
+let _filterTabAlreadyShown = false;
+function scheduleFilterTabCollapse() {
+  if (_filterTabAlreadyShown) return; // first visit only
+  _filterTabAlreadyShown = true;
+  if (_filterTabCollapseTimer) clearTimeout(_filterTabCollapseTimer);
+  _filterTabCollapseTimer = setTimeout(collapseFilterTab, 5000);
+}
+function collapseFilterTab() {
+  const tab = document.getElementById('filter-pullout-tab');
+  if (tab) tab.classList.add('collapsed');
+  if (_filterTabCollapseTimer) { clearTimeout(_filterTabCollapseTimer); _filterTabCollapseTimer = null; }
 }
 
 function renderFilterSidebar() {
@@ -4200,7 +4242,7 @@ function goToStep(n, skipBetaGate) {
     showBetaModal(function() { goToStep(4, true); });
     return;
   }
-  if (n === 4) { unlocked = true; calc(); }  // unlock and render full grid before showing results
+  if (n === 4) { unlocked = true; calc(); scheduleFilterTabCollapse(); }  // unlock and render full grid before showing results
   if (n === 4) sendBrowseEvent('view_results');
 
   const oldEl = document.getElementById('wiz-' + currentStep);
