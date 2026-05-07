@@ -739,6 +739,318 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
   .provider-grid { grid-template-columns: 1fr; }
 }
 
+/* ── COMPARE LAYOUT (booking.com-style sidebar) ── */
+.compare-layout {
+  display: grid;
+  grid-template-columns: 268px minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+  margin-top: 1.5rem;
+}
+.filter-sidebar {
+  position: sticky; top: 1.5rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-radius: 14px;
+  padding: 1rem 0.85rem 1rem;
+  box-shadow: 0 1px 0 0 rgba(255,255,255,0.6) inset, 0 16px 32px -20px rgba(15,118,110,0.12);
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.filter-sidebar::-webkit-scrollbar { width: 6px; }
+.filter-sidebar::-webkit-scrollbar-thumb { background: rgba(15,118,110,0.18); border-radius: 3px; }
+.filter-sidebar-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 0.4rem 0.65rem;
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: 0.6rem;
+}
+.filter-sidebar-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem; font-style: italic; color: var(--ink);
+}
+.filter-clear-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--accent); font-family: var(--font-sans); font-weight: 600;
+  padding: 4px 6px;
+}
+.filter-clear-btn:disabled { color: var(--dim); cursor: default; }
+.filter-search {
+  width: 100%;
+  padding: .55rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: rgba(255,255,255,0.7);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--ink);
+  margin: 0 0 0.7rem;
+}
+.filter-search:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(13,148,136,0.12); }
+.filter-group {
+  border-top: 1px solid var(--hairline);
+  padding: 0.55rem 0.4rem;
+}
+.filter-group:first-of-type { border-top: none; }
+.filter-group-header {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  user-select: none;
+}
+.filter-group-title {
+  font-family: var(--font-sans);
+  font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink2);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.filter-group-title .fg-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px;
+  background: var(--accent-tint);
+  color: var(--accent);
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+}
+.filter-group-chevron {
+  transition: transform .2s ease;
+  color: var(--muted);
+  font-size: 10px;
+}
+.filter-group.collapsed .filter-group-chevron { transform: rotate(-90deg); }
+.filter-group.collapsed .filter-group-body { display: none; }
+.filter-group-body {
+  margin-top: 0.4rem;
+  display: flex; flex-direction: column; gap: 0;
+}
+.filter-item {
+  display: flex; align-items: center; gap: 0.55rem;
+  padding: 0.42rem 0.4rem;
+  cursor: pointer;
+  font-size: 12.5px;
+  color: var(--ink2);
+  border-radius: 7px;
+  transition: background .15s ease, color .15s ease;
+}
+.filter-item:hover { background: rgba(13,148,136,0.06); color: var(--ink); }
+.filter-item input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  width: 16px; height: 16px;
+  border: 1.5px solid var(--border2);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: border-color .15s ease, background .15s ease;
+}
+.filter-item input[type="checkbox"]:hover { border-color: var(--accent); }
+.filter-item input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.filter-item input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px; top: 1px;
+  width: 4px; height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.filter-item-label { flex: 1; line-height: 1.35; }
+.filter-item-count {
+  font-size: 10.5px;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+.filter-item.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.filter-item.disabled input { cursor: not-allowed; }
+.filter-item.disabled:hover { background: transparent; color: var(--ink2); }
+.filter-item.match-hidden { display: none; }
+
+/* Filter section heading — "Filter results" + experimental tag in chip row */
+.filters-heading {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-display); font-style: italic;
+  font-size: 1.05rem; color: var(--ink);
+  margin: 0 0 0.4rem;
+}
+.filters-heading-pill {
+  display: inline-flex; align-items: center;
+  background: #f59e0b; color: #1a0c00;
+  font-size: 8.5px; font-weight: 700;
+  letter-spacing: 0.13em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+}
+@media (max-width: 900px) {
+  .filters-heading { display: none; }
+}
+
+/* Active filter chips above the grid */
+.active-filter-row {
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+  align-items: center;
+  margin: 0 0 1rem;
+  min-height: 0;
+}
+.active-filter-row:empty { margin: 0; }
+.active-filter-chip {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(13,148,136,0.2);
+  border-radius: 999px;
+  padding: 0.28rem 0.55rem 0.28rem 0.7rem;
+  font-size: 11px; font-weight: 500;
+  cursor: pointer;
+  transition: background .15s ease;
+}
+.active-filter-chip:hover { background: rgba(13,148,136,0.18); }
+.active-filter-chip-x {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: rgba(13,148,136,0.25);
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+.results-count {
+  font-size: 11px; color: var(--muted);
+  font-family: var(--font-mono);
+  margin-right: auto;
+  padding: 0.2rem 0;
+}
+
+/* Empty state when no providers match */
+.no-match-state {
+  border: 1px dashed var(--border2);
+  border-radius: 14px;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: rgba(255,255,255,0.5);
+}
+.no-match-state-title {
+  font-family: var(--font-display); font-style: italic;
+  font-size: 1.4rem; color: var(--ink); margin-bottom: 0.5rem;
+}
+.no-match-state-body { font-size: 13px; color: var(--muted); margin-bottom: 1rem; }
+
+/* Mobile: side-drawer + vertical pull-out tab on the left edge */
+.filter-pullout-tab { display: none; }
+.filter-sheet-backdrop { display: none; }
+
+@media (max-width: 900px) {
+  .compare-layout { grid-template-columns: 1fr; gap: 1rem; }
+  .filter-sidebar {
+    position: fixed; top: 0; bottom: 0; left: 0; right: auto;
+    width: min(86vw, 360px);
+    z-index: 1500;
+    border-radius: 0 18px 18px 0;
+    max-height: 100vh;
+    transform: translateX(-100%);
+    transition: transform .32s cubic-bezier(.2,.8,.2,1);
+    box-shadow: 8px 0 40px -8px rgba(15,23,42,0.25);
+    padding-top: 1.4rem;
+  }
+  .filter-sidebar.open { transform: translateX(0); }
+  .filter-sheet-backdrop {
+    display: block;
+    position: fixed; inset: 0; z-index: 1499;
+    background: rgba(15,23,42,0.45);
+    opacity: 0; pointer-events: none;
+    transition: opacity .25s ease;
+  }
+  .filter-sheet-backdrop.open { opacity: 1; pointer-events: auto; }
+
+  /* Vertical pull-out tab — fixed to the left edge, vertical text, signals "drag me out" */
+  .filter-pullout-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    position: fixed;
+    left: 0;
+    top: 38vh;
+    z-index: 1450;
+    width: 40px;
+    min-height: 220px;
+    padding: 0.9rem 0 1rem;
+    background: linear-gradient(180deg, var(--accent) 0%, var(--accent2) 100%);
+    color: #fff;
+    border: none;
+    border-left: none;
+    border-radius: 0 14px 14px 0;
+    box-shadow: 4px 4px 18px -6px rgba(13,118,110,0.45),
+                inset -1px 0 0 rgba(255,255,255,0.18);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    -webkit-tap-highlight-color: transparent;
+    /* Subtle continuous nudge so it reads as draggable */
+    animation: pulloutNudge 2.6s ease-in-out infinite;
+  }
+  @keyframes pulloutNudge {
+    0%, 70%, 100% { transform: translateX(0); }
+    80% { transform: translateX(4px); box-shadow: 8px 4px 22px -6px rgba(13,118,110,0.55), inset -1px 0 0 rgba(255,255,255,0.18); }
+    90% { transform: translateX(0); }
+  }
+  @media (prefers-reduced-motion: reduce) { .filter-pullout-tab { animation: none; } }
+  .filter-pullout-tab:active {
+    transform: translateX(2px) scale(0.98);
+    box-shadow: 2px 2px 8px -2px rgba(13,118,110,0.5);
+    animation: none;
+  }
+  .filter-pullout-tab .fpt-chevron {
+    font-size: 22px;
+    line-height: 1;
+    font-weight: 600;
+    opacity: 0.92;
+    transform: translateX(1px);
+  }
+  .filter-pullout-tab .fpt-text {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg); /* read bottom-to-top */
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+  .filter-pullout-tab .fpt-exp {
+    font-weight: 500;
+    opacity: 0.75;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: 11px;
+  }
+  .filter-pullout-tab .fpt-count {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 2px 7px;
+    line-height: 1;
+  }
+  /* Hide the tab while the drawer is open so it doesn't overlap */
+  body.filters-sheet-open .filter-pullout-tab { opacity: 0; pointer-events: none; }
+}
+
 /* ── ENGAGEMENT SECTION ── */
 .engagement-box {
   background: var(--black2);
@@ -1601,16 +1913,33 @@ footer {
       </div>
     </div>
 
-    <div class="sort-row" style="margin-top:1.5rem">
-      <span class="sort-label">Sort by</span>
-      <button class="sort-btn active" id="sb-tco-4" onclick="setSortBy('tco')">3yr cost</button>
-      <button class="sort-btn" id="sb-rate-4" onclick="setSortBy('rate')">Tx rate</button>
-      <button class="sort-btn" id="sb-monthly-4" onclick="setSortBy('monthly')">Monthly fees</button>
+    <div class="compare-layout">
+      <div class="filter-sheet-backdrop" id="filter-sheet-backdrop" onclick="toggleFilterSheet(false)"></div>
+      <aside class="filter-sidebar" id="filter-sidebar"></aside>
+
+      <!-- Mobile pull-out tab — fixed to the left edge of the viewport on small screens -->
+      <button class="filter-pullout-tab" id="filter-pullout-tab" onclick="toggleFilterSheet(true)" aria-label="Choose features (experimental)">
+        <span class="fpt-chevron" aria-hidden="true">›</span>
+        <span class="fpt-text">Choose Features <span class="fpt-exp">(Experimental)</span></span>
+        <span class="fpt-count" id="filter-mobile-trigger-count" style="display:none">0</span>
+      </button>
+
+      <div class="results-pane">
+        <div class="active-filter-row" id="active-filter-row"></div>
+
+        <div class="sort-row" style="margin-top:0">
+          <span class="results-count" id="results-count"></span>
+          <span class="sort-label">Sort by</span>
+          <button class="sort-btn active" id="sb-tco-4" onclick="setSortBy('tco')">3yr cost</button>
+          <button class="sort-btn" id="sb-rate-4" onclick="setSortBy('rate')">Tx rate</button>
+          <button class="sort-btn" id="sb-monthly-4" onclick="setSortBy('monthly')">Monthly fees</button>
+        </div>
+
+        <div class="provider-grid" id="provider-grid-4"></div>
+
+        <p style="font-size:10px;color:rgba(15,23,42,0.45);margin-top:1rem;line-height:1.6">All rates sourced directly from provider websites. Rates subject to change — verify before committing.</p>
+      </div>
     </div>
-
-    <div class="provider-grid" id="provider-grid-4"></div>
-
-    <p style="font-size:10px;color:rgba(15,23,42,0.45);margin-top:1rem;line-height:1.6">All rates sourced directly from provider websites. Rates subject to change — verify before committing.</p>
   </div>
 </div>
 
@@ -2657,6 +2986,305 @@ const POP_ORDER = [
   'fluxa',          // unverified / minimal info
 ];
 
+// ── FEATURE TAXONOMY (booking.com-style filter sidebar) ──
+// Groups are AND across, items within a group are OR. Sourced from each
+// provider's official site — see WebFetch transcripts in commit notes.
+const FEATURE_GROUPS = [
+  { id:'rewards', label:'Cardholder rewards', icon:'★', items:[
+    { id:'partner_offers',     label:'Retailer partner offers' },
+    { id:'fee_offset_rewards', label:'Spend-to-offset transaction fees' },
+    { id:'card_cashback',      label:'Cashback on card spend' },
+  ]},
+  { id:'funding', label:'Funding & capital', icon:'£', items:[
+    { id:'capital',            label:'Cash advance / business loan' },
+    { id:'revenue_financing',  label:'Revenue-based (no fixed monthly)' },
+  ]},
+  { id:'banking', label:'Banking & cards', icon:'⌬', items:[
+    { id:'business_account',   label:'Built-in business account' },
+    { id:'debit_card',         label:'Free debit Mastercard' },
+    { id:'virtual_cards',      label:'Virtual cards' },
+    { id:'multi_currency_account', label:'Multi-currency account' },
+    { id:'expense_management', label:'Expense management' },
+  ]},
+  { id:'settlement', label:'Settlement & payouts', icon:'⚡', items:[
+    { id:'instant_payout',     label:'Instant payout (24/7)' },
+    { id:'same_day_payout',    label:'Same-day settlement' },
+    { id:'next_day_payout',    label:'Next-day settlement' },
+    { id:'weekend_payout',     label:'Weekend payouts' },
+    { id:'custom_schedule',    label:'Custom payout schedule' },
+  ]},
+  { id:'hardware', label:'Hardware', icon:'▢', items:[
+    { id:'free_reader',        label:'Free / under-£30 reader' },
+    { id:'tap_to_phone',       label:'Tap to Pay on phone' },
+    { id:'portable_terminal',  label:'Portable terminal (SIM/Wi-Fi)' },
+    { id:'countertop_terminal',label:'Countertop terminal' },
+    { id:'printer_built_in',   label:'Built-in receipt printer' },
+    { id:'self_checkout',      label:'Self-checkout / kiosk' },
+    { id:'lifetime_warranty',  label:'Free reader replacement' },
+  ]},
+  { id:'pos', label:'POS & software', icon:'◫', items:[
+    { id:'inventory',          label:'Inventory management' },
+    { id:'crm',                label:'Customer database / CRM' },
+    { id:'loyalty',            label:'Loyalty programme' },
+    { id:'gift_cards',         label:'Gift cards' },
+    { id:'online_store',       label:'Online store builder' },
+    { id:'invoicing',          label:'Invoicing' },
+    { id:'appointments',       label:'Bookings / appointments' },
+    { id:'restaurant',         label:'Restaurant features (tables, KDS)' },
+    { id:'market_trader',      label:'Market trader / mobile-first' },
+    { id:'multi_location',     label:'Multi-location' },
+  ]},
+  { id:'payments', label:'Payments accepted', icon:'⊞', items:[
+    { id:'amex',               label:'American Express' },
+    { id:'apple_google_pay',   label:'Apple Pay & Google Pay' },
+    { id:'klarna',             label:'Klarna / BNPL' },
+    { id:'paypal',             label:'PayPal' },
+    { id:'open_banking',       label:'Open Banking / Pay by Bank' },
+    { id:'qr_payments',        label:'QR code payments' },
+    { id:'alipay_wechat',      label:'Alipay / WeChat Pay' },
+  ]},
+  { id:'online', label:'Online & ecommerce', icon:'⌖', items:[
+    { id:'payment_links',      label:'Payment links' },
+    { id:'hosted_checkout',    label:'Hosted checkout' },
+    { id:'subscriptions',      label:'Recurring / subscriptions' },
+    { id:'api',                label:'Developer API / SDK' },
+    { id:'plugins',            label:'Shopify / Woo / Magento plugins' },
+    { id:'virtual_terminal',   label:'Virtual terminal' },
+    { id:'marketplace',        label:'Marketplace / split payments' },
+  ]},
+  { id:'integrations', label:'Accounting integrations', icon:'⇆', items:[
+    { id:'xero',               label:'Xero' },
+    { id:'quickbooks',         label:'QuickBooks' },
+    { id:'sage',               label:'Sage' },
+  ]},
+  { id:'support', label:'Support', icon:'☎', items:[
+    { id:'support_24_7',       label:'24/7 support' },
+    { id:'uk_support',         label:'UK-based support' },
+    { id:'account_manager',    label:'Dedicated account manager' },
+  ]},
+  { id:'risk', label:'Risk & compliance', icon:'◈', items:[
+    { id:'fraud_tools',        label:'Built-in fraud tools' },
+    { id:'chargeback_protection', label:'Chargeback protection' },
+    { id:'high_risk',          label:'High-risk merchants accepted' },
+    { id:'dcc',                label:'Dynamic Currency Conversion' },
+    { id:'multi_currency_processing', label:'Multi-currency processing' },
+    { id:'fca_regulated',      label:'FCA regulated' },
+  ]},
+  { id:'contract', label:'Contract & flexibility', icon:'✓', items:[
+    { id:'no_contract',        label:'No contract / cancel anytime' },
+    { id:'no_monthly_min',     label:'No monthly minimum' },
+  ]},
+];
+
+// Per-provider feature tag-set, keyed by provider-group key (sumup, square, …)
+// All plans within a group inherit the same tag-set. Source: provider sites (May 2026 fetch).
+const PROVIDER_FEATURES = {
+  sumup: ['capital','business_account','debit_card','virtual_cards','expense_management',
+          'next_day_payout','weekend_payout',
+          'free_reader','tap_to_phone','portable_terminal','countertop_terminal','printer_built_in',
+          'inventory','crm','loyalty','gift_cards','online_store','invoicing','appointments','market_trader',
+          'amex','apple_google_pay','qr_payments',
+          'payment_links','hosted_checkout',
+          'no_contract','no_monthly_min','uk_support'],
+  teya: ['capital','business_account','debit_card','expense_management',
+         'instant_payout','next_day_payout','weekend_payout','custom_schedule',
+         'portable_terminal','tap_to_phone','lifetime_warranty',
+         'crm','multi_location','restaurant',
+         'amex','apple_google_pay',
+         'payment_links','plugins','virtual_terminal','hosted_checkout',
+         'xero','quickbooks','sage',
+         'uk_support','no_contract',
+         'card_cashback','fca_regulated'],
+  revolut: ['multi_currency_account','business_account','virtual_cards','expense_management',
+            'instant_payout',
+            'tap_to_phone','free_reader',
+            'apple_google_pay','open_banking',
+            'payment_links','hosted_checkout','subscriptions','api','plugins','virtual_terminal',
+            'xero','quickbooks',
+            'multi_currency_processing','fca_regulated'],
+  stripe: ['capital','business_account','virtual_cards','multi_currency_account','expense_management',
+           'instant_payout','same_day_payout','next_day_payout','weekend_payout',
+           'portable_terminal','countertop_terminal','tap_to_phone',
+           'invoicing',
+           'amex','apple_google_pay','klarna','paypal','open_banking','qr_payments','alipay_wechat',
+           'payment_links','hosted_checkout','subscriptions','api','plugins','marketplace',
+           'xero','quickbooks',
+           'support_24_7','fraud_tools','multi_currency_processing',
+           'no_contract','no_monthly_min'],
+  square: ['capital','debit_card','instant_payout','next_day_payout','weekend_payout',
+           'free_reader','tap_to_phone','portable_terminal','countertop_terminal','printer_built_in',
+           'inventory','crm','loyalty','gift_cards','online_store','invoicing','appointments','multi_location','restaurant',
+           'amex','apple_google_pay','klarna','paypal','qr_payments',
+           'payment_links','subscriptions','api','plugins','virtual_terminal',
+           'xero','quickbooks',
+           'no_contract','no_monthly_min','uk_support'],
+  zettle_by_paypal: ['capital','debit_card',
+            'next_day_payout',
+            'free_reader','tap_to_phone','portable_terminal',
+            'inventory','crm','gift_cards','invoicing',
+            'amex','apple_google_pay','paypal','klarna',
+            'payment_links',
+            'xero','quickbooks',
+            'uk_support','no_contract','no_monthly_min'],
+  mypos: ['capital','revenue_financing','business_account','debit_card','multi_currency_account',
+          'instant_payout',
+          'free_reader','tap_to_phone','portable_terminal','countertop_terminal','printer_built_in',
+          'inventory','gift_cards','invoicing',
+          'amex','apple_google_pay','qr_payments',
+          'payment_links','hosted_checkout','subscriptions','api','plugins','virtual_terminal',
+          'support_24_7','uk_support',
+          'no_contract','no_monthly_min','multi_currency_processing'],
+  tyl_by_natwest: ['next_day_payout',
+        'portable_terminal','tap_to_phone','countertop_terminal',
+        'amex','apple_google_pay',
+        'payment_links','plugins','subscriptions','virtual_terminal','hosted_checkout',
+        'uk_support','fca_regulated'],
+  shopify_pos: ['capital','next_day_payout','weekend_payout',
+                'free_reader','tap_to_phone','portable_terminal','countertop_terminal',
+                'inventory','crm','loyalty','gift_cards','online_store','invoicing','appointments','multi_location','restaurant',
+                'amex','apple_google_pay','klarna','paypal',
+                'payment_links','subscriptions','api','plugins',
+                'xero','quickbooks',
+                'support_24_7','no_contract'],
+  lightspeed: ['capital','next_day_payout',
+               'portable_terminal','tap_to_phone','countertop_terminal',
+               'inventory','crm','loyalty','gift_cards','online_store','multi_location','appointments','restaurant',
+               'amex','apple_google_pay','klarna',
+               'api','plugins',
+               'xero','quickbooks','sage',
+               'support_24_7','uk_support','account_manager'],
+  dojo: ['capital','same_day_payout',
+         'portable_terminal','tap_to_phone','countertop_terminal',
+         'crm','restaurant','appointments','multi_location',
+         'amex','apple_google_pay',
+         'payment_links','virtual_terminal',
+         'xero','quickbooks',
+         'support_24_7','uk_support','account_manager','fraud_tools','fca_regulated'],
+  worldpay: ['capital','next_day_payout',
+             'portable_terminal','tap_to_phone','countertop_terminal',
+             'inventory','loyalty','gift_cards','restaurant','multi_location',
+             'amex','apple_google_pay',
+             'payment_links','hosted_checkout','plugins','virtual_terminal','subscriptions','api',
+             'support_24_7','uk_support','account_manager','fraud_tools','multi_currency_processing','fca_regulated'],
+  barclaycard: ['capital','next_day_payout',
+                'portable_terminal','tap_to_phone','countertop_terminal',
+                'amex','apple_google_pay',
+                'payment_links','hosted_checkout','subscriptions','plugins','virtual_terminal',
+                'support_24_7','uk_support','fraud_tools','fca_regulated'],
+  clover_fiserv: ['capital','instant_payout','next_day_payout',
+                  'portable_terminal','countertop_terminal','tap_to_phone','printer_built_in',
+                  'inventory','crm','loyalty','gift_cards','online_store','invoicing','appointments','restaurant','multi_location',
+                  'amex','apple_google_pay',
+                  'payment_links','plugins','api',
+                  'xero','quickbooks',
+                  'uk_support','no_contract'],
+  elavon_opayo: ['capital','next_day_payout',
+                  'portable_terminal','tap_to_phone','countertop_terminal','printer_built_in',
+                  'inventory','restaurant',
+                  'amex','apple_google_pay',
+                  'payment_links','hosted_checkout','subscriptions','plugins','virtual_terminal','api',
+                  'support_24_7','uk_support','fraud_tools','chargeback_protection','multi_currency_processing','fca_regulated'],
+  lopay: ['debit_card','virtual_cards',
+          'instant_payout','next_day_payout','weekend_payout','custom_schedule',
+          'free_reader','tap_to_phone','portable_terminal','printer_built_in',
+          'inventory','crm','market_trader','multi_location',
+          'amex','apple_google_pay','qr_payments',
+          'payment_links','subscriptions','invoicing',
+          'uk_support','no_contract','no_monthly_min',
+          'card_cashback','partner_offers','fee_offset_rewards','fca_regulated'],
+  tide: ['business_account','debit_card','virtual_cards','expense_management',
+         'next_day_payout',
+         'portable_terminal','tap_to_phone','countertop_terminal',
+         'invoicing','multi_location',
+         'amex','apple_google_pay','qr_payments',
+         'payment_links','virtual_terminal',
+         'xero','quickbooks',
+         'no_contract','no_monthly_min','uk_support','fca_regulated'],
+  takepayments: ['capital','next_day_payout',
+                 'portable_terminal','tap_to_phone','countertop_terminal',
+                 'restaurant','inventory',
+                 'amex','apple_google_pay',
+                 'payment_links','hosted_checkout','virtual_terminal','plugins',
+                 'support_24_7','uk_support','fca_regulated'],
+  zeller: [],
+  fluxa: ['api','hosted_checkout','plugins','subscriptions',
+          'apple_google_pay',
+          'xero',
+          'no_contract','no_monthly_min','fca_regulated'],
+  adyen: ['capital','virtual_cards','multi_currency_account',
+          'next_day_payout',
+          'portable_terminal','tap_to_phone','countertop_terminal','self_checkout',
+          'amex','apple_google_pay','klarna','paypal','open_banking','qr_payments','alipay_wechat',
+          'payment_links','hosted_checkout','subscriptions','api','plugins','marketplace',
+          'support_24_7','account_manager','fraud_tools','multi_currency_processing','fca_regulated'],
+  airwallex: ['multi_currency_account','business_account','virtual_cards','expense_management',
+              'tap_to_phone','invoicing','subscriptions',
+              'amex','apple_google_pay','klarna','paypal','open_banking','alipay_wechat',
+              'payment_links','hosted_checkout','api','plugins','marketplace',
+              'xero','quickbooks','sage',
+              'multi_currency_processing','no_contract','no_monthly_min','fca_regulated'],
+  trust_payments: ['portable_terminal','tap_to_phone','countertop_terminal',
+                  'amex','apple_google_pay','klarna','paypal','open_banking',
+                  'payment_links','hosted_checkout','subscriptions','api','plugins','virtual_terminal',
+                  'account_manager','fraud_tools','high_risk','multi_currency_processing','dcc','fca_regulated'],
+  global_payments: ['capital','next_day_payout',
+                   'portable_terminal','tap_to_phone','countertop_terminal',
+                   'inventory','loyalty','gift_cards','restaurant','multi_location',
+                   'amex','apple_google_pay',
+                   'payment_links','hosted_checkout','plugins','virtual_terminal','api',
+                   'support_24_7','uk_support','account_manager','fraud_tools','multi_currency_processing','fca_regulated'],
+  cashflows: ['capital','instant_payout','next_day_payout',
+              'portable_terminal','countertop_terminal','tap_to_phone',
+              'amex','apple_google_pay',
+              'payment_links','hosted_checkout','subscriptions','virtual_terminal','api','plugins',
+              'multi_currency_processing','uk_support','fca_regulated'],
+  mollie: ['capital','custom_schedule',
+           'amex','apple_google_pay','klarna','paypal','open_banking',
+           'payment_links','hosted_checkout','subscriptions','api','plugins','invoicing',
+           'multi_currency_processing','no_contract','no_monthly_min'],
+  worldline: ['portable_terminal','tap_to_phone','countertop_terminal','self_checkout','printer_built_in',
+              'amex','apple_google_pay','open_banking',
+              'hosted_checkout','api','plugins','marketplace',
+              'multi_currency_processing','dcc','fca_regulated'],
+  aib_merchant_services: ['portable_terminal','tap_to_phone','countertop_terminal',
+                          'inventory','loyalty','gift_cards','online_store','multi_location',
+                          'amex','apple_google_pay','klarna','paypal','open_banking',
+                          'payment_links','hosted_checkout','subscriptions','api','plugins',
+                          'xero','quickbooks',
+                          'support_24_7','uk_support','account_manager',
+                          'multi_currency_processing','dcc','fca_regulated'],
+  checkout_com: ['virtual_cards','multi_currency_account',
+                'tap_to_phone',
+                'amex','apple_google_pay','klarna','paypal','open_banking','alipay_wechat',
+                'payment_links','hosted_checkout','subscriptions','api','plugins','marketplace',
+                'support_24_7','account_manager','fraud_tools','chargeback_protection','multi_currency_processing','fca_regulated'],
+  dna_payments: ['capital',
+                 'portable_terminal','tap_to_phone','countertop_terminal','self_checkout',
+                 'inventory','loyalty','multi_location',
+                 'amex','apple_google_pay','klarna','paypal','alipay_wechat',
+                 'payment_links','hosted_checkout','subscriptions','api','plugins','virtual_terminal',
+                 'uk_support','account_manager','fraud_tools','chargeback_protection','dcc','fca_regulated'],
+  handepay: ['portable_terminal','countertop_terminal','tap_to_phone',
+             'amex','apple_google_pay',
+             'payment_links','hosted_checkout','virtual_terminal','plugins',
+             'uk_support','fca_regulated'],
+  paymentsense: ['portable_terminal','tap_to_phone','countertop_terminal',
+                'amex','apple_google_pay',
+                'payment_links','hosted_checkout','virtual_terminal','plugins','api',
+                'support_24_7','uk_support','multi_location','fca_regulated'],
+  paymentsave: ['portable_terminal','tap_to_phone','countertop_terminal',
+                'amex','apple_google_pay',
+                'payment_links','virtual_terminal',
+                'uk_support','fca_regulated'],
+};
+
+// Active feature filter — multi-select; AND across groups, OR within a group.
+let activeFeatureFilters = new Set();
+
+function providerFeaturesFor(p) {
+  return PROVIDER_FEATURES[providerGroupKey(p)] || [];
+}
+
 let sortBy = 'tco';
 const HIDDEN_PROVIDERS_SESSION_KEY = 'hidden_provider_groups';
 const DEFAULT_HIDDEN_PROVIDER_GROUPS = ['revolut', 'worldpay', 'handepay', 'mypos'];
@@ -2703,6 +3331,181 @@ function showAllProvidersForSession() {
   setHiddenProviderGroups(new Set());
   calc();
   populateAdmin();
+}
+
+// ── FILTER SIDEBAR (booking.com-style) ──
+// Within a group: provider needs ANY selected item (OR).
+// Across groups: provider needs to satisfy EVERY group with selections (AND).
+function buildSelectionByGroup() {
+  const map = {};
+  FEATURE_GROUPS.forEach(g => {
+    const sel = g.items.filter(it => activeFeatureFilters.has(it.id)).map(it => it.id);
+    if (sel.length) map[g.id] = sel;
+  });
+  return map;
+}
+
+function providerMatchesFilters(p, selByGroup) {
+  const features = providerFeaturesFor(p);
+  for (const groupId in selByGroup) {
+    const wanted = selByGroup[groupId];
+    const ok = wanted.some(f => features.includes(f));
+    if (!ok) return false;
+  }
+  return true;
+}
+
+function applyFeatureFilter(rows) {
+  const sel = buildSelectionByGroup();
+  if (!Object.keys(sel).length) return rows;
+  return rows.filter(r => providerMatchesFilters(r, sel));
+}
+
+function countProvidersWithFeature(featureId, providers) {
+  // Count of providers that would match if `featureId` were added to current filters.
+  // If the feature's group already has selections, we replace with single-selection
+  // for counting purposes — gives the user a sense of "if I check this, X show up".
+  const groupOf = FEATURE_GROUPS.find(g => g.items.some(it => it.id === featureId));
+  if (!groupOf) return 0;
+  const sel = buildSelectionByGroup();
+  // If this feature isn't yet selected, simulate adding it.
+  const simSel = { ...sel };
+  if (activeFeatureFilters.has(featureId)) {
+    // Simulate removing it (count if you uncheck): drop it from the group set.
+    const remaining = (simSel[groupOf.id] || []).filter(f => f !== featureId);
+    if (remaining.length) simSel[groupOf.id] = remaining;
+    else delete simSel[groupOf.id];
+  } else {
+    simSel[groupOf.id] = [...(simSel[groupOf.id] || []), featureId];
+  }
+  return providers.filter(p => providerMatchesFilters(p, simSel)).length;
+}
+
+function toggleFeatureFilter(featureId) {
+  if (activeFeatureFilters.has(featureId)) activeFeatureFilters.delete(featureId);
+  else activeFeatureFilters.add(featureId);
+  calc();
+  renderFilterSidebar();
+}
+
+function clearAllFilters() {
+  activeFeatureFilters.clear();
+  calc();
+  renderFilterSidebar();
+}
+
+function getCollapsedGroups() {
+  try {
+    const raw = sessionStorage.getItem('filter_collapsed_groups');
+    return new Set(raw ? JSON.parse(raw) : []);
+  } catch (_) { return new Set(); }
+}
+function setCollapsedGroups(s) {
+  try { sessionStorage.setItem('filter_collapsed_groups', JSON.stringify([...s])); } catch (_) {}
+}
+function toggleFilterGroup(groupId) {
+  const c = getCollapsedGroups();
+  if (c.has(groupId)) c.delete(groupId); else c.add(groupId);
+  setCollapsedGroups(c);
+  const el = document.querySelector('[data-filter-group="' + groupId + '"]');
+  if (el) el.classList.toggle('collapsed');
+}
+
+function searchFilters() {
+  const q = (document.getElementById('filter-search')?.value || '').trim().toLowerCase();
+  document.querySelectorAll('.filter-item').forEach(el => {
+    const label = (el.dataset.label || '').toLowerCase();
+    el.classList.toggle('match-hidden', q.length > 0 && !label.includes(q));
+  });
+  // Auto-expand groups with matches when searching
+  if (q.length > 0) {
+    document.querySelectorAll('.filter-group').forEach(g => {
+      const visible = g.querySelectorAll('.filter-item:not(.match-hidden)').length;
+      if (visible > 0) g.classList.remove('collapsed');
+    });
+  }
+}
+
+function toggleFilterSheet(open) {
+  const sb = document.getElementById('filter-sidebar');
+  const bd = document.getElementById('filter-sheet-backdrop');
+  if (!sb || !bd) return;
+  sb.classList.toggle('open', !!open);
+  bd.classList.toggle('open', !!open);
+  document.body.classList.toggle('filters-sheet-open', !!open);
+}
+
+function renderFilterSidebar() {
+  const wrap = document.getElementById('filter-sidebar');
+  if (!wrap) return;
+  const visibleProviders = getVisibleProviders();
+  const collapsed = getCollapsedGroups();
+  const total = visibleProviders.length;
+  const filteredCount = applyFeatureFilter(visibleProviders).length;
+
+  const groupsHtml = FEATURE_GROUPS.map(g => {
+    const items = g.items.map(it => {
+      const count = countProvidersWithFeature(it.id, visibleProviders);
+      const checked = activeFeatureFilters.has(it.id);
+      const disabled = !checked && count === 0;
+      return `<label class="filter-item${disabled ? ' disabled' : ''}" data-label="${it.label.replace(/"/g,'&quot;')}">
+        <input type="checkbox" ${checked ? 'checked' : ''} ${disabled ? 'disabled' : ''}
+               onchange="toggleFeatureFilter('${it.id}')">
+        <span class="filter-item-label">${it.label}</span>
+        <span class="filter-item-count">${count}</span>
+      </label>`;
+    }).join('');
+    const isCollapsed = collapsed.has(g.id);
+    const selectedInGroup = g.items.filter(i => activeFeatureFilters.has(i.id)).length;
+    const titleSuffix = selectedInGroup ? ` <span style="color:var(--accent);font-weight:700">·${selectedInGroup}</span>` : '';
+    return `<div class="filter-group${isCollapsed ? ' collapsed' : ''}" data-filter-group="${g.id}">
+      <div class="filter-group-header" onclick="toggleFilterGroup('${g.id}')">
+        <span class="filter-group-title"><span class="fg-icon">${g.icon}</span>${g.label}${titleSuffix}</span>
+        <span class="filter-group-chevron">▾</span>
+      </div>
+      <div class="filter-group-body">${items}</div>
+    </div>`;
+  }).join('');
+
+  const anyActive = activeFeatureFilters.size > 0;
+  wrap.innerHTML = `
+    <div class="filter-sidebar-header">
+      <span class="filter-sidebar-title">Filter results <span class="filters-heading-pill" style="margin-left:0.4rem;vertical-align:middle">EXPERIMENTAL</span></span>
+      <button class="filter-clear-btn" ${anyActive ? '' : 'disabled'} onclick="clearAllFilters()">Clear all</button>
+    </div>
+    <input type="text" class="filter-search" id="filter-search" placeholder="Search filters…" oninput="searchFilters()">
+    ${groupsHtml}
+    <div style="padding:0.6rem 0.4rem 0.2rem;font-size:11px;color:var(--muted);border-top:1px solid var(--hairline);margin-top:0.4rem">
+      Showing <strong style="color:var(--ink)">${filteredCount}</strong> of ${total} providers
+    </div>
+  `;
+
+  // Active filter chip row + mobile trigger count
+  const chipRow = document.getElementById('active-filter-row');
+  if (chipRow) {
+    const chips = [];
+    FEATURE_GROUPS.forEach(g => {
+      g.items.forEach(it => {
+        if (activeFeatureFilters.has(it.id)) {
+          chips.push(`<span class="active-filter-chip" onclick="toggleFeatureFilter('${it.id}')" title="Remove">
+            ${it.label}<span class="active-filter-chip-x">×</span>
+          </span>`);
+        }
+      });
+    });
+    chipRow.innerHTML = chips.length
+      ? chips.join('') + `<button class="filter-clear-btn" onclick="clearAllFilters()" style="margin-left:0.3rem">Clear all</button>`
+      : '';
+  }
+  const trigCount = document.getElementById('filter-mobile-trigger-count');
+  if (trigCount) {
+    if (activeFeatureFilters.size > 0) {
+      trigCount.style.display = 'inline-flex';
+      trigCount.textContent = activeFeatureFilters.size;
+    } else {
+      trigCount.style.display = 'none';
+    }
+  }
 }
 
 function renderAdminProviderVisibilityControls() {
@@ -3857,12 +4660,17 @@ function calc() {
     return { ...p, rate: effRate, flat: effFlat, fees, subs, tco, mFee };
   });
 
+  // Apply feature filter (booking.com-style sidebar). Filter affects the displayed grid
+  // and the "Recommended" badge, but the dropdown / current-provider selector still
+  // uses the full visible set (a user shouldn't lose their existing selection).
+  const filteredAllRows = applyFeatureFilter(allRows);
+
   // Always sort by TCO first to get stable ranking & recommendation
-  const byTco = [...allRows].sort((a, b) => a.tco - b.tco);
+  const byTco = [...filteredAllRows].sort((a, b) => a.tco - b.tco);
   const recommended = byTco[0];
 
   // Sort rows per user's selected sort key
-  const rows = [...allRows];
+  const rows = [...filteredAllRows];
   if (sortBy === 'tco')          rows.sort((a, b) => a.tco  - b.tco);
   else if (sortBy === 'rate')    rows.sort((a, b) => a.rate - b.rate);
   else                           rows.sort((a, b) => a.mFee - b.mFee);
@@ -3871,14 +4679,15 @@ function calc() {
   const displayRank = {};
   rows.forEach((r, i) => { displayRank[r.id] = i + 1; });
 
-  let maxTco = Math.max(...rows.map(r => r.tco));
+  let maxTco = rows.length ? Math.max(...rows.map(r => r.tco)) : 0;
 
-  // Populate provider dropdown (first run only), sorted by popularity
+  // Populate provider dropdown — uses full visible set, NOT the filtered set, so
+  // a user's existing provider selection survives toggling feature filters.
   const previousSel = sel.value;
   while (sel.options.length > 3) sel.remove(3);
   const popBase = id => { const i = id.indexOf('_'); return i >= 0 ? id.slice(0, i) : id; };
   const popRank = id => { const r = POP_ORDER.indexOf(popBase(id)); return r >= 0 ? r : POP_ORDER.length; };
-  const dropRows = [...rows].sort((a, b) => {
+  const dropRows = [...allRows].sort((a, b) => {
     const diff = popRank(a.id) - popRank(b.id);
     return diff !== 0 ? diff : a.tco - b.tco; // within same provider, cheapest plan first
   });
@@ -3942,7 +4751,7 @@ function calc() {
 
   // ── Savings hook — Step 4 (fully unlocked) ──
   const hookEl4 = document.getElementById('savings-hook-4');
-  if (currentForHook) {
+  if (currentForHook && recommended) {
     hookEl4.style.display = '';
     const saving3y = currentForHook.tco - recommended.tco;
     const savingMo = saving3y / 3;
@@ -3993,6 +4802,16 @@ function calc() {
       return { num: fmt(r.tco - currentRow.tco), label: 'Costs more', color: 'rgba(220,100,80,0.8)' };
     }
 
+    if (!rows.length) {
+      document.getElementById(containerId).innerHTML = `
+        <div class="no-match-state" style="grid-column:1/-1">
+          <div class="no-match-state-title">No providers match every filter.</div>
+          <div class="no-match-state-body">Try removing a filter or two — the more you select, the narrower the field.</div>
+          <button class="btn-primary" style="display:inline-block;width:auto;margin-top:0" onclick="clearAllFilters()">Clear all filters</button>
+        </div>`;
+      return;
+    }
+
     document.getElementById(containerId).innerHTML = rows.map(r => {
       if (r.isCustom) {
         const feesPct = Math.round(r.fees / maxTco * 100);
@@ -4019,7 +4838,7 @@ function calc() {
 
       const feesPct = Math.round(r.fees  / maxTco * 100);
       const subPct  = Math.round(r.subs  / maxTco * 100);
-      const isRecommended = r.id === recommended.id;
+      const isRecommended = recommended && r.id === recommended.id;
       const isCurrent = effectiveCurrent && r.id === effectiveCurrent;
       const cardClass = isRecommended ? ' winner' : (isCurrent ? ' card-current' : '');
       const mf = mainFigure(r, isCurrent);
@@ -4061,6 +4880,14 @@ function calc() {
   if (unlocked) {
     renderGrid('provider-grid-4');
     requestAnimationFrame(() => applyCardReveal('provider-grid-4'));
+    renderFilterSidebar();
+    const rcEl = document.getElementById('results-count');
+    if (rcEl) {
+      const total = allRows.length;
+      rcEl.textContent = rows.filter(r => !r.isCustom).length === total
+        ? `${total} providers`
+        : `${rows.filter(r => !r.isCustom).length} of ${total} providers`;
+    }
   }
 
   // Stash the latest computation so the lead export can pick it up.
