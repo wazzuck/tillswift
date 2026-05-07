@@ -3483,20 +3483,56 @@ function toggleFilterSheet(open) {
   if (open) collapseFilterTab();
 }
 
-// The mobile pull-out tab starts in its full form (text + chevron) for the first
-// few seconds so users notice it; then it collapses to a chevron-only handle.
+// The mobile pull-out tab starts in its full form (text + chevron) for up to
+// 10 seconds so users notice it; then it collapses to a chevron-only handle.
+// It also collapses early if the user begins to scroll DOWN — but only on
+// genuine user input (wheel / touchmove), not on the programmatic scroll-to-top
+// that happens during step navigation. A startup grace period also covers any
+// stray events fired during the step-4 transition.
 let _filterTabCollapseTimer = null;
 let _filterTabAlreadyShown = false;
+let _filterTabReady = false;          // true once the startup grace has elapsed
+let _filterTabTouchStartY = null;
+let _filterTabOnWheel = null;
+let _filterTabOnTouchStart = null;
+let _filterTabOnTouchMove = null;
+
 function scheduleFilterTabCollapse() {
   if (_filterTabAlreadyShown) return; // first visit only
   _filterTabAlreadyShown = true;
   if (_filterTabCollapseTimer) clearTimeout(_filterTabCollapseTimer);
-  _filterTabCollapseTimer = setTimeout(collapseFilterTab, 5000);
+  _filterTabCollapseTimer = setTimeout(collapseFilterTab, 10000);
+
+  // Wait out the step-transition + scrollTo(0,0) before arming the listeners.
+  setTimeout(() => {
+    _filterTabReady = true;
+    _filterTabOnWheel = (e) => {
+      if (!_filterTabReady) return;
+      if (e.deltaY > 6) collapseFilterTab();
+    };
+    _filterTabOnTouchStart = (e) => {
+      if (e.touches && e.touches.length) _filterTabTouchStartY = e.touches[0].clientY;
+    };
+    _filterTabOnTouchMove = (e) => {
+      if (!_filterTabReady) return;
+      if (_filterTabTouchStartY == null || !e.touches || !e.touches.length) return;
+      // Finger moves UP the screen → page scrolls DOWN.
+      if (_filterTabTouchStartY - e.touches[0].clientY > 12) collapseFilterTab();
+    };
+    window.addEventListener('wheel',      _filterTabOnWheel,     { passive: true });
+    window.addEventListener('touchstart', _filterTabOnTouchStart,{ passive: true });
+    window.addEventListener('touchmove',  _filterTabOnTouchMove, { passive: true });
+  }, 700);
 }
+
 function collapseFilterTab() {
   const tab = document.getElementById('filter-pullout-tab');
   if (tab) tab.classList.add('collapsed');
   if (_filterTabCollapseTimer) { clearTimeout(_filterTabCollapseTimer); _filterTabCollapseTimer = null; }
+  if (_filterTabOnWheel)      { window.removeEventListener('wheel',      _filterTabOnWheel);      _filterTabOnWheel = null; }
+  if (_filterTabOnTouchStart) { window.removeEventListener('touchstart', _filterTabOnTouchStart); _filterTabOnTouchStart = null; }
+  if (_filterTabOnTouchMove)  { window.removeEventListener('touchmove',  _filterTabOnTouchMove);  _filterTabOnTouchMove = null; }
+  _filterTabReady = false;
 }
 
 function renderFilterSidebar() {
