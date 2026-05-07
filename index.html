@@ -791,6 +791,51 @@ a.provider-card:hover .p-source-arrow { transform: translate(2px, -2px); }
   margin: 0 0 0.7rem;
 }
 .filter-search:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(13,148,136,0.12); }
+.best-for-wrap {
+  padding: 0.4rem 0.4rem 0.7rem;
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: 0.4rem;
+}
+.best-for-label {
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--font-sans);
+  font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink2);
+  margin: 0 0 0.4rem;
+}
+.best-for-label .bf-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px;
+  background: var(--accent-tint);
+  color: var(--accent);
+  border-radius: 5px;
+  font-size: 11px;
+  margin-right: 0.5rem;
+}
+.best-for-select {
+  width: 100%;
+  padding: .55rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: rgba(255,255,255,0.7);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--ink);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%230f766e' d='M0 0l5 6 5-6z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  padding-right: 1.8rem;
+}
+.best-for-select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(13,148,136,0.12); }
+.best-for-hint {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin: 0.4rem 0 0;
+  line-height: 1.35;
+}
 .filter-group {
   border-top: 1px solid var(--hairline);
   padding: 0.55rem 0.4rem;
@@ -1727,14 +1772,14 @@ footer {
       <div class="step-num" style="margin-bottom:0">Step 2 of 3</div>
       <button onclick="goToStep(0)" style="background:#0f172a;border:none;cursor:pointer;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#fff;font-family:var(--font-sans);padding:4px 12px;font-weight:600">← Back</button>
     </div>
-    <h1 class="step-heading" id="step1-heading">Let's find out what<br><em>you're actually paying.</em></h1>
-    <p class="step-body" id="step1-body">Fill in a few numbers about your business. I'll rank every UK payment provider for your exact volumes.</p>
+    <h1 class="step-heading" id="step1-heading">Just pick your business<br><em>and you're done.</em></h1>
+    <p class="step-body" id="step1-body">All the hard work is already done. We've built a proprietary cost model on years of merchant statements, interchange tables and reader-level data that isn't published anywhere — the sort of detail acquirers, card schemes and consultants normally keep to themselves — and we keep every provider's rates up to the minute. Pick your business type below and the calculator instantly shows you the very latest rates from every UK provider, ranked for your category.</p>
 
     <div class="defaults-notice" id="defaults-notice">
       <span class="dn-icon" aria-hidden="true">✓</span>
       <div>
-        <strong>We've pre-filled typical starter numbers.</strong>
-        Tweak them if your business is different — or skip straight to your rankings.
+        <strong>That's it — pick a profile and the calculator does the rest.</strong>
+        It loads the channel mix, card-type split, debit-vs-credit ratio, Amex acceptance, transaction count and average ticket for your category — all calibrated against real UK merchant data — then shows you the very latest live rates from every provider. Nothing else to fill in unless you want to.
       </div>
     </div>
 
@@ -1743,19 +1788,9 @@ footer {
       <div class="dna-preset-wrap" style="max-width:360px">
         <select id="dna-preset" onchange="applyDnaPreset()">
           <option value="custom">Custom</option>
-          <option value="retail_highstreet">High-street retail</option>
-          <option value="cafe">Café</option>
-          <option value="restaurant">Restaurant</option>
-          <option value="medical_london">Private medical</option>
-          <option value="ecommerce_only">E-commerce only</option>
-          <option value="mixed_omnichannel">Mixed omnichannel</option>
-          <option value="b2b_invoicing">B2B invoicing / professional services</option>
-          <option value="convenience_store">Convenience store</option>
-          <option value="barber" selected>Barber</option>
-          <option value="salon">Hair salon</option>
         </select>
       </div>
-      <span class="field-hint">Choose a profile to prefill channel mix, card mix, and typical transaction assumptions.</span>
+      <span class="field-hint">This one choice is all the calculator needs — it feeds the model with channel split, card-type mix, debit/credit ratio, Amex acceptance, average ticket and trading days, then ranks every provider on their very latest published rates. Public price lists ignore all of these levers; we don't.</span>
     </div>
 
     <div class="field-grid">
@@ -3324,6 +3359,231 @@ const PROVIDER_FEATURES = {
                 'uk_support','fca_regulated'],
 };
 
+// "Best for" business-profile presets — single source of truth shared with the
+// homepage "Business profile" dropdown (#dna-preset). IDs and labels MUST stay
+// aligned with DNA_PRESETS keys so the two selectors stay in lock-step.
+// `providers` lists the provider group keys (matching providerGroupKey()) that
+// best fit the profile, in display-priority order. `category` groups options
+// into <optgroup>s in the dropdowns.
+const BUSINESS_PROFILES = [
+  // ── Retail ──
+  { id:'retail_highstreet', category:'Retail', label:'High-street retail',
+    providers:['square','lopay','sumup','shopify_pos','zettle_by_paypal'],
+    note:'Inventory + customer database in the box, with low-cost hardware.' },
+  { id:'convenience_store', category:'Retail', label:'Convenience store',
+    providers:['lopay','sumup','square','zettle_by_paypal','tyl_by_natwest'],
+    note:'Lopay’s 0.79–0.99% rate plus fee-offset rewards at ASDA/Iceland/Morrisons fits low-margin convenience retail.' },
+  { id:'boutique_fashion', category:'Retail', label:'Boutique / clothing',
+    providers:['shopify_pos','square','lightspeed','lopay','zettle_by_paypal'],
+    note:'Strong inventory variants and omnichannel sync — same SKU online and on the shop floor.' },
+  { id:'bookshop_gift', category:'Retail', label:'Bookshop / gift shop',
+    providers:['shopify_pos','square','lightspeed','sumup','lopay'],
+    note:'Catalogue-heavy retail with a small online tail.' },
+  { id:'florist', category:'Retail', label:'Florist',
+    providers:['square','sumup','lopay','zettle_by_paypal','shopify_pos'],
+    note:'Mix of walk-ins and online orders — payment links and a mobile reader cover both.' },
+  { id:'jewellery', category:'Retail', label:'Jeweller',
+    providers:['shopify_pos','square','stripe','lightspeed','dojo'],
+    note:'Higher tickets and Amex/premium-card acceptance matter — chargeback tooling is a plus.' },
+  { id:'butcher_grocer', category:'Retail', label:'Butcher / greengrocer / fishmonger',
+    providers:['lopay','sumup','square','zettle_by_paypal','tyl_by_natwest'],
+    note:'Low-margin food retail — the per-transaction rate is what moves the needle.' },
+  { id:'bakery', category:'Retail', label:'Bakery',
+    providers:['square','sumup','lopay','zettle_by_paypal','shopify_pos'],
+    note:'High-volume small tickets — favour low flat fees and fast tap-to-pay.' },
+  { id:'pharmacy', category:'Retail', label:'Pharmacy',
+    providers:['lopay','square','sumup','tyl_by_natwest','dojo'],
+    note:'High volume, low margin — squeeze the rate, prioritise reliable settlement.' },
+  { id:'off_licence', category:'Retail', label:'Off-licence / wine shop',
+    providers:['lopay','sumup','square','zettle_by_paypal','tyl_by_natwest'],
+    note:'Debit-heavy mix with high txn count — the rate is everything.' },
+  { id:'garden_centre', category:'Retail', label:'Garden centre',
+    providers:['lightspeed','square','shopify_pos','dojo','clover_fiserv'],
+    note:'Seasonal peaks, café add-on and big SKU counts — proper retail POS earns its keep.' },
+  { id:'bike_sports', category:'Retail', label:'Bike / sports shop',
+    providers:['shopify_pos','square','lightspeed','sumup','lopay'],
+    note:'Workshop labour + sales — needs serial-number inventory and online bookings.' },
+  { id:'pet_shop', category:'Retail', label:'Pet shop',
+    providers:['square','lopay','sumup','zettle_by_paypal','shopify_pos'],
+    note:'Repeat customers — loyalty and CRM in the box are worth more than 0.1% on the rate.' },
+  { id:'hardware_diy', category:'Retail', label:'Hardware / DIY',
+    providers:['square','lopay','sumup','tyl_by_natwest','lightspeed'],
+    note:'Trade and retail at the same till — multi-tender and account customers help.' },
+
+  // ── Hospitality ──
+  { id:'cafe', category:'Hospitality', label:'Café',
+    providers:['square','sumup','lopay','zettle_by_paypal','dojo'],
+    note:'Quick-service POS with menu management and tap-to-phone for queue-busting.' },
+  { id:'takeaway', category:'Hospitality', label:'Takeaway / fast food',
+    providers:['square','sumup','lopay','zettle_by_paypal','dojo'],
+    note:'Order-ahead, delivery integrations and a low flat fee for sub-£15 tickets.' },
+  { id:'restaurant', category:'Hospitality', label:'Restaurant',
+    providers:['dojo','lightspeed','square','clover_fiserv','shopify_pos'],
+    note:'Tables, KDS, tipping and same-day settlement are the differentiators here.' },
+  { id:'pub_bar', category:'Hospitality', label:'Pub / bar',
+    providers:['dojo','square','lightspeed','clover_fiserv','zettle_by_paypal'],
+    note:'Tab management, fast tap, late-night reliability and tips routing.' },
+  { id:'hotel_bnb', category:'Hospitality', label:'Hotel / B&B / guesthouse',
+    providers:['stripe','square','dojo','shopify_pos','lightspeed'],
+    note:'High average tickets, card-not-present pre-auth and Amex acceptance.' },
+  { id:'food_truck', category:'Hospitality', label:'Food truck / market trader',
+    providers:['lopay','sumup','square','zettle_by_paypal','teya'],
+    note:'Mobile-first apps with no monthly fee, no contract, and a sub-£30 reader.' },
+
+  // ── Beauty & wellness ──
+  { id:'barber', category:'Beauty & wellness', label:'Barber',
+    providers:['lopay','square','sumup','zettle_by_paypal'],
+    note:'Lopay leads on rate for chair-rental barbers; Square adds free bookings if you want online appointments.' },
+  { id:'salon', category:'Beauty & wellness', label:'Hair salon',
+    providers:['square','lopay','sumup','zettle_by_paypal','shopify_pos'],
+    note:'Bookings, customer database and loyalty in the box.' },
+  { id:'beauty_nail', category:'Beauty & wellness', label:'Beauty salon / nail bar / spa',
+    providers:['square','lopay','sumup','zettle_by_paypal','lightspeed'],
+    note:'Bookings, deposits and product retail at the same till.' },
+  { id:'tattoo_studio', category:'Beauty & wellness', label:'Tattoo / piercing studio',
+    providers:['square','lopay','sumup','zettle_by_paypal','stripe'],
+    note:'Deposits via payment links plus an in-chair card reader.' },
+
+  // ── Fitness & education ──
+  { id:'gym_fitness', category:'Fitness & education', label:'Gym / fitness studio',
+    providers:['stripe','square','mollie','lightspeed','shopify_pos'],
+    note:'Recurring memberships are the engine — recurring billing + dunning beat door rate.' },
+  { id:'personal_trainer', category:'Fitness & education', label:'Personal trainer / mobile fitness',
+    providers:['stripe','square','lopay','sumup','mollie'],
+    note:'Recurring billing for plans plus a phone-based reader for one-off sessions.' },
+  { id:'yoga_pilates', category:'Fitness & education', label:'Yoga / pilates / wellness',
+    providers:['square','stripe','lopay','sumup','mollie'],
+    note:'Class packs and memberships — bookings + recurring billing in one stack.' },
+  { id:'dance_music_school', category:'Fitness & education', label:'Dance / music school',
+    providers:['stripe','square','mollie','lopay','sumup'],
+    note:'Termly fees by recurring billing; payment links for trial classes.' },
+  { id:'tutoring', category:'Fitness & education', label:'Private tutoring / lessons',
+    providers:['stripe','mollie','square','lopay','sumup'],
+    note:'Mostly remote — payment links and recurring billing dominate.' },
+  { id:'childcare', category:'Fitness & education', label:'Nursery / preschool / childcare',
+    providers:['stripe','tide','square','mollie','lopay'],
+    note:'High-value monthly invoices — recurring + Open Banking cuts processing fees.' },
+
+  // ── Healthcare ──
+  { id:'medical_london', category:'Healthcare', label:'Private medical',
+    providers:['stripe','square','takepayments','dojo','clover_fiserv'],
+    note:'Higher average tickets, Amex/international acceptance and invoicing matter most.' },
+  { id:'dental', category:'Healthcare', label:'Private dental practice',
+    providers:['stripe','square','dojo','clover_fiserv','takepayments'],
+    note:'Treatment-plan deposits, recurring plans and chargeback tooling.' },
+  { id:'veterinary', category:'Healthcare', label:'Veterinary practice',
+    providers:['square','stripe','dojo','lightspeed','clover_fiserv'],
+    note:'Mixed in-clinic and CNP — practice-management integrations help.' },
+  { id:'optician', category:'Healthcare', label:'Optician / eyewear',
+    providers:['square','shopify_pos','lightspeed','lopay','zettle_by_paypal'],
+    note:'Retail SKUs + appointments — POS that does both is the win.' },
+
+  // ── Services & mobile ──
+  { id:'taxi_private_hire', category:'Services & mobile', label:'Taxi / private hire',
+    providers:['lopay','sumup','square','zettle_by_paypal','teya'],
+    note:'Phone-based tap-to-pay plus next-day settlement to keep cash flowing.' },
+  { id:'driving_instructor', category:'Services & mobile', label:'Driving instructor',
+    providers:['lopay','sumup','square','zettle_by_paypal','stripe'],
+    note:'Pre-paid blocks via payment links plus a low-cost in-car reader.' },
+  { id:'mobile_trades', category:'Services & mobile', label:'Mobile trades (plumber, electrician)',
+    providers:['stripe','square','lopay','sumup','tide'],
+    note:'Invoicing, deposits and on-site card payments from a phone.' },
+  { id:'cleaning_service', category:'Services & mobile', label:'Cleaning service',
+    providers:['stripe','square','lopay','sumup','tide'],
+    note:'Recurring contracts via Direct Debit/Open Banking + cards for ad-hoc jobs.' },
+  { id:'photographer', category:'Services & mobile', label:'Photographer / videographer',
+    providers:['stripe','square','lopay','sumup','mollie'],
+    note:'Deposits + final balance via payment links; sub-2% on premium cards is a win.' },
+  { id:'event_hire', category:'Services & mobile', label:'Event / wedding hire',
+    providers:['stripe','square','mollie','lopay','sumup'],
+    note:'Long lead times and big tickets — pre-auth, deposits and chargeback tooling.' },
+
+  // ── Online & digital ──
+  { id:'ecommerce_only', category:'Online & digital', label:'E-commerce only',
+    providers:['stripe','mollie','adyen','checkout_com','shopify_pos','airwallex'],
+    note:'Strong APIs, plugins, hosted checkout and subscription tooling.' },
+  { id:'mixed_omnichannel', category:'Online & digital', label:'Mixed omnichannel',
+    providers:['shopify_pos','square','stripe','lightspeed','adyen'],
+    note:'One stack for ecommerce and till — single inventory and unified reporting.' },
+  { id:'subscription_dtc', category:'Online & digital', label:'Subscription box / DTC',
+    providers:['stripe','mollie','shopify_pos','adyen','checkout_com'],
+    note:'Recurring billing, account updater and dunning are the difference between churn and retention.' },
+  { id:'saas_subscriptions', category:'Online & digital', label:'SaaS / subscriptions',
+    providers:['stripe','mollie','adyen','checkout_com','airwallex'],
+    note:'Recurring billing, dunning, tax and developer-grade APIs.' },
+  { id:'marketplace_platform', category:'Online & digital', label:'Marketplace / platform',
+    providers:['stripe','adyen','mollie','checkout_com','airwallex'],
+    note:'Split payments, KYC for sellers and multi-party payouts.' },
+
+  // ── Professional & B2B ──
+  { id:'b2b_invoicing', category:'Professional & B2B', label:'B2B invoicing / professional services',
+    providers:['stripe','mollie','tide','adyen','airwallex','square'],
+    note:'Hosted invoicing, recurring billing and Open Banking pull money in faster.' },
+  { id:'estate_agent', category:'Professional & B2B', label:'Estate agent / lettings',
+    providers:['stripe','square','tide','mollie','adyen'],
+    note:'High-value CNP — Open Banking and pre-auth holds on deposits.' },
+  { id:'travel_agent', category:'Professional & B2B', label:'Travel agent / tour operator',
+    providers:['stripe','adyen','mollie','takepayments','checkout_com'],
+    note:'Long lead times and elevated chargeback risk — needs strong fraud + chargeback tools.' },
+  { id:'car_dealership', category:'Professional & B2B', label:'Car dealership / garage / MOT',
+    providers:['dojo','takepayments','worldpay','barclaycard','global_payments'],
+    note:'Very high tickets — interchange-plus pricing beats blended for this category.' },
+
+  // ── Special cases ──
+  { id:'charity_nonprofit', category:'Special cases', label:'Charity / non-profit',
+    providers:['stripe','square','sumup','mollie','tide'],
+    note:'Donations via payment links, virtual terminal and Apple/Google Pay; charitable rates may apply.' },
+  { id:'high_risk', category:'Special cases', label:'High-risk merchant (vape, CBD, adult)',
+    providers:['trust_payments','checkout_com','adyen','dna_payments'],
+    note:'Acquirers willing to onboard higher-risk MCCs with built-in chargeback tooling.' },
+  { id:'multi_currency', category:'Special cases', label:'International / multi-currency',
+    providers:['airwallex','adyen','stripe','checkout_com','revolut','mollie'],
+    note:'Local acquiring, FX accounts and multi-currency processing.' },
+];
+
+let activeBusinessProfile = null; // profile id, or null
+let _syncingBusinessProfile = false; // re-entrancy guard between dna-preset ↔ best-for
+
+function getBusinessProfile() {
+  if (!activeBusinessProfile) return null;
+  return BUSINESS_PROFILES.find(p => p.id === activeBusinessProfile) || null;
+}
+
+function applyBusinessProfileFilter(rows) {
+  const profile = getBusinessProfile();
+  if (!profile) return rows;
+  const allowed = new Set(profile.providers);
+  return rows.filter(r => allowed.has(providerGroupKey(r)));
+}
+
+// Set the "Best for" filter and mirror the choice into the homepage
+// `Business profile` dropdown so the two stay in lock-step.
+function setBusinessProfile(id) {
+  activeBusinessProfile = id || null;
+  if (_syncingBusinessProfile) {
+    calc();
+    renderFilterSidebar();
+    return;
+  }
+  _syncingBusinessProfile = true;
+  try {
+    const dnaSel = document.getElementById('dna-preset');
+    if (dnaSel) {
+      const target = activeBusinessProfile || 'custom';
+      if (dnaSel.value !== target) {
+        dnaSel.value = target;
+        if (activeBusinessProfile && typeof applyDnaPreset === 'function') {
+          applyDnaPreset();
+        }
+      }
+    }
+  } finally {
+    _syncingBusinessProfile = false;
+  }
+  calc();
+  renderFilterSidebar();
+}
+
 // Active feature filter — multi-select; AND across groups, OR within a group.
 let activeFeatureFilters = new Set();
 
@@ -3402,9 +3662,10 @@ function providerMatchesFilters(p, selByGroup) {
 }
 
 function applyFeatureFilter(rows) {
+  const scoped = applyBusinessProfileFilter(rows);
   const sel = buildSelectionByGroup();
-  if (!Object.keys(sel).length) return rows;
-  return rows.filter(r => providerMatchesFilters(r, sel));
+  if (!Object.keys(sel).length) return scoped;
+  return scoped.filter(r => providerMatchesFilters(r, sel));
 }
 
 function countProvidersWithFeature(featureId, providers) {
@@ -3436,6 +3697,7 @@ function toggleFeatureFilter(featureId) {
 
 function clearAllFilters() {
   activeFeatureFilters.clear();
+  activeBusinessProfile = null;
   calc();
   renderFilterSidebar();
 }
@@ -3539,13 +3801,15 @@ function renderFilterSidebar() {
   const wrap = document.getElementById('filter-sidebar');
   if (!wrap) return;
   const visibleProviders = getVisibleProviders();
+  const profileScoped = applyBusinessProfileFilter(visibleProviders);
   const collapsed = getCollapsedGroups();
   const total = visibleProviders.length;
   const filteredCount = applyFeatureFilter(visibleProviders).length;
+  const activeProfile = getBusinessProfile();
 
   const groupsHtml = FEATURE_GROUPS.map(g => {
     const items = g.items.map(it => {
-      const count = countProvidersWithFeature(it.id, visibleProviders);
+      const count = countProvidersWithFeature(it.id, profileScoped);
       const checked = activeFeatureFilters.has(it.id);
       const disabled = !checked && count === 0;
       return `<label class="filter-item${disabled ? ' disabled' : ''}" data-label="${it.label.replace(/"/g,'&quot;')}">
@@ -3567,11 +3831,29 @@ function renderFilterSidebar() {
     </div>`;
   }).join('');
 
-  const anyActive = activeFeatureFilters.size > 0;
+  const anyActive = activeFeatureFilters.size > 0 || !!activeBusinessProfile;
+  const profileOptions = groupedBusinessProfiles().map(({ category, items }) => {
+    const opts = items.map(p =>
+      `<option value="${p.id}" ${activeBusinessProfile === p.id ? 'selected' : ''}>${p.label}</option>`
+    ).join('');
+    return `<optgroup label="${category}">${opts}</optgroup>`;
+  }).join('');
+  const profileNote = activeProfile
+    ? `<p class="best-for-hint">${activeProfile.note}</p>`
+    : `<p class="best-for-hint">Pick a business type to narrow the list to providers best suited to it.</p>`;
+
   wrap.innerHTML = `
     <div class="filter-sidebar-header">
       <span class="filter-sidebar-title">Filter results <span class="filters-heading-pill" style="margin-left:0.4rem;vertical-align:middle">EXPERIMENTAL</span></span>
       <button class="filter-clear-btn" ${anyActive ? '' : 'disabled'} onclick="clearAllFilters()">Clear all</button>
+    </div>
+    <div class="best-for-wrap">
+      <div class="best-for-label"><span><span class="bf-icon">★</span>Best for</span></div>
+      <select class="best-for-select" id="best-for-select" onchange="setBusinessProfile(this.value)">
+        <option value="">All business types</option>
+        ${profileOptions}
+      </select>
+      ${profileNote}
     </div>
     <input type="text" class="filter-search" id="filter-search" placeholder="Search filters…" oninput="searchFilters()">
     ${groupsHtml}
@@ -3584,6 +3866,11 @@ function renderFilterSidebar() {
   const chipRow = document.getElementById('active-filter-row');
   if (chipRow) {
     const chips = [];
+    if (activeProfile) {
+      chips.push(`<span class="active-filter-chip" onclick="setBusinessProfile('')" title="Clear business type">
+        Best for: ${activeProfile.label}<span class="active-filter-chip-x">×</span>
+      </span>`);
+    }
     FEATURE_GROUPS.forEach(g => {
       g.items.forEach(it => {
         if (activeFeatureFilters.has(it.id)) {
@@ -3599,9 +3886,10 @@ function renderFilterSidebar() {
   }
   const trigCount = document.getElementById('filter-mobile-trigger-count');
   if (trigCount) {
-    if (activeFeatureFilters.size > 0) {
+    const totalActive = activeFeatureFilters.size + (activeBusinessProfile ? 1 : 0);
+    if (totalActive > 0) {
       trigCount.style.display = 'inline-flex';
-      trigCount.textContent = activeFeatureFilters.size;
+      trigCount.textContent = totalActive;
     } else {
       trigCount.style.display = 'none';
     }
@@ -3677,17 +3965,17 @@ let userPath = null;  // 'new' or 'switch' — chosen on the intro step
 
 const PATH_COPY = {
   new: {
-    step1Heading: 'Let\'s find you<br><em>the best rate.</em>',
-    step1Body: 'Tell me a bit about your business — or the card volumes you\'re expecting. I\'ll rank every UK payment provider so you can start on the cheapest plan for your numbers.',
+    step1Heading: 'Just pick your business<br><em>and you\'re done.</em>',
+    step1Body: 'All the hard work is already done. We\'ve built a proprietary cost model on years of merchant statements, interchange tables and reader-level data that isn\'t published anywhere — the sort of detail acquirers, card schemes and consultants normally keep to themselves — and we keep every provider\'s rates up to the minute. Pick your business type below and the calculator instantly shows you the very latest rates from every UK provider, ranked for your category.',
     providerLabel: 'Current payment provider',
-    providerHint: 'You haven\'t signed up to anyone yet — no problem. Leave this as "No provider yet" and I\'ll show you the best starting option.',
+    providerHint: 'You haven\'t signed up to anyone yet — no problem. Leave this as "No provider yet" and the model will pick the best starting plan for your category.',
     savingsLabel: 'YOU SAVE',
     step4Heading: 'The best place<br><em>to start.</em>',
     step4Body: 'Every UK provider ranked for your expected volumes. The recommended option will save you the most over three years vs. the most expensive on the market — click any card to view their official pricing page.'
   },
   switch: {
-    step1Heading: 'Let\'s find out what<br><em>you\'re actually paying.</em>',
-    step1Body: 'Fill in a few numbers about your business and tell me who you\'re with today. I\'ll rank every UK payment provider for your exact volumes — so you can see exactly what switching is worth.',
+    step1Heading: 'Just pick your business<br><em>and you\'re done.</em>',
+    step1Body: 'All the hard work is already done. We\'ve built a proprietary cost model on years of merchant statements, interchange tables and reader-level data that isn\'t published anywhere — the sort of detail acquirers, card schemes and consultants normally keep to themselves — and we keep every provider\'s rates up to the minute. Pick your business type below, tell us who you\'re with today, and the calculator instantly shows you the very latest rates from every UK provider — including exactly what you\'d save by switching.',
     providerLabel: 'Current payment provider',
     providerHint: 'Not sure? Check your card reader, bank statement, or look for the name on your app.',
     savingsLabel: 'You will save',
@@ -4543,13 +4831,116 @@ const DNA_PRESETS = {
   convenience_store:  { f2f: 98, online: 1, cnp: 1,  dr: 82, cr: 17, pcr: 1,  days: 30, txn: 120, val: 9, acceptAmex: false },
   barber:             { f2f: 100, online: 0, cnp: 0,  dr: 78, cr: 20, pcr: 2,  days: 22, txn: 15, val: 17, acceptAmex: false },
   salon:              { f2f: 97, online: 2, cnp: 1,  dr: 62, cr: 30, pcr: 8,  days: 22, txn: 12, val: 65, acceptAmex: true },
+
+  // ── Retail (additions) ──
+  boutique_fashion:   { f2f: 65, online: 32, cnp: 3,  dr: 50, cr: 40, pcr: 10, txn: 14, val: 65,  days: 26, acceptAmex: true  },
+  bookshop_gift:      { f2f: 80, online: 18, cnp: 2,  dr: 55, cr: 38, pcr: 7,  txn: 30, val: 18,  days: 26, acceptAmex: true  },
+  florist:            { f2f: 60, online: 35, cnp: 5,  dr: 55, cr: 35, pcr: 10, txn: 18, val: 45,  days: 24, acceptAmex: true  },
+  jewellery:          { f2f: 75, online: 20, cnp: 5,  dr: 35, cr: 45, pcr: 20, txn: 5,  val: 280, days: 24, acceptAmex: true  },
+  butcher_grocer:     { f2f: 96, online: 3,  cnp: 1,  dr: 72, cr: 23, pcr: 5,  txn: 80, val: 18,  days: 26, acceptAmex: false },
+  bakery:             { f2f: 95, online: 4,  cnp: 1,  dr: 75, cr: 22, pcr: 3,  txn: 120,val: 8,   days: 24, acceptAmex: false },
+  pharmacy:           { f2f: 96, online: 3,  cnp: 1,  dr: 75, cr: 22, pcr: 3,  txn: 90, val: 14,  days: 26, acceptAmex: false },
+  off_licence:        { f2f: 97, online: 2,  cnp: 1,  dr: 70, cr: 25, pcr: 5,  txn: 90, val: 18,  days: 28, acceptAmex: false },
+  garden_centre:      { f2f: 90, online: 8,  cnp: 2,  dr: 50, cr: 38, pcr: 12, txn: 50, val: 35,  days: 26, acceptAmex: true  },
+  bike_sports:        { f2f: 75, online: 22, cnp: 3,  dr: 45, cr: 42, pcr: 13, txn: 18, val: 120, days: 24, acceptAmex: true  },
+  pet_shop:           { f2f: 85, online: 13, cnp: 2,  dr: 55, cr: 35, pcr: 10, txn: 35, val: 25,  days: 26, acceptAmex: true  },
+  hardware_diy:       { f2f: 90, online: 8,  cnp: 2,  dr: 55, cr: 35, pcr: 10, txn: 40, val: 30,  days: 26, acceptAmex: true  },
+
+  // ── Hospitality (additions) ──
+  takeaway:           { f2f: 80, online: 18, cnp: 2,  dr: 65, cr: 30, pcr: 5,  txn: 80, val: 14,  days: 28, acceptAmex: false },
+  pub_bar:            { f2f: 96, online: 2,  cnp: 2,  dr: 55, cr: 35, pcr: 10, txn: 120,val: 18,  days: 28, acceptAmex: true  },
+  hotel_bnb:          { f2f: 35, online: 50, cnp: 15, dr: 40, cr: 40, pcr: 20, txn: 6,  val: 180, days: 30, acceptAmex: true  },
+  food_truck:         { f2f: 99, online: 1,  cnp: 0,  dr: 65, cr: 30, pcr: 5,  txn: 60, val: 9,   days: 18, acceptAmex: false },
+
+  // ── Beauty & wellness (additions) ──
+  beauty_nail:        { f2f: 96, online: 3,  cnp: 1,  dr: 62, cr: 32, pcr: 6,  txn: 14, val: 50,  days: 24, acceptAmex: true  },
+  tattoo_studio:      { f2f: 95, online: 3,  cnp: 2,  dr: 55, cr: 35, pcr: 10, txn: 4,  val: 160, days: 22, acceptAmex: true  },
+
+  // ── Fitness & education ──
+  gym_fitness:        { f2f: 25, online: 30, cnp: 45, dr: 55, cr: 35, pcr: 10, txn: 8,  val: 55,  days: 26, acceptAmex: true  },
+  personal_trainer:   { f2f: 35, online: 25, cnp: 40, dr: 60, cr: 32, pcr: 8,  txn: 6,  val: 50,  days: 22, acceptAmex: false },
+  yoga_pilates:       { f2f: 55, online: 20, cnp: 25, dr: 60, cr: 32, pcr: 8,  txn: 18, val: 18,  days: 26, acceptAmex: true  },
+  dance_music_school: { f2f: 30, online: 25, cnp: 45, dr: 55, cr: 35, pcr: 10, txn: 5,  val: 90,  days: 22, acceptAmex: true  },
+  tutoring:           { f2f: 30, online: 20, cnp: 50, dr: 55, cr: 38, pcr: 7,  txn: 4,  val: 45,  days: 20, acceptAmex: false },
+  childcare:          { f2f: 15, online: 25, cnp: 60, dr: 55, cr: 35, pcr: 10, txn: 3,  val: 550, days: 22, acceptAmex: true  },
+
+  // ── Healthcare (additions) ──
+  dental:             { f2f: 65, online: 5,  cnp: 30, dr: 55, cr: 30, pcr: 15, txn: 8,  val: 180, days: 22, acceptAmex: true  },
+  veterinary:         { f2f: 80, online: 5,  cnp: 15, dr: 55, cr: 35, pcr: 10, txn: 12, val: 120, days: 22, acceptAmex: true  },
+  optician:           { f2f: 88, online: 7,  cnp: 5,  dr: 55, cr: 35, pcr: 10, txn: 8,  val: 120, days: 24, acceptAmex: true  },
+
+  // ── Services & mobile ──
+  taxi_private_hire:  { f2f: 80, online: 18, cnp: 2,  dr: 65, cr: 30, pcr: 5,  txn: 35, val: 14,  days: 26, acceptAmex: false },
+  driving_instructor: { f2f: 55, online: 10, cnp: 35, dr: 65, cr: 30, pcr: 5,  txn: 6,  val: 38,  days: 22, acceptAmex: false },
+  mobile_trades:      { f2f: 55, online: 10, cnp: 35, dr: 50, cr: 35, pcr: 15, txn: 3,  val: 240, days: 22, acceptAmex: true  },
+  cleaning_service:   { f2f: 30, online: 15, cnp: 55, dr: 55, cr: 35, pcr: 10, txn: 4,  val: 75,  days: 22, acceptAmex: false },
+  photographer:       { f2f: 25, online: 25, cnp: 50, dr: 45, cr: 40, pcr: 15, txn: 2,  val: 450, days: 18, acceptAmex: true  },
+  event_hire:         { f2f: 20, online: 30, cnp: 50, dr: 40, cr: 40, pcr: 20, txn: 3,  val: 650, days: 18, acceptAmex: true  },
+
+  // ── Online & digital (additions) ──
+  subscription_dtc:    { f2f: 0,  online: 90, cnp: 10, dr: 50, cr: 40, pcr: 10, txn: 25, val: 35,  days: 30, acceptAmex: true  },
+  saas_subscriptions:  { f2f: 0,  online: 40, cnp: 60, dr: 35, cr: 45, pcr: 20, txn: 8,  val: 70,  days: 30, acceptAmex: true  },
+  marketplace_platform:{ f2f: 0,  online: 80, cnp: 20, dr: 45, cr: 40, pcr: 15, txn: 50, val: 50,  days: 30, acceptAmex: true  },
+
+  // ── Professional & B2B ──
+  estate_agent:       { f2f: 5,  online: 15, cnp: 80, dr: 30, cr: 45, pcr: 25, txn: 2,  val: 1200,days: 22, acceptAmex: true  },
+  travel_agent:       { f2f: 25, online: 50, cnp: 25, dr: 35, cr: 40, pcr: 25, txn: 3,  val: 850, days: 24, acceptAmex: true  },
+  car_dealership:     { f2f: 40, online: 5,  cnp: 55, dr: 45, cr: 40, pcr: 15, txn: 1,  val: 8500,days: 24, acceptAmex: true  },
+
+  // ── Special cases ──
+  charity_nonprofit:  { f2f: 30, online: 55, cnp: 15, dr: 55, cr: 35, pcr: 10, txn: 20, val: 25,  days: 30, acceptAmex: true  },
+  high_risk:          { f2f: 20, online: 60, cnp: 20, dr: 35, cr: 50, pcr: 15, txn: 25, val: 55,  days: 30, acceptAmex: true  },
+  multi_currency:     { f2f: 25, online: 55, cnp: 20, dr: 45, cr: 40, pcr: 15, txn: 15, val: 90,  days: 26, acceptAmex: true  },
+
   // Backward compatibility for old links
   cafe_restaurant:    { f2f: 92, online: 5,  cnp: 3,  dr: 60, cr: 32, pcr: 8,  txn: 80, val: 10, days: 26 },
   market_seller:      { f2f: 98, online: 1, cnp: 1,  dr: 82, cr: 17, pcr: 1,  days: 30, txn: 120, val: 9, acceptAmex: false },
 };
 
+// Group BUSINESS_PROFILES by `category`, preserving first-seen order of both
+// categories and items so the two selectors render in a stable, sensible order.
+function groupedBusinessProfiles() {
+  const order = [];
+  const groups = new Map();
+  BUSINESS_PROFILES.forEach(p => {
+    const cat = p.category || 'Other';
+    if (!groups.has(cat)) { groups.set(cat, []); order.push(cat); }
+    groups.get(cat).push(p);
+  });
+  return order.map(cat => ({ category: cat, items: groups.get(cat) }));
+}
+
+// Populate the homepage Business profile dropdown from BUSINESS_PROFILES so the
+// two selectors share a single source of truth.
+function populateBusinessProfileDropdown() {
+  const sel = document.getElementById('dna-preset');
+  if (!sel) return;
+  // Keep the leading "Custom" option, drop any auto-populated options, then rebuild.
+  Array.from(sel.querySelectorAll('optgroup, option:not([value="custom"])')).forEach(n => n.remove());
+  groupedBusinessProfiles().forEach(({ category, items }) => {
+    const og = document.createElement('optgroup');
+    og.label = category;
+    items.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = p.label;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+}
+
 function applyDnaPreset() {
   const key = document.getElementById('dna-preset').value;
+  // Mirror the homepage choice into the sidebar Best-For state.
+  if (!_syncingBusinessProfile) {
+    const matchingProfile = BUSINESS_PROFILES.some(p => p.id === key) ? key : null;
+    if (matchingProfile !== activeBusinessProfile) {
+      _syncingBusinessProfile = true;
+      try { setBusinessProfile(matchingProfile); }
+      finally { _syncingBusinessProfile = false; }
+    }
+  }
   const p = DNA_PRESETS[key];
   if (!p) return;
   ['f2f','online','cnp','dr','cr','pcr'].forEach(k => {
@@ -5532,6 +5923,11 @@ function loadFromURLParams() {
       });
       const sel = document.getElementById('dna-preset');
       if (sel) sel.value = presetKey;
+      if (BUSINESS_PROFILES.some(bp => bp.id === presetKey)) {
+        _syncingBusinessProfile = true;
+        try { activeBusinessProfile = presetKey; }
+        finally { _syncingBusinessProfile = false; }
+      }
       // Apply preset transaction defaults unless overridden explicitly in the URL
       if (preset.txn  != null && !p.has('txn'))  { const el = document.getElementById('f-txn');  if (el) el.value = preset.txn; }
       if (preset.val  != null && !p.has('val'))  { const el = document.getElementById('f-val');  if (el) el.value = preset.val; }
@@ -5602,6 +5998,14 @@ function loadFromURLParams() {
   }
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+  populateBusinessProfileDropdown();
+  // Restore the original default selection (barber) when no URL preset is given.
+  if (!new URLSearchParams(location.search).has('preset')) {
+    const sel = document.getElementById('dna-preset');
+    if (sel) sel.value = 'barber';
+  }
+});
 document.addEventListener('DOMContentLoaded', loadFromURLParams);
 document.addEventListener('DOMContentLoaded', function() {
   sendBrowseEvent('session_started');
