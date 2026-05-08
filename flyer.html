@@ -114,14 +114,21 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 }
 
 /* ── Hero ── */
-.hero { margin-bottom: 4mm; }
+.hero {
+  margin-bottom: 4mm;
+  border: 0.35mm solid var(--ink);
+  padding: 2.4mm 3mm 3mm;
+  background: #fff;
+}
 .hero-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 6.5pt;
-  letter-spacing: 0.18em;
-  color: var(--accent);
+  font-family: var(--font-sans);
+  font-size: 6pt;
+  letter-spacing: 0.12em;
+  color: var(--ink2);
   text-transform: uppercase;
   margin-bottom: 2mm;
+  border-bottom: 0.25mm solid var(--border2);
+  padding-bottom: 1.2mm;
 }
 .hero-h {
   font-size: 22pt;
@@ -132,38 +139,47 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 }
 .hero-h .line { display: block; }
 .hero-h .line-sans {
-  font-family: var(--font-sans);
-  font-weight: 900;
-  font-size: 22pt;
-  letter-spacing: -0.025em;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 24pt;
+  letter-spacing: -0.015em;
   color: var(--ink);
+}
+.hero-h .line-underline {
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.08em;
 }
 .hero-h .line-serif {
   font-family: var(--font-serif);
-  font-style: italic;
+  font-style: normal;
   font-weight: 400;
-  font-size: 26pt;
-  letter-spacing: -0.005em;
+  font-size: 22pt;
+  letter-spacing: -0.01em;
   color: var(--ink);
 }
+.hero-h .line-alt-italic {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  letter-spacing: -0.005em;
+}
 .hero-h .line-mono {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-weight: 700;
-  font-size: 17pt;
-  letter-spacing: -0.04em;
-  color: var(--accent);
-  text-transform: lowercase;
+  font-size: 12pt;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  text-transform: none;
 }
 .hero-h .line-strike {
-  font-family: 'Bebas Neue', 'Inter', sans-serif;
-  font-weight: 400;
-  font-size: 30pt;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 10pt;
+  letter-spacing: 0.02em;
+  text-transform: none;
   color: var(--ink2);
-  text-decoration: line-through;
-  text-decoration-thickness: 0.13em;
-  text-decoration-color: var(--rose);
+  text-decoration: none;
+  margin-top: 1.2mm;
 }
 .hero-sub {
   font-size: 8pt;
@@ -235,13 +251,13 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 .compare-row.cheap + .compare-row { border-top: 0; }
 .compare-row.cheap .pname { color: var(--emerald); font-weight: 800; }
 .compare-row.cheap .pname::before { content:'★'; color: var(--emerald); margin-right: 1mm; font-size: 7pt; }
-.compare-row.cheap .pcost { color: var(--emerald); }
+.compare-row.cheap .pcost { color: #facc15; }
 
 .savings-strip {
   margin-top: auto;
   padding: 2mm 3mm;
   background: var(--accent);
-  color: #fff;
+  color: #facc15;
   border-radius: 1.5mm;
   display: flex; align-items: center; justify-content: space-between;
   margin-top: 2mm;
@@ -257,7 +273,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 16pt;
-  color: var(--accent2);
+  color: #fff;
   line-height: 1;
 }
 
@@ -456,7 +472,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 .matrix tr.win { background: var(--emerald-soft); }
 .matrix tr.win .pname { color: var(--emerald); font-weight: 700; }
 .matrix tr.win .pname::before { content:'★ '; color: var(--emerald); font-size: 7pt; }
-.matrix tr.win .num { color: var(--emerald); }
+.matrix tr.win .num { color: #facc15; }
 .matrix tr.why-row td {
   font-size: 5.5pt;
   line-height: 1.35;
@@ -579,15 +595,15 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
     </header>
 
     <section class="hero">
-      <div class="hero-eyebrow">STOP OVERPAYING FOR CARD PAYMENTS</div>
+      <div class="hero-eyebrow">UK payments expose | small business edition</div>
       <h1 class="hero-h">
-        <span class="line line-sans">The brand on the</span>
-        <span class="line line-serif">billboard is rarely</span>
-        <span class="line line-mono">the cheapest reader</span>
-        <span class="line line-strike">in the till.</span>
+        <span class="line line-sans line-underline">banker buys even bigger yacht.</span>
+        <span class="line line-serif line-alt-italic">small businesses pay the bill.</span>
+        <span class="line line-mono">The loudest payment brands are usually the priciest.</span>
+        <span class="line line-strike">See the maths. Keep your margin.</span>
       </h1>
       <p class="hero-sub">
-        <strong>I'm a software engineer, not a salesman.</strong> Square, SumUp, Zettle, Worldpay and Dojo and other mainstream providers spend a fortune on advertising — and you pay for it on every transaction. I work for you, not the card companies. I just publish the maths. Below: two real UK businesses and the answer the maths actually points at — sometimes a cheaper rate, sometimes a better-fit feature set, never the marketing.
+        <strong>I'm a software engineer, not a commission-driven salesman - and I've built a FREE,<br>state-of-the-art comparison website for 50+ UK providers.</strong> Big payment brands don't just spend on ads - they spend on sponsorships, sales teams, glossy offices, partner kickbacks, and executive bonuses, then claw it back from every tap on your card reader. I work for you and I find the best provider for you. <strong>I expose hidden costs and flag any trickery</strong>, and I'm not biased towards any of them -  Use the feature selector to pick what matters: cash flow advance loans, affordable card readers without hidden costs, and next-day, same-day, or custom settlement days. Then compare real numbers, not marketing claims.
       </p>
     </section>
 
@@ -611,31 +627,31 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
           <span class="pcost">£9,215</span>
         </div>
         <div class="savings-strip">
-          <div class="ss-label">3-yr saving<br>vs Square</div>
-          <div class="ss-amount">£11,197</div>
+          <div class="ss-label">Why it wins<br>significantly cheaper</div>
+          <div class="ss-amount">£11,197<span style="display:block;font-family:var(--font-sans);font-size:6pt;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-style:normal">savings over 3 years vs square free</span></div>
         </div>
       </article>
 
       <article class="compare-card">
         <div class="biz">
-          <div class="biz-name">Hair salon</div>
+          <div class="biz-name">Salon</div>
           <div class="biz-numbers">12 visits × £65 × 22d · online bookings<br>£205,920/yr volume</div>
         </div>
         <div class="compare-row expensive">
-          <span class="pname">Worldpay (typical) <small>~1.75% · 12-mo contract</small></span>
-          <span class="pcost">£10,811</span>
+          <span class="pname">Dojo PAYG <small>1.90% + 5p in-person</small></span>
+          <span class="pcost">£12,213</span>
         </div>
         <div class="compare-row">
-          <span class="pname">Lopay Essential <small>0.79% · no booking tools</small></span>
-          <span class="pcost">£4,880</span>
+          <span class="pname">Teya PAYG <small>1.59% in-person</small></span>
+          <span class="pcost">£9,822</span>
         </div>
         <div class="compare-row cheap">
-          <span class="pname">Square Appointments <small>1.75% · bookings bundled free</small></span>
+          <span class="pname">Square Appointments <small>1.75% · free booking software</small></span>
           <span class="pcost">£10,811</span>
         </div>
         <div class="savings-strip">
-          <div class="ss-label">Why it wins<br>bookings bundled</div>
-          <div class="ss-amount">£1,400+<span style="display:block;font-family:var(--font-sans);font-size:6pt;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-style:normal">free over 3 yrs</span></div>
+          <div class="ss-label">Why it wins<br>free booking software</div>
+          <div class="ss-amount">£1,402<span style="display:block;font-family:var(--font-sans);font-size:6pt;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-style:normal">savings over 3 years vs dojo payg</span></div>
         </div>
       </article>
 
@@ -650,7 +666,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
     </div>
 
     <div class="cta">
-      <div class="cta-text">Run <em>your</em> numbers in 30 seconds.<br>Free. No sign-up. No sales call.</div>
+      <div class="cta-text">Run <em>your</em> numbers in 30 seconds.<br>Free. No subscription. No sales call.</div>
       <div class="cta-url">
         <small>OPEN THE CALCULATOR</small>
         tillswift.com
@@ -672,18 +688,18 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
     </header>
 
     <section class="back-hero">
-      <h1>The right answer<br>changes by <em>business.</em><br>The maths decides — not the marketing.</h1>
-      <p>The cheapest pure rate is rarely the best buy. Sometimes it is — high-volume convenience retail lives or dies on the rate. But cafés need a free POS, restaurants need same-day settlement and a kitchen display, and online stores need a storefront bundled in. Below: a different winner for every business type, and the feature that earns it the spot.</p>
+      <h1>The right answer<br>changes by <em>business.</em><br>The maths decides - not the ad copy.</h1>
+      <p>The lowest sticker rate is not the lowest real cost. Convenience retail lives or dies on rate, but cafés need free POS, restaurants need same-day settlement and kitchen tools, and online stores need storefront economics. Below: a different winner for each model, based on what keeps more money in your business.</p>
     </section>
 
     <div class="why-cols">
       <div class="why-col warn">
-        <h3>What you're being sold</h3>
+        <h3>What they're selling you</h3>
         <ul>
-          <li>Brand-name reassurance — same 1.69–1.75% as everyone else</li>
+          <li>Brand-name reassurance — same rates as similar advertised brands</li>
           <li>"Flat" pricing that bills debit-only shops at the credit-card rate</li>
           <li>12-month merchant agreements that lock you in even when better offers appear</li>
-          <li>Surcharges of +1.5–2.0% on premium and non-UK cards, buried in the small print</li>
+          <li>Surcharges of +1.5-2.0% on premium and non-UK cards, hidden in the small print</li>
         </ul>
       </div>
       <div class="why-col good">
@@ -716,7 +732,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
         <!-- Café — Square wins on features -->
         <tr class="biz-row"><td colspan="3">Café <small>£10 × 80 × 26d · £249,600/yr</small></td></tr>
         <tr class="cheap"><td class="pname">Lopay Essential</td><td class="prate">0.79% · cheapest in-person rate</td><td class="num">£5,916</td></tr>
-        <tr class="exp"><td class="pname">SumUp PAYG</td><td class="prate">1.69% in-person · the marketed default</td><td class="num">£12,655</td></tr>
+        <tr class="exp"><td class="pname">SumUp PAYG</td><td class="prate">1.69% in-person · the heavily advertised default</td><td class="num">£12,655</td></tr>
         <tr class="win"><td class="pname">Square Free</td><td class="prate">1.75% in-person + free POS bundle</td><td class="num">£13,104</td></tr>
         <tr class="why-row"><td colspan="3"><strong>Why Square wins for cafés:</strong> free POS, menu, modifiers, online orders, gift cards, loyalty and CRM — ~£40/mo of tools bundled into the rate.</td></tr>
 
@@ -739,7 +755,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 
     <div class="back-footer">
       <div class="back-indie">
-        <strong>I'm an independent software consultant, not a salesman.</strong> The site already ranks <strong>around 50 UK providers and is still growing</strong>. The goal is to find the best buyer for <em>you</em> — and to show up the naughty ones banking on the small print.
+        <strong>I'm an independent software consultant, not a salesman.</strong> The site already ranks <strong>around 50 UK providers and is still growing</strong>. The goal is to find the best deal for <em>you</em> - and expose providers padding margins in the small print.
       </div>
       <div class="back-url">
         <span class="upper">Run your numbers</span>
