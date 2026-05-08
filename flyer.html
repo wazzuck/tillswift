@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tillswift — A5 flyer, 2-up on A4 (cut in half)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --surface: #f0fdfa;
+  --surface2: #ccfbf1;
+  --ink: #0f172a;
+  --ink2: #334155;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --border2: #cbd5e1;
+  --accent: #0f766e;
+  --accent2: #0d9488;
+  --accent-soft: #ccfbf1;
+  --accent-tint: #f0fdfa;
+  --rose: #be123c;
+  --rose-soft: #fff1f2;
+  --emerald: #047857;
+  --emerald-soft: #ecfdf5;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Instrument Serif', 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #cbd5e1; }
+body {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01","cv11";
+}
+
+/* ─────────────────────────────────────────
+   PRINT FRAME — A4 landscape sheet, two identical
+   A5-portrait halves side-by-side. Cut down the
+   middle to get two flyers from each sheet.
+   Putting *identical* content on each half means
+   the front/back duplex flip orientation doesn't
+   matter — every cut piece is correctly aligned.
+   ───────────────────────────────────────── */
+@page { size: A4 landscape; margin: 0; }
+
+.sheet {
+  width: 297mm;
+  height: 210mm;
+  display: flex;
+  background: #fff;
+  position: relative;
+  page-break-after: always;
+  break-after: page;
+  margin: 6mm auto;
+  box-shadow: 0 1mm 6mm rgba(15,23,42,0.18);
+  overflow: hidden;
+}
+.sheet:last-of-type { page-break-after: auto; break-after: auto; }
+
+/* Cut guide removed */
+@media print {
+  html, body { background: #ffffff; }
+  .print-hint { display: none !important; }
+  .sheet { box-shadow: none; margin: 0; }
+}
+
+/* ─────────────────────────────────────────
+   A5 FLYER HALF — 148.5 × 210 mm, portrait
+   ───────────────────────────────────────── */
+.flyer-half {
+  width: 148.5mm;
+  height: 210mm;
+  padding: 5mm 7mm;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Type ── */
+h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
+.serif { font-family: var(--font-serif); font-weight: 400; font-style: italic; letter-spacing: -0.01em; }
+.upper { text-transform: uppercase; letter-spacing: 0.14em; font-size: 6.5pt; font-weight: 700; }
+.muted { color: var(--muted); }
+
+/* ── Brand bar ── */
+.brand {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 1.5mm;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5mm;
+}
+.brand-mark {
+  font-family: var(--font-sans);
+  font-size: 11pt;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+  text-transform: uppercase;
+  line-height: 1;
+}
+.brand-tagline {
+  font-size: 7pt;
+  color: var(--muted);
+  text-align: right;
+  line-height: 1.35;
+  max-width: 60mm;
+}
+
+/* ── Hero ── */
+.hero { margin-bottom: 4mm; }
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 6.5pt;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 2mm;
+}
+.hero-h {
+  font-size: 22pt;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin-bottom: 2.5mm;
+  font-weight: 400;
+}
+.hero-h .line { display: block; }
+.hero-h .line-sans {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  font-size: 22pt;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+.hero-h .line-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 26pt;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+.hero-h .line-mono {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 17pt;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+  text-transform: lowercase;
+}
+.hero-h .line-strike {
+  font-family: 'Bebas Neue', 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 30pt;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink2);
+  text-decoration: line-through;
+  text-decoration-thickness: 0.13em;
+  text-decoration-color: var(--rose);
+}
+.hero-sub {
+  font-size: 8pt;
+  line-height: 1.4;
+  color: var(--ink2);
+  margin: 0;
+}
+.hero-sub strong { color: var(--ink); }
+
+/* ── Compare cards (front) ── */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  gap: 3mm;
+  margin-bottom: 4mm;
+}
+.compare-card {
+  border: 0.4mm solid var(--border);
+  border-radius: 2mm;
+  padding: 3mm;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.compare-card .biz {
+  padding-bottom: 2mm;
+  margin-bottom: 1.5mm;
+  border-bottom: 0.3mm dashed var(--border);
+}
+.compare-card .biz-name {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 12pt;
+  color: var(--ink);
+  line-height: 1;
+}
+.compare-card .biz-numbers {
+  font-family: var(--font-mono);
+  font-size: 6pt;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 1mm;
+}
+.compare-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2mm;
+  align-items: baseline;
+  padding: 1.2mm 0;
+  font-size: 7.5pt;
+  line-height: 1.25;
+}
+.compare-row + .compare-row { border-top: 0.2mm solid var(--border); }
+.compare-row .pname { font-weight: 600; color: var(--ink); }
+.compare-row .pname small { display:block; font-weight: 400; font-size: 6pt; color: var(--muted); margin-top: 0.5mm; font-family: var(--font-mono); }
+.compare-row .pcost { font-family: var(--font-mono); font-weight: 700; font-size: 8.5pt; color: var(--ink); text-align: right; min-width: 16mm; }
+.compare-row.expensive .pcost { color: var(--rose); }
+.compare-row.expensive .pname { color: var(--ink2); }
+.compare-row.expensive .pname::before { content:'●'; color: var(--rose); margin-right: 1mm; font-size: 5.5pt; vertical-align: 1pt; }
+.compare-row.cheap {
+  background: var(--emerald-soft);
+  margin: 1mm -3mm 0;
+  padding: 2mm 3mm;
+  border-radius: 1mm;
+  border-top: 0 !important;
+}
+.compare-row.cheap + .compare-row { border-top: 0; }
+.compare-row.cheap .pname { color: var(--emerald); font-weight: 800; }
+.compare-row.cheap .pname::before { content:'★'; color: var(--emerald); margin-right: 1mm; font-size: 7pt; }
+.compare-row.cheap .pcost { color: var(--emerald); }
+
+.savings-strip {
+  margin-top: auto;
+  padding: 2mm 3mm;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 1.5mm;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 2mm;
+}
+.savings-strip .ss-label {
+  font-size: 6pt;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.2;
+}
+.savings-strip .ss-amount {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 16pt;
+  color: var(--accent2);
+  line-height: 1;
+}
+
+/* ── Indie stamp ── */
+.indie-stamp {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3mm;
+  align-items: center;
+  padding: 3mm 4mm;
+  margin-bottom: 4mm;
+  border: 0.4mm solid var(--ink);
+  border-left: 2.5mm solid var(--accent);
+  border-radius: 1mm;
+  background: #fff;
+}
+.indie-stamp-mark {
+  font-size: 18pt;
+  color: var(--accent);
+  line-height: 1;
+}
+.indie-stamp-body strong { color: var(--ink); font-weight: 700; }
+.indie-stamp-body em { color: var(--accent); font-style: italic; font-weight: 600; }
+.indie-stamp-title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 11pt;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 1mm;
+}
+.indie-stamp-sub {
+  font-size: 7pt;
+  line-height: 1.4;
+  color: var(--ink2);
+}
+
+/* ── CTA bar ── */
+.cta {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 4mm;
+  padding-top: 3mm;
+  border-top: 0.6mm solid var(--ink);
+  align-items: center;
+}
+.cta-text {
+  font-family: var(--font-serif);
+  font-size: 13pt;
+  line-height: 1.05;
+  color: var(--ink);
+}
+.cta-text em { color: var(--accent); font-style: italic; }
+.cta-url {
+  font-family: var(--font-mono);
+  font-size: 11pt;
+  background: var(--ink);
+  color: #fff;
+  padding: 3mm 3.5mm;
+  border-radius: 1.5mm;
+  text-align: center;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+.cta-url small {
+  display: block;
+  font-size: 5.5pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 1mm;
+  font-family: var(--font-sans);
+  font-weight: 700;
+}
+
+/* ─────────────────────────────────────────
+   BACK SIDE
+   ───────────────────────────────────────── */
+.back-hero { margin-bottom: 1.5mm; }
+.back-hero h1 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 15pt;
+  line-height: 0.95;
+  margin-bottom: 0.5mm;
+  letter-spacing: -0.01em;
+}
+.back-hero h1 em { color: var(--accent); }
+.back-hero p {
+  font-size: 7pt;
+  line-height: 1.35;
+  color: var(--ink2);
+  margin: 0;
+}
+.back-hero p strong { color: var(--ink); }
+
+.why-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2mm;
+  margin-bottom: 1.5mm;
+}
+.why-col {
+  padding: 2mm 2.5mm;
+  border: 0.3mm solid var(--border);
+  border-radius: 1.5mm;
+  background: #fff;
+}
+.why-col.warn { border-color: var(--rose); background: var(--rose-soft); }
+.why-col.good { border-color: var(--accent); background: var(--accent-tint); }
+.why-col h3 {
+  font-size: 6.5pt;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1mm;
+  color: var(--ink);
+}
+.why-col.warn h3 { color: var(--rose); }
+.why-col.good h3 { color: var(--accent); }
+.why-col ul { margin: 0; padding: 0; list-style: none; }
+.why-col li {
+  font-size: 6pt;
+  line-height: 1.3;
+  padding: 0.6mm 0 0.6mm 4mm;
+  position: relative;
+  color: var(--ink2);
+  border-top: 0.25mm dashed var(--border);
+}
+.why-col li:first-child { border-top: 0; }
+.why-col li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 1.6mm;
+  width: 2.6mm; height: 2.6mm;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 5pt;
+  font-weight: 700;
+  line-height: 2.6mm;
+  color: #fff;
+}
+.why-col.warn li::before { background: var(--rose); content: '✕'; }
+.why-col.good li::before { background: var(--accent); content: '✓'; }
+.why-col li strong { color: var(--ink); }
+
+/* ── Compact comparison table ── */
+.matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 6.5pt;
+  margin-bottom: 1mm;
+}
+.matrix tr.why-row td {
+  font-size: 5.5pt;
+  line-height: 1.35;
+  color: var(--ink2);
+  background: var(--accent-tint);
+  padding: 0.8mm 1.5mm;
+  border-bottom: 0.4mm solid var(--accent);
+  border-top: 0;
+  font-style: italic;
+}
+.matrix th, .matrix td {
+  text-align: left;
+  padding: 0.8mm 1.2mm;
+  border-bottom: 0.2mm solid var(--border);
+  vertical-align: middle;
+  line-height: 1.25;
+}
+.matrix thead th {
+  font-size: 5.5pt;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  border-bottom: 0.4mm solid var(--ink);
+}
+.matrix .biz-row {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 8.5pt;
+  color: var(--ink);
+  background: var(--surface);
+}
+.matrix .biz-row td { padding: 1mm 1.2mm; border-bottom: 0; }
+.matrix .biz-row td small { font-family: var(--font-sans); font-style: normal; font-size: 5.5pt; color: var(--muted); margin-left: 2mm; letter-spacing: 0.04em; }
+.matrix .pname { font-weight: 600; }
+.matrix .prate { font-family: var(--font-mono); color: var(--ink2); font-size: 6pt; }
+.matrix .num { font-family: var(--font-mono); font-weight: 700; text-align: right; white-space: nowrap; }
+.matrix tr.exp .num { color: var(--rose); }
+.matrix tr.exp .pname { color: var(--ink2); }
+.matrix tr.exp .pname::before { content:'● '; color: var(--rose); font-size: 5.5pt; vertical-align: 1pt; }
+.matrix tr.cheap .pname::before { content:'● '; color: var(--muted); font-size: 5.5pt; vertical-align: 1pt; }
+.matrix tr.cheap .num { color: var(--ink); }
+.matrix tr.win { background: var(--emerald-soft); }
+.matrix tr.win .pname { color: var(--emerald); font-weight: 700; }
+.matrix tr.win .pname::before { content:'★ '; color: var(--emerald); font-size: 7pt; }
+.matrix tr.win .num { color: var(--emerald); }
+.matrix tr.why-row td {
+  font-size: 5.5pt;
+  line-height: 1.35;
+  color: var(--ink2);
+  background: var(--accent-tint);
+  padding: 1mm 1.5mm;
+  border-bottom: 0.4mm solid var(--accent);
+  border-top: 0;
+  font-style: italic;
+}
+.matrix tr.why-row td strong { color: var(--accent); font-style: normal; font-weight: 700; }
+.matrix tr.why-row td em { color: var(--ink); font-weight: 600; }
+
+.legend {
+  display: flex; gap: 4mm;
+  font-size: 5pt;
+  color: var(--muted);
+  margin-bottom: 0.5mm;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.legend span::before { content:'●'; margin-right: 1mm; }
+.legend .l-exp::before   { color: var(--rose); }
+.legend .l-cheap::before { color: var(--muted); }
+.legend .l-win::before   { color: var(--emerald); content:'★'; }
+
+/* ── Back footer ── */
+.back-footer {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 2.5mm;
+  padding-top: 1mm;
+  border-top: 0.5mm solid var(--ink);
+  align-items: center;
+}
+.back-indie {
+  font-size: 7pt;
+  line-height: 1.4;
+  color: var(--ink2);
+}
+.back-indie strong { color: var(--ink); }
+.back-indie em { color: var(--accent); font-style: italic; }
+.back-url {
+  background: var(--ink);
+  color: #fff;
+  padding: 3mm;
+  border-radius: 1.5mm;
+  text-align: center;
+}
+.back-url .upper { color: var(--accent2); display: block; font-size: 5.5pt; }
+.back-url .url { font-family: var(--font-mono); font-size: 12pt; display: block; margin-top: 1mm; letter-spacing: 0.02em; font-weight: 600; }
+
+.fine-print {
+  font-size: 5.5pt;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 1mm;
+  border-top: 0.2mm solid var(--border);
+  padding-top: 1mm;
+}
+
+/* ── Screen-only print hint ── */
+.print-hint {
+  max-width: 297mm;
+  margin: 0 auto;
+  padding: 6mm 8mm;
+  font-family: var(--font-sans);
+  font-size: 10pt;
+  color: var(--ink2);
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.45;
+}
+.print-hint h2 { font-size: 14pt; margin: 0 0 2mm; color: var(--ink); }
+.print-hint button {
+  background: var(--ink); color: #fff; border: 0; padding: 2.5mm 5mm;
+  border-radius: 4px; font-weight: 600; cursor: pointer; margin-top: 3mm; font-size: 10pt;
+}
+.print-hint code { background: var(--surface); padding: 0.5mm 1.5mm; border-radius: 2px; font-size: 9pt; }
+.print-hint .ph-steps { margin: 2mm 0 0 4mm; padding: 0; }
+.print-hint .ph-steps li { margin: 0.8mm 0; }
+</style>
+</head>
+<body>
+
+<div class="print-hint">
+  <h2>Tillswift A5 flyer — 2-up on A4, cut in half</h2>
+  Two identical A5 flyers print on each A4 sheet. <strong>Print double-sided</strong>, then <strong>cut down the dashed centre line</strong> to get two finished flyers.
+  <ol class="ph-steps">
+    <li>File → Print (or use the button below)</li>
+    <li>Paper size: <code>A4</code> · Orientation: <code>Landscape</code> · Two-sided / Duplex: <code>On</code> (long-edge OR short-edge — either works, both halves carry identical content)</li>
+    <li>Margins: <code>None</code> · Background graphics: <code>On</code> · Scaling: <code>Default</code> / 100%</li>
+    <li>Print, let the duplex finish, then cut along the green dashed line down the middle</li>
+  </ol>
+  <button onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<!-- ─────────────────────────────────────────
+     FRONT SIDE — A4 landscape, 2× A5 flyers
+     ───────────────────────────────────────── -->
+<section class="sheet" data-tpl="t-front">
+</section>
+
+<!-- ─────────────────────────────────────────
+     BACK SIDE — A4 landscape, 2× A5 flyers
+     ───────────────────────────────────────── -->
+<section class="sheet" data-tpl="t-back">
+</section>
+
+<!-- ─────────────────────────────────────────
+     FRONT TEMPLATE
+     ───────────────────────────────────────── -->
+<template id="t-front">
+  <article class="flyer-half flyer-front">
+
+    <header class="brand">
+      <div class="brand-mark"><strong>tillswift</strong></div>
+      <div class="brand-tagline">The independent UK card-payment cost calculator · ~50 providers, growing</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-eyebrow">STOP OVERPAYING FOR CARD PAYMENTS</div>
+      <h1 class="hero-h">
+        <span class="line line-sans">The brand on the</span>
+        <span class="line line-serif">billboard is rarely</span>
+        <span class="line line-mono">the cheapest reader</span>
+        <span class="line line-strike">in the till.</span>
+      </h1>
+      <p class="hero-sub">
+        <strong>I'm a software engineer, not a salesman.</strong> Square, SumUp, Zettle, Worldpay and Dojo and other mainstream providers spend a fortune on advertising — and you pay for it on every transaction. I work for you, not the card companies. I just publish the maths. Below: two real UK businesses and the answer the maths actually points at — sometimes a cheaper rate, sometimes a better-fit feature set, never the marketing.
+      </p>
+    </section>
+
+    <div class="compare-grid">
+
+      <article class="compare-card">
+        <div class="biz">
+          <div class="biz-name">Convenience store</div>
+          <div class="biz-numbers">120 txns × £9 × 30d<br>£388,800/yr volume</div>
+        </div>
+        <div class="compare-row expensive">
+          <span class="pname">Square Free <small>1.75% in-person</small></span>
+          <span class="pcost">£20,412</span>
+        </div>
+        <div class="compare-row expensive">
+          <span class="pname">SumUp PAYG <small>1.69% in-person</small></span>
+          <span class="pcost">£19,712</span>
+        </div>
+        <div class="compare-row cheap">
+          <span class="pname">Lopay Essential <small>0.79% · no monthly fee</small></span>
+          <span class="pcost">£9,215</span>
+        </div>
+        <div class="savings-strip">
+          <div class="ss-label">3-yr saving<br>vs Square</div>
+          <div class="ss-amount">£11,197</div>
+        </div>
+      </article>
+
+      <article class="compare-card">
+        <div class="biz">
+          <div class="biz-name">Hair salon</div>
+          <div class="biz-numbers">12 visits × £65 × 22d · online bookings<br>£205,920/yr volume</div>
+        </div>
+        <div class="compare-row expensive">
+          <span class="pname">Worldpay (typical) <small>~1.75% · 12-mo contract</small></span>
+          <span class="pcost">£10,811</span>
+        </div>
+        <div class="compare-row">
+          <span class="pname">Lopay Essential <small>0.79% · no booking tools</small></span>
+          <span class="pcost">£4,880</span>
+        </div>
+        <div class="compare-row cheap">
+          <span class="pname">Square Appointments <small>1.75% · bookings bundled free</small></span>
+          <span class="pcost">£10,811</span>
+        </div>
+        <div class="savings-strip">
+          <div class="ss-label">Why it wins<br>bookings bundled</div>
+          <div class="ss-amount">£1,400+<span style="display:block;font-family:var(--font-sans);font-size:6pt;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-style:normal">free over 3 yrs</span></div>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="indie-stamp">
+      <div class="indie-stamp-mark">⛨</div>
+      <div class="indie-stamp-body">
+        <div class="indie-stamp-title">Independent software consultant — not a salesman.</div>
+        <div class="indie-stamp-sub">Service is <strong>completely free</strong>, funded by affiliate commissions when a provider you choose pays one. <em>Rankings are never paid-for</em> — every provider is judged on the same maths, and the cheapest answer for <em>your</em> business wins, regardless of who pays out.</div>
+      </div>
+    </div>
+
+    <div class="cta">
+      <div class="cta-text">Run <em>your</em> numbers in 30 seconds.<br>Free. No sign-up. No sales call.</div>
+      <div class="cta-url">
+        <small>OPEN THE CALCULATOR</small>
+        tillswift.com
+      </div>
+    </div>
+
+  </article>
+</template>
+
+<!-- ─────────────────────────────────────────
+     BACK TEMPLATE
+     ───────────────────────────────────────── -->
+<template id="t-back">
+  <article class="flyer-half flyer-back">
+
+    <header class="brand">
+      <div class="brand-mark"><strong>tillswift</strong></div>
+      <div class="brand-tagline">Why are some providers <em>so much cheaper?</em></div>
+    </header>
+
+    <section class="back-hero">
+      <h1>The right answer<br>changes by <em>business.</em><br>The maths decides — not the marketing.</h1>
+      <p>The cheapest pure rate is rarely the best buy. Sometimes it is — high-volume convenience retail lives or dies on the rate. But cafés need a free POS, restaurants need same-day settlement and a kitchen display, and online stores need a storefront bundled in. Below: a different winner for every business type, and the feature that earns it the spot.</p>
+    </section>
+
+    <div class="why-cols">
+      <div class="why-col warn">
+        <h3>What you're being sold</h3>
+        <ul>
+          <li>Brand-name reassurance — same 1.69–1.75% as everyone else</li>
+          <li>"Flat" pricing that bills debit-only shops at the credit-card rate</li>
+          <li>12-month merchant agreements that lock you in even when better offers appear</li>
+          <li>Surcharges of +1.5–2.0% on premium and non-UK cards, buried in the small print</li>
+        </ul>
+      </div>
+      <div class="why-col good">
+        <h3>What actually wins</h3>
+        <ul>
+          <li><strong>Convenience / high-volume retail</strong> · Lopay 0.79–0.99% — the rate is the whole game</li>
+          <li><strong>Cafés</strong> · Square Free — POS, menu, online orders, loyalty all bundled</li>
+          <li><strong>Restaurants</strong> · Dojo — same-day 7am settlement (incl. weekends), tables, KDS, bookings</li>
+          <li><strong>Online retail</strong> · Shopify Basic — 1.7% with no flat fee + a full storefront for £25/mo</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="l-exp">Heavily-marketed mainstream</span>
+      <span class="l-cheap">Cheapest pure rate</span>
+      <span class="l-win">★ Best fit (price + features)</span>
+    </div>
+
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th style="width: 44%">Provider</th>
+          <th style="width: 36%">Headline pricing</th>
+          <th style="width: 20%; text-align:right">3-yr fees</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- Café — Square wins on features -->
+        <tr class="biz-row"><td colspan="3">Café <small>£10 × 80 × 26d · £249,600/yr</small></td></tr>
+        <tr class="cheap"><td class="pname">Lopay Essential</td><td class="prate">0.79% · cheapest in-person rate</td><td class="num">£5,916</td></tr>
+        <tr class="exp"><td class="pname">SumUp PAYG</td><td class="prate">1.69% in-person · the marketed default</td><td class="num">£12,655</td></tr>
+        <tr class="win"><td class="pname">Square Free</td><td class="prate">1.75% in-person + free POS bundle</td><td class="num">£13,104</td></tr>
+        <tr class="why-row"><td colspan="3"><strong>Why Square wins for cafés:</strong> free POS, menu, modifiers, online orders, gift cards, loyalty and CRM — ~£40/mo of tools bundled into the rate.</td></tr>
+
+        <!-- Restaurant — Dojo wins on features -->
+        <tr class="biz-row"><td colspan="3">Restaurant <small>£50 × 40 × 26d · £624,000/yr</small></td></tr>
+        <tr class="cheap"><td class="pname">Lopay Standard</td><td class="prate">0.99% · cheapest in-person rate</td><td class="num">£18,533</td></tr>
+        <tr class="exp"><td class="pname">Worldpay (typical)</td><td class="prate">~1.75% · 12-mo contract</td><td class="num">£32,760</td></tr>
+        <tr class="win"><td class="pname">Dojo (typical)</td><td class="prate">~1.4% blended + restaurant kit</td><td class="num">£26,208</td></tr>
+        <tr class="why-row"><td colspan="3"><strong>Why Dojo wins for restaurants:</strong> same-day 7am settlement <em>incl. weekends</em> + tables, KDS, tipping, bookings and Dojo Pocket loyalty — the cash-flow uplift beats the rate gap.</td></tr>
+
+        <!-- Online gift shop — Shopify wins on features + price -->
+        <tr class="biz-row"><td colspan="3">Online gift shop <small>£18 × 40 × 30d · £259,200/yr · pure online</small></td></tr>
+        <tr class="exp"><td class="pname">PayPal Standard</td><td class="prate">2.9% + 30p · the SME default</td><td class="num">£35,510</td></tr>
+        <tr class="cheap"><td class="pname">Stripe Online</td><td class="prate">1.5% + 20p · cheapest pure card rate</td><td class="num">£20,304</td></tr>
+        <tr class="win"><td class="pname">Shopify Basic + Payments</td><td class="prate">1.7% online · £25/mo · storefront bundled</td><td class="num">£14,119</td></tr>
+        <tr class="why-row"><td colspan="3"><strong>Why Shopify wins for online retail:</strong> 1.7% <em>no per-txn flat fee</em> beats Stripe below ~£35 avg ticket; £25/mo includes full storefront, inventory and plugins.</td></tr>
+
+      </tbody>
+    </table>
+
+    <div class="back-footer">
+      <div class="back-indie">
+        <strong>I'm an independent software consultant, not a salesman.</strong> The site already ranks <strong>around 50 UK providers and is still growing</strong>. The goal is to find the best buyer for <em>you</em> — and to show up the naughty ones banking on the small print.
+      </div>
+      <div class="back-url">
+        <span class="upper">Run your numbers</span>
+        <span class="url">tillswift.com</span>
+      </div>
+    </div>
+
+    <div class="fine-print">
+      Rates from each provider's official UK pricing page (Square, SumUp, Zettle, Stripe, PayPal, Worldpay, Tyl, Teya, myPOS, Shopify, Lopay). 3-year fees are processing only — hardware excluded except where noted. "Typical" rates for negotiated providers (Worldpay, Dojo) are illustrative blended retail offers. Tillswift is independent; rankings are never paid-for, and providers without an affiliate deal are ranked the same as those with one.
+    </div>
+
+  </article>
+</template>
+
+<script>
+// Render two identical flyer halves on each A4 sheet so the duplex flip
+// orientation doesn't matter — every cut piece is correctly aligned.
+document.querySelectorAll('.sheet[data-tpl]').forEach(sheet => {
+  const tpl = document.getElementById(sheet.dataset.tpl);
+  if (!tpl) return;
+  // Two clones, one per A5 half
+  for (let i = 0; i < 2; i++) {
+    sheet.appendChild(tpl.content.cloneNode(true));
+  }
+});
+</script>
+
+</body>
+</html>
