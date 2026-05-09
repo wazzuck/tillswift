@@ -251,7 +251,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 .compare-row.cheap + .compare-row { border-top: 0; }
 .compare-row.cheap .pname { color: var(--emerald); font-weight: 800; }
 .compare-row.cheap .pname::before { content:'★'; color: var(--emerald); margin-right: 1mm; font-size: 7pt; }
-.compare-row.cheap .pcost { color: #facc15; }
+.compare-row.cheap .pcost { color: var(--emerald); }
 
 .savings-strip {
   margin-top: auto;
@@ -314,11 +314,11 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 /* ── CTA bar ── */
 .cta {
   margin-top: auto;
+  margin-bottom: 5mm;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 4mm;
-  padding-top: 3mm;
-  border-top: 0.6mm solid var(--ink);
+  padding-top: 0mm;
   align-items: center;
 }
 .cta-text {
@@ -591,7 +591,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 
     <header class="brand">
       <div class="brand-mark"><strong>tillswift</strong></div>
-      <div class="brand-tagline">The independent UK card-payment cost calculator · ~50 providers, growing</div>
+      <div class="brand-tagline">The independent UK card-payment cost calculator ~50 providers and growing</div>
     </header>
 
     <section class="hero">
@@ -626,7 +626,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
           <span class="pname">Lopay Essential <small>0.79% · no monthly fee</small></span>
           <span class="pcost">£9,215</span>
         </div>
-        <div class="savings-strip">
+        <div class="savings-strip" style="padding: 2mm 3mm 4.2mm 3mm;">
           <div class="ss-label">Why it wins<br>significantly cheaper</div>
           <div class="ss-amount">£11,197<span style="display:block;font-family:var(--font-sans);font-size:6pt;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-style:normal">savings over 3 years vs square free</span></div>
         </div>
@@ -641,17 +641,17 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
           <span class="pname">Dojo PAYG <small>1.90% + 5p in-person</small></span>
           <span class="pcost">£12,213</span>
         </div>
-        <div class="compare-row">
-          <span class="pname">Teya PAYG <small>1.59% in-person</small></span>
-          <span class="pcost">£9,822</span>
+        <div class="compare-row expensive">
+          <span class="pname">Phorest <small>£95/mo booking software</small></span>
+          <span class="pcost">£3,420</span>
         </div>
         <div class="compare-row cheap">
-          <span class="pname">Square Appointments <small>1.75% · free booking software</small></span>
+          <span class="pname">Square Appointments Plus <small>1.75% · £25/mo booking software</small></span>
           <span class="pcost">£10,811</span>
         </div>
-        <div class="savings-strip">
-          <div class="ss-label">Why it wins<br>free booking software</div>
-          <div class="ss-amount">£1,402<span style="display:block;font-family:var(--font-sans);font-size:6pt;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-style:normal">savings over 3 years vs dojo payg</span></div>
+        <div class="savings-strip" style="padding: 2mm 3mm 2mm 3mm;">
+          <div class="ss-label"><span style="color:#fff">Why it wins</span><br>Cheaper booking software</div>
+          <div class="ss-amount">£4,822<span style="display:block;font-family:var(--font-sans);font-size:6pt;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-style:normal">savings over 3 years vs dojo + phorest combined</span></div>
         </div>
       </article>
 
