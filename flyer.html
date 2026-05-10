@@ -114,21 +114,14 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 }
 
 /* ── Hero ── */
-.hero {
-  margin-bottom: 4mm;
-  border: 0.35mm solid var(--ink);
-  padding: 2.4mm 3mm 3mm;
-  background: #fff;
-}
+.hero { margin-bottom: 4mm; }
 .hero-eyebrow {
-  font-family: var(--font-sans);
-  font-size: 6pt;
-  letter-spacing: 0.12em;
-  color: var(--ink2);
+  font-family: var(--font-mono);
+  font-size: 6.5pt;
+  letter-spacing: 0.18em;
+  color: var(--accent);
   text-transform: uppercase;
   margin-bottom: 2mm;
-  border-bottom: 0.25mm solid var(--border2);
-  padding-bottom: 1.2mm;
 }
 .hero-h {
   font-size: 26pt;
@@ -145,11 +138,6 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
   letter-spacing: -0.015em;
   color: #1e40af;
 }
-.hero-h .line-underline {
-  text-decoration: underline;
-  text-decoration-thickness: 0.08em;
-  text-underline-offset: 0.08em;
-}
 .hero-h .line-serif {
   font-family: var(--font-serif);
   font-style: normal;
@@ -161,25 +149,29 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 .hero-h .line-alt-italic {
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
+  font-weight: 400;
+  font-size: 26pt;
   letter-spacing: -0.005em;
+  color: var(--ink);
 }
 .hero-h .line-mono {
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 12pt;
-  letter-spacing: 0.01em;
-  color: var(--ink);
-  text-transform: none;
+  font-size: 17pt;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+  text-transform: lowercase;
 }
 .hero-h .line-strike {
-  font-family: var(--font-sans);
-  font-weight: 500;
-  font-size: 10pt;
-  letter-spacing: 0.02em;
-  text-transform: none;
+  font-family: 'Bebas Neue', 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 30pt;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   color: var(--ink2);
-  text-decoration: none;
-  margin-top: 1.2mm;
+  text-decoration: line-through;
+  text-decoration-thickness: 0.13em;
+  text-decoration-color: var(--rose);
 }
 .hero-h .line-strike-red {
   font-family: var(--font-sans);
@@ -621,15 +613,23 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
     </header>
 
     <section class="hero">
-      <div class="hero-eyebrow">UK payments expose | small business edition</div>
+      <div class="hero-eyebrow">STOP OVERPAYING FOR CARD PAYMENTS</div>
       <h1 class="hero-h">
+<<<<<<< HEAD
         <span class="line line-sans line-underline">banker buys even bigger yacht!</span>
         <span class="line line-serif line-alt-italic">mis-sold small businesses pay the bill.</span>
         <span class="line line-mono">The loudest payment brands are usually the priciest.</span>
         <span class="line line-strike">See the maths. Keep your margin.</span>
         <span class="line line-strike-red">Get rid of killer costs.</span>
+=======
+        <span class="line line-sans">The brand on the</span>
+        <span class="line line-serif">billboard is rarely</span>
+        <span class="line line-mono">the cheapest reader</span>
+        <span class="line line-strike">in the till.</span>
+>>>>>>> 35438ed345c3ca2a1fe58ad265d7882cd1f84de4
       </h1>
       <p class="hero-sub">
+        <strong>I'm a software engineer, not a salesman.</strong> Square, SumUp, Zettle, Worldpay and Dojo and other mainstream providers spend a fortune on advertising — and you pay for it on every transaction. I work for you, not the card companies. I just publish the maths. Below: two real UK businesses and the answer the maths actually points at — sometimes a cheaper rate, sometimes a better-fit feature set, never the marketing.
       </p>
     </section>
 
@@ -658,7 +658,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
         </div>
         <div class="savings-strip" style="padding: 2mm 3mm 4.2mm 3mm;">
           <div class="ss-label">Why it wins<br>significantly cheaper</div>
-          <div class="ss-amount">£11,197<span style="display:block;font-family:var(--font-sans);font-size:6pt;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-style:normal">savings over 3 years vs square free</span></div>
+          <div class="ss-amount">You Save £11,197<span style="display:block;font-family:var(--font-sans);font-size:6pt;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-style:normal">savings over 3 years vs square free</span></div>
         </div>
       </article>
 
@@ -681,7 +681,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
         </div>
         <div class="savings-strip" style="padding: 2mm 3mm 2mm 3mm;">
           <div class="ss-label"><span style="color:#fff">Why it wins</span><br>Cheaper booking software</div>
-          <div class="ss-amount">£4,822<span style="display:block;font-family:var(--font-sans);font-size:6pt;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-style:normal">savings over 3 years vs dojo + phorest combined</span></div>
+          <div class="ss-amount">You Save £4,822<span style="display:block;font-family:var(--font-sans);font-size:6pt;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-style:normal">savings over 3 years vs dojo + phorest combined</span></div>
         </div>
       </article>
 
