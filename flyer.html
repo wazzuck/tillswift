@@ -47,11 +47,11 @@ body {
    the front/back duplex flip orientation doesn't
    matter — every cut piece is correctly aligned.
    ───────────────────────────────────────── */
-@page { size: A5 portrait; margin: 0; }
+@page { size: 5in 7in; margin: 0; }
 
 .sheet {
-  width: 148.5mm;
-  height: 210mm;
+  width: 127mm;
+  height: 177.8mm;
   display: block;
   background: #fff;
   position: relative;
@@ -75,7 +75,7 @@ body {
    ───────────────────────────────────────── */
 .flyer-half {
   width: 100%;
-  height: 210mm;
+  height: 177.8mm;
   padding: 5mm 7mm;
   display: flex;
   flex-direction: column;
@@ -117,7 +117,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 }
 
 /* ── Hero ── */
-.hero { margin-bottom: 4mm; }
+.hero { margin-bottom: 2mm; }
 .hero-eyebrow {
   font-family: var(--font-mono);
   font-size: 6.5pt;
@@ -133,7 +133,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
   margin-bottom: 0;
   font-weight: 400;
 }
-.hero-h .line { display: block; margin-bottom: 1.5mm; text-align: center; white-space: nowrap; }
+.hero-h .line { display: block; margin-bottom: 2mm; text-align: center; white-space: nowrap; }
 .hero-h .line-sans {
   font-family: var(--font-serif);
   font-weight: 700;
@@ -189,8 +189,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
   margin-top: 0;
 }
 .hero-sub {
-  font-size: 8pt;
-  line-height: 1.4;
+  font-size: 6.5pt;
+  line-height: 1.3;
   color: var(--ink2);
   margin: 0;
 }
@@ -201,13 +201,13 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: stretch;
-  gap: 6mm;
-  margin-bottom: 4mm;
+  gap: 3mm;
+  margin-bottom: 2mm;
 }
 .compare-card {
   border: 0.4mm solid var(--border);
   border-radius: 2mm;
-  padding: 3mm;
+  padding: 2mm;
   background: #fff;
   display: flex;
   flex-direction: column;
@@ -305,10 +305,10 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 .indie-stamp {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 3mm;
+  gap: 2mm;
   align-items: center;
-  padding: 3mm 4mm;
-  margin-bottom: 4mm;
+  padding: 2mm 3mm;
+  margin-bottom: 2mm;
   border: 0.4mm solid var(--ink);
   border-left: 2.5mm solid var(--accent);
   border-radius: 1mm;
@@ -337,7 +337,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 
 /* ── CTA bar ── */
 .cta {
-  margin-bottom: 5mm;
+  margin-bottom: 2mm;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 4mm;
@@ -376,19 +376,19 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 /* ─────────────────────────────────────────
    BACK SIDE
    ───────────────────────────────────────── */
-.back-hero { margin-bottom: 1.5mm; }
+.back-hero { margin-bottom: 1mm; }
 .back-hero h1 {
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 15pt;
+  font-size: 12pt;
   line-height: 0.95;
   margin-bottom: 0.5mm;
   letter-spacing: -0.01em;
 }
 .back-hero h1 em { color: var(--accent); }
 .back-hero p {
-  font-size: 7pt;
-  line-height: 1.35;
+  font-size: 6pt;
+  line-height: 1.3;
   color: var(--ink2);
   margin: 0;
 }
@@ -397,11 +397,11 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 .why-cols {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2mm;
-  margin-bottom: 1.5mm;
+  gap: 1.5mm;
+  margin-bottom: 1mm;
 }
 .why-col {
-  padding: 2mm 2.5mm;
+  padding: 1.5mm 2mm;
   border: 0.3mm solid var(--border);
   border-radius: 1.5mm;
   background: #fff;
@@ -462,10 +462,10 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 }
 .matrix th, .matrix td {
   text-align: left;
-  padding: 0.8mm 1.2mm;
+  padding: 0.5mm 1mm;
   border-bottom: 0.2mm solid var(--border);
   vertical-align: middle;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 .matrix thead th {
   font-size: 5.5pt;
@@ -527,14 +527,14 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
   margin-top: auto;
   display: grid;
   grid-template-columns: 1.4fr 1fr;
-  gap: 2.5mm;
-  padding-top: 1mm;
+  gap: 2mm;
+  padding-top: 0.5mm;
   border-top: 0.5mm solid var(--ink);
   align-items: center;
 }
 .back-indie {
-  font-size: 7pt;
-  line-height: 1.4;
+  font-size: 6pt;
+  line-height: 1.3;
   color: var(--ink2);
 }
 .back-indie strong { color: var(--ink); }
@@ -542,20 +542,20 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
 .back-url {
   background: var(--ink);
   color: #fff;
-  padding: 3mm;
+  padding: 2mm;
   border-radius: 1.5mm;
   text-align: center;
 }
-.back-url .upper { color: var(--accent2); display: block; font-size: 5.5pt; }
-.back-url .url { font-family: var(--font-mono); font-size: 12pt; display: block; margin-top: 1mm; letter-spacing: 0.02em; font-weight: 600; }
+.back-url .upper { color: var(--accent2); display: block; font-size: 5pt; }
+.back-url .url { font-family: var(--font-mono); font-size: 10pt; display: block; margin-top: 0.5mm; letter-spacing: 0.02em; font-weight: 600; }
 
 .fine-print {
-  font-size: 5.5pt;
+  font-size: 5pt;
   color: var(--muted);
-  line-height: 1.4;
-  margin-top: 1mm;
+  line-height: 1.3;
+  margin-top: 0.5mm;
   border-top: 0.2mm solid var(--border);
-  padding-top: 1mm;
+  padding-top: 0.5mm;
 }
 
 /* ── Screen-only print hint ── */
@@ -666,7 +666,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
           <span class="pcost">£3,420</span>
         </div>
         <div class="compare-row cheap">
-          <span class="pname">Square Appointments Plus <small>1.75% · £25/mo booking software</small></span>
+          <span class="pname">Square Appointments <small>1.75% · £25/mo software</small></span>
           <span class="pcost">£10,811</span>
         </div>
         <div class="savings-strip" style="padding: 2mm 3mm 2mm 3mm;">
