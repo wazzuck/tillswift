@@ -130,12 +130,12 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
   margin-bottom: 0;
   font-weight: 400;
 }
-.hero-h .line { display: block; }
+.hero-h .line { display: block; margin-bottom: 1.5mm; text-align: center; white-space: nowrap; }
 .hero-h .line-sans {
   font-family: var(--font-serif);
   font-weight: 700;
-  font-size: 38pt;
-  letter-spacing: -0.015em;
+  font-size: 24pt;
+  letter-spacing: 0.05em;
   color: var(--rose);
   text-decoration: underline;
   text-decoration-thickness: 0.08em;
@@ -145,31 +145,31 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
   font-family: var(--font-serif);
   font-style: normal;
   font-weight: 400;
-  font-size: 19pt;
-  letter-spacing: -0.01em;
+  font-size: 15pt;
+  letter-spacing: 0.03em;
   color: var(--ink);
 }
 .hero-h .line-alt-italic {
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
   font-weight: 400;
-  font-size: 26pt;
-  letter-spacing: -0.005em;
+  font-size: 19pt;
+  letter-spacing: 0.03em;
   color: var(--ink);
 }
 .hero-h .line-mono {
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: 17pt;
-  letter-spacing: -0.04em;
+  letter-spacing: 0.02em;
   color: var(--accent);
   text-transform: lowercase;
 }
 .hero-h .line-strike {
   font-family: 'Bebas Neue', 'Inter', sans-serif;
   font-weight: 400;
-  font-size: 30pt;
-  letter-spacing: 0.03em;
+  font-size: 20pt;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink2);
 }
@@ -619,11 +619,10 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.05; }
       <h1 class="hero-h">
         <span class="line line-sans line-underline">banker buys even bigger yacht!</span>
         <span class="line line-serif line-alt-italic">mis-sold businesses pay the bill.</span>
-        <span class="line line-mono">The loudest payment brands are usually the priciest.</span>
         <span class="line line-strike">See the maths. Keep your margin.</span>
       </h1>
       <p class="hero-sub">
-        <strong>I'm a software engineer, not a salesman.</strong> Square, SumUp, Zettle, Worldpay and Dojo and other mainstream providers spend a fortune on advertising — and you pay for it on every transaction. I work for you, not the card companies. I just publish the maths. Below: two real UK businesses and the answer the maths actually points at — sometimes a cheaper rate, sometimes a better-fit feature set, never the marketing.
+      <strong>I'm a software engineer, not a salesman.</strong> Square, SumUp, Zettle, Worldpay and Dojo and other mainstream providers spend a fortune on advertising — and you pay for it on every transaction. I just publish the maths for <strong>free</strong>. Below: two real UK businesses and the answer the maths actually points at — sometimes a cheaper rate, sometimes a better-fit feature set, never the marketing.
       </p>
     </section>
     <div class="compare-grid">
@@ -800,6 +799,22 @@ document.querySelectorAll('.sheet[data-tpl]').forEach(sheet => {
     sheet.appendChild(tpl.content.cloneNode(true));
   }
 });
+
+function fitHeroLines() {
+  document.querySelectorAll('.hero-h .line').forEach(el => {
+    const parentWidth = el.parentElement.getBoundingClientRect().width;
+    if (!parentWidth) return;
+    let lo = 6, hi = 300;
+    while (hi - lo > 0.5) {
+      const mid = (lo + hi) / 2;
+      el.style.fontSize = mid + 'px';
+      el.scrollWidth <= parentWidth ? (lo = mid) : (hi = mid);
+    }
+    el.style.fontSize = lo + 'px';
+  });
+}
+
+document.fonts.ready.then(fitHeroLines);
 </script>
 
 </body>
