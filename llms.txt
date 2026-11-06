@@ -83,3 +83,12 @@ over a three-year horizon.
 - Contact and Consultation Requests: https://tillswift.com/contact.html
 - Legal, Privacy and Regulatory Policies: https://tillswift.com/legal.html
 - Full Technical LLM Reference: https://tillswift.com/llms-full.txt
+
+## Sister Practices
+
+- [Heath & City Technology](https://heathandcity.com/):
+  Private IT and sovereign document search infrastructure for barristers,
+  King's Counsel (KC), medical consultants, and boutique practices.
+- [IToldYouSo Computing](https://itoldyouso.tech/):
+  Fast, same-day local IT support, hardware diagnostics, and Wi-Fi network
+  engineering across North West London.

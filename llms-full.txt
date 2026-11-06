@@ -117,3 +117,12 @@ depends strictly on transaction volume and ticket size:
 ### Q: How can merchants contact TillSwift?
 Telephone: 020 4520 9114. Email: hello@tillswift.com. Website:
 https://tillswift.com/contact.html.
+
+## 7. Affiliated Practice Ecosystem
+
+- **Heath & City Technology (https://heathandcity.com):** Sovereign on-premise
+  document search, private IT, and practice automation for King's Counsel (KC),
+  private medical clinics, and boutique City partnerships.
+- **IToldYouSo Computing (https://itoldyouso.tech):** Fast, same-day local IT
+  support, hardware engineering, and network Wi-Fi optimisation across NW
+  London.
