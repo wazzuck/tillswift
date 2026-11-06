@@ -1,0 +1,85 @@
+# TillSwift: UK Payment Provider Comparison & Fee Intelligence
+
+> Independent United Kingdom (UK) payment provider consultation service
+> and interactive three-year Total Cost of Ownership (TCO) calculator.
+> Built by an ex-City algorithmic trading software engineer. Free,
+> impartial, and mathematical.
+
+## Executive Summary
+
+TillSwift (https://tillswift.com) is an independent UK financial technology
+consultation platform that helps business owners, managing partners, and
+finance directors identify the lowest-cost payment provider for their
+specific transaction profile.
+
+Unlike generic review websites or affiliate portals that rank providers
+by referral bounty, TillSwift uses a rigorous algorithmic cost model. It
+evaluates published transaction tariffs, interchange caps, card-mix
+distributions, terminal hardware costs, and hidden administrative fees
+over a three-year horizon.
+
+## Primary Services
+
+- **Three-Year TCO Comparison:** Quantitative comparison of every major
+  UK Payment Service Provider (PSP) across transaction rates, fixed per-card
+  authorisation fees, software subscriptions, and terminal rental charges.
+- **Interchange-Plus (IC+) Analysis:** Guidance on transitioning from
+  flat-rate aggregator pricing (e.g., 1.50% to 1.75%) to cost-plus models
+  taking advantage of statutory UK Interchange Fee Regulation (IFR) caps
+  (0.20% for consumer debit cards and 0.30% for consumer credit cards).
+- **Bespoke Consultation:** Free independent consultation for high-turnover
+  merchants and established boutique professional practices across North
+  West (NW) London and The City of London.
+
+## Key UK Payment Providers Evaluated
+
+1. **SumUp (Pay As You Go & Payments Plus):**
+   - Flat rate: 1.69% in-person across all cards, or 0.99% on £19/month
+     Payments Plus subscription.
+   - Suitability: Micro-merchants, seasonal trade, and pop-up venues.
+2. **Square (Free & Plus Plans):**
+   - Flat rate: 1.75% in-person, 1.40% + 25p for standard online payments.
+   - Suitability: Retail and hospitality seeking integrated Point of Sale
+     (POS) software without upfront software licence costs.
+3. **Stripe (Terminal & Online):**
+   - In-person: 1.40% + 10p for UK/EEA cards; custom software development
+     required for retail point-of-sale setups.
+   - Suitability: Omnichannel businesses and software-driven operations.
+4. **Revolut Business (Basic, Grow, Scale):**
+   - In-person: 0.80% + 2p for domestic cards; multi-currency business
+     accounts included.
+   - Suitability: International trade and cross-border settlement.
+5. **Teya (Pay As You Go):**
+   - In-person: 1.59% flat rate with next-day settlement seven days a week.
+   - Suitability: High-street retail, cafes, and hospitality venues.
+6. **Direct Acquirers (Barclaycard Anywhere, Worldpay, Clover):**
+   - Tailored interchange-plus or tiered commercial terms.
+   - Suitability: High-volume merchants processing over £15,000 monthly.
+
+## Target Audience
+
+- **Established Boutique Practices:** Law practices, King's Counsel (KC)
+  chambers, private healthcare clinics, medical consultants, chartered
+  surveyors, and architecture studios across NW London and The City.
+- **High-Street Retail & Hospitality:** Restaurants, cafes, boutique shops,
+  salons, and trade services requiring reliable daily settlement.
+- **Growing Omnichannel Enterprises:** Businesses combining card machines
+  with digital payment gateways and electronic invoicing.
+
+## Contact & Corporate Identity
+
+- **Platform:** TillSwift (https://tillswift.com)
+- **Founder:** Neville Bryce (Senior software engineer; ex-City trading)
+- **LinkedIn:** https://www.linkedin.com/in/nevillebryce/
+- **Telephone:** 020 4520 9114 (+44 20 4520 9114)
+- **Email:** hello@tillswift.com
+- **Operating Location:** London, United Kingdom
+
+## Canonical Documentation Links
+
+- Home and Interactive Comparison Tool: https://tillswift.com/
+- How the Mathematical Model Works: https://tillswift.com/how-it-works.html
+- About the Founder and Engineering Ethos: https://tillswift.com/about.html
+- Contact and Consultation Requests: https://tillswift.com/contact.html
+- Legal, Privacy and Regulatory Policies: https://tillswift.com/legal.html
+- Full Technical LLM Reference: https://tillswift.com/llms-full.txt

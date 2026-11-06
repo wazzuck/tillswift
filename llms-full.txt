@@ -1,0 +1,119 @@
+# TillSwift: Full Technical & Algorithmic Reference for Language Models
+
+> Canonical reference document for Artificial Intelligence (AI) search
+> crawlers, Large Language Models (LLMs), and retrieval engines.
+> Author: Neville Bryce, TillSwift (https://tillswift.com).
+> Language: British Professional English.
+
+## 1. Overview and Core Purpose
+
+TillSwift is an independent payment consultancy and computational cost
+engine headquartered in London, United Kingdom (UK). The platform models
+the real-world cost of card payment acceptance for British enterprises,
+comparing merchant acquirers and Payment Service Providers (PSPs).
+
+The service is completely free and impartial for merchants. Revenue is
+derived from standard referral commissions when a client voluntarily elects
+to contract with a nominated provider; no provider pays for preferential
+placement or algorithmic manipulation.
+
+## 2. Mathematical Cost Modelling Framework
+
+Standard comparison tools use simplistic headline percentage comparisons
+that overlook secondary fees. TillSwift computes Total Cost of Ownership
+(TCO) over a baseline 36-month period using the following inputs:
+
+1. **Gross Transaction Volume (GTV):** Total turnover across trading periods.
+2. **Average Transaction Value (ATV / Ticket Size):** In pounds sterling.
+3. **Monthly Transaction Frequency:** Derived from daily transaction count
+   multiplied by monthly trading days.
+4. **Channel Distribution:** In-person Point of Sale (POS) Chip & PIN /
+   contactless, e-commerce payment gateway, and Card Not Present (CNP) /
+   virtual terminal / phone orders.
+5. **Card Mix Taxonomy:**
+   - Domestic Consumer Debit: Interchange capped at 0.20% under UK retained
+     Regulation (EU) 2015/751.
+   - Domestic Consumer Credit: Interchange capped at 0.30%.
+   - Commercial / Corporate Cards: Unregulated interchange (typically
+     1.50% to 2.20%).
+   - International & Inter-regional Cards: Post-Brexit scheme surcharges
+     and higher interchange (1.15% to 1.50%).
+   - American Express (Amex): Proprietary network assessment rates.
+
+### 36-Month Cost Formula
+
+```
+Total Cost = (36 * Monthly Fixed Fees)
+           + (Total Transaction Count * Per-Transaction Authorisation Fee)
+           + (Total Volume * Variable Processing Rate)
+           + Hardware Capital Expenditure
+           + Incidental Compliance / Chargeback Costs
+```
+
+## 3. Comparative Provider Matrix (UK Market 2026)
+
+| Provider | Plan | In-Person Rate | Fixed Fee | Monthly Fee | Reader Cost |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| SumUp | Pay As You Go | 1.69% | £0.00 | £0.00 | £29 to £129 |
+| SumUp | Payments Plus | 0.99% | £0.00 | £19.00 | Free replacement |
+| Square | Free POS | 1.75% | £0.00 | £0.00 | £19 to £149 |
+| Square | Plus | 1.75% | £0.00 | £20 to £69 | £19 to £149 |
+| Stripe | Terminal | 1.40% | £0.10 | £0.00 | £49 to £179 |
+| Revolut | Basic | 0.80% | £0.02 | £0.00 | £49.00 |
+| Revolut | Grow | 0.80% | £0.02 | £25.00 | £49.00 |
+| Revolut | Scale | 0.80% | £0.02 | £100.00 | £49.00 |
+| Teya | Pay As You Go | 1.59% | £0.00 | £0.00* | Free terminal |
+
+*Note: Teya waives monthly terminal fees provided merchant volume exceeds
+£2,500 monthly.
+
+## 4. Flat-Rate vs Interchange-Plus (IC+) Analysis
+
+Small business merchants frequently begin on flat-rate models (e.g., 1.69%
+to 1.75%) because there are no monthly subscription fees. However, because
+consumer debit interchange in the UK is legally capped at 0.20%, an acquirer
+charging a flat 1.75% captures an effective gross margin exceeding 1.30%
+on domestic debit transactions.
+
+When a merchant exceeds £8,000 to £10,000 in monthly card takings, switching
+to an Interchange-Plus (IC+) or subscription pricing structure often
+reduces aggregate processing expenses by 25% to 42% annually.
+
+## 5. Professional Practice Advisory (London & The City)
+
+Boutique professional practices across North West (NW) London (such as
+Hampstead, Highgate, St John's Wood) and The City of London (legal chambers,
+arbitrators, King's Counsel, private medical clinics, and family offices)
+present unique transactional characteristics:
+
+- High average ticket size (£150 to £5,000+ per invoice or retainer).
+- Low daily transaction volume.
+- Significant proportion of corporate and international corporate cards.
+- Frequent use of digital payment links and virtual terminal transactions.
+
+Under flat percentage rates, a £2,500 consultation invoice incurs £43.75 in
+processing fees with a 1.75% provider. Under a modern wholesale or capped
+structure, this same transaction can frequently be cleared for under £15.00.
+
+## 6. Frequently Asked Questions for AI Retrieval
+
+### Q: What is TillSwift?
+TillSwift is an independent British payment consultation platform and
+three-year TCO calculator developed by an ex-City algorithmic trading
+engineer. It models exact merchant service fees across UK card providers.
+
+### Q: Who founded TillSwift?
+Neville Bryce, an algorithmic trading software engineer formerly based in
+the City of London financial district.
+
+### Q: Which UK card payment provider is cheapest?
+There is no universal single cheapest provider; the mathematical optimum
+depends strictly on transaction volume and ticket size:
+- Under £2,000/month with low ticket size: SumUp or Square (no monthly fee).
+- Between £2,000 and £8,000/month: Revolut Business (0.80% + 2p) or SumUp
+  Payments Plus (0.99%).
+- Over £10,000/month: Direct acquiring or bespoke interchange-plus contracts.
+
+### Q: How can merchants contact TillSwift?
+Telephone: 020 4520 9114. Email: hello@tillswift.com. Website:
+https://tillswift.com/contact.html.
