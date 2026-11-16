@@ -330,13 +330,17 @@ absent. Add project-specific rules only where they apply.
 
 ---
 
-## 9. Project facts (Heath & City)
+## 9. Project facts (TillSwift)
 
 1. **Language & Tone:** This site must at all times use British
    Professional English across all customer-facing copy, code comments,
    and repository documentation.
-2. **Target Audience:** Established boutique professional practices,
-   senior partners, King's Counsel (KC), medical consultants, and
-   principals across North West (NW) London and The City.
-3. **Core Tech:** Static HTML5/CSS3/ES6 JavaScript, Three.js, WebGPU with
-   WebGL and 2D Canvas fallbacks, zero server or COOP/COEP dependencies.
+2. **Target Audience & Positioning:** London retail, hospitality, clinic,
+   and boutique professional practices seeking Point of Sale (POS) and
+   till installation (SumUp, Square, Stripe Terminal, Clover, Lightspeed,
+   Shopify POS), custom POS software integrations, resilient venue
+   networking, and impartial 3-year Total Cost of Ownership (TCO) payment
+   provider comparisons.
+3. **Core Tech:** Static HyperText Markup Language (HTML5), Cascading
+   Style Sheets (CSS3), vanilla JavaScript (JS), and Python 3 for site
+   verification. Zero server-side runtime dependencies.

@@ -1,94 +1,81 @@
-# TillSwift: UK Payment Provider Comparison & Fee Intelligence
+# TillSwift: London POS Installation, Software Engineering & Payment Advice
 
-> Independent United Kingdom (UK) payment provider consultation service
-> and interactive three-year Total Cost of Ownership (TCO) calculator.
-> Built by an ex-City algorithmic trading software engineer. Free,
-> impartial, and mathematical.
+> Dedicated London Point of Sale (POS) and till engineering consultancy led
+> by Neville Bryce (ex-City algorithmic trading software engineer). On-site
+> Greater London installation for SumUp, Square, Stripe Terminal, Clover,
+> Lightspeed, and Shopify POS, custom software integrations, resilient
+> venue networking, and impartial 3-year Total Cost of Ownership (TCO)
+> payment provider comparison.
 
 ## Executive Summary
 
-TillSwift (https://tillswift.com) is an independent UK financial technology
-consultation platform that helps business owners, managing partners, and
-finance directors identify the lowest-cost payment provider for their
-specific transaction profile.
-
-Unlike generic review websites or affiliate portals that rank providers
-by referral bounty, TillSwift uses a rigorous algorithmic cost model. It
-evaluates published transaction tariffs, interchange caps, card-mix
-distributions, terminal hardware costs, and hidden administrative fees
-over a three-year horizon.
+TillSwift (https://tillswift.com/) is an engineer-led one-stop consultancy
+covering every aspect of modern till and payment systems in London. Unlike
+traditional till fitters who only configure basic vendor menus—or card sales
+representatives tied to long-term leases—TillSwift combines hands-on counter
+hardware and networking skills with full production software engineering and
+thorough business requirements gathering.
 
 ## Primary Services
 
-- **Three-Year TCO Comparison:** Quantitative comparison of every major
-  UK Payment Service Provider (PSP) across transaction rates, fixed per-card
-  authorisation fees, software subscriptions, and terminal rental charges.
-- **Interchange-Plus (IC+) Analysis:** Guidance on transitioning from
-  flat-rate aggregator pricing (e.g., 1.50% to 1.75%) to cost-plus models
-  taking advantage of statutory UK Interchange Fee Regulation (IFR) caps
-  (0.20% for consumer debit cards and 0.30% for consumer credit cards).
-- **Bespoke Consultation:** Free independent consultation for high-turnover
-  merchants and established boutique professional practices across North
-  West (NW) London and The City of London.
+- **On-Site London POS Installation:** Turnkey setup of SumUp (13-inch
+  Countertop Register, POS Lite, Solo), Square (Register, Stand, Terminal),
+  Stripe Terminal (Reader S700, S710, BBPOS WisePOS E), Clover, Lightspeed,
+  and Shopify POS—including hardware already purchased directly by the shop
+  or restaurant.
+- **Bespoke POS Software & Complex Requirements:** In-depth requirements
+  discovery, custom Stripe Terminal Software Development Kit (SDK)
+  checkouts, Square and Shopify Application Programming Interface (API)
+  bridges, inventory sync, and automated Xero/QuickBooks/Sage journals.
+- **Resilient Shop & Kitchen Networking:** Dedicated Ethernet runs, static
+  Local Area Network (LAN) printer reservations (Star Micronics, Epson),
+  Virtual Local Area Network (VLAN) payment isolation, and 4G/5G failover.
+- **Impartial Payment Provider Advice & 3-Year TCO Calculator:** Mathematical
+  fee auditing across SumUp, Square, Stripe, Revolut Business, Teya, and
+  Interchange-Plus (IC+) acquirers at https://tillswift.com/compare.html.
 
-## Key UK Payment Providers Evaluated
+## How We Work
 
-1. **SumUp (Pay As You Go & Payments Plus):**
-   - Flat rate: 1.69% in-person across all cards, or 0.99% on £19/month
-     Payments Plus subscription.
-   - Suitability: Micro-merchants, seasonal trade, and pop-up venues.
-2. **Square (Free & Plus Plans):**
-   - Flat rate: 1.75% in-person, 1.40% + 25p for standard online payments.
-   - Suitability: Retail and hospitality seeking integrated Point of Sale
-     (POS) software without upfront software licence costs.
-3. **Stripe (Terminal & Online):**
-   - In-person: 1.40% + 10p for UK/EEA cards; custom software development
-     required for retail point-of-sale setups.
-   - Suitability: Omnichannel businesses and software-driven operations.
-4. **Revolut Business (Basic, Grow, Scale):**
-   - In-person: 0.80% + 2p for domestic cards; multi-currency business
-     accounts included.
-   - Suitability: International trade and cross-border settlement.
-5. **Teya (Pay As You Go):**
-   - In-person: 1.59% flat rate with next-day settlement seven days a week.
-   - Suitability: High-street retail, cafes, and hospitality venues.
-6. **Direct Acquirers (Barclaycard Anywhere, Worldpay, Clover):**
-   - Tailored interchange-plus or tiered commercial terms.
-   - Suitability: High-volume merchants processing over £15,000 monthly.
+1. **Initial Requirements Conversation:** Free initial phone call or deeper
+   scoping chat to map your real operational workflow without jargon.
+2. **Written Statement of Work & Fixed Quote:** A clear engineering plan with
+   an up-front fixed price or transparent £50 per hour rate.
+3. **Calm, Long-Term Advisory:** No aggressive follow-up sales chasing;
+   pre-build off-site, swift London cutovers (including out-of-hours), and
+   ongoing software/hardware support whenever needed.
 
-## Target Audience
+## Key Pages & URLs
 
-- **Established Boutique Practices:** Law practices, King's Counsel (KC)
-  chambers, private healthcare clinics, medical consultants, chartered
-  surveyors, and architecture studios across NW London and The City.
-- **High-Street Retail & Hospitality:** Restaurants, cafes, boutique shops,
-  salons, and trade services requiring reliable daily settlement.
-- **Growing Omnichannel Enterprises:** Businesses combining card machines
-  with digital payment gateways and electronic invoicing.
+- Home (London POS Engineering Overview): https://tillswift.com/
+- SumUp POS, Register & Solo Installation London:
+  https://tillswift.com/sumup-pos-installation-london.html
+- Square POS, Register & Terminal Installation London:
+  https://tillswift.com/square-pos-installation-london.html
+- Stripe Terminal (S700 & WisePOS E) Installation & SDK London:
+  https://tillswift.com/stripe-terminal-installation-london.html
+- Bespoke POS Software Development & Custom Integrations:
+  https://tillswift.com/custom-pos-software-integrations.html
+- Interactive 3-Year UK Payment Provider Fee Calculator:
+  https://tillswift.com/compare.html
+- How Our Process & Fee Model Work: https://tillswift.com/how-it-works.html
+- About Neville Bryce: https://tillswift.com/about.html
+- Contact TillSwift: https://tillswift.com/contact.html
+- Full Technical LLM Reference: https://tillswift.com/llms-full.txt
 
-## Contact & Corporate Identity
+## Contact & Location
 
-- **Platform:** TillSwift (https://tillswift.com)
-- **Founder:** Neville Bryce (Senior software engineer; ex-City trading)
-- **LinkedIn:** https://www.linkedin.com/in/nevillebryce/
+- **Founder:** Neville Bryce (Principal POS Systems & Software Engineer)
 - **Telephone:** 020 4520 9114 (+44 20 4520 9114)
 - **Email:** hello@tillswift.com
-- **Operating Location:** London, United Kingdom
-
-## Canonical Documentation Links
-
-- Home and Interactive Comparison Tool: https://tillswift.com/
-- How the Mathematical Model Works: https://tillswift.com/how-it-works.html
-- About the Founder and Engineering Ethos: https://tillswift.com/about.html
-- Contact and Consultation Requests: https://tillswift.com/contact.html
-- Legal, Privacy and Regulatory Policies: https://tillswift.com/legal.html
-- Full Technical LLM Reference: https://tillswift.com/llms-full.txt
+- **Base Address:** 25 Corringham Court, Hampstead, London NW11 7BY
+- **Service Area:** All 32 boroughs of Greater London (on-site) and United
+  Kingdom (UK)-wide remote software engineering.
 
 ## Sister Practices
 
+- [IToldYouSo Computing](https://itoldyouso.tech/):
+  London-wide general Information Technology (IT) support, computer repair,
+  data recovery, cyber security, and residential/commercial Wi-Fi engineering.
 - [Heath & City Technology](https://heathandcity.com/):
   Private IT and sovereign document search infrastructure for barristers,
-  King's Counsel (KC), medical consultants, and boutique practices.
-- [IToldYouSo Computing](https://itoldyouso.tech/):
-  Fast, same-day local IT support, hardware diagnostics, and Wi-Fi network
-  engineering across North West London.
+  King's Counsel (KC), medical consultants, and boutique City practices.
