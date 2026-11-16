@@ -79,3 +79,21 @@ thorough business requirements gathering.
 - [Heath & City Technology](https://heathandcity.com/):
   Private IT and sovereign document search infrastructure for barristers,
   King's Counsel (KC), medical consultants, and boutique City practices.
+
+## Also Known As: Search Terms and Synonyms
+
+People search for Point of Sale (POS) and till engineering in many ways:
+
+- Till = checkout = cash register = Electronic Cash Register (ECR) = EPOS =
+  ePOS = POS = point of sale = counter terminal = takings machine.
+- SumUp installer = SumUp Solo = SumUp 13-inch Countertop Touchscreen
+  Register = SumUp POS Lite = SumUp Air = SumUp setup London.
+- Square installer = Square Register = Square Stand = Square Terminal =
+  Square Reader = Square Kitchen Display System (KDS) = Square POS setup
+  London.
+- Stripe Terminal installer = Stripe Reader S700 = Stripe Reader S710 =
+  BBPOS WisePOS E = WisePad 3 = Stripe Terminal Software Development Kit
+  (SDK) integration London.
+- Till fitter = POS installer = EPOS engineer = software support engineer =
+  custom POS developer = API integration = Xero or QuickBooks sync = shop
+  Wi-Fi and Ethernet cabling.
