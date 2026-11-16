@@ -291,6 +291,7 @@ def check_line_lengths() -> List[str]:
     errors: List[str] = []
     targets = [
         "AGENTS.md",
+        "README.md",
         "llms.txt",
         "llms-full.txt",
         "styles.css",
