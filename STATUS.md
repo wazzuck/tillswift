@@ -49,6 +49,10 @@ provider comparison.
   on-site installation and staff training, and ongoing engineer support),
   dedicated `#hardware` and `#sectors` sections, and matching verbatim
   `FAQPage` items.
+- **London-based & Hampstead base opening copy (`2ff4a41`)**: Updated the
+  opening statements across `index.html`, `about.html`, `how-it-works.html`,
+  `contact.html`, the four platform pages, `llms.txt`, and `llms-full.txt`
+  to highlight that TillSwift is London-based, operating from Hampstead.
 
 ---
 
