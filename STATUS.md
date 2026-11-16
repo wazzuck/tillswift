@@ -37,34 +37,55 @@ provider comparison.
   forwarded non-Personally Identifiable Information (PII) calculator
   events from `compare.html`, and enforced `gtag.js` + `site.js` in
   `scripts/verify_site.py`.
+- **Online discovery documentation (`753c758`)**: Created `README.md`
+  documenting Search Engine Optimisation (SEO), Generative Engine
+  Optimisation (GEO), Artificial Intelligence (AI) crawler configuration,
+  IndexNow automation, Google Analytics 4 (GA4), and a post-crawl checklist,
+  with 80-column verification enforced in `scripts/verify_site.py`.
 
 ---
 
 ## Done (Off-Site / Browser Actions, 16 Nov 2026)
 
-- **IndexNow live push**: Submitted all 10 canonical URLs from
-  `sitemap.xml` to `https://api.indexnow.org/indexnow` (`HTTP 200`).
-- **Google Search Console (GSC)**: Added `https://tillswift.com/` and
-  auto-verified ownership via the existing Google Analytics (`gtag.js`
-  `G-V22KGRG9RS`) tag. Clicked **Request Indexing** on `/`,
-  `square-pos-installation-london.html`, and
-  `stripe-terminal-installation-london.html` until GSC presented a
-  reCAPTCHA challenge on `custom-pos-software-integrations.html`, where
-  automation stopped safely.
+- **IndexNow live push**: Submitted all 10 canonical Uniform Resource
+  Locators (URLs) from `sitemap.xml` to `https://api.indexnow.org/indexnow`
+  (`HTTP 200`).
+- **Google Search Console (GSC)**:
+  - Verified ownership for `https://tillswift.com/` via the existing Google
+    Analytics (`G-V22KGRG9RS`) tag.
+  - Submitted `sitemap.xml` (`Status: Success`, `10` discovered pages, read
+    `16 Nov 2026`).
+  - Submitted **Request Indexing** on `/`,
+    `square-pos-installation-london.html`,
+    `stripe-terminal-installation-london.html`,
+    `custom-pos-software-integrations.html` (after clearing reCAPTCHA), and
+    `compare.html`.
+  - Checked `sumup-pos-installation-london.html`: currently shows
+    `Discovered – currently not indexed` (`Sitemaps:
+    https://tillswift.com/sitemap.xml`, `Last crawl: N/A`) while awaiting
+    `Googlebot`'s asynchronous initial crawl.
 - **Bing Webmaster Tools**: Added and verified `https://tillswift.com/` via
-  the `msvalidate.01` HTML meta tag, submitted `https://tillswift.com/sitemap.xml`
-  (status: `Submitted - Processing`), and submitted all 6 priority URLs
-  via Bing URL Submission (`Success: 6 URLs submitted Succesfully`).
+  the `msvalidate.01` HTML meta tag, submitted `https://tillswift.com/sitemap.xml`,
+  and submitted all 6 priority URLs via Bing URL Submission (`Success: 6 URLs
+  submitted Succesfully`).
 
 ---
 
-## Next (Manual Follow-Up in Browser & Off-Site)
+## Next (Check Back & Off-Site Follow-Up)
 
-- [ ] **Complete GSC sitemap & remaining Request Indexing checks**: Clear the
-  visible reCAPTCHA on the open GSC tab in Chromium, submit `sitemap.xml`
-  under `https://tillswift.com/` Sitemaps, and finish requesting indexing
-  for `sumup-pos-installation-london.html`,
-  `custom-pos-software-integrations.html`, and `compare.html`.
+- [ ] **Check back & verify search crawl (24–72 hours & 7–14 days)**:
+  Google Search Console still initially shows *"URL is not on Google"* and
+  *"Last crawl: N/A"* while the crawl queue runs asynchronously. Revisit
+  *Indexing → Pages* and *URL Inspection* after **24–72 hours** to confirm
+  all 10 URLs (especially `sumup-pos-installation-london.html` and the new
+  landing pages) report **URL is on Google** with a fresh crawl timestamp,
+  then verify live `site:tillswift.com` results on Google UK, Bing UK, and
+  AI search engines (OpenAI ChatGPT, Google Gemini, DeepSeek, Perplexity)
+  and live events in GA4 (`G-V22KGRG9RS`).
+- [ ] **Optional manual Request Indexing boost**: Once rate limiting resets,
+  optionally click **Request Indexing** directly in GSC for
+  `sumup-pos-installation-london.html` and any remaining un-requested pages
+  from `sitemap.xml` (`about.html`, `how-it-works.html`, `contact.html`).
 - [ ] **External UK citations & partner directories**: Add consistent Name,
   Address, and Phone (NAP) listings (`TillSwift`, `25 Corringham Court,
   London NW11 7BY`, `020 4520 9114`, `hello@tillswift.com`) and links to
