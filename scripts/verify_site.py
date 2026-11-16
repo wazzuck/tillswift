@@ -115,13 +115,23 @@ def check_html_pages() -> List[str]:
         if f'<link rel="canonical" href="{expected_canon}">' not in raw:
             errors.append(f"{name}: missing or mismatched canonical URL")
 
-        # 2. Validate Open Graph tags on primary editorial and service pages.
+        # 2. Enforce first-party Google Analytics 4 (GA4) gtag.js and site.js
+        #    event instrumentation across every public HTML page.
+        ga_tag_src = (
+            "https://www.googletagmanager.com/gtag/js?id=G-V22KGRG9RS"
+        )
+        if "G-V22KGRG9RS" not in raw or ga_tag_src not in raw:
+            errors.append(f"{name}: missing GA4 G-V22KGRG9RS Google tag")
+        if 'src="site.js"' not in raw:
+            errors.append(f"{name}: missing shared site.js tracking script")
+
+        # 3. Validate Open Graph tags on primary editorial and service pages.
         if name != "legal.html":
             for prop in ("og:title", "og:description", "og:url", "og:image"):
                 if f'property="{prop}"' not in raw:
                     errors.append(f"{name}: missing Open Graph {prop}")
 
-        # 3. Parse every JSON-LD script block and gather FAQPage entries.
+        # 4. Parse every JSON-LD script block and gather FAQPage entries.
         ld_blocks = re.findall(
             r'<script\s+type="application/ld\+json"[^>]*>(.*?)</script>',
             raw,
@@ -145,7 +155,7 @@ def check_html_pages() -> List[str]:
                 ):
                     faq_entities.extend(node.get("mainEntity", []))
 
-        # 4. Ensure visible FAQ details match JSON-LD verbatim on new pages.
+        # 5. Ensure visible FAQ details match JSON-LD verbatim on new pages.
         if faq_entities and name != "compare.html":
             vis_faqs = re.findall(
                 r'<details\s+class="faq-item"[^>]*>\s*<summary>(.*?)</summary>'
@@ -164,7 +174,7 @@ def check_html_pages() -> List[str]:
                 if jq != _plain_text(vq) or ja != _plain_text(va):
                     errors.append(f"{name}: FAQ #{idx + 1} verbatim mismatch")
 
-        # 5. Check relative local href/src targets resolve to files on disk.
+        # 6. Check relative local href/src targets resolve to files on disk.
         if name not in ("compare.html", "legal.html"):
             for ref in re.findall(r'(?:href|src)="([^"]+)"', raw):
                 if ref.startswith(
@@ -175,7 +185,7 @@ def check_html_pages() -> List[str]:
                 if target and not (REPO_ROOT / target).exists():
                     errors.append(f"{name}: broken local reference {ref}")
 
-    # 6. Confirm private/print utility pages carry noindex, nofollow.
+    # 7. Confirm private/print utility pages carry noindex, nofollow.
     for name in NOINDEX_PAGES:
         path = REPO_ROOT / name
         if not path.is_file():
