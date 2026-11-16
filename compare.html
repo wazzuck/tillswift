@@ -13,6 +13,7 @@
   gtag('config', 'G-V22KGRG9RS');
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="site.js" defer></script>
 <title>UK Payment Provider &amp; Card Machine 3-Year Cost Calculator — TillSwift</title>
 <link rel="canonical" href="https://tillswift.com/compare.html">
 <link rel="sitemap" type="application/xml" title="Sitemap" href="https://tillswift.com/sitemap.xml">
@@ -5036,6 +5037,17 @@ function sendBrowseEvent(eventName, extra) {
         : document.body.classList.contains('test-mode') ? 'test' : 'live'
     }, extra || {});
     addLocalTrackingEvent(payload);
+    // Forward calculator milestones to Google Analytics 4 (GA4) without
+    // Personally Identifiable Information (PII) to honour GA4 policy.
+    if (typeof window.gtag === 'function') {
+      const gaParams = { path: userPath || '', mode: payload.mode };
+      if (extra && typeof extra === 'object') {
+        ['provider_id', 'provider_name', 'provider_plan', 'sort_by'].forEach(function(k) {
+          if (extra[k]) gaParams[k] = String(extra[k]).slice(0, 100);
+        });
+      }
+      window.gtag('event', 'calc_' + eventName, gaParams);
+    }
     const params = new URLSearchParams(payload);
     fetch(BETA_SCRIPT_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' }).catch(function() {});
   } catch (_) {}
