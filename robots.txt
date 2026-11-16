@@ -5,6 +5,8 @@ User-agent: *
 Allow: /
 Disallow: /custom_pricing_models/
 Disallow: /manual_email.html
+Disallow: /5x7flyer1.html
+Disallow: /flyer2.html
 
 # Major Artificial Intelligence (AI) Search, Grounding, and Crawler Agents
 User-agent: GPTBot

@@ -1,0 +1,44 @@
+# ==============================================================================
+# Workflow: Submit Updated Pages to IndexNow
+# Purpose: Notify Microsoft Bing and IndexNow-participating Artificial
+#          Intelligence (AI) search engines whenever GitHub Pages finishes
+#          deploying updates to the main branch.
+# ==============================================================================
+
+name: Submit Updated Pages to IndexNow
+
+on:
+  # 1. Trigger automatically after GitHub Pages finishes deploying main so the
+  #    verification key file and updated pages are already live online.
+  workflow_run:
+    workflows: ["pages-build-deployment"]
+    types:
+      - completed
+
+  # 2. Allow manual dispatch from the GitHub Actions tab if needed.
+  workflow_dispatch:
+
+jobs:
+  submit_indexnow:
+    # Only notify IndexNow on manual runs or successful Pages deployments.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out main containing sitemap.xml and the verification key.
+      - name: Check out main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      # 2. Provide Python 3 standard-library runtime.
+      - name: Set up Python 3
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      # 3. Submit all canonical sitemap URLs to https://api.indexnow.org/indexnow.
+      - name: Submit sitemap URLs to IndexNow
+        run: python3 scripts/submit_indexnow.py
