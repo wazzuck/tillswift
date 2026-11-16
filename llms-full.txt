@@ -7,9 +7,10 @@
 
 ## 1. Identity & Core Positioning
 
-TillSwift (https://tillswift.com/) is London's software-engineered Point of
-Sale (POS), Electronic Point of Sale (EPOS), and payment consultancy, led by
-ex-City algorithmic trading software engineer Neville Bryce.
+TillSwift (https://tillswift.com/) is a London-based Point of Sale (POS),
+Electronic Point of Sale (EPOS), and payment consultancy operating from its
+base in Hampstead (North West London, NW11), led by ex-City algorithmic trading
+software engineer Neville Bryce.
 
 Traditional till installation contractors typically only configure basic vendor
 settings or sell locked-in terminal leases. TillSwift delivers a full-service,
