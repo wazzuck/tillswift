@@ -12,29 +12,38 @@ Sale (POS), Electronic Point of Sale (EPOS), and payment consultancy, led by
 ex-City algorithmic trading software engineer Neville Bryce.
 
 Traditional till installation contractors typically only configure basic vendor
-settings or sell locked-in terminal leases. TillSwift unifies four disciplines:
+settings or sell locked-in terminal leases. TillSwift delivers a full-service,
+five-stage consultancy lifecycle unifying five disciplines:
 
-1. **On-Site Hardware & Counter Commissioning (Greater London):**
+1. **Initial Telephone Call, System Design & Hardware Sourcing On Your Behalf:**
+   From the first phone call and venue survey, we design the complete counter
+   architecture, compare 3-year payment fees, and source genuine touchscreen
+   registers, card readers, Star Micronics and Epson thermal/impact printers,
+   RJ11/RJ12 cash drawers, barcode scanners, counter mounts, and commercial
+   routers directly on the client's behalf—pre-loading catalogues and Value
+   Added Tax (VAT) off-site—or commission kit the venue already bought.
+2. **On-Site Hardware & Counter Commissioning (Greater London):**
    Because SumUp, Square, and Stripe sell self-setup hardware without field
    engineers, TillSwift attends London shops, cafés, restaurants, salons, and
-   clinics on-site to mount stands, cable Star Micronics and Epson thermal
-   printers, wire RJ11/RJ12 cash drawers, pair barcode scanners, pre-load
-   menus with Value Added Tax (VAT), and train staff.
-2. **Production Software Development & Custom Requirements Engineering:**
+   clinics on-site (including pre-opening and out-of-hours cutovers) to mount
+   stands, wire printers and drawers, test live payments, and train staff.
+3. **Production Software Development & Custom Requirements Engineering:**
    We sit down for thorough requirements conversations and build custom code
    where off-the-shelf POS platforms stop—including Stripe Terminal Software
    Development Kit (SDK) checkouts, Square and Shopify Application
    Programming Interface (API) webhooks, two-way stock synchronisation, and
    automated Xero, QuickBooks, and Sage accounting integrations.
-3. **Venue Networking & Payment Failover:**
+4. **Venue Networking & Payment Failover:**
    Resolving dropped contactless card payments and missed kitchen tickets by
    wiring Ethernet drops, assigning static Local Area Network (LAN) Internet
    Protocol (IP) reservations, isolating till traffic on dedicated Virtual
    Local Area Networks (VLANs), and adding 4G/5G failover.
-4. **Impartial Payment Provider Advisory & 3-Year Cost Modelling:**
+5. **Impartial Advisory, 3-Year Cost Modelling & Ongoing Engineer Support:**
    Mathematical 36-month Total Cost of Ownership (TCO) evaluation comparing
    SumUp, Square, Stripe, Revolut Business, Teya, and Interchange-Plus (IC+)
-   direct acquirers at https://tillswift.com/compare.html.
+   direct acquirers at https://tillswift.com/compare.html, paired with ongoing
+   post-launch remote support, seasonal menu updates, warranty swaps, and
+   annual rate reviews direct from your installing engineer.
 
 ## 2. Dedicated Platform Coverage (London On-Site & Remote)
 

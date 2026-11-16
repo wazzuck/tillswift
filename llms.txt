@@ -18,31 +18,42 @@ thorough business requirements gathering.
 
 ## Primary Services
 
+- **Full-Service POS Consultancy & System Design:** From the initial scoping
+  phone call and venue survey to hardware/network specification and 3-year
+  payment fee modelling.
+- **Complete Equipment Sourcing & Pre-Staging:** We procure touchscreen
+  registers, card readers, Star/Epson printers, heavy-duty cash drawers,
+  barcode scanners, mounts, and 4G routers on your behalf—and pre-load menus
+  and Value Added Tax (VAT) off-site—or install kit you already own.
 - **On-Site London POS Installation:** Turnkey setup of SumUp (13-inch
   Countertop Register, POS Lite, Solo), Square (Register, Stand, Terminal),
   Stripe Terminal (Reader S700, S710, BBPOS WisePOS E), Clover, Lightspeed,
-  and Shopify POS—including hardware already purchased directly by the shop
-  or restaurant.
+  and Shopify POS across all Greater London boroughs, including staff
+  training and out-of-hours cutovers.
 - **Bespoke POS Software & Complex Requirements:** In-depth requirements
   discovery, custom Stripe Terminal Software Development Kit (SDK)
   checkouts, Square and Shopify Application Programming Interface (API)
   bridges, inventory sync, and automated Xero/QuickBooks/Sage journals.
-- **Resilient Shop & Kitchen Networking:** Dedicated Ethernet runs, static
-  Local Area Network (LAN) printer reservations (Star Micronics, Epson),
-  Virtual Local Area Network (VLAN) payment isolation, and 4G/5G failover.
+- **Resilient Shop Networking & Ongoing Support:** Dedicated Ethernet runs,
+  static Local Area Network (LAN) printer reservations, Virtual Local Area
+  Network (VLAN) payment isolation, 4G/5G failover, plus direct post-launch
+  support, menu updates, warranty liaison, and annual fee reviews.
 - **Impartial Payment Provider Advice & 3-Year TCO Calculator:** Mathematical
   fee auditing across SumUp, Square, Stripe, Revolut Business, Teya, and
   Interchange-Plus (IC+) acquirers at https://tillswift.com/compare.html.
 
-## How We Work
+## How We Work (5-Stage Consultancy Lifecycle)
 
-1. **Initial Requirements Conversation:** Free initial phone call or deeper
-   scoping chat to map your real operational workflow without jargon.
-2. **Written Statement of Work & Fixed Quote:** A clear engineering plan with
-   an up-front fixed price or transparent £50 per hour rate.
-3. **Calm, Long-Term Advisory:** No aggressive follow-up sales chasing;
-   pre-build off-site, swift London cutovers (including out-of-hours), and
-   ongoing software/hardware support whenever needed.
+1. **Initial Phone Call & Discovery:** Free initial telephone call and venue
+   scoping to map real workflows, peripheral counts, and software needs.
+2. **System Design & Statement of Work:** Written architecture, equipment bill
+   of materials, 3-year fee advice, and fixed price or £50 per hour rate.
+3. **Equipment Sourcing & Off-Site Staging:** We order every component on your
+   behalf and pre-build menus, VAT settings, and permissions before arrival.
+4. **On-Site Installation & Training:** Swift London cutovers (including
+   out-of-hours), hardwired printer/network checks, and staff training.
+5. **Ongoing Support & Evolution:** Direct senior engineer aftercare with zero
+   aggressive sales chasing, seasonal updates, and annual card-rate reviews.
 
 ## Key Pages & URLs
 

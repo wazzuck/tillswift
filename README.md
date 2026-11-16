@@ -41,10 +41,15 @@ Cost of Ownership (TCO) payment provider comparison calculator.
      software design capabilities, while preserving `compare.html` as a
      first-class companion tool.
    - Applied Search Engine Optimisation (SEO) and Generative Engine
-     Optimisation (GEO) across four intent-specific London landing pages
-     targeting high-intent commercial searches (`"SumUp POS installation
-     London"`, `"Square POS setup London"`, `"Stripe Terminal developer
-     installation London"`, and `"custom POS software integrations"`).
+     Optimisation (GEO) across a full-service five-stage lifecycle
+     (`index.html`, `how-it-works.html`) covering the initial phone call,
+     system architecture, equipment sourcing on the client's behalf (registers,
+     readers, Star/Epson printers, cash drawers, scanners, Kitchen Display
+     Systems (KDS), and failover routers), off-site staging, on-site
+     installation, staff training, and ongoing support, alongside four
+     high-intent pages (`"SumUp POS installation London"`, `"Square POS setup
+     London"`, `"Stripe Terminal developer installation London"`, and `"custom
+     POS software integrations"`).
    - Expanded accessible `<details class="faq-item">` Frequently Asked
      Questions (FAQ) sections written in British Professional English.
 
