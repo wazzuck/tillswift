@@ -42,6 +42,13 @@ provider comparison.
   Optimisation (GEO), Artificial Intelligence (AI) crawler configuration,
   IndexNow automation, Google Analytics 4 (GA4), and a post-crawl checklist,
   with 80-column verification enforced in `scripts/verify_site.py`.
+- **Full-service turnkey POS lifecycle (`7d4ca96`)**: Expanded `index.html`,
+  `how-it-works.html`, platform pages, `contact.html`, `llms.txt`,
+  `llms-full.txt`, and `README.md` with the 5-stage consultancy workflow
+  (initial call, system design, equipment sourcing on the client's behalf,
+  on-site installation and staff training, and ongoing engineer support),
+  dedicated `#hardware` and `#sectors` sections, and matching verbatim
+  `FAQPage` items.
 
 ---
 
