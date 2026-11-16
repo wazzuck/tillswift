@@ -112,6 +112,11 @@ Cost of Ownership (TCO) payment provider comparison calculator.
 
 ## 3. Check Back & Verify Search Crawl & Live Rankings (Action Required Later)
 
+- **Submitted Date:** Monday, 16 November 2026
+- **Check Back From (Initial Crawl Verification):** Thursday, 19 November 2026
+- **Check Back From (Search & AI Ranking Review):** Monday, 23 November 2026
+  to Monday, 30 November 2026
+
 > **Important Note on Crawl Latency (16 Nov 2026):** Immediately after
 > submitting `sitemap.xml` and queueing **Request Indexing**, Google Search
 > Console URL Inspection continues to display **"URL is not on Google"** and
@@ -119,12 +124,15 @@ Cost of Ownership (TCO) payment provider comparison calculator.
 > `Googlebot` processes the asynchronous crawl queue. Sitemap status
 > **`Success` (10 discovered pages)** confirms Google has accepted the
 > sitemap; actual indexing and live Search Engine Results Page (SERP)
-> inclusion typically take **24–72 hours** for initial crawl and
-> **7–14 days** (plus external UK directory citations and reviews) for
-> ranking movement across search and AI engines.
+> inclusion typically take **24–72 hours** (check back from **Thursday,
+> 19 November 2026**) and **7–14 days** (check back from **Monday,
+> 23 November 2026 to Monday, 30 November 2026**, alongside external UK
+> directory citations and reviews) for ranking movement across search and AI
+> engines.
 
-Please revisit and verify the following checks after waiting **24–72 hours**
-and again at **7–14 days**:
+Please revisit and verify the following checks **from Thursday, 19 November
+2026** onwards and again **between Monday, 23 November 2026 and Monday,
+30 November 2026**:
 
 1. **Google Search Console (`https://search.google.com/search-console`)**:
    - Open `https://tillswift.com/` → *Indexing → Pages* and confirm all 10
