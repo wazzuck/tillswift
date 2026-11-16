@@ -71,17 +71,23 @@ provider comparison.
 
 ---
 
-## Next (Check Back & Off-Site Follow-Up)
+## Next (Check Back From Thursday, 19 November 2026)
 
-- [ ] **Check back & verify search crawl (24–72 hours & 7–14 days)**:
+- **Submitted Date:** Monday, 16 November 2026.
+- **Check Back From (Initial Crawl Verification):** Thursday,
+  19 November 2026 (24–72 hours post-submission).
+- **Check Back From (Search & AI Ranking Review):** Monday,
+  23 November 2026 to Monday, 30 November 2026 (7–14 days post-submission).
+- [ ] **Check back & verify search crawl (from 19 November 2026)**:
   Google Search Console still initially shows *"URL is not on Google"* and
   *"Last crawl: N/A"* while the crawl queue runs asynchronously. Revisit
-  *Indexing → Pages* and *URL Inspection* after **24–72 hours** to confirm
-  all 10 URLs (especially `sumup-pos-installation-london.html` and the new
-  landing pages) report **URL is on Google** with a fresh crawl timestamp,
-  then verify live `site:tillswift.com` results on Google UK, Bing UK, and
-  AI search engines (OpenAI ChatGPT, Google Gemini, DeepSeek, Perplexity)
-  and live events in GA4 (`G-V22KGRG9RS`).
+  *Indexing → Pages* and *URL Inspection* **from Thursday, 19 November 2026**
+  onwards to confirm all 10 URLs (especially
+  `sumup-pos-installation-london.html` and the new landing pages) report
+  **URL is on Google** with a fresh crawl timestamp, then verify live
+  `site:tillswift.com` results on Google UK, Bing UK, and AI search engines
+  (OpenAI ChatGPT, Google Gemini, DeepSeek, Perplexity) **from Monday,
+  23 November 2026** alongside live events in GA4 (`G-V22KGRG9RS`).
 - [ ] **Optional manual Request Indexing boost**: Once rate limiting resets,
   optionally click **Request Indexing** directly in GSC for
   `sumup-pos-installation-london.html` and any remaining un-requested pages
