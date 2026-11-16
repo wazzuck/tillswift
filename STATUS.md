@@ -29,6 +29,14 @@ provider comparison.
   `scripts/verify_site.py`, `Also Known As` synonym blocks in `llms.txt` and
   `llms-full.txt`, `noindex, nofollow` + `Disallow` rules for print/email
   utility pages, and the Bing Webmaster Tools `msvalidate.01` meta tag.
+- **Full Google Analytics 4 (GA4) instrumentation (`f314e5e`)**: Added the
+  `G-V22KGRG9RS` Google tag to `legal.html` for 100% coverage across all 10
+  public pages, wired `site.js` site-wide (`phone_call_click`,
+  `email_enquiry_click`, `open_fee_calculator`, `pos_guide_click`,
+  `outbound_click`, `platform_tab_select`, `faq_expand`, `scroll_depth`),
+  forwarded non-Personally Identifiable Information (PII) calculator
+  events from `compare.html`, and enforced `gtag.js` + `site.js` in
+  `scripts/verify_site.py`.
 
 ---
 
