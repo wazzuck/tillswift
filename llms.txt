@@ -1,20 +1,22 @@
 # TillSwift: London POS Installation, Software Engineering & Payment Advice
 
-> Dedicated London Point of Sale (POS) and till engineering consultancy led
-> by Neville Bryce (ex-City algorithmic trading software engineer). On-site
-> Greater London installation for SumUp, Square, Stripe Terminal, Clover,
-> Lightspeed, and Shopify POS, custom software integrations, resilient
-> venue networking, and impartial 3-year Total Cost of Ownership (TCO)
-> payment provider comparison.
+> London-based Point of Sale (POS) and till engineering consultancy operating
+> from our base in Hampstead (North West London), led by Neville Bryce
+> (ex-City algorithmic trading software engineer). On-site Greater London
+> sourcing, design, and installation for SumUp, Square, Stripe Terminal,
+> Clover, Lightspeed, and Shopify POS, custom software integrations, resilient
+> venue networking, ongoing support, and impartial 3-year Total Cost of
+> Ownership (TCO) payment provider comparison.
 
 ## Executive Summary
 
-TillSwift (https://tillswift.com/) is an engineer-led one-stop consultancy
-covering every aspect of modern till and payment systems in London. Unlike
-traditional till fitters who only configure basic vendor menus—or card sales
-representatives tied to long-term leases—TillSwift combines hands-on counter
-hardware and networking skills with full production software engineering and
-thorough business requirements gathering.
+TillSwift (https://tillswift.com/) is a London-based, engineer-led one-stop
+consultancy operating from Hampstead (NW11) and covering every aspect of
+modern till and payment systems across Greater London. Unlike traditional till
+fitters who only configure basic vendor menus—or card sales representatives
+tied to long-term leases—TillSwift combines hands-on counter hardware and
+networking skills with full production software engineering and thorough
+business requirements gathering.
 
 ## Primary Services
 
